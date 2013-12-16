@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  sport: MyString
+  contest_type: MyString
+  prize: 9.99
+  enrtry_fee: 9.99
+  contest_start: 2013-12-16 22:09:51
+
+two:
+  title: MyString
+  sport: MyString
+  contest_type: MyString
+  prize: 9.99
+  enrtry_fee: 9.99
+  contest_start: 2013-12-16 22:09:51
