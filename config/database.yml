@@ -3,29 +3,21 @@
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
-development:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  password: postgres
-  database: fantasycapital_dev
-  pool: 5
+  login: &login
+    adapter: postgresql
+    username: Lungs
+    password: 
+    host: localhost
+    port: 5432
+    pool: 5
+    timeout: 5000
 
-test:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  password: postgres
-  database: fantasycapital_test
-  pool: 5
-
-production:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  password: postgres
-  database: fantasycapital
-  pool: 5
+  development:
+    <<: *login
+    database: fantasycapital_dev
+  production:
+    <<: *login
+    database: fantasycapital
+  test:
+    <<: *login
+    database: fantasycapital_test

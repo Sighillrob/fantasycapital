@@ -18,7 +18,7 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-
+a
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
@@ -44,9 +44,13 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
 gem 'devise'
+gem 'slim'
+gem 'slim-rails'
 
-gem "rspec-rails", :group => [:development, :test]
-gem "capybara", :group => :test
-gem "database_cleaner", :group => :test
+group :development, :test do
+  gem 'pry-rails'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'annotate'
+end

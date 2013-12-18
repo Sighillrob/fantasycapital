@@ -1,0 +1,64 @@
+.topbarWraper
+  .navbar.navbar-default.navbar-static-top.capital_top_nav role="navigation"
+    .container
+      .navbar-header
+        button.navbar-toggle data-target=".capitalcollapse" data-toggle="collapse" type="button"
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+      .navbar-collapse.collapse.capitalcollapse
+        ul.nav.navbar-nav
+          li
+            = link_to '#_' do
+              = image_tag 'twitter.jpg', alt: 'Fantasy capital Twitter page'
+              | Twitter
+          li
+            = link_to '#_' do
+              = image_tag 'facebook.jpg', alt: 'Fantasy capital Facebook page'
+              | Facebook
+          li
+            = link_to '#_' do
+              = image_tag 'gplus.jpg', alt: 'Fantasy capital Google Plus page'
+              | Google +
+        ul.nav.navbar-nav.navbar-right.capital-navbar-right
+          li
+            strong.green Refer Friends for Cash »
+          li.dropdown
+            a.dropdown-toggle data-toggle="dropdown" href="#_"
+              | Welcome,
+              span.green Steve
+              b.downarrow &nbsp;
+            ul.dropdown-menu
+              li Content Area
+
+header
+  .container
+    h1.logo
+      a href=root_path
+        = image_tag 'logo.png', alt: 'Fantasy Capital'
+    .balanceBlock
+      h1 Balance: &nbsp;$0.00
+      strong.green Add Funds »
+    .clear &nbsp;
+    .navbar.navbar-default role="navigation"
+      .navbar-header
+        button.navbar-toggle data-target=".mainMenu" data-toggle="collapse" type="button"
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+      .navbar-collapse.collapse.mainMenu
+        ul.nav.navbar-nav
+          li.active
+            a href="#" Home
+          li
+            a href="#" Contest
+          li
+            a href="#" Lineups
+          li
+            a href="#" Leaderboard
+          li
+            a href="#" Rules/Faq
+          li
+            a href="#" Account
