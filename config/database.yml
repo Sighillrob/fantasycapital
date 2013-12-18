@@ -18,11 +18,14 @@ test:
   host: localhost
   username: postgres
   password: postgres
-  database: fantasycapital_dev
+  database: fantasycapital_test
   pool: 5
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  username: postgres
+  password: postgres
+  database: fantasycapital
   pool: 5
-  timeout: 5000
