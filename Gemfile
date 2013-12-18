@@ -45,6 +45,10 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 gem 'devise'
+
+gem "rspec-rails", :group => [:development, :test]
+gem "capybara", :group => :test
+gem "database_cleaner", :group => :test
 gem 'slim'
 gem 'slim-rails'
 
