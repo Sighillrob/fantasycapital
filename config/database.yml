@@ -5,8 +5,8 @@
 #   gem 'sqlite3'
   login: &login
     adapter: postgresql
-    username: Lungs
-    password: 
+    username: postgres
+    password: postgres
     host: localhost
     port: 5432
     pool: 5
