@@ -1,18 +1,25 @@
+/*Navigatoin*/
+
+.navbar {
+  border: none;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #0fea6c;
+
+  &:hover, &:focus {
+    color: #fff;
+  }
+}
+
+.navbar-collapse {
+  padding: 0;
+}
+
 .mainMenu {
   background: #000;
   height: 50px;
   font-family: 'droid_sansregular';
-
-  ul li {
-    padding: 0 25px;
-    &:first-child {
-      padding: 0;
-    }
-
-    &:last-child {
-      border-right: none;
-    }
-  }
 
   .navbar-nav {
     a {
@@ -23,6 +30,10 @@
     li {
       background: url(/assets/divider.png) no-repeat right center;
 
+      &:last-child {
+        background: none
+      }
+
       &.active {
         background: #fff;
         padding: 0 25px;
@@ -30,25 +41,25 @@
         a {
           background: none
         }
-
       }
+    }
+  }
 
-      &:last-child {
-        background: none
-      }
+  ul li {
+    padding: 0 25px;
+
+    &:first-child {
+      padding: 0;
+    }
+
+    &:last-child {
+      border-right: none;
     }
   }
 }
 
-.navbar-default .navbar-nav > li > a {
-  color: #0fea6c;
-  &:hover, &:focus {
-    color: #fff;
-  }
-}
-
-.navbar-collapse {
-  padding: 0;
+.capitalnavbar {
+  margin: 0
 }
 
 @media (max-width: 768px) {
@@ -58,9 +69,10 @@
   .mainMenu .navbar-nav li {
     background: none;
     padding: 0 0px;
-  }
-  .mainMenu .navbar-nav li.active {
-    padding: 0
-  }
-}
 
+    &.active {
+      padding: 0
+    }
+  }
+
+}

@@ -1,6 +1,6 @@
-*.rbc
 *.sassc
 .sass-cache
+*.rbc
 capybara-*.html
 .rspec
 /log
@@ -32,3 +32,4 @@ config/database.yml
 # Ignore other unneeded files.
 *.swp
 *~
+.idea/*
