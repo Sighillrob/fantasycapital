@@ -28,7 +28,7 @@
     }
 
     li {
-      background: url(/assets/divider.png) no-repeat right center;
+      background: image-url('divider.png') no-repeat right center;
 
       &:last-child {
         background: none
