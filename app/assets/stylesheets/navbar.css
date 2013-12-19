@@ -1,22 +1,78 @@
 /*Navigatoin*/
-.mainMenu { background:#000; height:50px; 	font-family: 'droid_sansregular';}
-.navbar { border:none;}
-.navbar-default .navbar-nav > li > a { color:#0fea6c;}
-.navbar-collapse { padding:0;}
-.mainMenu .navbar-nav a { font-size:18px; text-transform:uppercase;}
-.mainMenu .navbar-nav li { background:url(../images/divider.png) no-repeat right center;}
-.mainMenu .navbar-nav li.active { background:#fff; padding:0 25px;}
-.mainMenu .navbar-nav li.active a{ background:none}
-.mainMenu .navbar-nav li:last-child { background:none}
+.mainMenu {
+    background: #000;
+    height: 50px;
+    font-family: 'droid_sansregular';
+}
+
+.navbar {
+    border: none;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #0fea6c;
+}
+
+.navbar-collapse {
+    padding: 0;
+}
+
+.mainMenu .navbar-nav a {
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.mainMenu .navbar-nav li {
+    background: url(../images/divider.png) no-repeat right center;
+}
+
+.mainMenu .navbar-nav li.active {
+    background: #fff;
+    padding: 0 25px;
+}
+
+.mainMenu .navbar-nav li.active a {
+    background: none
+}
+
+.mainMenu .navbar-nav li:last-child {
+    background: none
+}
+
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #fff;
+    color: #fff;
 
 }
 
-.mainMenu ul li{padding:0 25px;}
-.mainMenu ul li:first-child { padding:0;}
-.mainMenu ul li:last-child{border-right:none;}
-.capitalnavbar { margin:0}
-@media (max-width: 768px){.navbar-collapse { padding:0 20px;}.mainMenu .navbar-nav li { background:none; padding:0 0px;}.mainMenu .navbar-nav li.active{ padding:0}}
+.mainMenu ul li {
+    padding: 0 25px;
+}
+
+.mainMenu ul li:first-child {
+    padding: 0;
+}
+
+.mainMenu ul li:last-child {
+    border-right: none;
+}
+
+.capitalnavbar {
+    margin: 0
+}
+
+@media (max-width: 768px) {
+    .navbar-collapse {
+        padding: 0 20px;
+    }
+
+    .mainMenu .navbar-nav li {
+        background: none;
+        padding: 0 0px;
+    }
+
+    .mainMenu .navbar-nav li.active {
+        padding: 0
+    }
+}
 

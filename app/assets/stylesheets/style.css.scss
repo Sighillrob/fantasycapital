@@ -502,38 +502,43 @@ footer {
 div.footerContainer {
   margin: 0 auto;
   min-height: 180px;
-}
+  ul{
+    margin: 25px 0 0;
+    padding: 0;
+    &.left{
 
-div.footerContainer ul {
-  margin: 25px 0 0;
-  padding: 0;
-}
+      li{
+        float: left;
+        width: 50%;
+        list-style: none;
 
-div.footerContainer ul.left li {
-  float: left;
-  width: 50%;
-  list-style: none;
-}
+        a{
+          color: #0FEA6C;
+          font-size: 17px;
+          text-transform: uppercase;
+        }
+      }
+    }
 
-div.footerContainer ul.left li a {
-  color: #0FEA6C;
-  font-size: 17px;
-  text-transform: uppercase;
-}
-
-div.footerContainer ul.right li {
-  float: left;
-  list-style: none;
-  margin: 10px 0 10px 10px;
-}
-
-@media (max-width: 768px) {
-  div.footerContainer ul.left li {
-    float: none;
+    &.right{
+     li{
+       float: left;
+       list-style: none;
+       margin: 10px 0 10px 10px;
+     }
+    }
   }
+}
 
-  div.footerContainer ul.right li {
-    float: none;
+
+@media(max-width: 768px) {
+  div.footerContainer {
+    ul.left, ul.right {
+      li {
+        float: none;
+      }
+    }
+
   }
 }
 
