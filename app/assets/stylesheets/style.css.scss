@@ -33,12 +33,12 @@ body {
 
 body {
   font-family: 'droid_sansregular';
-  background: url(/assets/body-bg.jpg) no-repeat fixed 100% top #555555 !important;
+  background: image-url('body-bg.jpg') no-repeat fixed 100% top #555555 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
-  background: url(/assets/body-bg.jpg) no-repeat fixed top center #555555 !important     \9;
+  background: image-url('body-bg.jpg') no-repeat fixed top center #555555 !important     \9;
   /*IE 9*/
-  background: url(/assets/body-bg.jpg) no-repeat fixed top 100% #555555 /IE9 !important;
+  background: image-url('body-bg.jpg') no-repeat fixed top 100% #555555 /IE9 !important;
   background-attachment: fixed /IE9 !important;
   background-size: 100% /IE9 !important;
 }
@@ -549,13 +549,13 @@ div.footerContainer {
 }
 
 .downarrow {
-  background: url(/assets/dropdownarrow.png) no-repeat center center;
+  background: image-url('dropdownarrow.png') no-repeat center center;
   padding: 0 0 0 12px;
   float: right;
 }
 
 .downarrowblack {
-  background: url(/assets/black.png) no-repeat center center;
+  background: image-url('black.png') no-repeat center center;
   padding: 0 0 0 10px;
   float: right;
 }
