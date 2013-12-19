@@ -1,16 +1,22 @@
 /*External Font for the Site*/
 @font-face {
   font-family: 'droid_sansregular';
-  src: url('/assets/droidsans-webfont.eot');
-  src: url('/assets/droidsans-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/droidsans-webfont.woff') format('woff'), url('/assets/droidsans-webfont.ttf') format('truetype'), url('/assets/droidsans-webfont.svg#droid_sansregular') format('svg');
+  src: font-url('droidsans-webfont.eot');
+  src: font-url('droidsans-webfont.eot?#iefix') format('embedded-opentype'),
+       font-url('droidsans-webfont.woff') format('woff'),
+       font-url('droidsans-webfont.ttf') format('truetype'),
+       font-url('droidsans-webfont.svg#droid_sansregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'droid_sansbold';
-  src: url('/assets/droidsans-bold-webfont.eot');
-  src: url('/assets/droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/droidsans-bold-webfont.woff') format('woff'), url('/assets/droidsans-bold-webfont.ttf') format('truetype'), url('/assets/droidsans-bold-webfont.svg#droid_sansbold') format('svg');
+  src: font-url('droidsans-bold-webfont.eot');
+  src: font-url('droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+       font-url('droidsans-bold-webfont.woff') format('woff'),
+       font-url('droidsans-bold-webfont.ttf') format('truetype'),
+       font-url('droidsans-bold-webfont.svg#droid_sansbold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
