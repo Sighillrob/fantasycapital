@@ -52,6 +52,11 @@ gem "database_cleaner", :group => :test
 gem 'slim'
 gem 'slim-rails'
 
+group :production, :staging do
+  gem 'rails_12factor'
+  gem "rack-google-analytics"
+end
+
 group :development, :test do
   gem 'pry-rails'
   gem 'better_errors'
