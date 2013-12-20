@@ -1,8 +1,9 @@
 class CreateEntries < ActiveRecord::Migration
   def change
-    create_table :entries, :id => false do |t|
-      t.integer :user_id
-      t.integer :contest_id
+    create_table :entries do |t|
+      t.references :user, index: true
+      t.references :contest, index: true
+      t.string :sport
 
       t.timestamps
     end

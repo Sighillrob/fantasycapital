@@ -1,0 +1,214 @@
+// Place all the styles related to the entries controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.teamDraft {
+  background: #565656;
+  color: #fff;
+  padding: 30px 20px 60px 20px !important;
+  border-radius: 10px 10px 0 0 !important;
+  margin: 0;
+
+  h1 {
+    font-size: 28px;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+
+    &.bold {
+      font-family: 'droid_sansbold';
+      float: left;
+      margin: 0;
+    }
+  }
+
+  h4 {
+    font-size: 21px;
+    float: left;
+    padding: 2px 15px 0 15px;
+  }
+
+  p {
+    color: #949494;
+    font-size: 14px;
+    padding: 5px 0;
+
+    strong.green {
+      margin: 0;
+    }
+
+    .timingschedule {
+      background: none repeat scroll 0 0 #3C3C3C;
+      border-radius: 0 0 10px 10px;
+      color: #FFFFFF;
+      padding: 15px 20px;
+      font-size: 18px;
+
+      strong {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.contestlive {
+  background: none repeat scroll 0 0 #3C3C3C;
+  border-radius: 10px;
+  float: right;
+  font-family: 'droid_sansregular';
+  font-size: 23px;
+  margin: 0 0 20px 0;
+  padding: 10px 20px;
+  font-weight: normal;
+
+  strong {
+    font-size: 25px;
+    font-family: 'droid_sansbold';
+  }
+}
+
+@media (max-width: 768px) {
+  .teamDraft h4 {
+    float: none;
+    padding: 10px 0;
+  }
+  .teamDraft h1.bold {
+    float: none;
+  }
+}
+
+.col-md2 {
+  width: 48%;
+  float: left;
+  padding: 0 0 0 10px;
+
+  ul.dropdownsport {
+    clear: both;
+    margin: 15px 0 65px;
+    padding: 0;
+
+    li {
+      list-style: none;
+      float: left;
+      width: 44%;
+    }
+
+    .dropdownlogin {
+      padding: 5px 10px 0;
+      color: #555555;
+      font-family: 'droid_sansbold';
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .col-md2 {
+    float: none;
+    margin: 20px 0
+  }
+}
+
+#filterSport {
+  width: auto;
+  border: none;
+
+  li {
+    background: #b2b2b2;
+    border: none;
+    border-radius: none;
+    margin: 0 1px;
+    text-transform: uppercase;
+    font-family: 'droid_sansbold';
+
+    a {
+      color: #565656;
+      font-size: 17px;
+      padding: 12px;
+      border: none;
+      border-radius: none;
+    }
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &.active {
+      background: #d1d1d1;
+      border: none;
+      border-radius: none;
+
+      a {
+        background: none;
+        border: none;
+      }
+    }
+  }
+}
+
+table.tab {
+  font-family: 'droid_sansregular';
+  width: 100%;
+  border: 2px solid #d1d1d1;
+
+  thead tr th {
+    background: #d1d1d1;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 5px 0 5px 15px;
+  }
+
+  tbody tr td {
+    font-size: 13px;
+    padding: 5px 0 5px 15px;
+
+    .green {
+      font-size: 13px;
+      padding: 0 10px 0 0;
+      margin: 0
+    }
+  }
+}
+
+
+table.lineup tbody tr td:last-child {
+  background: none repeat scroll 0 0 #0FEA6C;
+  color: #FFFFFF;
+  font-family: arial;
+  font-size: 26px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+table.tab tbody tr {
+  border-bottom: 1px solid #d1d1d1;
+
+  td span {
+    border-right: 1px solid #d1d1d1;
+    padding: 0 10px 0 0;
+    float: right
+  }
+}
+
+.col-md2 .col-lg-6 {
+  padding: 0
+}
+
+.col-md2 .col-lg-6 h4 {
+  font-size: 17px;
+  margin: 20px 0 28px;
+}
+
+.submitTeam {
+  width: 300px;
+  margin: 0 auto
+}
+
+.submitTeam input[type=submit] {
+  background: none repeat scroll 0 0 #555555;
+  border: medium none;
+  color: #0FEA6C;
+  font-family: 'droid_sansbold';
+  font-size: 40px;
+  padding: 10px 25px;
+}
