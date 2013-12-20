@@ -12,6 +12,6 @@
 
 require 'spec_helper'
 
-describe PlayerPerfIndex do
+describe PlayerStat do
   pending "add some examples to (or delete) #{__FILE__}"
 end

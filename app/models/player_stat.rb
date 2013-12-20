@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: player_perf_indices
+# Table name: player_stats
 #
 #  id          :integer          not null, primary key
 #  player_id   :integer
@@ -10,6 +10,6 @@
 #  updated_at  :datetime
 #
 
-class PlayerPerfIndex < ActiveRecord::Base
+class PlayerStat < ActiveRecord::Base
   belongs_to :player
 end
