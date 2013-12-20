@@ -34,16 +34,6 @@ ActiveRecord::Schema.define(version: 20131220000001) do
     t.datetime "updated_at"
   end
 
-  create_table "player_perf_indices", force: true do |t|
-    t.integer  "player_id"
-    t.string   "index_name"
-    t.string   "index_value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "player_perf_indices", ["player_id"], name: "index_player_perf_indices_on_player_id", using: :btree
-
   create_table "player_stats", force: true do |t|
     t.integer  "player_id"
     t.string   "index_name"
