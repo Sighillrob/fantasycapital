@@ -1,6 +1,12 @@
 Main::Application.routes.draw do
+  get "entries/new"
+  get "entries/edit"
+  get "entries/show"
   devise_for :users
-  resources :contests
+
+  resources :contests do
+    resources :entries
+  end
   root to: "contests#index"
 
   # The priority is based upon order of creation: first created -> highest priority.

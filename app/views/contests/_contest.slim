@@ -1,11 +1,10 @@
-ul.contest
-  li 50/50
+ul.contest id=dom_id(contest)
+  li= contest.contest_type
   li
-    = image_tag 'sports/nba.png'
-    | NBA
-  li 01:23:45
-  li $1
-  li $1.90
-  li 51
-  li
-    a.button href="#" Enter
+    = image_tag "sports/#{contest.sport.downcase}.png"
+    = contest.sport
+  li= contest_remaining_time contest
+  li= number_to_currency contest.enrtry_fee
+  li= number_to_currency contest.prize
+  li= contest.entries.size
+  li= link_to 'enter', new_contest_entry_path(contest), class: 'button'

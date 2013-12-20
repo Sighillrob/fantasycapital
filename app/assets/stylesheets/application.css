@@ -13,5 +13,6 @@
  *= require navbar-static-top
  *= require navbar
  *= require style
+ *= require entries
  *= require_tree .
  */

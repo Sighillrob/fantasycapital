@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: entries
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  sport      :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  contest_id :integer
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
