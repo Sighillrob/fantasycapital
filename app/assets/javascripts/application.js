@@ -13,6 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require moment.min
+//= require bootstrap-sortable
 //= require turbolinks
 //= require bootstrap_run
+//= require player
+//= require entries
 //= require_tree .

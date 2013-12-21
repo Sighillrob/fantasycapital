@@ -1,7 +1,7 @@
 .jumbotron.team.teamDraft
   .contestlive
     strong Contest Live In
-    | 06:55:48
+    = content_livein_countdown @contest
   h1 Draft Your Team
   p
     | Choose from the available players below, and submit your team.
@@ -9,15 +9,15 @@
     | You can edit your team at any time until the game starts.
   p
     strong.green Full Contest Rules & Prizes »
-  h1.bold NFL Freeroll
+  h1.bold= @contest.sport
   h4 (Mon-Thurs) [5 step 1 Tix Gtd.]
-  h1.bold $10.00 Prize Pool
+  h1.bold= "#{number_to_currency @contest.prize} Prize Pool"
 
 p.timingschedule
   strong Start Time:
   | October 14,2013 at 8:40pm EST
   strong  Entry Fee:
-  | Free
+  = contest_entry_fee @contest
   strong  Entries:
   span.green 564/Uni »
 
@@ -35,164 +35,40 @@ p.timingschedule
       input placeholder="Search" type="text"
 
   ul#filterSport.nav.nav-tabs.tabs
-    li.active
-      a data-toggle="tab" href="#QB" QB
-    li
-      a data-toggle="tab" href="#RB" RB
-    li
-      a data-toggle="tab" href="#WR" WR
-    li
-      a data-toggle="tab" href="#TE" TE
-    li
-      a data-toggle="tab" href="#FLEX" FLEX
-    li
-      a data-toggle="tab" href="#K" K
-    li
-      a data-toggle="tab" href="#DST" DST
+    - Player::Positions.constants.each do |position|
+      li
+        = link_to Player::Positions.const_get(position), "##{position.to_s} ", data:{ toggle:  'tab' }
     li
       a data-toggle="tab" href="#ALL" ALL
 
   .tab-content
-    #QB.tab-pane.active
-      table.tab.lineup
-        thead
-          tr
-            th POS
-            th PLAYER
-            th OPP
-            th SALARY
-            th FPPG
-            th &nbsp;
-        tbody
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
-          tr
-            td
-              strong QB
-              span &nbsp;
-            td
-              span.green Phillip Rivers
-            td
-              span Ind@SDD
-            td
-              span $8,500
-            td 24.5
-            td +
+    - Player::Positions.constants.each do |position|
+      .tab-pane id=position.to_s
+        table.tab.lineup
+          thead
+            tr
+              th POS
+              th PLAYER
+              th OPP
+              th SALARY
+              th FPPG
+              th &nbsp;
+          tbody
+            - Player.on_position(position).each do |player|
+              = content_tag :tr, id: dom_id(player), class: 'contest-player', data: { player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.position } do
+                td
+                  strong=player.position
+                  span &nbsp;
+                td
+                  span.green= player.name
+                td
+                  span Ind@SDD
+                td
+                  span $8,500
+                td 24.5
+                td= link_to '+', '#_', class: 'add-to-lineup'
 
-    #RB.tab-pane 2
-    #WR.tab-pane 3
-    #TE.tab-pane 4
-    #FLEX.tab-pane 5
-    #K.tab-pane 6
-    #DST.tab-pane 7
-    #ALL.tab-pane 8
-  p.green Export to CSV »
+        p.green Export to CSV »
 
 .col-md2
   h2 LINEUP
@@ -213,94 +89,21 @@ p.timingschedule
         th SALARY
         th FPPG
     tbody
-      tr
-        td
-          strong QB
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong RB
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong WR
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong TE
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong FLEX
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong K
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
-      tr
-        td
-          strong DST
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td
-          span &nbsp;
-        td &nbsp;
+      - Player::Positions.constants.each do |position|
+        tr.lineup-item id="lineup_#{position.to_s}"
+          td
+            strong= Player::Positions.const_get position
+          td.player.val
+          td.opp.val
+          td.salary.val
+          td.fppg.val
       tr
         td
           strong ALL
-          span &nbsp;
         td
-          span &nbsp;
         td
-          span &nbsp;
         td
-          span &nbsp;
-        td &nbsp;
+        td
 
   p.green Clear »
 

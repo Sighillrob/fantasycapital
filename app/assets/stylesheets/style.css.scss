@@ -355,6 +355,7 @@ input[type=text] {
   border: 2px solid #0fea6c;
   padding: 20px;
   font-size: 18px;
+  margin-bottom: 15px;
 }
 
 /*Login Section*/
@@ -418,84 +419,44 @@ div.button {
 }
 
 /*Contest List*/
-ul.contest, ul.contestHead {
+ul.contest, table.contestHead {
   width: 100%;
-  padding: 0;
-  margin: 10px auto;
   border-top: 1px solid #bbbbbb;
   clear: both;
-}
 
-ul.contestHead li {
-  font-family: 'droid_sansbold';
-  float: left;
-  list-style: none;
-  font-size: 16px;
-  padding: 10px 20px;
-  text-align: left;
-}
+  tr{
+    font-family: 'droid_sansbold';
+    padding: 10px 20px;
 
-ul.contestHead li:nth-child(1), ul.contest li:nth-child(1) {
-  width: 10%;
-  font-weight: bold
-}
+    th{
+      color: #000;
+    }
 
-ul.contestHead li:nth-child(2), ul.contest li:nth-child(2) {
-  width: 30%;
-  font-weight: bold
-}
+    td{
+      &.sport-name, &.contest-type{
+        font-weight: bold;
+      }
 
-ul.contestHead li:nth-child(3), ul.contest li:nth-child(3) {
-  width: 12%
-}
+      color: #555555;
 
-ul.contestHead li:nth-child(4), ul.contest li:nth-child(4) {
-  width: 13%
-}
+      img{
+        margin-right: 5px;
+      }
 
-ul.contestHead li:nth-child(5), ul.contest li:nth-child(5) {
-  width: 13%
-}
-
-ul.contestHead li:nth-child(6), ul.contest li:nth-child(6) {
-  width: 12%
-}
-
-ul.contestHead li:nth-child(7), ul.contest li:nth-child(7) {
-  width: 10%
-}
-
-ul.contest li {
-  font-family: 'droid_sansregular';
-  float: left;
-  list-style: none;
-  padding: 10px 20px;
-  text-align: left;
-  color: #555555;
-  font-size: 18px;
-
-  img{
-    margin-right: 5px;
+      a.enter-contest {
+        background: #555555;
+        color: #0FEA6C;
+        padding: 5px 10px;
+        font-weight: bold;
+        text-decoration: none
+      }
+    }
   }
 }
 
-a.button {
-  background: #555555;
-  color: #0FEA6C;
-  padding: 5px 10px;
-  font-weight: bold;
-  text-decoration: none
-}
 
-@media (max-width: 768px) {
-  ul.contestHead li {
-    float: none;
-  }
 
-  ul.contest li {
-    float: none
-  }
-}
+
 
 /*Footer Area*/
 footer {

@@ -40,13 +40,15 @@
         li
           .button JOIN
 
-ul.contestHead
-  li CONTEST
-  li SPORT
-  li LIVE IN
-  li ENTRY
-  li PRIZE
-  li ENTRIES
-  li
-
-= render partial: 'contest', collection: @contests
+table.contestHead.table.sortable
+  thead
+    tr
+      th data-defaultsort="asc" CONTEST
+      th data-defaultsort="asc" SPORT
+      th data-defaultsort="asc" LIVE IN
+      th data-defaultsort="asc" ENTRY
+      th data-defaultsort="asc" PRIZE
+      th data-defaultsort="asc" ENTRIES
+      th data-defaultsort="disabled"
+  tbody
+    = render partial: 'contest', collection: @contests

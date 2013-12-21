@@ -12,4 +12,20 @@
 #
 
 class Player < ActiveRecord::Base
+  module Positions
+    SF = 'SF'
+    F  = 'F'
+    C  = 'C'
+    PF = 'PF'
+    SG = 'SG'
+    FC = 'F-C'
+    PG = 'PG'
+    G  = 'G'
+  end
+
+  class << self
+    def on_position(pos)
+      where position: pos.to_s
+    end
+  end
 end

@@ -7,7 +7,7 @@
 #  sport         :string(255)
 #  contest_type  :string(255)
 #  prize         :decimal(, )
-#  enrtry_fee    :decimal(, )
+#  entry_fee     :decimal(, )
 #  contest_start :datetime
 #  created_at    :datetime
 #  updated_at    :datetime
