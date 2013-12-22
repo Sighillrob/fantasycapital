@@ -11,6 +11,10 @@
 #
 
 class Entry < ActiveRecord::Base
+  self.primary_key = :id 
+
   belongs_to :contest
   belongs_to :user, inverse_of: :entries
+  has_many :lineups, inverse_of: :entry
+  has_many :players, :through => :lineups
 end
