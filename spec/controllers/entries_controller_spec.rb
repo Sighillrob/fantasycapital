@@ -2,9 +2,13 @@ require 'spec_helper'
 
 describe EntriesController do
 
+  before :each do
+    @contest = FactoryGirl.create(:contest)
+  end
+
   describe "GET 'new'" do
     it "returns http success" do
-      get 'new'
+      get 'new', contest_id: @contest.id
       response.should be_success
     end
   end
