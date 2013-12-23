@@ -1,0 +1,8 @@
+SportPosition.create(sport: "NBA", name: "SF", display_priority: 0)
+SportPosition.create(sport: "NBA", name: "F", display_priority: 1)
+SportPosition.create(sport: "NBA", name: "C", display_priority: 2)
+SportPosition.create(sport: "NBA", name: "PF", display_priority: 3)
+SportPosition.create(sport: "NBA", name: "SG", display_priority: 4)
+SportPosition.create(sport: "NBA", name: "F-C", display_priority: 5)
+SportPosition.create(sport: "NBA", name: "PG", display_priority: 6)
+SportPosition.create(sport: "NBA", name: "G", display_priority: 7)
