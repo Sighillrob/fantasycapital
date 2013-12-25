@@ -48,9 +48,9 @@
   </ul>
 
   <ul id='filterSport' class='nav nav-tabs tabs'>
-    <% Player::Positions.constants.each do |position| %>
+    <% @positions.each do |position| %>
         <li>
-          <%= link_to Player::Positions.const_get(position), "##{position.to_s} ", data: {toggle: 'tab'} %>
+          <%= link_to position.name, "##{position.name} ", data: {toggle: 'tab'} %>
         </li>
     <% end %>
 
@@ -60,8 +60,8 @@
   </ul>
 
   <div class='tab-content'>
-    <% Player::Positions.constants.each do |position| %>
-      <div class='tab-pane' id="<%= position.to_s %>">
+    <% @positions.each.each do |position| %>
+      <div class='tab-pane' id="<%= position.name %>">
         <table class='tab lineup'>
           <thead>
             <tr>
@@ -74,10 +74,10 @@
             </tr>
           </thead>
           <tbody>
-            <% Player.on_position(position).each do |player| %>
-              <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.position} do %>
+            <% position.players.each do |player| %>
+              <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: position.name} do %>
                 <td>
-                  <strong> <%= player.position %> </strong>
+                  <strong> <%= position.name %> </strong>
                     <span>&nbsp;</span>
                 </td>
                 <td>
@@ -111,9 +111,9 @@
         </thead>
         <tbody>
         <% Player.all.each do |player| %>
-            <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.position} do %>
+            <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.sport_position.name} do %>
                 <td>
-                  <strong> <%= player.position %> </strong>
+                  <strong> <%= player.sport_position.name %> </strong>
                   <span>&nbsp;</span>
                 </td>
                 <td>
@@ -165,10 +165,10 @@
     </tr>
     </thead>
     <tbody>
-    <% Player::Positions.constants.each do |position| %>
-        <tr class='lineup-item' id="lineup_<%= position.to_s %>">
+    <% @positions.each do |position| %>
+        <tr class='lineup-item' id="lineup_<%= position.name %>">
           <td>
-            <strong> <%= Player::Positions.const_get position %> </strong>
+            <strong> <%= position.name %> </strong>
           </td>
           <td class='player val'></td>
           <td class='opp val'></td>
