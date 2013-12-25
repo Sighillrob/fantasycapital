@@ -1,0 +1,18 @@
+<tr class='contest' id='<%=dom_id(contest)%>'>
+  <td class='contest-type'><%= contest.contest_type %></td>
+  <td class='sport-name'>
+    <%= image_tag "sports/#{contest.sport.downcase}.png" %>
+  </td>
+    <%= contest.sport %>
+  <td><%= content_livein_countdown contest %></td>
+  <td data-value=<%= contest.entry_fee %>>
+    <%= contest_entry_fee contest %>
+   </td>
+  <td data-value=<%= contest.prize %>>
+    <%= number_to_currency contest.prize %>
+  </td>
+  <td><%= contest.entries.size %></td>
+  <td>
+    <%= link_to 'enter', new_contest_entry_path(contest), class: 'enter-contest'%>
+  </td>
+</tr>

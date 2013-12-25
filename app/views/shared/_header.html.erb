@@ -1,0 +1,98 @@
+<div class='topbarWraper'>
+  <div class='navbar navbar-default navbar-static-top capital_top_nav' role="navigation">
+    <div class='container'>
+      <div class='navbar-header'>
+        <button class='navbar-toggle' data-target=".capitalcollapse" data-toggle="collapse" type="button">
+          <span class='sr-only'>Toggle navigation</span>
+          <span class='icon-bar'></span>
+          <span class='icon-bar'></span>
+          <span class='icon-bar'></span>
+        </button>
+      </div>
+      <div class='navbar-collapse collapse.capitalcollapse'>
+        <ul class='nav navbar-nav'>
+          <li>
+            <%= link_to '#_' do %>
+              <%= image_tag 'twitter.jpg', alt: 'Fantasy capital Twitter page' %>
+              Twitter
+            <%end %>
+          </li>
+          <li>
+            <%= link_to '#_' do %>
+              <%= image_tag 'facebook.jpg', alt: 'Fantasy capital Facebook page' %>
+              Facebook
+             <% end %>
+          </li>
+          <li>
+            <%= link_to '#_' do %>
+              <%= image_tag 'gplus.jpg', alt: 'Fantasy capital Google Plus page' %>
+              Google +
+            <% end %>
+          </li>
+        </ul>
+        <ul class='nav navbar-nav navbar-right capital-navbar-right'>
+          <li>
+            <strong class='green'>Refer Friends for Cash »</strong>
+          </li>
+          <li class='dropdown'>
+            <a class='dropdown-toggle' data-toggle="dropdown" href="#_">
+              Welcome,
+              <span class='green'>Steve</span>
+              <b class='downarrow'>&nbsp;</b>
+            </a>
+            <ul class='dropdown-menu'>
+              <li>Content Area</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class='container'>
+    <h1 class='logo'>
+      <%= link_to root_path do%>
+        <%= image_tag 'logo.png', alt: 'Fantasy Capital' %>
+       <% end %>
+    </h1>
+    <div class='balanceBlock'>
+      <h1>Balance: &nbsp;$0.00</h1>
+      <strong class='green'>Add Funds »</strong>
+    </div>
+    <div class='clear'>&nbsp;</div>
+    <div class='navbar navbar-default capitalnavbar' role="navigation">
+      <div class='navbar-header'>
+        <button class='navbar-toggle' data-target=".mainMenu" data-toggle="collapse" type="button">
+          <span class='sr-only'>Toggle navigation</span>
+          <span class='icon-bar'></span>
+          <span class='icon-bar'></span>
+          <span class='icon-bar'></span>
+        </button>
+      </div>
+      .<div class='navbar-collapse collapse mainMenu'>
+        <ul class='nav navbar-nav'>
+          <li class='active'>
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#">Contest</a>
+          </li>
+          <li>
+            <a href="#">Lineups</a>
+          </li>
+          <li>
+            <a href="#">Leaderboard</a>
+          </li>
+          <li>
+            <a href="#">Rules/Faq</a>
+          </li>
+          <li>
+            <a href="#">Account</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
