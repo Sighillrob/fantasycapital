@@ -27,13 +27,16 @@ ActiveRecord::Schema.define(version: 20131223162540) do
     t.datetime "updated_at"
   end
 
-  create_table "entries", id: false, force: true do |t|
+  create_table "entries", force: true do |t|
     t.integer  "user_id"
     t.integer  "contest_id"
+    t.string   "sport"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "id"
   end
+
+  add_index "entries", ["contest_id"], name: "index_entries_on_contest_id", using: :btree
+  add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
 
   create_table "lineups", force: true do |t|
     t.integer  "entry_id"
