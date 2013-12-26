@@ -110,7 +110,7 @@
         </tr>
         </thead>
         <tbody>
-        <% Player.all.each do |player| %>
+        <% Player.eager_load(:sport_position).all.each do |player| %>
             <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: 100, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.sport_position.name} do %>
                 <td>
                   <strong> <%= player.sport_position.name %> </strong>
