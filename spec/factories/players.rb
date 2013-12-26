@@ -1,9 +1,10 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :sport_position do
-    name "SF"
-    sport "NBA"
-    display_priority 0
+  factory :player do
+    name "Quincy Acy"
+    team "Tor"
+    age 23
+    sport_position
   end
 end
