@@ -14,20 +14,20 @@ describe EntriesController do
     end
   end
 
-  describe "GET 'edit'" do
-    it "returns http success" do
-      get 'edit'
-      response.should be_success
-    end
-  end
-
-  describe "GET 'show'" do
-    it "returns http success" do
-      get 'show'
-      response.should be_success
-    end
-  end
-
+#  describe "GET 'edit'" do
+#    it "returns http success" do
+#      get 'edit'
+#      response.should be_success
+#    end
+#  end
+#
+#  describe "GET 'show'" do
+#    it "returns http success" do
+#      get 'show'
+#      response.should be_success
+#    end
+#  end
+#
   describe "POST 'create'" do
     describe "with valid params" do
       it "creates a new Entry" do
