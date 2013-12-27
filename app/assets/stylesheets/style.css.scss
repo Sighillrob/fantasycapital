@@ -1,3 +1,5 @@
+@import 'variables';
+
 /*External Font for the Site*/
 @font-face {
   font-family: 'droid_sansregular';
@@ -105,7 +107,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   strong {
-    color: #0FEA6C;
+    color: $theme-green;
     font-size: 17px;
     position: relative;
     top: 13px;
@@ -119,10 +121,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .green {
-  color: #0FEA6C;
+  color: $theme-green;
   font-size: 17px;
   font-weight: bold;
   margin: 0 5px 0 5px;
+  &:hover{
+    color: $theme-green;
+  }
 }
 
 li.dropdown {
@@ -352,7 +357,7 @@ input[type=text] {
 /*Welcome Note*/
 .welcomeNote {
   text-align: center;
-  border: 2px solid #0fea6c;
+  border: 2px solid $theme-green;
   padding: 20px;
   font-size: 18px;
   margin-bottom: 15px;
@@ -403,7 +408,7 @@ ul.loginJoin li {
 
 div.button {
   background: none repeat scroll 0 0 #555555;
-  color: #0FEA6C;
+  color: $theme-green;
   font-weight: bold;
   margin: 0 0 0 5px;
   min-width: 75px;
@@ -445,7 +450,7 @@ ul.contest, table.contestHead {
 
       a.enter-contest {
         background: #555555;
-        color: #0FEA6C;
+        color: $theme-green;
         padding: 5px 10px;
         font-weight: bold;
         text-decoration: none
@@ -480,7 +485,7 @@ div.footerContainer {
         list-style: none;
 
         a{
-          color: #0FEA6C;
+          color: $theme-green;
           font-size: 17px;
           text-transform: uppercase;
         }

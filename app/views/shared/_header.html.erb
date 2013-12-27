@@ -35,14 +35,18 @@
             <strong class='green'>Refer Friends for Cash »</strong>
           </li>
           <li class='dropdown'>
+            <% if user_signed_in? %>
             <a class='dropdown-toggle' data-toggle="dropdown" href="#_">
               Welcome,
-              <span class='green'>Steve</span>
+              <span class='green'><%= current_user.first_name %></span>
               <b class='downarrow'>&nbsp;</b>
             </a>
             <ul class='dropdown-menu'>
               <li>Content Area</li>
             </ul>
+            <% else %>
+              <%= link_to "Sign in", new_user_session_path %>
+            <% end %>
           </li>
         </ul>
       </div>

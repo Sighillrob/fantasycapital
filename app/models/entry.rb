@@ -15,4 +15,18 @@ class Entry < ActiveRecord::Base
   belongs_to :user, inverse_of: :entries
   has_many :lineups, inverse_of: :entry
   has_many :players, through: :lineups
+
+  accepts_nested_attributes_for :lineups
+
+  class << self
+    def build_entry_for_contest(contest)
+      entry = Entry.new contest: contest
+      contest.sport_positions.order(display_priority: :asc).each do |position|
+        entry.lineups.build sport_position: position
+      end
+
+      entry
+    end
+
+  end
 end

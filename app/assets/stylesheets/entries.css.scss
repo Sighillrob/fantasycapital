@@ -227,3 +227,9 @@ table.tab tbody tr {
   font-size: 40px;
   padding: 10px 25px;
 }
+a#clear-lineups{
+
+  &:focus, &:hover{
+    text-decoration: none;
+  }
+}

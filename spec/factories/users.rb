@@ -19,14 +19,15 @@
 #  last_name              :string(255)
 #
 
-class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-  has_many :entries, inverse_of: :user
-  has_many :contests, through: :entries
+# Read about factories at https://github.com/thoughtbot/factory_girl
+FactoryGirl.define do
+  sequence :email do |n|
+    "user#{n}@example.com"
+  end
+end
 
-  validates :first_name, :last_name, presence: true
-
+FactoryGirl.define do
+  factory :user do
+    email { generate :email }
+  end
 end

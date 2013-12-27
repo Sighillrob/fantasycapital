@@ -19,14 +19,12 @@
 #  last_name              :string(255)
 #
 
-class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-  has_many :entries, inverse_of: :user
-  has_many :contests, through: :entries
+require 'spec_helper'
 
-  validates :first_name, :last_name, presence: true
+describe User do
+  it { should have_many(:entries) }
+  it { should have_many(:contests).through(:entries) }
+  it { should validate_presence_of(:first_name) }
+  it { should validate_presence_of(:last_name) }
 
 end

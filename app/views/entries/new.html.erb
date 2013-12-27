@@ -137,60 +137,67 @@
 
   </div>
 </div>
+<%= form_for [@contest, @entry]  do |f| %>
+    <div class='col-md2'>
+      <h2>LINEUP</h2>
 
-<div class='col-md2'>
-  <h2>LINEUP</h2>
+      <div class='col-lg-6'>
+        <h4>
+          <strong> AVG. REM./PLAYER:</strong>
+          $5,555
+        </h4>
+      </div>
+      <div class='col-lg-6'>
+        <h4>
+          <strong> REM./SALARY:</strong>
+          $50,000
+        </h4>
+      </div>
 
-  <div class='col-lg-6'>
-    <h4>
-      <strong> AVG. REM./PLAYER:</strong>
-      $5,555
-    </h4>
-  </div>
-  <div class='col-lg-6'>
-    <h4>
-      <strong> REM./SALARY:</strong>
-      $50,000
-    </h4>
-  </div>
-
-  <table class='tab'>
-    <thead>
-    <tr>
-      <th>POS</th>
-      <th>PLAYER</th>
-      <th>OPP</th>
-      <th>SALARY</th>
-      <th>FPPG</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @positions.each do |position| %>
-        <tr class='lineup-item' id="lineup_<%= position.name %>">
-          <td>
-            <strong> <%= position.name %> </strong>
-          </td>
-          <td class='player val'></td>
-          <td class='opp val'></td>
-          <td class='salary val'></td>
-          <td class='fppg val'></td>
+      <table class='tab'>
+        <thead>
+        <tr>
+          <th>POS</th>
+          <th>PLAYER</th>
+          <th>OPP</th>
+          <th>SALARY</th>
+          <th>FPPG</th>
         </tr>
-    <% end %>
-    <tr>
-      <td>
-        <strong>ALL</strong>
-      </td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    </tbody>
-  </table>
-    <%= link_to 'Clear »', '#_', class: 'clear-lineups green' %>
-</div>
+        </thead>
+        <tbody>
+        <%= f.fields_for :lineups do |lineup_form| %>
+            <% position = lineup_form.object.sport_position %>
+            <tr class='lineup-item' id="lineup_<%= position.name %>">
+              <td>
+                <strong> <%= position.name %> </strong>
+                <%= lineup_form.hidden_field :sport_position_id %>
+              </td>
+              <td class='player val'>
+                <span></span>
+                <%= lineup_form.hidden_field :player_id %>
+              </td>
+              <td class='opp val'></td>
+              <td class='salary val'></td>
+              <td class='fppg val'></td>
+            </tr>
+        <% end %>
+        <tr>
+          <td>
+            <strong>ALL</strong>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      <%= link_to 'Clear »', '#_', class: 'green', id: 'clear-lineups' %>
+    </div>
 
-<div class='clear'> &nbsp;</div>
-<div class='submitTeam'>
-  <input name="submit" type="submit" value="SUBMIT TEAM"/>
-</div>
+    <div class='clear'> &nbsp;</div>
+    <div class='submitTeam'>
+      <%= f.submit 'SUBMIT TEAM', disable_with: 'Please wait...' %>
+    </div>
+<% end %>
+
