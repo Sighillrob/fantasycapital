@@ -59,8 +59,8 @@ group :development, :test do
   gem "factory_girl_rails", "~> 4.0"
   gem "bullet"
   gem "rspec-rails"
+  gem 'meta_request'
 end
-
 
 group :test do
   gem 'shoulda-matchers'
