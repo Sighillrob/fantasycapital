@@ -16,6 +16,12 @@ class Lineup
     dom.find('td.opp').html @player.opp
     dom.find('td.salary').html @player.salary
     dom.find('td.fppg').html @player.fppg
+  
+  replace: (dom) -> 
+    dom.find('td.player span').html @player.name
+    dom.find('td.opp').html @player.opp
+    dom.find('td.salary').html @player.salary
+    dom.find('td.fppg').html @player.fppg
 
 class Entry
   lineups: []
@@ -27,8 +33,18 @@ class Entry
 
     $('a.add-to-lineup').on 'click', ->
       player = new window.Player($(@).closest('tr.contest-player'))
+      i = 0
+      keep = false
+      while i < that.lineups.length
+        if that.lineups[i].position is player.position
+          prev_lineup = that.lineups.splice(i, 1)[0]
+          prev_lineup.replace($(@).closest('tr.contest-player'))
+          keep = true
+        i++
       that.lineups.push(new Lineup(player))
       that.updateView()
+      unless keep
+        $(@).closest('tr.contest-player').remove()    
 
   clear: ->
     @lineups = []
@@ -38,6 +54,7 @@ class Entry
     #$('tr.lineup-item').find('td.val').empty()
     $.each @lineups, (i, lineup) ->
       lineup.render()
+
 
 $ ->
   new Entry
