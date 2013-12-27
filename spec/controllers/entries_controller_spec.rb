@@ -32,7 +32,7 @@ describe EntriesController do
     describe "with valid params" do
       it "creates a new Entry" do
         expect {
-          post :create, {contest_id: @contest.id, player_ids: [@player.id]}
+          post :create, {contest_id: @contest.id, entry: {player_ids: [@player.id]}}
         }.to change(Entry, :count).by(1)
       end
     end
