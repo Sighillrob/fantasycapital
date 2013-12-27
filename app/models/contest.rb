@@ -15,5 +15,10 @@
 
 class Contest < ActiveRecord::Base
   has_many :entries
-  has_many :users, :through => :entries
+  has_many :users, through: :entries
+
+  def sport_positions
+    SportPosition.where sport: self.sport
+  end
+
 end

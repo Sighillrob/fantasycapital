@@ -1,11 +1,11 @@
 <tr class='contest' id='<%=dom_id(contest)%>'>
   <td class='contest-type'><%= contest.contest_type %></td>
   <td class='sport-name'>
+    <%= contest.sport %>
     <%= image_tag "sports/#{contest.sport.downcase}.png" %>
   </td>
-    <%= contest.sport %>
   <td><%= content_livein_countdown contest %></td>
-  <td data-value=<%= contest.entry_fee %>>
+  <td class='entry-fee' data-value=<%= contest.entry_fee %>>
     <%= contest_entry_fee contest %>
    </td>
   <td data-value=<%= contest.prize %>>

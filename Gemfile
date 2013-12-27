@@ -46,12 +46,6 @@ end
 # gem 'debugger', group: [:development, :test]
 gem 'devise'
 
-gem "rspec-rails", :group => [:development, :test]
-gem "capybara", :group => :test
-gem "database_cleaner", :group => :test
-gem 'slim'
-gem 'slim-rails'
-
 group :production, :staging do
   gem 'rails_12factor'
   gem "rack-google-analytics"
@@ -63,4 +57,14 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'annotate'
   gem "factory_girl_rails", "~> 4.0"
+  gem "bullet"
+  gem "rspec-rails"
+end
+
+
+group :test do
+  gem 'shoulda-matchers'
+  gem 'capybara'
+  gem "database_cleaner"
+  gem 'selenium-webdriver'
 end

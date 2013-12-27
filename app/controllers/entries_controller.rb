@@ -1,7 +1,8 @@
 class EntriesController < ApplicationController
+  before_action :set_contest, only: [:new, :create]
+
   def new
-    set_contest
-    @positions = SportPosition.where(sport: @contest.sport).order(display_priority: :asc)
+    @positions = @contest.sport_positions.order(display_priority: :asc)
   end
 
   def edit
@@ -13,7 +14,6 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
-    set_contest
     @entry = Entry.new(contest: @contest)
     params[:player_ids].each do |player_id|
       @entry.lineups.build(player_id: player_id)
@@ -22,7 +22,7 @@ class EntriesController < ApplicationController
     respond_to do |format|
       if @entry.save
         format.html { redirect_to [@contest, @entry], notice: 'Entry was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @entry}
+        format.json { render action: 'show', status: :created, location: @entry }
       else
         format.html { render action: 'new' }
         format.json { render json: @entry.errors, status: :unprocessable_entity }
@@ -31,8 +31,8 @@ class EntriesController < ApplicationController
   end
 
   private
-    def set_contest
-      @contest = Contest.find(params[:contest_id])
-    end
+  def set_contest
+    @contest = Contest.find(params[:contest_id])
+  end
 
 end
