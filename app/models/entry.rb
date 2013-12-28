@@ -4,29 +4,19 @@
 #
 #  id         :integer          not null, primary key
 #  user_id    :integer
+#  lineup_id  :integer
+#  player_id  :integer
 #  sport      :string(255)
 #  created_at :datetime
 #  updated_at :datetime
-#  contest_id :integer
 #
 
 class Entry < ActiveRecord::Base
+  attr_accessor :sport_position
   belongs_to :contest
   belongs_to :user, inverse_of: :entries
-  has_many :lineups, inverse_of: :entry
-  has_many :players, through: :lineups
+  belongs_to :lineup, inverse_of: :entries
+  belongs_to :player
 
-  accepts_nested_attributes_for :lineups
-
-  class << self
-    def build_entry_for_contest(contest)
-      entry = Entry.new contest: contest
-      contest.sport_positions.order(display_priority: :asc).each do |position|
-        entry.lineups.build sport_position: position
-      end
-
-      entry
-    end
-
-  end
+  validates :player, presence: true
 end

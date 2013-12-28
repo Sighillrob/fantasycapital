@@ -3,8 +3,8 @@
 # Table name: lineups
 #
 #  id                :integer          not null, primary key
-#  entry_id          :integer
-#  player_id         :integer
+#  user_id           :integer
+#  contest_id        :integer
 #  created_at        :datetime
 #  updated_at        :datetime
 #  sport_position_id :integer

@@ -7,6 +7,7 @@ class CreateContests < ActiveRecord::Migration
       t.decimal :prize
       t.decimal :enrtry_fee
       t.datetime :contest_start
+      t.integer :lineups_count, default: 0
 
       t.timestamps
     end

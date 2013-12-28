@@ -24,8 +24,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :entries, inverse_of: :user
-  has_many :contests, through: :entries
+
+  has_many :lineups, inverse_of: :user
+  has_many :contests, through: :lineups
 
   validates :first_name, :last_name, presence: true
 

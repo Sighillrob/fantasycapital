@@ -10,5 +10,11 @@ module ApplicationHelper
   def page_id
     "#{controller_name}_#{action_name}".downcase
   end
+
+  def menu_classes(menu)
+    classes = { controller_name => 'active'}
+
+    classes[menu]
+  end
 end
 

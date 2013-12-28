@@ -13,4 +13,6 @@
 
 class Player < ActiveRecord::Base
   belongs_to :sport_position
+  has_many :entries, inverse_of: :player
+
 end

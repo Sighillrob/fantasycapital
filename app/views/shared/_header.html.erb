@@ -77,14 +77,14 @@
       </div>
       .<div class='navbar-collapse collapse mainMenu'>
         <ul class='nav navbar-nav'>
-          <li class='active'>
-            <a href="#">Home</a>
+          <li class='<%= menu_classes 'contests' %>'>
+            <%= link_to 'Home', root_path %>
           </li>
           <li>
             <a href="#">Contest</a>
           </li>
-          <li>
-            <a href="#">Lineups</a>
+          <li class='<%= menu_classes 'lineups' %>'>
+            <%= link_to 'Lineups', lineups_path %>
           </li>
           <li>
             <a href="#">Leaderboard</a>
