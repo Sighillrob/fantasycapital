@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131227164532) do
+ActiveRecord::Schema.define(version: 20131228124816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,32 +23,35 @@ ActiveRecord::Schema.define(version: 20131227164532) do
     t.decimal  "prize"
     t.decimal  "entry_fee"
     t.datetime "contest_start"
+    t.integer  "lineups_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "entries", force: true do |t|
     t.integer  "user_id"
-    t.integer  "contest_id"
-    t.string   "sport"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "entries", ["contest_id"], name: "index_entries_on_contest_id", using: :btree
-  add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
-
-  create_table "lineups", force: true do |t|
-    t.integer  "entry_id"
+    t.integer  "lineup_id"
     t.integer  "player_id"
+    t.string   "sport"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sport_position_id"
   end
 
-  add_index "lineups", ["entry_id"], name: "index_lineups_on_entry_id", using: :btree
-  add_index "lineups", ["player_id"], name: "index_lineups_on_player_id", using: :btree
-  add_index "lineups", ["sport_position_id"], name: "index_lineups_on_sport_position_id", using: :btree
+  add_index "entries", ["lineup_id"], name: "index_entries_on_lineup_id", using: :btree
+  add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
+  add_index "entries", ["sport_position_id"], name: "index_entries_on_sport_position_id", using: :btree
+  add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
+
+  create_table "lineups", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "contest_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "lineups", ["contest_id"], name: "index_lineups_on_contest_id", using: :btree
+  add_index "lineups", ["user_id"], name: "index_lineups_on_user_id", using: :btree
 
   create_table "player_stats", force: true do |t|
     t.integer  "player_id"

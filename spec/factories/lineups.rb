@@ -2,12 +2,11 @@
 #
 # Table name: lineups
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  contest_id        :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  sport_position_id :integer
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  contest_id :integer
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

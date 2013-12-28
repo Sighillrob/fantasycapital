@@ -22,4 +22,9 @@ class Contest < ActiveRecord::Base
     SportPosition.where sport: self.sport
   end
 
+  #TODO: placeholder for testing the views
+  def salary_cap
+    50000
+  end
+
 end

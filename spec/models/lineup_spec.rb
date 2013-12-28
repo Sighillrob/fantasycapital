@@ -2,17 +2,19 @@
 #
 # Table name: lineups
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  contest_id        :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  sport_position_id :integer
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  contest_id :integer
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 require 'spec_helper'
 
 describe Lineup do
-  it { should belong_to(:player) }
-  it { should belong_to(:entry) }
+  it { should belong_to(:contest) }
+  it { should belong_to(:user) }
+  it { should have_many(:entries) }
+  it { should have_many(:players).through(:entries) }
+
 end

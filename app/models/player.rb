@@ -15,4 +15,10 @@ class Player < ActiveRecord::Base
   belongs_to :sport_position
   has_many :entries, inverse_of: :player
 
+  #TODO: stub method for testing remaining salary cap in lineup
+  def salary
+    @salary ||= rand(5500)
+    @salary
+  end
+
 end
