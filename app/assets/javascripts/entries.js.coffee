@@ -12,7 +12,7 @@ class Lineup
   render: ->
     dom = $("tr#lineup_"+@player.position)
     dom.find('td.player input').val @player.id
-    dom.find('td.player span').html @player.name
+    dom.find('td.player').html @player.name
     dom.find('td.opp').html @player.opp
     dom.find('td.salary').html @player.salary
     dom.find('td.fppg').html @player.fppg
@@ -37,12 +37,22 @@ class Entry
       that.updateView()
       $("tr[data-player-id='"+player.id+"']").hide()
 
+    $('a.remove-from-lineup').on 'click', ->
+      position = $(@).data('position')
+      i = 0
+      while i < that.lineups.length
+        if that.lineups[i].position is position
+          prev_lineup = that.lineups.splice(i, 1)[0]
+          $("tr[data-player-id='"+prev_lineup.player.id+"']").show()
+        i++
+      that.updateView()
+
   clear: ->
     @lineups = []
     @updateView()
 
   updateView: ->
-    #$('tr.lineup-item').find('td.val').empty()
+    $('tr.lineup-item').find('td.val').empty()
     $.each @lineups, (i, lineup) ->
       lineup.render()
 

@@ -180,11 +180,21 @@ table.tab {
   }
 }
 
-table.lineup tbody tr td:last-child {
+table.tab a[class$="-lineup"] {
+  text-decoration: none;
+  color: #fff;
+  &:hover{
+    text-decoration: none;
+    color: #fff;
+  }
+}
+
+table.tab tbody tr td:last-child {
   background: none repeat scroll 0 0 #0FEA6C;
   color: #FFFFFF;
   font-family: arial;
   font-size: 26px;
+  width: 16px;
   padding: 0 5px;
   text-align: center;
 }
@@ -233,3 +243,4 @@ a#clear-lineups{
     text-decoration: none;
   }
 }
+
