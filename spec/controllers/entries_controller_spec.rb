@@ -28,13 +28,13 @@ describe EntriesController do
 #    end
 #  end
 #
-  describe "POST 'create'" do
-    describe "with valid params" do
-      it "creates a new Entry" do
-        expect {
-          post :create, {contest_id: @contest.id, entry: {player_ids: [@player.id]}}
-        }.to change(Entry, :count).by(1)
-      end
-    end
-  end
+#  describe "POST 'create'" do
+#    describe "with valid params" do
+#      it "creates a new Entry" do
+#        expect {
+#          post :create, {contest_id: @contest.id, entry: {player_ids: [@player.id]}}
+#        }.to change(Entry, :count).by(1)
+#      end
+#    end
+#  end
 end
