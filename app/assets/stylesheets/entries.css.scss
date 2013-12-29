@@ -161,11 +161,11 @@ table.tab {
 
   tbody tr td {
     font-size: 13px;
-    padding: 5px 0 5px 15px;
+    padding: 5px 15px 5px 0px;
 
     .green {
       font-size: 13px;
-      padding: 0 10px 0 0;
+      padding: 0 0 0 10px;
       margin: 0
     }
   }
@@ -203,9 +203,8 @@ table.tab tbody tr {
   border-bottom: 1px solid #d1d1d1;
 
   td span {
-    border-right: 1px solid #d1d1d1;
-    padding: 0 10px 0 0;
-    float: right
+    border-left: 1px solid #d1d1d1;
+    padding: 0 0 0 10px;
   }
   &.lineup-item{
     td{
