@@ -9,5 +9,6 @@ Contest.delete_all
 PlayerStat.delete_all
 Player.delete_all
 SportPosition.delete_all
+LineupSpotProto.delete_all
 
 Dir[Rails.root.join("db/seeds/*.rb")].entries.sort.each { |f| require f }

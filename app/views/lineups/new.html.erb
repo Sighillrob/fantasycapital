@@ -59,6 +59,24 @@
   </ul>
 
   <div class='tab-content'>
+    <div class='tab-pane' id="ALL">
+      <table class='tab lineup'>
+        <thead>
+        <tr>
+          <th>POS</th>
+          <th>PLAYER</th>
+          <th>OPP</th>
+          <th>SALARY</th>
+          <th>FPPG</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+          <%= render partial: 'lineups/lineup_player', collection: Player.eager_load(:sport_position).all, as: :player %>
+        </tbody>
+      </table>
+    </div>
+
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
           <table class='tab lineup'>
@@ -78,24 +96,6 @@
           </table>
         </div>
     <% end %>
-    <div class='tab-pane' id="ALL">
-      <table class='tab lineup'>
-        <thead>
-        <tr>
-          <th>POS</th>
-          <th>PLAYER</th>
-          <th>OPP</th>
-          <th>SALARY</th>
-          <th>FPPG</th>
-          <th>&nbsp;</th>
-        </tr>
-        </thead>
-        <tbody>
-          <%= render partial: 'lineups/lineup_player', collection: Player.eager_load(:sport_position).all, as: :player %>
-        </tbody>
-      </table>
-    </div>
-
     <p class='green'>Export to CSV »</p>
 
   </div>
@@ -133,16 +133,17 @@
         </tr>
         </thead>
         <tbody>
-        <%= f.fields_for :entries do |entry_form| %>
-            <% position = entry_form.object.sport_position %>
-            <tr class='entry-item' id="entry_<%= position.name %>">
+        <%= f.fields_for :lineup_spots do |spot_form| %>
+            <% spot = spot_form.object %>
+            <% position = spot.sport_position %>
+            <%= content_tag :tr, id: dom_id(spot), class: 'lineup-spot', data: {sport_position_name: position.name, spot: spot.spot} do %>
               <td>
                 <strong><span><%= position.name %> </span></strong>
-                <%= entry_form.hidden_field :sport_position_id %>
+                <%= spot_form.hidden_field :sport_position_id %>
               </td>
               <td class='player val'>
                 <span>&nbsp;</span>
-                <%= entry_form.hidden_field :player_id %>
+                <%= spot_form.hidden_field :player_id %>
               </td>
               <td class='opp val'>
                 <span>&nbsp;</span>
@@ -154,8 +155,9 @@
                 <span>&nbsp;</span>
               </td>
               </td>
-              <td><%= link_to 'x', '#_', class: 'remove-from-lineup', data: {position: position.name} %> </td>
+              <td><%= link_to 'x', '#_', class: 'remove-from-lineup', data: {lineup_spot: spot.spot} %> </td>
             </tr>
+          <% end %>
         <% end %>
         <tr>
           <td>

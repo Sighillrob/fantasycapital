@@ -8,6 +8,8 @@ class Lineup
   constructor: ->
     that        = @
     @salary_cap = $('#contest-salary-sap').data('salary')
+    $(".lineup-spot").each (i, obj) ->
+      that.entries.push(new Entry($(@)))
 
     $('a#clear-lineups').on 'click', ->
       that.clear()
@@ -15,30 +17,27 @@ class Lineup
     $('a.add-to-lineup').on 'click', ->
       player = new window.Player($(@).closest('tr.contest-player'))
       if that.canAddPlayer(player)
-        i = 0
-        while i < that.entries.length
-          if that.entries[i].position is player.position
-            prev_entry = that.entries.splice(i, 1)[0]
-            $("tr[data-player-id='"+prev_entry.player.id+"']").show()
-          i++
-        that.entries.push(new Entry(player))
+        eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
+        if eligible_spots.length is 0
+          alert "Please remove player from position "+player.position
+        else
+          eligible_spots[0].player = player
+          $("tr[data-player-id='"+player.id+"']").hide()
         that.updateView()
-        $("tr[data-player-id='"+player.id+"']").hide()
       else
         alert "You can't add this player. Salary limit reached!"
 
     $('a.remove-from-lineup').on 'click', ->
-      position = $(@).data('position')
-      i = 0
-      while i < that.entries.length
-        if that.entries[i].position is position
-          prev_entry = that.entries.splice(i, 1)[0]
-          $("tr[data-player-id='"+prev_entry.player.id+"']").show()
-        i++
+      spot_seq = $(@).data('lineup-spot')
+      spots = (spot for spot in that.entries when spot.spot is spot_seq and not not spot.player)
+      for spot in spots
+        $("tr[data-player-id='"+spot.player.id+"']").show()
+        spot.player = ''
       that.updateView()
 
   consumedSalary: ->
-    @entries.map((entry) ->
+    alloted_spots = (spot for spot in @entries when not not spot.player)
+    alloted_spots.map((entry) ->
       entry.player.salary
     ).reduce (a, b) ->
       a + b
@@ -52,7 +51,6 @@ class Lineup
     @updateView()
 
   updateView: ->
-    $('tr.entry-item').find('td.val span').html '&nbsp;'
     $('#contest-salary-sap').html '$'+(@salary_cap - @consumedSalary())
     $('#contest-salary-consumed').html '$'+@consumedSalary()
 
@@ -62,18 +60,19 @@ class Lineup
 class Entry
   player: ''
   position: ''
+  spot: ''
 
-  constructor: (player) ->
-    @player   = player
-    @position = player.position
+  constructor: (dom) ->
+    @position = dom.data('sport-position-name')
+    @spot = dom.data('spot')
 
   render: ->
-    dom = $("tr#entry_"+@player.position)
+    dom = $("tr.lineup-spot[data-spot="+@spot+"]")
     dom.find('td.player input').val @player.id
-    dom.find('td.player span').html @player.name
-    dom.find('td.opp span').html @player.opp
-    dom.find('td.salary span').html @player.salary
-    dom.find('td.fppg span').html @player.fppg
+    dom.find('td.player span').html @player.name || "&nbsp;"
+    dom.find('td.opp span').html @player.opp || "&nbsp;"
+    dom.find('td.salary span').html @player.salary || "&nbsp;"
+    dom.find('td.fppg span').html @player.fppg || "&nbsp;"
 
 $ ->
   new Lineup

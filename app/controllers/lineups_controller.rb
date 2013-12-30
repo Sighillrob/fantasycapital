@@ -2,8 +2,8 @@ class LineupsController < ApplicationController
   before_action :set_contest, only: [:new, :create]
 
   def new
-    @positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
-    @lineup     = Lineup.build_entries_for_contest @contest
+    @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
+    @lineup     = Lineup.build_for_contest @contest
   end
 
   def edit

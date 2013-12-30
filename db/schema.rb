@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131228124816) do
+ActiveRecord::Schema.define(version: 20131229203006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,27 @@ ActiveRecord::Schema.define(version: 20131228124816) do
   add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
   add_index "entries", ["sport_position_id"], name: "index_entries_on_sport_position_id", using: :btree
   add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
+
+  create_table "lineup_spot_protos", force: true do |t|
+    t.string   "sport"
+    t.string   "sport_position_name"
+    t.integer  "spot"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lineup_spots", force: true do |t|
+    t.integer  "sport_position_id"
+    t.integer  "lineup_id"
+    t.integer  "player_id"
+    t.integer  "spot"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "lineup_spots", ["lineup_id"], name: "index_lineup_spots_on_lineup_id", using: :btree
+  add_index "lineup_spots", ["player_id"], name: "index_lineup_spots_on_player_id", using: :btree
+  add_index "lineup_spots", ["sport_position_id"], name: "index_lineup_spots_on_sport_position_id", using: :btree
 
   create_table "lineups", force: true do |t|
     t.integer  "user_id"
@@ -78,6 +99,7 @@ ActiveRecord::Schema.define(version: 20131228124816) do
     t.integer  "display_priority"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "visible",          default: true
   end
 
   add_index "sport_positions", ["name", "sport"], name: "index_sport_positions_on_name_and_sport", unique: true, using: :btree
