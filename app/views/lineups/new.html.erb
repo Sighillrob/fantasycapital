@@ -18,7 +18,7 @@
   <h1 class="bold"><%= @contest.sport %></h1>
   <h4>(Mon-Thurs) [5 step 1 Tix Gtd.]</h4>
 
-  <h1 class='bold'> <%= number_to_currency @contest.prize %> Prize Pool</h1>
+  <h1 class='bold'> <%= number_to_currency @contest.prize, precision: 0 %> Prize Pool</h1>
 </div>
 
 <p class='timingschedule'>
@@ -58,7 +58,7 @@
     </li>
   </ul>
 
-  <div class='tab-content'>
+  <div class='tab-content same-height'>
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
           <table class='tab lineup'>
@@ -107,21 +107,21 @@
       <div class='col-lg-6'>
         <h4>
           <strong> AVG. REM./PLAYER:</strong>
-          <span id='contest-salary-consumed'>
-            <%= number_to_currency consumed_salary @contest %>
+          <span id='contest-salary-consumed' class="currency">
+            <%= number_to_currency consumed_salary(@contest), precision: 0 %>
           </span>
         </h4>
       </div>
       <div class='col-lg-6'>
         <h4>
           <strong> REM./SALARY:</strong>
-          <span id='contest-salary-sap' data-salary=<%= @contest.salary_cap %>>
-            <%= number_to_currency @contest.salary_cap %>
+          <span id='contest-salary-cap' class="currency" data-salary=<%= @contest.salary_cap %>>
+            <%= number_to_currency @contest.salary_cap, precision: 0 %>
           </span>
         </h4>
       </div>
 
-      <table class='tab'>
+      <table class='tab same-height'>
         <thead>
         <tr>
           <th>POS</th>
@@ -170,7 +170,7 @@
         </tbody>
       </table>
       <%= link_to 'Import »', '#_', class: 'green', id: 'import-lineups' %>
-      <%= link_to 'Clear »', '#_', class: 'green', id: 'clear-lineups' %>
+      <%= link_to 'Clear »', '#_', class: 'green', id: 'clear-lineups', confirm: "are you sure to clear lineups?" %>
     </div>
 
     <div class='clear'> &nbsp;</div>

@@ -8,6 +8,6 @@ module ContestsHelper
   end
 
   def  contest_entry_fee(contest)
-    contest.entry_fee.zero? ? 'Free' : number_to_currency(contest.entry_fee)
+    contest.entry_fee.zero? ? 'Free' : number_to_currency(contest.entry_fee, precision: 0)
   end
 end
