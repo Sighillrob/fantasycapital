@@ -8,7 +8,7 @@ class Lineup
   constructor: ->
     @fixHeight()
     that        = @
-    @salary_cap = $('#contest-salary-sap').data('salary')
+    @salary_cap = $('#contest-salary-cap').data('salary')
     $(".lineup-spot").each (i, obj) ->
       that.entries.push(new Entry($(@)))
 
