@@ -6,13 +6,15 @@ class Lineup
   entries:    []
 
   constructor: ->
+    @fixHeight()
     that        = @
     @salary_cap = $('#contest-salary-sap').data('salary')
     $(".lineup-spot").each (i, obj) ->
       that.entries.push(new Entry($(@)))
 
     $('a#clear-lineups').on 'click', ->
-      that.clear()
+      if confirm("Are you sure to clear your lineup?")
+        that.clear()
 
     $('a.add-to-lineup').on 'click', ->
       player = new window.Player($(@).closest('tr.contest-player'))
@@ -51,11 +53,24 @@ class Lineup
     @updateView()
 
   updateView: ->
-    $('#contest-salary-sap').html '$'+(@salary_cap - @consumedSalary())
-    $('#contest-salary-consumed').html '$'+@consumedSalary()
+    $('tr.entry-item').find('td.val span').html '&nbsp;'
+    $('#contest-salary-cap').html (@salary_cap - @consumedSalary())
+    $('#contest-salary-consumed').html @consumedSalary()
+    $('.currency').currency
+      region: 'USD'
+      thousands: ','
+      decimal: '.'
+      decimals: 0
+      hidePrefix: false
 
     $.each @entries, (i, entry) ->
       entry.render()
+
+  fixHeight: ->
+    minHeight = $('div.capitalcontent').find('.same-height:first').height()
+    $('div.capitalcontent').find('.same-height').each ->
+      minHeight= Math.min minHeight, $(this).height()
+    $('.same-height').css({height: minHeight+'px'})
 
 class Entry
   player: ''

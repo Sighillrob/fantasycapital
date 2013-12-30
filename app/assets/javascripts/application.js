@@ -17,6 +17,8 @@
 //= require bootstrap-sortable
 //= require turbolinks
 //= require bootstrap_run
+//= require jquery.currency
 //= require player
 //= require entries
+
 //= require_tree .
