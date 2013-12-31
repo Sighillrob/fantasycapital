@@ -24,7 +24,7 @@ class Lineup
           alert "Please remove player from position "+player.position
         else
           eligible_spots[0].player = player
-          $("tr[data-player-id='"+player.id+"']").hide()
+          $('tr#player_'+player.id).hide()
         that.updateView()
       else
         alert "You can't add this player. Salary limit reached!"
@@ -33,7 +33,7 @@ class Lineup
       spot_seq = $(@).data('lineup-spot')
       spots = (spot for spot in that.entries when spot.spot is spot_seq and not not spot.player)
       for spot in spots
-        $("tr[data-player-id='"+spot.player.id+"']").show()
+        $('tr#player_'+spot.player.id).show()
         spot.player = ''
       that.updateView()
 
@@ -80,6 +80,9 @@ class Entry
   constructor: (dom) ->
     @position = dom.data('sport-position-name')
     @spot = dom.data('spot')
+    if dom.data('player-id')
+      @player = new window.Player($($('tr#player_'+dom.data('player-id'))[0]))
+      $('tr#player_'+@player.id).hide()
 
   render: ->
     dom = $("tr.lineup-spot[data-spot="+@spot+"]")

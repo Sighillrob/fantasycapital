@@ -79,7 +79,13 @@
     <!---Box Header-->
     <header>
     <div class="pull-left"><img src="/assets/sports/nfl.png" alt=""/><strong><%= lineup.contest.sport %></strong></div>
-    <div class="pull-right"><%= lineup.contest.complete? ? "<strong>COMPLETE</strong>".html_safe : "<strong>UPCOMING</strong>: 52:34:46".html_safe %></div>
+    <div class="pull-right">
+    <% if lineup.contest.complete? %>
+      <strong>COMPLETE</strong>
+    <% else %>
+      <strong>UPCOMING</strong>: <%= contest_livein_countdown lineup.contest %>
+    <% end %>
+    </div>
     </header>
     <ul class="summary">
       <li># of Entries</li>
@@ -114,7 +120,7 @@
       </tr>
       </tbody>
     </table>
-    <p class="small"><strong>Last Edit:</strong> Dec 10 2013 3:49PM EST</p>
+    <p class="small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
     <footer>
       <ul>
       <% unless lineup.contest.complete? %>
