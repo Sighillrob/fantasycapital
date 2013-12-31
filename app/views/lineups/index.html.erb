@@ -112,7 +112,7 @@
         <td><span><strong><%= lineup_spot.sport_position.name %></strong></span></td>
         <td><span class="green"><%= lineup_spot.player.try(:name) || "&nbsp;".html_safe %></span></td>
 
-        <td><span>24.5</span></td>
+        <td><span><%= (lineup_spot.player ? "24.5" : "&nbsp;").html_safe %></span></td>
       </tr>
     <% end %>
       <tr>
