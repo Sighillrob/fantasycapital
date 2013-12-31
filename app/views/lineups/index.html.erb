@@ -103,14 +103,14 @@
       <tbody>
         <% lineup.lineup_spots.each do |lineup_spot| %>
       <tr>
-        <td><strong><%= lineup_spot.sport_position.name %></strong><span>&nbsp;</span></td>
-        <td><span class="green"><%= lineup_spot.player.try(:name) || " " %></span></td>
+        <td><span><strong><%= lineup_spot.sport_position.name %></strong></span></td>
+        <td><span class="green"><%= lineup_spot.player.try(:name) || "&nbsp;".html_safe %></span></td>
 
-        <td>24.5</td>
+        <td><span>24.5</span></td>
       </tr>
     <% end %>
       <tr>
-        <td colspan="4"><%= lineup.contest.complete? ? "<strong>FANTASY POINTS</strong>: 126.7".html_safe : " " %></td>
+        <td colspan="4" style="color: white; text-align: center;"><%= (lineup.contest.complete? ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
       </tr>
       </tbody>
     </table>

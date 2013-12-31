@@ -211,6 +211,9 @@ table.tab tbody tr {
       border-right: 1px solid #d1d1d1;
     }
   }
+  td:first-child span {
+    border-left: 0
+  }
 }
 
 

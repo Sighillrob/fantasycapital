@@ -45,6 +45,7 @@ end
 # Use debugger
 gem 'debugger', group: [:development, :test]
 gem 'devise'
+gem "bullet"
 
 group :production, :staging do
   gem 'rails_12factor'
@@ -59,7 +60,6 @@ group :development, :test do
   gem "factory_girl_rails", "~> 4.0"
   gem "rspec-rails"
   gem 'meta_request'
-  gem "bullet"
 end
 
 group :test do
