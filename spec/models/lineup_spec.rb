@@ -15,6 +15,6 @@ describe Lineup do
   it { should belong_to(:contest) }
   it { should belong_to(:user) }
   it { should have_many(:entries) }
-  it { should have_many(:players).through(:entries) }
+  it { should have_many(:players).through(:lineup_spots) }
 
 end

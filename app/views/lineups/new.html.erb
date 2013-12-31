@@ -140,6 +140,7 @@
               <td>
                 <strong><span><%= position.name %> </span></strong>
                 <%= spot_form.hidden_field :sport_position_id %>
+                <%= spot_form.hidden_field :spot %>
               </td>
               <td class='player val'>
                 <span>&nbsp;</span>
@@ -155,7 +156,7 @@
                 <span>&nbsp;</span>
               </td>
               </td>
-              <td><%= link_to 'x', '#_', class: 'remove-from-lineup', data: {lineup_spot: spot.spot} %> </td>
+              <td class='action-icon'><%= link_to 'x', '#_', class: 'remove-from-lineup', data: {lineup_spot: spot.spot} %> </td>
             </tr>
           <% end %>
         <% end %>

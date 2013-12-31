@@ -17,7 +17,4 @@ require 'spec_helper'
 describe Entry do
   it { should belong_to(:user) }
   it { should belong_to(:lineup) }
-  it { should belong_to(:player) }
-  it { should belong_to(:sport_position) }
-  it { should validate_presence_of(:player) }
 end

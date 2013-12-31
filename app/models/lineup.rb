@@ -12,11 +12,13 @@
 class Lineup < ActiveRecord::Base
   has_many :entries, inverse_of: :lineup
   has_many :lineup_spots, inverse_of: :lineup
-  has_many :players, through: :entries
+  has_many :players, through: :lineup_spots
   belongs_to :contest, inverse_of: :lineups, counter_cache: true
   belongs_to :user, inverse_of: :lineup
 
   accepts_nested_attributes_for :entries, :lineup_spots
+
+  validates :contest, presence: true
 
   class << self
     def build_for_contest(contest)

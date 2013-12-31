@@ -568,15 +568,6 @@ table.summarymatchup tbody tr td .green {
   margin: 0
 }
 
-table.lineup tbody tr td:last-child {
-  background: none repeat scroll 0 0 #0FEA6C;
-  color: #FFFFFF;
-  font-family: arial;
-  font-size: 26px;
-  padding: 0 5px;
-  text-align: center;
-}
-
 table.summarymatchup tbody tr {
   border-bottom: 1px solid #d1d1d1;
 }
@@ -599,10 +590,6 @@ table.summarymatchup tbody tr:last-child {
   border: 2px solid #0FEA6C;
 }
 
-.complete table.lineup tbody tr td:last-child {
-  background: image-url('lock.png') no-repeat center center #ababab;
-}
-
 .complete table.lineup tbody tr:last-child td:last-child {
   background: none repeat scroll 0 0 #585858;
   font-size: 16px;
@@ -614,7 +601,7 @@ table.summarymatchup tbody tr:last-child {
   font-size: 16px;
   height: 45px;
   margin: 0 0 10px 0;
-  padding: 10px;
+  padding: 3px;
 }
 
 .gridbox header img {
@@ -662,6 +649,10 @@ table.summarymatchup tbody tr:last-child {
 
 .gridbox table.lineup tbody {
   background: #fff;
+}
+
+.gridbox table.lineup tbody tr {
+  line-height: 28px;
 }
 
 .gridbox table.lineup tbody tr:last-child td {

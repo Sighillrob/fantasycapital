@@ -27,4 +27,8 @@ class Contest < ActiveRecord::Base
     15000
   end
 
+  def complete?
+    contest_start < Time.now
+  end
+
 end

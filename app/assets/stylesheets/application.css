@@ -14,6 +14,7 @@
  *= require navbar
  *= require style
  *= require entries
+ *= require lineups
  *= require bootstrap-sortable
  *= require_tree .
  */
