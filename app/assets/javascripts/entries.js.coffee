@@ -37,6 +37,13 @@ class Lineup
         spot.player = ''
       that.updateView()
 
+    $('#new_lineup').submit (event) ->
+      spots = (spot for spot in that.entries when not spot.player)
+      if spots.length is 0
+        return true
+      alert "Team needds to be completely filled before it can be submitted."
+      return false
+
   consumedSalary: ->
     alloted_spots = (spot for spot in @entries when not not spot.player)
     alloted_spots.map((entry) ->
