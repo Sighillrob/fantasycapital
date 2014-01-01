@@ -1,0 +1,16 @@
+<table class='contestHead table sortable'>
+  <thead>
+    <tr>
+      <th data-defaultsort="asc" class="srt-contest-name">CONTEST</th>
+      <th data-defaultsort="asc" class="srt-sport">SPORT</th>
+      <th data-defaultsort="asc" class="srt-live-in">LIVE IN</th>
+      <th data-defaultsort="asc" class="srt-entry-fee">ENTRY</th>
+      <th data-defaultsort="asc">PRIZE</th>
+      <th data-defaultsort="asc">ENTRIES</th>
+      <th data-defaultsort="disabled"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: 'contest', collection: @contests %>
+  </tbody>
+</table>

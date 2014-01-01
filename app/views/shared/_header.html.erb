@@ -77,11 +77,11 @@
       </div>
       .<div class='navbar-collapse collapse mainMenu'>
         <ul class='nav navbar-nav'>
-          <li class='<%= menu_classes 'contests' %>'>
+          <li class='<%= menu_classes 'home' %>'>
             <%= link_to 'Home', root_path %>
           </li>
-          <li>
-            <a href="#">Contest</a>
+          <li class='<%= menu_classes 'contests' %>'>
+            <%= link_to 'Contests', browse_contests_path %>
           </li>
           <li class='<%= menu_classes 'lineups' %>'>
             <%= link_to 'Lineups', lineups_path %>

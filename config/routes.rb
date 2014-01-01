@@ -4,6 +4,9 @@ Main::Application.routes.draw do
 
   resources :lineups, only: :index
   resources :contests do
+    collection do
+      get 'browse'
+    end
     resources :lineups
   end
 
