@@ -57,22 +57,24 @@ class Lineup
     @consumedSalary() + player.salary < @salary_cap
 
   clear: ->
-    @entries = []
+    @entries.map (entry) ->
+      entry.player = ''
     @updateView()
 
   updateView: ->
     $('tr.entry-item').find('td.val span').html '&nbsp;'
     $('#contest-salary-cap').html (@salary_cap - @consumedSalary())
     $('#contest-salary-consumed').html @consumedSalary()
+
+    $.each @entries, (i, entry) ->
+      entry.render()
+
     $('.currency').currency
       region: 'USD'
       thousands: ','
       decimal: '.'
       decimals: 0
       hidePrefix: false
-
-    $.each @entries, (i, entry) ->
-      entry.render()
 
   fixHeight: ->
     minHeight = $('div.capitalcontent').find('.same-height:first').height()
