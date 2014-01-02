@@ -60,11 +60,11 @@
 
   <div class='tab-content same-height'>
     <div class='tab-pane' id="ALL">
-      <table class='tab lineup'>
+      <table class='tab lineup table sortable'>
         <thead>
         <tr>
           <th>POS</th>
-          <th>PLAYER</th>
+          <th data-defaultsort="asc">PLAYER</th>
           <th>OPP</th>
           <th>SALARY</th>
           <th>FPPG</th>
@@ -79,11 +79,11 @@
 
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
-          <table class='tab lineup'>
+          <table class='tab lineup table sortable'>
             <thead>
             <tr>
               <th>POS</th>
-              <th>PLAYER</th>
+              <th data-defaultsort="asc">PLAYER</th>
               <th>OPP</th>
               <th>SALARY</th>
               <th>FPPG</th>
