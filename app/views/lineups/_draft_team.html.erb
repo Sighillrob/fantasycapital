@@ -47,19 +47,18 @@
   </ul>
 
   <ul id='filterSport' class='nav nav-tabs tabs'>
+    <li class="active">
+      <a data-toggle="tab" href="#ALL">ALL</a>
+    </li>
     <% @positions.each do |position| %>
         <li>
           <%= link_to position.name, "##{position.name} ", data: {toggle: 'tab'} %>
         </li>
     <% end %>
-
-    <li>
-      <a data-toggle="tab" href="#ALL">ALL</a>
-    </li>
-  </ul>
+ </ul>
 
   <div class='tab-content same-height'>
-    <div class='tab-pane' id="ALL">
+    <div class='tab-pane active' id="ALL">
       <table class='tab lineup table sortable'>
         <thead>
         <tr>
