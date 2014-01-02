@@ -36,6 +36,7 @@ class Lineup
         $('tr#player_'+spot.player.id).show()
         spot.player = ''
       that.updateView()
+    @updateView()
 
     $('#new_lineup').submit (event) ->
       spots = (spot for spot in that.entries when not spot.player)
@@ -86,10 +87,14 @@ class Entry
 
   constructor: (dom) ->
     @position = dom.data('sport-position-name')
+    @spot     = dom.data('spot')
+    player_id = dom.data('player-id')
+
+    if player_id?
+      player_dom = $('tr.contest-player#player_'+player_id)
+      @player = new window.Player(player_dom)
+      player_dom.hide()
     @spot = dom.data('spot')
-    if dom.data('player-id')
-      @player = new window.Player($($('tr#player_'+dom.data('player-id'))[0]))
-      $('tr#player_'+@player.id).hide()
 
   render: ->
     dom = $("tr.lineup-spot[data-spot="+@spot+"]")

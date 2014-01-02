@@ -58,34 +58,6 @@ p.message {
   background: image-url('arrow.png') no-repeat right #F6F6F6;
 }
 
-/*Top Bar*/
-.topbarWraper {
-  height: 55px;
-}
-
-.capital_top_nav {
-  height: auto
-}
-
-.capital_top_nav a {
-  color: #FFFFFF !important;
-  font-size: 16px;
-  font-weight: bold;
-  height: 45px;
-  padding-right: 0 !important;
-  margin: 0;
-}
-
-.capital_top_nav a img {
-  margin-right: 5px;
-}
-
-.capitalcollapse {
-  height: 55px;
-  overflow: visible;
-  padding-bottom: 10px;
-}
-
 @media (max-width: 768px) {
   .navbar-header {
     background: #313131;

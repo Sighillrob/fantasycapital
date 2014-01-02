@@ -1,20 +1,22 @@
 class LineupsController < ApplicationController
-  before_action :set_contest, only: [:new, :create, :edit, :update]
+  before_action :set_contest, except: :index
+  before_filter :authenticate_user!
   before_action :set_lineup, only: [:edit, :update]
 
   def new
     @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
-    @lineup     = Lineup.build_for_contest @contest
+    @lineup    = Lineup.build_for_contest @contest
   end
 
   def edit
-    @positions = @lineup.contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
+    @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
+    @lineup    = current_user.lineups.build_for_contest @contest, params[:id]
   end
 
   # POST /entries
   # POST /entries.json
   def create
-    @lineup = Lineup.create(lineup_parameters)
+    @lineup         = current_user.lineups.create(lineup_parameters)
     @lineup.contest = @contest
 
     respond_to do |format|
@@ -48,7 +50,23 @@ class LineupsController < ApplicationController
 
 
   def index
-    @lineups = Lineup.includes([:lineup_spots, :contest]).order(updated_at: :desc).limit 3
+    @lineups = current_user.lineups.includes([:lineup_spots, :contest]).order(updated_at: :desc).limit 3
+  end
+
+  def update
+   @lineup = current_user.lineups.find(params[:id])
+
+   respond_to do |format|
+     if @lineup.update_attributes(line_parameters)
+       format.html { redirect_to lineups_path, notice: 'Lineup was successfully updated.' }
+       format.json { render action: 'show', status: :created, location: @lineup }
+     else
+       @positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
+       format.html { render action: 'edit' }
+       format.json { render json: @entry.errors, status: :unprocessable_entity }
+     end
+   end
+
   end
 
   private

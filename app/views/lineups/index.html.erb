@@ -78,7 +78,9 @@
   <div class="gridbox <%= lineup.contest.complete? ? "complete" : "upcoming" %>">
     <!---Box Header-->
     <header>
-    <div class="pull-left"><img src="/assets/sports/nfl.png" alt=""/><strong><%= lineup.contest.sport %></strong></div>
+      <div class="pull-left">
+        <%= image_tag "sports/#{lineup.contest.sport.downcase}.png" %>
+        <strong><%= lineup.contest.sport %></strong></div>
     <div class="pull-right">
     <% if lineup.contest.complete? %>
       <strong>COMPLETE</strong>

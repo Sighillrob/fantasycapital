@@ -5,8 +5,8 @@ module LineupsHelper
     end
   end
 
-  def consumed_salary(contest)
-      0
+  def consumed_salary(lineup)
+    lineup.players.sum(:salary)
   end
 
 end

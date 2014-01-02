@@ -9,8 +9,8 @@
           <span class='icon-bar'></span>
         </button>
       </div>
-      <div class='navbar-collapse collapse.capitalcollapse'>
-        <ul class='nav navbar-nav'>
+      <div class='navbar-collapse collapse capitalcollapse'>
+        <ul class='nav navbar-nav social-links social-link'>
           <li>
             <%= link_to '#_' do %>
               <%= image_tag 'twitter.jpg', alt: 'Fantasy capital Twitter page' %>
@@ -42,7 +42,7 @@
               <b class='downarrow'>&nbsp;</b>
             </a>
             <ul class='dropdown-menu'>
-              <li>Content Area</li>
+              <li><%= link_to 'Sign out', destroy_user_session_path, method: :delete %></li>
             </ul>
             <% else %>
               <%= link_to "Sign in", new_user_session_path %>
