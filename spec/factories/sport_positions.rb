@@ -8,6 +8,7 @@
 #  display_priority :integer
 #  created_at       :datetime
 #  updated_at       :datetime
+#  visible          :boolean          default(TRUE)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

@@ -57,7 +57,7 @@ class LineupsController < ApplicationController
    @lineup = current_user.lineups.find(params[:id])
 
    respond_to do |format|
-     if @lineup.update_attributes(line_parameters)
+     if @lineup.update_attributes(lineup_parameters)
        format.html { redirect_to lineups_path, notice: 'Lineup was successfully updated.' }
        format.json { render action: 'show', status: :created, location: @lineup }
      else

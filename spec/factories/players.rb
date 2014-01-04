@@ -9,6 +9,7 @@
 #  created_at        :datetime
 #  updated_at        :datetime
 #  sport_position_id :integer
+#  salary            :integer
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

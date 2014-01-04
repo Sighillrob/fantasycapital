@@ -9,6 +9,7 @@
 #  created_at        :datetime
 #  updated_at        :datetime
 #  sport_position_id :integer
+#  salary            :integer
 #
 
 require 'spec_helper'

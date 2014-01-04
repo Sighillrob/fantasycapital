@@ -1,5 +1,1 @@
-<%= form_for @waiting_list do |f|  %>
-  <%= f.label :email %>
-  <%= f.email_field :email, autofocus: true, required: true %>
-  <%= f.submit 'JOIN BETA GROUP' %>
-<% end %>
+<%= render partial: 'waiting_lists/form' %>

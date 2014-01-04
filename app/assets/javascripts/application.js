@@ -16,9 +16,11 @@
 //= require moment.min
 //= require bootstrap-sortable
 //= require turbolinks
+//= require social-share-button
 //= require bootstrap_run
 //= require jquery.currency
 //= require player
 //= require entries
+
 
 //= require_tree .

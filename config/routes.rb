@@ -1,4 +1,11 @@
 Main::Application.routes.draw do
+  get "splash/index", as: :splash
+  resources :waiting_lists, only: [:new, :create, :show] do
+    collection do
+      get :invite
+    end
+  end
+
   devise_for :users
   resource :entries
 

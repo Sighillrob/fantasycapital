@@ -16,5 +16,6 @@
  *= require entries
  *= require lineups
  *= require bootstrap-sortable
+ *= require social-share-button
  *= require_tree .
  */
