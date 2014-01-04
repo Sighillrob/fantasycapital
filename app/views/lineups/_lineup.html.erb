@@ -1,0 +1,63 @@
+<div class="col-md-4">
+  <div class="gridbox <%= lineup.contest.complete? ? "complete" : "upcoming" %>">
+    <!---Box Header-->
+    <header>
+      <div class="pull-left">
+        <%= image_tag "sports/#{lineup.contest.sport.downcase}.png" %>
+        <strong><%= lineup.contest.sport %></strong></div>
+      <div class="pull-right">
+        <% if lineup.contest.complete? %>
+            <strong>COMPLETE</strong>
+        <% else %>
+            <strong>UPCOMING</strong>: <%= contest_livein_countdown lineup.contest %>
+        <% end %>
+      </div>
+    </header>
+    <ul class="summary">
+      <li># of Entries</li>
+      <li>PMR</li>
+      <li>REM.Salary</li>
+    </ul>
+    <ul class="summary">
+      <li>1</li>
+      <li>540</li>
+      <li>$0</li>
+    </ul>
+    <!---/Box Header-->
+    <table class="tab lineup">
+      <thead>
+      <tr>
+        <th>POS</th>
+        <th>PLAYER</th>
+        <th>FPPG</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% lineup.lineup_spots.each do |lineup_spot| %>
+          <tr>
+            <td><span><strong><%= lineup_spot.sport_position.name %></strong></span></td>
+            <td data-stats-url="<%= stats_player_path(lineup_spot.player) if lineup_spot.player %>" class="<%= 'player-stats' if lineup_spot.player %>"><span class="green"><%= lineup_spot.player.try(:name) || "&nbsp;".html_safe %></span></td>
+
+            <td><span><%= (lineup_spot.player ? "24.5" : "&nbsp;").html_safe %></span></td>
+          </tr>
+      <% end %>
+      <tr>
+        <td colspan="4" style="color: white; text-align: center;"><%= (lineup.contest.complete? ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
+    <footer>
+      <ul>
+        <% unless lineup.contest.complete? %>
+            <li><span class="green"><%= link_to "Edit »", edit_contest_lineup_path(lineup.contest, lineup) %></span></li>
+            <li><span class="green"><a href="#">Export »</a></span></li>
+        <% end %>
+        <li><span class="green"><a href="#">Entries »</a></span></li>
+        <% unless lineup.contest.complete? %>
+            <li><span class="green"><a href="#">Challenge »</a></span></li>
+        <% end %>
+      </ul>
+    </footer>
+  </div>
+</div>

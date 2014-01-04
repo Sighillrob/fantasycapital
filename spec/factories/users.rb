@@ -28,6 +28,9 @@ end
 
 FactoryGirl.define do
   factory :user do
+    first_name "first"
+    last_name "last"
+    password "password"
     email { generate :email }
   end
 end

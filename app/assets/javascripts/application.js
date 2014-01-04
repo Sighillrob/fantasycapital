@@ -15,6 +15,9 @@
 //= require bootstrap
 //= require moment.min
 //= require bootstrap-sortable
+//= require bootstrap-modal
+//= require bootstrap-modalmanager
+//= require ajax_modal
 //= require turbolinks
 //= require social-share-button
 //= require bootstrap_run

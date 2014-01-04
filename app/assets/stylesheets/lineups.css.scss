@@ -467,6 +467,9 @@ ul.completedcontest li {
 
 /*POP UP*/
 
+.modal .capitalcontent{
+  border-radius: 10px;
+}
 .btnClose {
   border: 1px solid #555555;
   border-radius: 33px;
@@ -474,6 +477,7 @@ ul.completedcontest li {
   float: right;
   font-size: 18px;
   padding: 2px 10px;
+  background: #fff;
 }
 
 .popupTitle {

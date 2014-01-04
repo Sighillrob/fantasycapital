@@ -1,23 +1,28 @@
 Main::Application.routes.draw do
   get "splash/index", as: :splash
-  resources :waiting_lists, only: [:new, :create, :show] do
-    collection do
-      get :invite
-    end
-  end
+  root to: "contests#index"
 
   devise_for :users
-  resource :entries
 
+  resource :entries
   resources :lineups, only: :index
+  resources :players, only: [] do
+    member do
+      get :stats
+    end
+  end
   resources :contests do
     collection do
       get 'browse'
     end
     resources :lineups
   end
+  resources :waiting_lists, only: [:new, :create, :show] do
+    collection do
+      get :invite
+    end
+  end
 
-  root to: "contests#index"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

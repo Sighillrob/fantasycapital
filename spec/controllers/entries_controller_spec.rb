@@ -1,15 +1,19 @@
 require 'spec_helper'
 
 describe EntriesController do
+  let!(:contest) { create(:contest)}
+  let(:user) { create(:user) }
 
   before :each do
-    @contest = FactoryGirl.create(:contest)
     @player = FactoryGirl.create(:player)
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in :user, user
   end
 
   describe "GET 'new'" do
     it "returns http success" do
-      get 'new', contest_id: @contest.id
+      get 'new', contest_id: contest.id
+
       response.should be_success
     end
   end

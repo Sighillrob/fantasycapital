@@ -11,9 +11,17 @@ describe ContestsController do
   # in order to pass any filters (e.g. authentication) defined in
   # ContestsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+  let(:user) { create(:user) }
 
   describe "GET index" do
+
+    before do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in :user, user
+    end
+
     it "assigns all contests as @contests" do
+
       contest = create(:contest)
       get :index, {}, valid_session
       assigns(:contests).should eq([contest])

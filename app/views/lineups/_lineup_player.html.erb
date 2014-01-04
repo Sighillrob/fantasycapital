@@ -4,7 +4,7 @@
         <strong> <%= player.sport_position.name %> </strong>
       </span>
     </td>
-    <td class='player'>
+    <td class='player player-stats' data-stats-url="<%= stats_player_path player %>">
       <span class='green'><%= player.name %> </span>
     </td>
     <td class='opp'>

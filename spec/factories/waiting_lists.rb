@@ -16,7 +16,7 @@
 
 FactoryGirl.define do
   factory :waiting_list do
-    email "MyString"
-    name "MyString"
+    email { generate :email }
+    invitation_token { SecureRandom.hex(6) }
   end
 end
