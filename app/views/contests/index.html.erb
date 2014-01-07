@@ -1,81 +1,100 @@
-<div class='categoryNav'>
-  <ul>
-    <li>
-      <%= link_to 'Best Odds', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Lowest Rake', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Fast and Secure Payments', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Refer Friends, Earn Cash', '#_' %>
-    </li>
-  </ul>
+<div class="welcomeNote">Enter the Game of your choice, then Select your Lineup and Win Cash.</div>
+
+<h2>MY CONTEST</h2>
+<div class="clear">&nbsp;</div>
+<div class="filter_row">
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Live Contest</h4>
+    </div>
+    <div class="col-md-4"><span class="green"><a href="#">Join More Contest »</a></span></div>
+  </div>
 </div>
-
-<div class='welcomeNote'>Enter the Game of your choice, then Select your Lineup and Win Cash.</div>
-
-<div class='loginSection'>
-  <div class='row'>
-    <div class='col-md-4'>
-      <div class='radio'>
-        <input id='publicContent' name="radio" type="radio" value=""/>
-        <label for="publicContent">Public</label>
-        <input id='privateContest' name="radio" type="radio" value=""/>
-        <label for="privateContest"> Private</label>
-      </div>
+<p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
+<div class="filter_row">
+  <div class="row">
+    <div class="col-md-4">
+      <h4>Upcoming Contest</h4>
     </div>
-    <div class='col-md-4'>
-      <div class='login'>
-        <ul class='nav navbar-nav navbar-right capital-navbar-right'>
-          <li class='dropdownlogin'>
-            <a class='dropdown-toggle' data-toggle="dropdown" href="#">
-              FILTER BY SPORT &nbsp;
-              <b class='downarrowblack'>&nbsp;</b>
-            </a>
-            <ul class='dropdown-menu'>
-              <li><a href="#">CBB</a></li>
-              <li><a href="#">NBA</a></li>
-              <li><a href="#">NHL</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+    <div class="col-md-8"><span class="green"><a href="#">Join More Contest »</a></span><span class="green"><a href="#">View
+      my Lineups »</a></span></div>
+  </div>
+</div>
+<p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
+<div class="filter_row">
+  <div class="row">
+    <div class="col-md-4">
+      <h4>Completed Contest</h4>
     </div>
-    <div class='col-md-4'>
-      <ul class='loginJoin'>
+    <div class="col-md-8">
+      <ul>
         <li>
-          <input type="text" value="Name"/>
+          <h4>Buy In</h4>
         </li>
         <li>
-          <div class='button'>CREATE</div>
-        </li>
+          <div class="styled-select">
+            <select>
+              <option>ALL</option>
+              <option>ALL TIME</option>
+            </select>
+          </div>
         <li>
-          <input type="text" value="Password"/>
+          <h4>Show Contest from</h4>
         </li>
-        <li>
-          <div class='button'>JOIN</div>
-        </li>
+        <div class="styled-select">
+          <select>
+            <option>ALL</option>
+            <option>ALL TIME</option>
+          </select>
+        </div>
       </ul>
     </div>
   </div>
 </div>
 
-<table class='contestHead table sortable'>
-  <thead>
-    <tr>
-      <th data-defaultsort="asc" class="srt-contest-name">CONTEST</th>
-      <th data-defaultsort="asc" class="srt-sport">SPORT</th>
-      <th data-defaultsort="asc" class="srt-live-in">LIVE IN</th>
-      <th data-defaultsort="asc" class="srt-entry-fee">ENTRY</th>
-      <th data-defaultsort="asc">PRIZE</th>
-      <th data-defaultsort="asc">ENTRIES</th>
-      <th data-defaultsort="disabled"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: 'contest', collection: @contests %>
-  </tbody>
-</table>
+<!--List Area-->
+<!---Heading-->
+<ul class="completedcontestHead">
+  <li>ID</li>
+  <li>GAME</li>
+  <li>COMPLETED</li>
+  <li>ENTRY FEE</li>
+  <li>PRIZE POOL</li>
+  <li>PLACE</li>
+  <li>ENTRIES</li>
+  <li></li>
+</ul>
+<!---ROW 1-->
+<ul class="completedcontest">
+  <li>269806</li>
+  <li>NBA Daily Freeroll</li>
+  <li>11/17/2003</li>
+  <li>$0.00</li>
+  <li>$1.90</li>
+  <li>814</li>
+  <li>$0</li>
+  <li><a class="button" href="#">RESULTS</a></li>
+</ul>
+<!---ROW 2-->
+<ul class="completedcontest">
+  <li>269806</li>
+  <li>NBA Daily Freeroll</li>
+  <li>11/17/2003</li>
+  <li>$0.00</li>
+  <li>$1.90</li>
+  <li>814</li>
+  <li>$0</li>
+  <li><a class="button" href="#">RESULTS</a></li>
+</ul>
+<!---ROW 3-->
+<ul class="completedcontest">
+  <li>269806</li>
+  <li>NBA Daily Freeroll</li>
+  <li>11/17/2003</li>
+  <li>$0.00</li>
+  <li>$1.90</li>
+  <li>814</li>
+  <li>$0</li>
+  <li><a class="button" href="#">RESULTS</a></li>
+</ul>
+

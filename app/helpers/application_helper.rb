@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def menu_classes(menu)
-    if controller_name.eql? 'contests' and action_name.eql? 'index'
+    if controller_name.eql? 'contests' and action_name.eql? 'browse'
       classes = { 'home' => 'active'}
     else
       classes = { controller_name => 'active'}
