@@ -3,7 +3,7 @@ require "spec_helper"
 describe ContestsController do
   describe "routing" do
     it "routes to root" do
-      get("/").should route_to("contests#index")
+      get("/").should route_to("contests#browse")
     end
 
     it "routes to #index" do
