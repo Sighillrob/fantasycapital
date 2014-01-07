@@ -1,16 +1,81 @@
+<div class='categoryNav'>
+  <ul>
+    <li>
+      <%= link_to 'Best Odds', '#_' %>
+    </li>
+    <li>
+      <%= link_to 'Lowest Rake', '#_' %>
+    </li>
+    <li>
+      <%= link_to 'Fast and Secure Payments', '#_' %>
+    </li>
+    <li>
+      <%= link_to 'Refer Friends, Earn Cash', '#_' %>
+    </li>
+  </ul>
+</div>
+
+<div class='welcomeNote'>Enter the Game of your choice, then Select your Lineup and Win Cash.</div>
+
+<div class='loginSection'>
+  <div class='row'>
+    <div class='col-md-4'>
+      <div class='radio'>
+        <input id='publicContent' name="radio" type="radio" value=""/>
+        <label for="publicContent">Public</label>
+        <input id='privateContest' name="radio" type="radio" value=""/>
+        <label for="privateContest"> Private</label>
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <div class='login'>
+        <ul class='nav navbar-nav navbar-right capital-navbar-right'>
+          <li class='dropdownlogin'>
+            <a class='dropdown-toggle' data-toggle="dropdown" href="#">
+              FILTER BY SPORT &nbsp;
+              <b class='downarrowblack'>&nbsp;</b>
+            </a>
+            <ul class='dropdown-menu'>
+              <li><a href="#">CBB</a></li>
+              <li><a href="#">NBA</a></li>
+              <li><a href="#">NHL</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <ul class='loginJoin'>
+        <li>
+          <input type="text" value="Name"/>
+        </li>
+        <li>
+          <div class='button'>CREATE</div>
+        </li>
+        <li>
+          <input type="text" value="Password"/>
+        </li>
+        <li>
+          <div class='button'>JOIN</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <table class='contestHead table sortable'>
   <thead>
-    <tr>
-      <th data-defaultsort="asc" class="srt-contest-name">CONTEST</th>
-      <th data-defaultsort="asc" class="srt-sport">SPORT</th>
-      <th data-defaultsort="asc" class="srt-live-in">LIVE IN</th>
-      <th data-defaultsort="asc" class="srt-entry-fee">ENTRY</th>
-      <th data-defaultsort="asc">PRIZE</th>
-      <th data-defaultsort="asc">ENTRIES</th>
-      <th data-defaultsort="disabled"></th>
-    </tr>
+  <tr>
+    <th data-defaultsort="asc" class="srt-contest-name">CONTEST</th>
+    <th data-defaultsort="asc" class="srt-sport">SPORT</th>
+    <th data-defaultsort="asc" class="srt-live-in">LIVE IN</th>
+    <th data-defaultsort="asc" class="srt-entry-fee">ENTRY</th>
+    <th data-defaultsort="asc">PRIZE</th>
+    <th data-defaultsort="asc">ENTRIES</th>
+    <th data-defaultsort="disabled"></th>
+  </tr>
   </thead>
   <tbody>
-    <%= render partial: 'contest', collection: @contests %>
+  <%= render partial: 'contest', collection: @contests %>
   </tbody>
 </table>
