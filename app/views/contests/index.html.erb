@@ -7,10 +7,68 @@
     <div class="col-md-8">
       <h4>Live Contest</h4>
     </div>
+
     <div class="col-md-4"><span class="green"><a href="#">Join More Contest »</a></span></div>
+
   </div>
 </div>
-<p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
+
+<% if @contests.live.present? %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="asc">ENTRIES</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      </tbody>
+    </table>
+
+<% else %>
+    <p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
+<% end %>
+
 <div class="filter_row">
   <div class="row">
     <div class="col-md-4">
@@ -20,7 +78,67 @@
       my Lineups »</a></span></div>
   </div>
 </div>
-<p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
+
+<% if @contests.upcoming.present? %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="asc">ENTRIES</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      </tbody>
+    </table>
+
+<% else %>
+    <p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
+<% end %>
+
+
+
+
+
 <div class="filter_row">
   <div class="row">
     <div class="col-md-4">
@@ -52,49 +170,60 @@
   </div>
 </div>
 
-<!--List Area-->
-<!---Heading-->
-<ul class="completedcontestHead">
-  <li>ID</li>
-  <li>GAME</li>
-  <li>COMPLETED</li>
-  <li>ENTRY FEE</li>
-  <li>PRIZE POOL</li>
-  <li>PLACE</li>
-  <li>ENTRIES</li>
-  <li></li>
-</ul>
-<!---ROW 1-->
-<ul class="completedcontest">
-  <li>269806</li>
-  <li>NBA Daily Freeroll</li>
-  <li>11/17/2003</li>
-  <li>$0.00</li>
-  <li>$1.90</li>
-  <li>814</li>
-  <li>$0</li>
-  <li><a class="button" href="#">RESULTS</a></li>
-</ul>
-<!---ROW 2-->
-<ul class="completedcontest">
-  <li>269806</li>
-  <li>NBA Daily Freeroll</li>
-  <li>11/17/2003</li>
-  <li>$0.00</li>
-  <li>$1.90</li>
-  <li>814</li>
-  <li>$0</li>
-  <li><a class="button" href="#">RESULTS</a></li>
-</ul>
-<!---ROW 3-->
-<ul class="completedcontest">
-  <li>269806</li>
-  <li>NBA Daily Freeroll</li>
-  <li>11/17/2003</li>
-  <li>$0.00</li>
-  <li>$1.90</li>
-  <li>814</li>
-  <li>$0</li>
-  <li><a class="button" href="#">RESULTS</a></li>
-</ul>
+<% if @contests.completed.present? %>
 
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="asc">ENTRIES</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      <tr class="completedcontest">
+        <td>269806</td>
+        <td>NBA Daily Freeroll</td>
+        <td>11/17/2003</td>
+        <td>$0.00</td>
+        <td>$1.90</td>
+        <td>814</td>
+        <td>$0</td>
+        <td><a class="button" href="#">RESULTS</a></td>
+      </tr>
+
+      </tbody>
+    </table>
+
+<% else %>
+    <p class="message">YOU HAVE NO FINISHED CONTEST RIGHT NOW.CONTEST WILL APPEAR HERE ONCE THE GAMES WILL BE
+      FINISHED.</p>
+<% end %>
