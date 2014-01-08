@@ -19,49 +19,25 @@
       <tr>
         <th data-defaultsort="asc" class="srt-contest-name">ID</th>
         <th data-defaultsort="asc" class="srt-sport">GAME</th>
-        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-live-in">STARTED AT</th>
         <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
         <th data-defaultsort="asc">PRIZE POOL</th>
         <th data-defaultsort="asc">PLACE</th>
-        <th data-defaultsort="asc">ENTRIES</th>
         <th data-defaultsort="disabled"></th>
       </tr>
       </thead>
       <tbody>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
+      <% @contests.live.each do |contest| %>
+          <tr class="completedcontest">
+            <td><%= contest.id %></td>
+            <td><%= contest.sport %></td>
+            <td><%= contest.contest_start.strftime("%m/%d/%Y") %></td>
+            <td><%= number_to_currency contest.entry_fee %></td>
+            <td><%= number_to_currency contest.prize %></td>
+            <td>814</td>
+            <td><a class="button" href="#">RESULTS</a></td>
+          </tr>
+      <% end %>
       </tbody>
     </table>
 
@@ -85,59 +61,35 @@
       <tr>
         <th data-defaultsort="asc" class="srt-contest-name">ID</th>
         <th data-defaultsort="asc" class="srt-sport">GAME</th>
-        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-live-in">STARTS IN</th>
         <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
         <th data-defaultsort="asc">PRIZE POOL</th>
-        <th data-defaultsort="asc">PLACE</th>
         <th data-defaultsort="asc">ENTRIES</th>
         <th data-defaultsort="disabled"></th>
       </tr>
       </thead>
       <tbody>
 
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
+      <% @contests.upcoming.each do |contest| %>
 
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
+          <tr class="completedcontest">
+            <td><%= contest.id %></td>
+            <td><%= contest.sport %></td>
+            <td><%= contest.contest_start.strftime("%m/%d/%Y") %></td>
+            <td><%= number_to_currency contest.entry_fee %></td>
+            <td><%= number_to_currency contest.prize %></td>
+            <td><%= contest.lineups.size %></td>
+            <td>
+              <%= link_to "EDIT", edit_contest_lineup_path(contest, contest.lineup_for_user(current_user)), class: 'button' %>
+            </td>
+          </tr>
+      <% end %>
       </tbody>
     </table>
 
 <% else %>
     <p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
 <% end %>
-
-
-
-
 
 <div class="filter_row">
   <div class="row">
@@ -181,48 +133,25 @@
         <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
         <th data-defaultsort="asc">PRIZE POOL</th>
         <th data-defaultsort="asc">PLACE</th>
-        <th data-defaultsort="asc">ENTRIES</th>
+        <th data-defaultsort="asc">$WON</th>
         <th data-defaultsort="disabled"></th>
       </tr>
       </thead>
       <tbody>
-
+      <% @contests.upcoming.each do |contest| %>
       <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
+        <td><%= contest.id %></td>
+        <td><%= contest.sport %></td>
+        <td><%= contest.complete? %></td>
+        <td><%= number_to_currency contest.entry_fee %></td>
+        <td><%= number_to_currency contest.prize %></td>
         <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
-      <tr class="completedcontest">
-        <td>269806</td>
-        <td>NBA Daily Freeroll</td>
-        <td>11/17/2003</td>
-        <td>$0.00</td>
-        <td>$1.90</td>
-        <td>814</td>
-        <td>$0</td>
-        <td><a class="button" href="#">RESULTS</a></td>
-      </tr>
-
+            <td>$0</td>
+            <td><a class="button" href="#">RESULTS</a></td>
+          </tr>
+      <% end %>
       </tbody>
     </table>
-
 <% else %>
     <p class="message">YOU HAVE NO FINISHED CONTEST RIGHT NOW.CONTEST WILL APPEAR HERE ONCE THE GAMES WILL BE
       FINISHED.</p>

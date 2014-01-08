@@ -13,6 +13,10 @@ class LineupsController < ApplicationController
     @lineup    = current_user.lineups.build_for_contest @contest, params[:id]
   end
 
+  def result
+
+  end
+
   # POST /entries
   # POST /entries.json
   def create

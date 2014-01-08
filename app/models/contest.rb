@@ -31,13 +31,19 @@ class Contest < ActiveRecord::Base
     contest_start < Time.now
   end
 
+  def lineup_for_user(user)
+    lineups.where(user_id: user.id).first
+  end
+
+
   class << self
+
     def live
-       where contest_start: DateTime.now .. DateTime.now + 3.hour
+      where contest_start: DateTime.now .. DateTime.now + 3.hour
     end
 
     def completed
-      where "contest_start < ?", DateTime.now
+     where "contest_start < ?", DateTime.now
     end
 
     def upcoming
