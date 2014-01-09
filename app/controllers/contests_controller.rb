@@ -4,7 +4,7 @@ class ContestsController < ApplicationController
   # GET /contests
   # GET /contests.json
   def index
-    @contests = Contest.all
+    @contests = current_user.contests
   end
 
   # GET /contests/browse

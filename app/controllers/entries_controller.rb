@@ -12,6 +12,10 @@ class EntriesController < ApplicationController
   def show
   end
 
+  def index
+
+  end
+
   # POST /entries
   # POST /entries.json
   def create

@@ -1,6 +1,6 @@
 Main::Application.routes.draw do
   get "splash/index", as: :splash
-  root to: "contests#index"
+  root to: "contests#browse"
 
   devise_for :users
 
