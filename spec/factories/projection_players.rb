@@ -4,5 +4,6 @@ FactoryGirl.define do
   factory :projection_player, :class => 'Projection::Player' do
     ext_player_id "MyString"
     player_name "MyString"
+    team
   end
 end

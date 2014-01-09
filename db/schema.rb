@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140107164853) do
+ActiveRecord::Schema.define(version: 20140108005811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,19 +94,38 @@ ActiveRecord::Schema.define(version: 20140107164853) do
     t.integer  "salary"
   end
 
+  create_table "projection_game_playeds", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "game_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_game_playeds", ["game_id"], name: "index_projection_game_playeds_on_game_id", using: :btree
+  add_index "projection_game_playeds", ["player_id"], name: "index_projection_game_playeds_on_player_id", using: :btree
+
   create_table "projection_games", force: true do |t|
     t.datetime "gamedate"
     t.boolean  "is_home"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "home_team_id"
+    t.integer  "opponent_team_id"
   end
+
+  add_index "projection_games", ["home_team_id"], name: "index_projection_games_on_home_team_id", using: :btree
+  add_index "projection_games", ["opponent_team_id"], name: "index_projection_games_on_opponent_team_id", using: :btree
 
   create_table "projection_players", force: true do |t|
     t.string   "ext_player_id"
     t.string   "player_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "fp"
+    t.integer  "team_id"
   end
+
+  add_index "projection_players", ["team_id"], name: "index_projection_players_on_team_id", using: :btree
 
   create_table "projection_stats", force: true do |t|
     t.string   "stat_name"
@@ -115,11 +134,16 @@ ActiveRecord::Schema.define(version: 20140107164853) do
     t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "fp"
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
+
+  create_table "projection_teams", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sport_positions", force: true do |t|
     t.string   "name"
@@ -151,6 +175,17 @@ ActiveRecord::Schema.define(version: 20140107164853) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "versions", force: true do |t|
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   create_table "waiting_lists", force: true do |t|
     t.string   "email"
