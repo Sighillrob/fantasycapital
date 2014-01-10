@@ -25,6 +25,8 @@ gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'social-share-button'
+gem 'premailer-rails'
+
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -47,9 +49,12 @@ gem 'paper_trail', '~> 3.0.0'
 # gem 'capistrano', group: :development
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
 gem 'devise'
 gem "bullet"
+
+group :development do
+  gem 'mailcatcher'
+end
 
 group :production, :staging do
   gem 'rails_12factor'
@@ -64,6 +69,7 @@ group :development, :test do
   gem "factory_girl_rails", "~> 4.0"
   gem "rspec-rails"
   gem 'meta_request'
+  gem 'debugger'
 end
 
 group :test do
