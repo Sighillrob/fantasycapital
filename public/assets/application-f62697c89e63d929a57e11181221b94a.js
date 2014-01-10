@@ -14204,6 +14204,34 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
 
 }).call(this);
 (function() {
+  var Contest;
+
+  Contest = (function() {
+    function Contest() {
+      this.bindAll();
+    }
+
+    Contest.prototype.bindAll = function() {
+      return $(".contest-filter .filter").on('click', function() {
+        var filter;
+        $(".filter-result").find("tr.contest").show();
+        filter = $(this).data('filter');
+        if (filter !== 'all') {
+          return $(".filter-result").find("tr.contest:not('." + filter + "')").hide();
+        }
+      });
+    };
+
+    return Contest;
+
+  })();
+
+  $(function() {
+    return new Contest;
+  });
+
+}).call(this);
+(function() {
 
 
 }).call(this);
@@ -14227,7 +14255,6 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-
 
 
 
