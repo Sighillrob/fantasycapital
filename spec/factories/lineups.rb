@@ -13,7 +13,7 @@
 
 FactoryGirl.define do
   factory :lineup do
-    entry nil
-    Player nil
+    contest nil
+    user nil
   end
 end
