@@ -2,26 +2,43 @@
 #
 # Table name: waiting_lists
 #
-#  id              :integer          not null, primary key
-#  email           :string(255)
-#  name            :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  invited_by_id   :integer
-#  invited_by_type :string(255)
-#  invitation_code :string(255)
+#  id               :integer          not null, primary key
+#  email            :string(255)
+#  name             :string(255)
+#  created_at       :datetime
+#  updated_at       :datetime
+#  invited_by_token :string(255)
+#  invitation_token :string(255)
 #
 
 class WaitingList < ActiveRecord::Base
+  module InvitationStatus
+    WAITING = 1
+    INVITED = 2
+    JOINED  = 3
+  end
 
-  belongs_to :invited_by, polymorphic: true
+  belongs_to :user
 
-  validates :email, uniqueness: true
+  validates :email, uniqueness: true, presence: true
 
   before_create :generate_invitation_code
 
   def to_param
     invitation_token
+  end
+
+  def invite!
+    WaitingListMailer.invite(self).deliver
+    update_attributes status: InvitationStatus::INVITED
+  end
+
+  def invited?
+    status == InvitationStatus::INVITED
+  end
+
+  def joined?
+    status == InvitationStatus::JOINED
   end
   private
 

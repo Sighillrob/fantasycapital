@@ -14,5 +14,7 @@
 require 'spec_helper'
 
 describe LineupSpot do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to :sport_position }
+  it { should belong_to :lineup }
+  it { should belong_to :player }
 end
