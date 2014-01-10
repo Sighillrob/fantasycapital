@@ -1,4 +1,4 @@
-<tr class='contest' id='<%=dom_id(contest)%>'>
+<tr class="contest <%= contest.sport.downcase %>" id='<%=dom_id(contest)%>'>
   <td class='contest-type'><%= contest.contest_type %></td>
   <td class='sport-name'>
     <%= contest.sport %>

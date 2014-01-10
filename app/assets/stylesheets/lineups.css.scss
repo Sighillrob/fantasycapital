@@ -228,113 +228,7 @@ input[type=radio]:checked + label:before {
   line-height: 14px;
 }
 
-input[type=checkbox]:checked + label:before {
-  content: "\2713";
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-  font-size: 15px;
-  color: #f3f3f3;
-  text-align: center;
-  line-height: 15px;
-}
 
-input[type=text] {
-  border: 1px solid #ccc9c9;
-  color: #8e8e93;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-}
-
-/*Capital Content*/
-.capitalcontent {
-  background: #fff;
-  padding: 10px 20px 20px;
-}
-
-/*Category Nav*/
-.categoryNav {
-  background: none repeat scroll 0 0 #565656;
-  border-radius: 15px;
-  clear: both;
-  margin: 10px 0 20px;
-  min-height: 57px;
-  width: 100%
-}
-
-.categoryNav ul {
-  margin: 0;
-  padding: 0;
-  background: #565656;
-}
-
-.categoryNav ul li {
-  background: #565656;
-  float: left;
-  list-style: none;
-  padding: 15px 0px;
-}
-
-.categoryNav ul li:first-child {
-  border-radius: 15px 0 0 15px;
-  padding-left: 25px;
-}
-
-.categoryNav ul li:last-child {
-  border-radius: 0px 15px 15px 0;
-  padding-right: 25px;
-}
-
-.categoryNav ul li a {
-  font-family: 'droid_sansbold';
-  font-size: 18px;
-  color: #fff;
-  border-right: 1px solid #787878;
-  padding: 0 34px;
-  text-decoration: none
-}
-
-.categoryNav ul li:last-child a {
-  border-right: none;
-}
-
-@media (max-width: 768px) {
-  .categoryNav {
-    border-radius: none;
-  }
-  .categoryNav ul li {
-    float: none;
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 0;
-  }
-  .categoryNav ul li a {
-    border: none;
-  }
-  .categoryNav ul li:first-child {
-    padding: 20px 0 10px 0
-  }
-}
-
-a.button {
-  background: #555555;
-  color: #0FEA6C;
-  padding: 5px 10px;
-  font-weight: bold;
-  text-decoration: none
-}
-
-ul.contest li img {
-  margin-right: 10px;
-}
-
-@media (max-width: 768px) {
-  ul.contestHead li {
-    float: none;
-  }
-  ul.contest li {
-    float: none
-  }
-}
 
 /*Completed Contest*/
 .filter_row {
@@ -809,18 +703,6 @@ div.footerContainer ul.right li {
   div.footerContainer ul.right li {
     float: none;
   }
-}
-
-.downarrow {
-  background: image-url('dropdownarrow.png') no-repeat center center;
-  padding: 0 0 0 12px;
-  float: right;
-}
-
-.downarrowblack {
-  background: image-url('black.png') no-repeat center center;
-  padding: 0 0 0 12px;
-  float: right;
 }
 
 @media (max-width: 768px) {

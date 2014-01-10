@@ -24,6 +24,5 @@
 //= require jquery.currency
 //= require player
 //= require entries
-
-
+//= require contest
 //= require_tree .
