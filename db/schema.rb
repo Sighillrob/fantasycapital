@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110123349) do
+ActiveRecord::Schema.define(version: 20140111213105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: true do |t|
+    t.integer  "user_id"
+    t.string   "type"
+    t.string   "ext_account_id"
+    t.decimal  "balance",        precision: 10, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
   create_table "contests", force: true do |t|
     t.string   "title"
@@ -112,11 +123,11 @@ ActiveRecord::Schema.define(version: 20140110123349) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "home_team_id"
-    t.integer  "opponent_team_id"
+    t.integer  "away_team_id"
   end
 
+  add_index "projection_games", ["away_team_id"], name: "index_projection_games_on_away_team_id", using: :btree
   add_index "projection_games", ["home_team_id"], name: "index_projection_games_on_home_team_id", using: :btree
-  add_index "projection_games", ["opponent_team_id"], name: "index_projection_games_on_opponent_team_id", using: :btree
 
   create_table "projection_players", force: true do |t|
     t.string   "ext_player_id"

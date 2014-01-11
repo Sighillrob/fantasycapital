@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :lineups, inverse_of: :user
   has_many :contests, through: :lineups
   has_one :waiting_list
+  has_many :accounts, inverse_of: :user
 
   validates :first_name, :last_name, presence: true
 

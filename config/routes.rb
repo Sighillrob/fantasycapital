@@ -1,4 +1,5 @@
 Main::Application.routes.draw do
+  get "account/add_fund"
   get "splash/index", as: :splash
   root to: "contests#browse"
 
