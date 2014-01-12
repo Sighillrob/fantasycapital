@@ -25,4 +25,6 @@
 //= require player
 //= require entries
 //= require contest
+//= require balanced
+//= require account
 //= require_tree .

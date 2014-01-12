@@ -1,5 +1,4 @@
 Main::Application.routes.draw do
-  get "account/add_fund"
   get "splash/index", as: :splash
   root to: "contests#browse"
 
@@ -21,6 +20,12 @@ Main::Application.routes.draw do
   resources :waiting_lists, only: [:new, :create, :show] do
     collection do
       get :invite
+    end
+  end
+
+  resources :accounts, only: [:create, :show, :index] do
+    collection do
+      get :new_cc
     end
   end
 
