@@ -23,7 +23,7 @@ Main::Application.routes.draw do
     end
   end
 
-  resources :accounts, only: [:create, :show, :index] do
+  resources :accounts, only: [:create, :edit, :show, :index] do
     collection do
       get :new_cc
     end

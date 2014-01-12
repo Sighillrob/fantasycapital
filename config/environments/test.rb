@@ -34,3 +34,4 @@ Main::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 end
+Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"

@@ -1,16 +1,11 @@
-class CreditCard
+$ ->
+    accountUri = '/accounts'
 
-  constructor: ->
-    marketplaceUri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
-    balanced.init marketplaceUri
-    
-    #//
-    # Click event for tokenize credit card
-    #//
     $("#cc-submit").click (e) ->
       e.preventDefault()
-      $("#response").hide()
+      amount = $("#deposit-amount").val()
       payload =
+        name: $("#cc-name").val()
         card_number: $("#cc-number").val()
         expiration_month: $("#cc-ex-month").val()
         expiration_year: $("#cc-ex-year").val()
@@ -18,20 +13,22 @@ class CreditCard
       
       # Tokenize credit card
       balanced.card.create payload, (response) ->
-        
-        # Successful tokenization
-        if response.status is 201 and response.href
-          
+
+        if response.status is 201 and response.data
+          $.post accountUri,
+            amount: amount
+            account:
+              ext_account_id: response.data.uri
+          , (r) ->
+            
+            if r.status is 201
+              alert "Account created."
+            else
+              alert "Error: "+JSON.stringify(response.error, false, 4)
+
         else
+          alert "Error: "+JSON.stringify(response.error, false, 4)
   
-        
-        # Failed to tokenize, your error logic here
-        
-  
-    
-    #//
-    # Click event for tokenize bank account
-    #//
     $("#ba-submit").click (e) ->
       e.preventDefault()
       $("#response").hide()
@@ -39,33 +36,22 @@ class CreditCard
         name: $("#ba-name").val()
         account_number: $("#ba-number").val()
         routing_number: $("#ba-routing").val()
-  
       
       # Tokenize bank account
       balanced.bankAccount.create payload, (response) ->
         
-        # Successful tokenization
         if response.status is 201 and response.href
           
-          # Send to your backend
           jQuery.post responseTarget,
             uri: response.href
           , (r) ->
             
-            # Check your backend response
             if r.status is 201
-  
             
-            # Your successful logic here from backend
             else
-  
-        
-        # Your failure logic here from backend
+
         else
   
-        
-        # Failed to tokenize, your error logic here
-        
   
     #//
     # Simply populates credit card and bank account fields with test data
@@ -80,6 +66,3 @@ class CreditCard
       $("#ba-number").val "9900000000"
       $("#ba-routing").val "321174851"
 
-
-$ ->
-  new CreditCard

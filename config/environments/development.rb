@@ -36,3 +36,4 @@ Main::Application.configure do
    Bullet.add_footer    = true
   end
 end
+Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"

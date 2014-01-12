@@ -28,3 +28,4 @@ Main::Application.configure do
   config.assets.debug = true
 
 end
+Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
