@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.version = "0.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Naveed Ahmad"]
+  s.authors = ["Michael Lungo"]
   s.date = "2014-01-11"
   s.description = "Stats.com's client"
-  s.email = "naveedahmada036@gmail.com"
+  s.email = "mike@michaellungo.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/stats_client_spec.rb"
   ]
-  s.homepage = "http://github.com/naveed-ahmad/stats_client"
+  s.homepage = "http://github.com/TKVR/stats_client"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "2.1.5"

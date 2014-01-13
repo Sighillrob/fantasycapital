@@ -15,12 +15,12 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "stats_client"
-  gem.homepage = "http://github.com/naveed-ahmad/stats_client"
+  gem.homepage = "http://github.com/TKVR/stats_client"
   gem.license = "MIT"
   gem.summary = "Ruby wrapper for stats.com"
   gem.description = "Stats.com's client"
-  gem.email = "naveedahmada036@gmail.com"
-  gem.authors = ["Naveed Ahmad"]
+  gem.email = "mike@michaellungo.com"
+  gem.authors = ["Michael Lungo"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
