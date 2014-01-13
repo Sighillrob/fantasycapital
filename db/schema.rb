@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20140112172317) do
     t.integer  "user_id"
     t.string   "type"
     t.string   "ext_account_id"
-    t.decimal  "balance",        precision: 10, scale: 2
+    t.decimal  "balance",        precision: 20, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

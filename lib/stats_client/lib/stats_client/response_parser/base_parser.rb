@@ -3,7 +3,6 @@ module StatsClient
     class BaseParser
       attr_reader :result
 
-
       def initialize(payload, resource_class)
         @payload = payload
         @resource_class = resource_class

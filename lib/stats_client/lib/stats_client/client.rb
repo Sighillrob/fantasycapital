@@ -3,7 +3,7 @@ require 'httparty'
 module StatsClient
   class Client
     include HTTParty
-    logger StatsClient.logger, :info, :apache
+    #logger StatsClient.logger, :info, :apache
     base_uri StatsClient.base_url
     default_params accept: 'json'
 
