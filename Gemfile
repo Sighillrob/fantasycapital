@@ -28,6 +28,8 @@ gem 'social-share-button'
 gem 'premailer-rails'
 
 gem 'balanced'
+gem "stats_client", path: "lib/"
+
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 1.2'
