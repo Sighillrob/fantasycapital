@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140114011134) do
+ActiveRecord::Schema.define(version: 20140114162924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,16 +118,17 @@ ActiveRecord::Schema.define(version: 20140114011134) do
   add_index "projection_game_playeds", ["player_id"], name: "index_projection_game_playeds_on_player_id", using: :btree
 
   create_table "projection_games", force: true do |t|
-    t.datetime "gamedate"
-    t.boolean  "is_home"
+    t.datetime "start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "home_team_id"
-    t.integer  "away_team_id"
+    t.integer  "team_id"
+    t.integer  "opponent_team_id"
+    t.integer  "stats_event_id"
   end
 
-  add_index "projection_games", ["away_team_id"], name: "index_projection_games_on_away_team_id", using: :btree
-  add_index "projection_games", ["home_team_id"], name: "index_projection_games_on_home_team_id", using: :btree
+  add_index "projection_games", ["opponent_team_id"], name: "index_projection_games_on_opponent_team_id", using: :btree
+  add_index "projection_games", ["team_id", "stats_event_id"], name: "index_projection_games_on_team_id_and_stats_event_id", using: :btree
+  add_index "projection_games", ["team_id"], name: "index_projection_games_on_team_id", using: :btree
 
   create_table "projection_players", force: true do |t|
     t.string   "name"
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20140114011134) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|

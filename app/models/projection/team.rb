@@ -15,7 +15,7 @@ module Projection
   
     class << self
       # refresh teams with STATS API response
-      def refresh(stats_teams)
+      def refresh_all(stats_teams)
         Team.update_all(is_current: false)
         stats_teams.each do |stats_team|
           team = Team.where(stats_team_id: stats_team.team_id).first_or_create

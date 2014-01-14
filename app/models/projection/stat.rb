@@ -11,7 +11,41 @@
 #  updated_at :datetime
 #
 
-class Projection::Stat < ActiveRecord::Base
-  belongs_to :game
-  belongs_to :player
+module Projection
+  class Stat < ActiveRecord::Base
+    belongs_to :game
+    belongs_to :player
+  
+    STATS_ALLOWED = [
+      "points",
+      "assists",
+      "steals",
+      "rebounds",
+      "blockedShots",
+      "turnovers" ]
+  
+    COMP_STAT_KEY = [
+      "made",
+      "total" ]
+  
+    class << self
+
+      def refresh(player, game, stats)
+        stats.select {|k,v| STATS_ALLOWED.include? k}.each do |stat_n, stat_v|
+          st = Stat.where(player: player, game: game, stat_name: stat_n).first_or_initialize 
+          if st.new_record?
+            case stat_v
+            when Numeric
+              st.stat_value = stat_v
+            when Hash
+              st.stat_value = stat_v.reduce(0) {|result, k,v| result = v if COMP_STAT_KEY.include? k}
+            end
+            st.save!
+          end
+        end
+      end
+
+    end
+  
+  end
 end
