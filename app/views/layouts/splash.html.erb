@@ -11,10 +11,8 @@
   <%= csrf_meta_tags %>
 </head>
 
-<body class='<%=page_class%>' id='<%= page_id %>'>
-<div class='container capitalcontent'>
-  <%= yield %>
-</div>
-</body>
-<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <body class='<%=page_class%>' id='<%= page_id %>'>
+    <%= yield %>
+  </body>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 </html>
