@@ -2,11 +2,13 @@
 #
 # Table name: projection_games
 #
-#  id         :integer          not null, primary key
-#  gamedate   :datetime
-#  is_home    :boolean
-#  created_at :datetime
-#  updated_at :datetime
+#  id           :integer          not null, primary key
+#  gamedate     :datetime
+#  is_home      :boolean
+#  created_at   :datetime
+#  updated_at   :datetime
+#  home_team_id :integer
+#  away_team_id :integer
 #
 
 require 'spec_helper'

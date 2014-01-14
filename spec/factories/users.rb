@@ -17,6 +17,7 @@
 #  updated_at             :datetime
 #  first_name             :string(255)
 #  last_name              :string(255)
+#  balanced_customer_id   :string(255)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

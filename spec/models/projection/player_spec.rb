@@ -7,6 +7,8 @@
 #  player_name   :string(255)
 #  created_at    :datetime
 #  updated_at    :datetime
+#  fp            :decimal(, )
+#  team_id       :integer
 #
 
 require 'spec_helper'

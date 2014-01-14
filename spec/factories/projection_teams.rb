@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: projection_teams
+#
+#  id            :integer          not null, primary key
+#  name          :string(255)
+#  created_at    :datetime
+#  updated_at    :datetime
+#  stats_team_id :integer
+#  is_current    :boolean
+#
+
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do

@@ -9,7 +9,6 @@
 #  game_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
-#  fp         :decimal(, )
 #
 
 class Projection::Stat < ActiveRecord::Base
