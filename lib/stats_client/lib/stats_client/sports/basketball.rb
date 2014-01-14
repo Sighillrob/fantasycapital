@@ -13,13 +13,14 @@ module StatsClient
 
           def players
             client.request 'participants/' do |response|
-              StatsClient::ResponseParser::BaseParser.new(response, StatsClient::Player).parse 'teams'
+              StatsClient::ResponseParser::BaseParser.new(response, StatsClient::Player).parse 'players'
             end
           end
 
-          # Find team by ID
-          def fetch_team(team_id, season= nil)
-            #client.request "/teams/#{team_id}"
+          def player_game_by_game_stats(player_id)
+            client.request "stats/players/#{player_id}/events/" do |response|
+              StatsClient::ResponseParser::SimpleParser.new(response).parse 'events'
+            end
           end
 
           protected
