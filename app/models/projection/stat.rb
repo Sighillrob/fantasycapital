@@ -38,7 +38,7 @@ module Projection
             when Numeric
               st.stat_value = stat_v
             when Hash
-              st.stat_value = stat_v.reduce(0) {|result, k,v| result = v if COMP_STAT_KEY.include? k}
+              st.stat_value = stat_v.select {|k,v| COMP_STAT_KEY.include? k}.values.sum
             end
             st.save!
           end

@@ -25,7 +25,7 @@ module Projection
         stats_players.each do |stats_player|
           player = Player.where(stats_player_id: stats_player.player_id).first_or_initialize
           player.name = stats_player.first_name + " " + stats_player.last_name
-          player.is_current = true;
+          player.is_current = true
           player.team = Team.find_by_stats_team_id(stats_player.team['teamId'])
           player.position = (stats_player.positions.select {|p| p['sequence'] ==1}).first['abbreviation']
           player.save!
