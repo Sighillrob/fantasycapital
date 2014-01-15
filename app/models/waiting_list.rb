@@ -25,6 +25,7 @@ class WaitingList < ActiveRecord::Base
   validates :email, uniqueness: true, presence: true
 
   before_create :generate_invitation_code
+  after_create :mailchimp
 
   def to_param
     invitation_token
@@ -42,7 +43,17 @@ class WaitingList < ActiveRecord::Base
   def joined?
     status == InvitationStatus::JOINED
   end
+
   private
+
+  def mailchimp
+    # This requires a few values set in order for it to work properly
+    Gibbon::API.lists.subscribe({
+      :id => Rails.configuration.waiting_list_email_id,
+      :email => {:email => self.email},
+      :double_optin => false
+    })
+  end
 
   def generate_invitation_code
     token = loop do
