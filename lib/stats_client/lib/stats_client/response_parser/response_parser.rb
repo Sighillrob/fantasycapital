@@ -1,12 +1,12 @@
 module StatsClient
   module ResponseParser
-    class BaseParser
+    class ResponseParser
       attr_reader :result
 
       def initialize(payload, resource_class)
-        @payload = payload
+        @payload        = payload
         @resource_class = resource_class
-        @result  = []
+        @result         = []
       end
 
       def parse(parent_node)

@@ -12,6 +12,8 @@ module StatsClient
     def request(action, params = {}, &block)
       params.merge! sig: generate_stats_signature, api_key: StatsClient.api_key
 
+      params.delete_if { |k, v| v.nil? || v.empty? }
+
       parse_response self.class.get(api_url(action), query: params), &block
     end
 

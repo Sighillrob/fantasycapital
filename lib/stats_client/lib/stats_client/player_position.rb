@@ -1,13 +1,12 @@
 module StatsClient
-  class Team
-    attr_accessor :id, :name, :location, :abbreviation
+  class PlayerPosition
+    attr_reader :id, :name, :abbreviation, :sequence
     include StatsClient::BaseResource
 
     class << self
       def method_name_for_attr(attr)
-         {'nickname' => 'name', 'teamId' => 'id'}[attr] || super
+        {'positionId' => 'id'}[attr] || attr
       end
     end
   end
 end
-
