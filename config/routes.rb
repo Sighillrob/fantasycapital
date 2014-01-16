@@ -1,4 +1,5 @@
 Main::Application.routes.draw do
+  get "users/leadboard"
   get "splash/index", as: :splash
   root to: "contests#browse"
 

@@ -1,0 +1,58 @@
+<h2>LEADERBOARD</h2>
+<div class="loginSection">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="radio">
+        <ul class="list-inline filtercheckbox">
+          <li> Filter by :</li>
+          <li>
+            <input id="sport" type="radio" name="radio" value="">
+            <label for="sport">Sports</label>
+          </li>
+          <li>
+            <input id="monthlyleaders" type="radio" name="radio" value="">
+            <label for="monthlyleaders">Monthly Leaders</label>
+          </li>
+          <li>
+            <input id="alltimeleaders" type="radio" name="radio" value="">
+            <label for="alltimeleaders">All-Time Leaders</label>
+          </li>
+          <li>
+            <input id="topscores" type="radio" name="radio" value="">
+            <label for="topscores">Top Scores</label>
+          </li>
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="small">&nbsp;</p>
+<!--/Login Section-->
+<!--List Area-->
+<table class="table leaderBoard table-responsive contestHead">
+  <thead>
+  <tr>
+    <th>RANK</th>
+    <th width="10%">USER</th>
+    <th width="50%">&nbsp;</th>
+    <th width="10%">WIN %</th>
+    <th width="10%"><span class="green">WINS</span></th>
+    <th width="10%"><span class="green">WINNING</span></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% 6.times do %>
+      <tr class="top-user">
+        <td>1</td>
+        <td><%= image_tag 'user.png', class: 'user' %></td>
+        <td><span class="green">MZambelli_23</span></td>
+        <td>0.561%</td>
+        <td>42</td>
+        <td>$60</td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<span class="green pull-right">NEXT »</span>
