@@ -28,6 +28,7 @@ Main::Application.routes.draw do
       get :new_cc
     end
   end
+  resources :projections, only: :index
 
 
   # The priority is based upon order of creation: first created -> highest priority.

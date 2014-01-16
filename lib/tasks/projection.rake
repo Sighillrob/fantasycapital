@@ -1,13 +1,13 @@
 namespace :projection do
   desc "Fetch data from STATS" 
   task fetch_stats: :environment do
-    puts "Feteching and populating Teams from STATS"
+    Rails.logger.info "Feteching and populating Teams from STATS"
     Projection::Team.refresh_all StatsClient::Sports::Basketball::NBA.teams.result
-    puts "Feteching and populating Players from STATS"
+    Rails.logger.info "Feteching and populating Players from STATS"
     Projection::Player.refresh_all StatsClient::Sports::Basketball::NBA.players.result
-    puts "Feteching and populating events from STATS"
+    Rails.logger.info "Feteching and populating events from STATS"
     Projection::ScheduledGame.refresh_all StatsClient::Sports::Basketball::NBA.events.result
-    puts "Feteching and populating Stats from STATS"
+    Rails.logger.info "Feteching and populating Stats from STATS"
     Projection::Player.where(is_current: true).each do |player|
       player.refresh_stats StatsClient::Sports::Basketball::NBA.player_game_by_game_stats(player.stats_player_id).result
     end
@@ -15,7 +15,7 @@ namespace :projection do
 
   desc "Projeted Fantasy Points"
   task fp: [:environment] do
-    puts "Calculating FP..."
+    Rails.logger.info "Calculating FP..."
     Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
       [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
         team1.players.each do |player|
@@ -34,7 +34,7 @@ namespace :projection do
   desc "Purge projection database"
   task purge: :environment do
     input = ''
-    STDOUT.puts "This will delete all data in projectin tables! Are you sure (y/N)?"
+    STDOUT.Rails.logger.info "This will delete all data in projectin tables! Are you sure (y/N)?"
     input = STDIN.gets.chomp
     if input.downcase == "y"
       Projection::Stat.delete_all
