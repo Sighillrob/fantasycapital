@@ -15,13 +15,14 @@ module Projection
   
     def fp(opponent_team)
       self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
-      @fp_ratios.reduce(0) do |fp, (stat_name, ratio)|
-        fp + ratio * (
-          avg_stat(@player.last_1_game, @player.position, stat_name) * 0.15
-          + avg_stat(@player.last_3_games, @player.position, stat_name) * 0.15
-          + avg_stat(@player.last_10_games, @player.position, stat_name) * 0.20
-          + team_stat(opponent_team, @player.position, stat_name) * 0.50
-          )
+      @fp_ratios.reduce(0.0) do |fp, (stat_name, ratio)|
+        c = [ 
+          avg_stat(@player.last_1_game, @player.position, stat_name) * 0.15,
+          avg_stat(@player.last_3_games, @player.position, stat_name) * 0.15,
+          avg_stat(@player.last_10_games, @player.position, stat_name) * 0.20,
+          team_stat(opponent_team, @player.position, stat_name) * 0.50
+        ].sum
+        fp + c.to_f * ratio
       end
     end
 
@@ -35,8 +36,8 @@ module Projection
       stats = games.reduce([]) {|stats, game| stats + game.stats}
       stats.select do |stat|
         stat.stat_name == stat_name && stat.player.position == position
-      end.reduce(0) do |fp, stat|
-        fp += stat.stat_value
+      end.reduce(0.0) do |fp, stat|
+        fp += stat.stat_value.to_f
       end / games.size
     end
 
