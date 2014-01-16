@@ -6,7 +6,6 @@
 #  name            :string(255)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  fp              :decimal(, )
 #  team_id         :integer
 #  is_current      :boolean
 #  stats_player_id :integer
@@ -16,7 +15,6 @@
 module Projection
   class Player < ActiveRecord::Base
     belongs_to :team
-    has_paper_trail :ignore => [:stats_player_id, :name]
 
     class << self
       # refresh players with STATS API response

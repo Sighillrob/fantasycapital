@@ -13,6 +13,7 @@
 module Projection
   class Team < ActiveRecord::Base
     has_many :games, class_name: Projection::Game, inverse_of: :team
+    has_many :players, class_name: Projection::Player, inverse_of: :team
   
     class << self
       # refresh teams with STATS API response

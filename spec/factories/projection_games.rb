@@ -15,7 +15,6 @@
 
 FactoryGirl.define do
   factory :projection_game, :class => 'Projection::Game' do
-    gamedate "2014-01-07"
-    is_home false
+    start_date "2014-01-07"
   end
 end

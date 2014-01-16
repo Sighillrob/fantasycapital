@@ -30,7 +30,7 @@ module Projection
     end
 
     def team_stat(team, position, stat_name)
-      last_10_games = Game.includes(:opponent_team, stats: :player).where(team: team).order(start_date: :desc).limit(10)
+      last_10_games = Game.includes(:opponent_team, stats: :player).where(opponent_team: team).order(start_date: :desc).limit(10)
       aggregated_stat(last_10_games, position, stat_name)
     end
 

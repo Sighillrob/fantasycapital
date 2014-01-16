@@ -37,6 +37,12 @@ module StatsClient
             end
           end
 
+          def events
+            client.request "events/" do |response|
+              StatsClient::ResponseParser::SimpleParser.new(response).parse 'events'
+            end
+          end
+
           protected
           def action_prefix
             'stats/basketball/nba'

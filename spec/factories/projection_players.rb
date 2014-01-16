@@ -6,7 +6,6 @@
 #  name            :string(255)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  fp              :decimal(, )
 #  team_id         :integer
 #  is_current      :boolean
 #  stats_player_id :integer

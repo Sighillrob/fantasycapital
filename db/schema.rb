@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140114162924) do
+ActiveRecord::Schema.define(version: 20140116080516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20140114162924) do
     t.integer  "user_id"
     t.string   "type"
     t.string   "ext_account_id"
-    t.decimal  "balance",        precision: 20, scale: 2
+    t.decimal  "balance",        precision: 10, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -134,7 +134,6 @@ ActiveRecord::Schema.define(version: 20140114162924) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "fp"
     t.integer  "team_id"
     t.boolean  "is_current"
     t.integer  "stats_player_id"
@@ -143,6 +142,29 @@ ActiveRecord::Schema.define(version: 20140114162924) do
 
   add_index "projection_players", ["stats_player_id"], name: "index_projection_players_on_stats_player_id", using: :btree
   add_index "projection_players", ["team_id"], name: "index_projection_players_on_team_id", using: :btree
+
+  create_table "projection_projections", force: true do |t|
+    t.integer  "scheduled_game_id"
+    t.integer  "player_id"
+    t.decimal  "fp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_projections", ["player_id"], name: "index_projection_projections_on_player_id", using: :btree
+  add_index "projection_projections", ["scheduled_game_id"], name: "index_projection_projections_on_scheduled_game_id", using: :btree
+
+  create_table "projection_scheduled_games", force: true do |t|
+    t.integer  "home_team_id"
+    t.integer  "away_team_id"
+    t.datetime "start_date"
+    t.integer  "stats_event_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_scheduled_games", ["away_team_id"], name: "index_projection_scheduled_games_on_away_team_id", using: :btree
+  add_index "projection_scheduled_games", ["home_team_id"], name: "index_projection_scheduled_games_on_home_team_id", using: :btree
 
   create_table "projection_stats", force: true do |t|
     t.string   "stat_name"
