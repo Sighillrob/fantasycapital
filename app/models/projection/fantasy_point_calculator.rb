@@ -1,29 +1,25 @@
 module Projection
   class FantasyPointCalculator
 
-    FP_RATIOS = { 
-      "points" => 1,
-      "assists" => 1.5,
-      "steals" => 2,
-      "rebounds" => 1.25,
-      "blockedShots" => 2,
-      "turnovers" => -1 }
 
     def initialize(player)
+      @fp_ratios = { 
+        "points" => 1,
+        "assists" => 1.5,
+        "steals" => 2,
+        "rebounds" => 1.25,
+        "blockedShots" => 2,
+        "turnovers" => -1 }
       @player = player
     end
   
     def fp(opponent_team)
-      games_played = GamePlayed.includes(:game).where(player: @player).sort { |a,b| a.game.start_date <=> b.game.start_date}
-      last_game = games_played.last(1).map {|x| x.game} 
-      last_3_games = games_played.last(3).map {|x| x.game} 
-      last_10_games = games_played.last(10).map {|x| x.game} 
-
-      FP_RATIOS.reduce(0) do |fp, (stat_name, ratio)|
+      self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
+      @fp_ratios.reduce(0) do |fp, (stat_name, ratio)|
         fp + ratio * (
-          aggregated_stat(last_game, @player.position, stat_name) * 0.15
-          + aggregated_stat(last_3_games, @player.position, stat_name) * 0.15
-          + aggregated_stat(last_10_games, @player.position, stat_name) * 0.20
+          aggregated_stat(@player.last_1_game, @player.position, stat_name) * 0.15
+          + aggregated_stat(@player.last_3_games, @player.position, stat_name) * 0.15
+          + aggregated_stat(@player.last_10_games, @player.position, stat_name) * 0.20
           + team_stat(opponent_team, @player.position, stat_name) * 0.50
           )
       end
@@ -40,6 +36,14 @@ module Projection
         stat.stat_name == stat_name && stat.player.position == position
       end.reduce(0) do |fp, stat|
         fp += stat.stat_value
+      end
+    end
+
+    def method_missing(method_name, *args, &block)
+      if @fp_ratios.keys.include?(method_name.to_s)
+        @fp_ratios[method_name.to_s] = args[0]
+      else
+        super
       end
     end
 

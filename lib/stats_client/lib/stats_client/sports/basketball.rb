@@ -13,7 +13,7 @@ module StatsClient
 
           def players
             client.request 'participants/' do |response|
-              StatsClient::ResponseParser::ResponseParser.new(response, StatsClient::Player).parse 'players'
+              StatsClient::ResponseParser::SimpleParser.new(response).parse 'players'
             end
           end
 

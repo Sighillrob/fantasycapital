@@ -10,8 +10,10 @@
 #  updated_at        :datetime
 #
 
-class Projection::Projection < ActiveRecord::Base
-  belongs_to :scheduled_game
-  belongs_to :player
-  has_paper_trail
+module Projection
+  class Projection < ActiveRecord::Base
+    belongs_to :scheduled_game
+    belongs_to :player
+    has_paper_trail
+  end
 end

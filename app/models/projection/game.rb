@@ -13,8 +13,8 @@
 
 module Projection
   class Game < ActiveRecord::Base
-    belongs_to :team, class_name: Projection::Team
-    belongs_to :opponent_team, class_name: Projection::Team
+    belongs_to :team
+    belongs_to :opponent_team, class_name: Team
     has_many :stats, inverse_of: :game
   
     def self.find_or_create_for_stats(stats_game)

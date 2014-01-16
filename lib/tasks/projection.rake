@@ -15,6 +15,7 @@ namespace :projection do
 
   desc "Projeted Fantasy Points"
   task fp: [:environment] do
+    puts "Calculating FP..."
     Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
       [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
         team1.players.each do |player|
