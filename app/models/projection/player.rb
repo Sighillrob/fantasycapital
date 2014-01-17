@@ -50,7 +50,7 @@ module Projection
     end
     
     def _last_games(x)
-        GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game}
+      GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game}
     end
 
   end

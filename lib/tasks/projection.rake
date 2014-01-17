@@ -34,9 +34,10 @@ namespace :projection do
   desc "Purge projection database"
   task purge: :environment do
     input = ''
-    STDOUT.Rails.logger.info "This will delete all data in projectin tables! Are you sure (y/N)?"
+    STDOUT.puts "This will delete all data in projectin tables! Are you sure (y/N)?"
     input = STDIN.gets.chomp
     if input.downcase == "y"
+      Projection::Projection.delete_all
       Projection::Stat.delete_all
       Projection::GamePlayed.delete_all
       Projection::Game.delete_all

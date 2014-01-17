@@ -3,6 +3,7 @@ require 'httparty'
 module StatsClient
   class Client
     include HTTParty
+    debug_output $stderr if Rails.env.development?
     #logger StatsClient.logger, :info, :apache
     base_uri StatsClient.base_url
     default_params accept: 'json'

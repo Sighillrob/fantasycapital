@@ -17,21 +17,27 @@ module Projection
       self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
       @fp_ratios.reduce(0.0) do |fp, (stat_name, ratio)|
         c = [ 
-          avg_stat(@player.last_1_game, @player.position, stat_name) * 0.15,
-          avg_stat(@player.last_3_games, @player.position, stat_name) * 0.15,
-          avg_stat(@player.last_10_games, @player.position, stat_name) * 0.20,
+          avg_stat(@player.last_1_game, @player, stat_name) * 0.15,
+          avg_stat(@player.last_3_games, @player, stat_name) * 0.15,
+          avg_stat(@player.last_10_games, @player, stat_name) * 0.20,
           team_stat(opponent_team, @player.position, stat_name) * 0.50
         ].sum
+        debugger
         fp + c.to_f * ratio
       end
     end
 
-    def team_stat(team, position, stat_name)
-      last_10_games = Game.includes(:opponent_team, stats: :player).where(opponent_team: team).order(start_date: :desc).limit(10)
-      avg_stat(last_10_games, position, stat_name)
+    def avg_stat(games, player, stat_name)
+      stats = games.reduce([]) {|stats, game| stats + game.stats}
+      stats.select do |stat|
+        stat.stat_name == stat_name && stat.player == player
+      end.reduce(0.0) do |fp, stat|
+        fp += stat.stat_value.to_f
+      end / games.size
     end
 
-    def avg_stat(games, position, stat_name)
+    def team_stat(team, position, stat_name)
+      games = Game.includes(:opponent_team, stats: :player).where(opponent_team: team).order(start_date: :desc).limit(10)
       return 0 if games.size == 0
       stats = games.reduce([]) {|stats, game| stats + game.stats}
       stats.select do |stat|
