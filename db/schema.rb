@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140116215241) do
+ActiveRecord::Schema.define(version: 20140117213257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,30 @@ ActiveRecord::Schema.define(version: 20140116215241) do
 
   add_index "projection_players", ["stats_player_id"], name: "index_projection_players_on_stats_player_id", using: :btree
   add_index "projection_players", ["team_id"], name: "index_projection_players_on_team_id", using: :btree
+
+  create_table "projection_proj_by_stat_crits", force: true do |t|
+    t.integer  "projection_by_stat_id"
+    t.decimal  "fp"
+    t.decimal  "weighted_fp"
+    t.string   "criteria"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_proj_by_stat_crits", ["projection_by_stat_id", "criteria"], name: "i_projection_proj_by_stat_crits", unique: true, using: :btree
+  add_index "projection_proj_by_stat_crits", ["projection_by_stat_id"], name: "index_projection_proj_by_stat_crits_on_projection_by_stat_id", using: :btree
+
+  create_table "projection_projection_by_stats", force: true do |t|
+    t.string   "stat_name"
+    t.decimal  "fp"
+    t.decimal  "weighted_fp"
+    t.integer  "projection_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_projection_by_stats", ["projection_id", "stat_name"], name: "projection_by_stat_projection_and_stat_name", unique: true, using: :btree
+  add_index "projection_projection_by_stats", ["projection_id"], name: "index_projection_projection_by_stats_on_projection_id", using: :btree
 
   create_table "projection_projections", force: true do |t|
     t.integer  "scheduled_game_id"

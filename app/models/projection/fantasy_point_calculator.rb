@@ -2,28 +2,47 @@ module Projection
   class FantasyPointCalculator
 
 
-    def initialize(player)
-      @fp_ratios = { 
+    def initialize
+      @stat_weights = { 
         "points" => 1,
         "assists" => 1.5,
         "steals" => 2,
         "rebounds" => 1.25,
         "blockedShots" => 2,
         "turnovers" => -1 }
-      @player = player
+      @games_weights = {
+        "player.last_1_game" => 0.15,
+        "player.last_3_games" => 0.15,
+        "player.last_10_games" => 0.20,
+        "opponent_team" => 0.50
+      }
     end
   
-    def fp(opponent_team)
-      self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
-      @fp_ratios.reduce(0.0) do |fp, (stat_name, ratio)|
-        c = [ 
-          avg_stat(@player.last_1_game, @player, stat_name) * 0.15,
-          avg_stat(@player.last_3_games, @player, stat_name) * 0.15,
-          avg_stat(@player.last_10_games, @player, stat_name) * 0.20,
-          team_stat(opponent_team, @player.position, stat_name) * 0.50
-        ].sum
-        debugger
-        fp + c.to_f * ratio
+    def update(player, opponent_team, projection)
+
+      projection.fp = @stat_weights.reduce(0.0) do |fp, (stat_name, weight)|
+        p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
+        p_by_stat.fp = fp_of_stat(stat_name, player, opponent_team, p_by_stat)
+        p_by_stat.weighted_fp = p_by_stat.fp * weight
+        p_by_stat.save!
+
+        fp + p_by_stat.weighted_fp
+      end
+
+    end
+
+    def fp_of_stat(stat_name, player, opponent_team, p_by_stat)
+      p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, weight)|
+        p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
+
+        if ( criteria == "opponent_team" )
+          p_by_s_c.fp = team_stat(opponent_team, player.position, stat_name)
+        else
+          p_by_s_c.fp = avg_stat(eval(criteria), player, stat_name)
+        end
+
+        p_by_s_c.weighted_fp = p_by_s_c.fp * weight
+        p_by_s_c.save!
       end
     end
 
@@ -48,8 +67,8 @@ module Projection
     end
 
     def method_missing(method_name, *args, &block)
-      if @fp_ratios.keys.include?(method_name.to_s)
-        @fp_ratios[method_name.to_s] = args[0]
+      if @stat_weights.keys.include?(method_name.to_s)
+        @stat_weights[method_name.to_s] = args[0]
       else
         super
       end

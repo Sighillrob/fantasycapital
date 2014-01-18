@@ -37,8 +37,8 @@ module StatsClient
             end
           end
 
-          def events
-            client.request "events/" do |response|
+          def events(date=Time.now)
+            client.request "events/?date=#{date.strftime("%Y-%m-%d")}" do |response|
               StatsClient::ResponseParser::SimpleParser.new(response).parse 'events'
             end
           end
