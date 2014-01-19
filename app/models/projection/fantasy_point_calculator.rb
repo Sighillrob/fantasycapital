@@ -19,8 +19,10 @@ module Projection
     end
   
     def update(player, opponent_team, projection)
+      Rails.logger.info "Updating projection for #{player} --> #{opponent_team}"
 
       projection.fp = @stat_weights.reduce(0.0) do |fp, (stat_name, weight)|
+        Rails.logger.debug "Calculating #{stat_name}"
         p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
         p_by_stat.fp = fp_of_stat(stat_name, player, opponent_team, p_by_stat)
         p_by_stat.weighted_fp = p_by_stat.fp * weight
@@ -47,6 +49,7 @@ module Projection
     end
 
     def avg_stat(games, player, stat_name)
+      return 0 if games.size == 0
       stats = games.reduce([]) {|stats, game| stats + game.stats}
       stats.select do |stat|
         stat.stat_name == stat_name && stat.player == player
@@ -69,6 +72,10 @@ module Projection
     def method_missing(method_name, *args, &block)
       if @stat_weights.keys.include?(method_name.to_s)
         @stat_weights[method_name.to_s] = args[0]
+      elsif @games_weights.keys.include?(method_name.to_s)
+        @games_weights[method_name.to_s] = args[0]
+      elsif @games_weights.keys.include?("player." +method_name.to_s)
+        @games_weights["player."+method_name.to_s] = args[0]
       else
         super
       end

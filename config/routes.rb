@@ -29,7 +29,12 @@ Main::Application.routes.draw do
       get :new_cc
     end
   end
-  resources :projections, only: :index
+
+  resources :projections, only: :index do
+    resources :projection_by_stats do
+      resources :projection_by_stat_and_games
+    end
+  end
 
 
   # The priority is based upon order of creation: first created -> highest priority.

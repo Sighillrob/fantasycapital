@@ -5,3 +5,8 @@ steals 2
 rebounds 1.25
 blockedShots 2
 turnovers -1 
+
+last_1_game 0.15
+last_3_games 0.15
+last_10_games 0.20
+opponent_team 0.50

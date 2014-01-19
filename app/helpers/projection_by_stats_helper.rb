@@ -1,0 +1,2 @@
+module ProjectionByStatsHelper
+end
