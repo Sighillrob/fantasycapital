@@ -41,6 +41,9 @@ namespace :projection do
     STDOUT.puts "This will delete all data in projectin tables! Are you sure (y/N)?"
     input = STDIN.gets.chomp
     if input.downcase == "y"
+      Projection::ProjectionBreakdown.delete_all
+      Projection::ProjByStatCrit.delete_all
+      Projection::ProjectionByStat.delete_all
       Projection::Projection.delete_all
       Projection::Stat.delete_all
       Projection::GamePlayed.delete_all
