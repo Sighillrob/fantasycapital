@@ -13,4 +13,5 @@
 
 class Projection::ProjByStatCrit < ActiveRecord::Base
   belongs_to :projection_by_stat
+  has_many :projection_breakdowns, :dependent => :delete_all
 end

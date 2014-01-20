@@ -22,7 +22,8 @@ module Projection
       "steals",
       "rebounds",
       "blockedShots",
-      "turnovers" ]
+      "turnovers",
+      "totalSecondsPlayed" ]
   
     COMP_STAT_KEY = [
       "made",

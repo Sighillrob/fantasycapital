@@ -32,7 +32,9 @@ Main::Application.routes.draw do
 
   resources :projections, only: :index do
     resources :projection_by_stats do
-      resources :projection_by_stat_and_games
+      resources :projection_by_stat_and_games do
+        resources :projection_breakdowns
+      end
     end
   end
 

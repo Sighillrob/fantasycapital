@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140117213257) do
+ActiveRecord::Schema.define(version: 20140119160012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,16 @@ ActiveRecord::Schema.define(version: 20140117213257) do
 
   add_index "projection_proj_by_stat_crits", ["projection_by_stat_id", "criteria"], name: "i_projection_proj_by_stat_crits", unique: true, using: :btree
   add_index "projection_proj_by_stat_crits", ["projection_by_stat_id"], name: "index_projection_proj_by_stat_crits_on_projection_by_stat_id", using: :btree
+
+  create_table "projection_projection_breakdowns", force: true do |t|
+    t.integer  "proj_by_stat_crit_id"
+    t.integer  "stat_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projection_projection_breakdowns", ["proj_by_stat_crit_id"], name: "index_projection_projection_breakdowns_on_proj_by_stat_crit_id", using: :btree
+  add_index "projection_projection_breakdowns", ["stat_id"], name: "index_projection_projection_breakdowns_on_stat_id", using: :btree
 
   create_table "projection_projection_by_stats", force: true do |t|
     t.string   "stat_name"

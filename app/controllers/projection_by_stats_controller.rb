@@ -9,7 +9,7 @@ class ProjectionByStatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_projection
-      @projection = Projection::Projection.find(params[:projection_id])
+      @projection = Projection::Projection.includes(:projection_by_stats).find(params[:projection_id])
     end
 
 end
