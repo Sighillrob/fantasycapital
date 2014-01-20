@@ -34,14 +34,15 @@ module Projection
     end
 
     def fp_of_stat(stat_name, player, opponent_team, p_by_stat)
+
       p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, weight)|
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
         if ( criteria == "opponent_team" )
           p_by_s_c.fp = team_stat(opponent_team, player.position, stat_name, p_by_s_c)
           # opponent's stat should be factored by minutes played
-        #  p_by_s_c.weighted_fp = p_by_s_c.fp * weight * stats_avg(player.last_3_games, player, "totalSecondsPlayed", p_by_s_c) / (48 * 60.0)
-          p_by_s_c.weighted_fp = p_by_s_c.fp * weight
+          avg_seconds = avg_seconds_played_in_last_3(player, p_by_stat.projection)
+          p_by_s_c.weighted_fp = p_by_s_c.fp * weight * avg_seconds / (48 * 60.0)
         else
           p_by_s_c.fp = stats_avg(eval(criteria), player, stat_name, p_by_s_c)
           p_by_s_c.weighted_fp = p_by_s_c.fp * weight
@@ -50,6 +51,19 @@ module Projection
 
         fp + p_by_s_c.weighted_fp
       end
+    end
+
+    def avg_seconds_played_in_last_3(player, projection)
+      stat_name = "totalSecondsPlayed"
+      p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
+      p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: "last_3_games").first_or_create
+      p_by_s_c.fp = stats_avg(player.last_3_games, player, stat_name, p_by_s_c)
+      p_by_stat.fp = stats_avg(player.last_3_games, player, stat_name, p_by_s_c)
+      p_by_s_c.weighted_fp = 0.0
+      p_by_stat.weighted_fp = 0.0
+      p_by_s_c.save!
+      p_by_stat.save!
+      p_by_s_c.fp
     end
 
     def stats_avg(games, player, stat_name, p_by_s_c)

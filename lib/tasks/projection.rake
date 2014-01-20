@@ -20,7 +20,7 @@ namespace :projection do
     # load weights and other parameters from rule file
     c.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
 
-    Projection::ScheduledGame.where("start_date > ?", 7.days.ago).each do |scheduled_game|
+    Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
       [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
         team1.players.each do |player|
           p = Projection::Projection.where(scheduled_game: scheduled_game, player: player).first_or_create
