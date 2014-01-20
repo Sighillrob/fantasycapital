@@ -40,7 +40,8 @@ module Projection
         if ( criteria == "opponent_team" )
           p_by_s_c.fp = team_stat(opponent_team, player.position, stat_name, p_by_s_c)
           # opponent's stat should be factored by minutes played
-          p_by_s_c.weighted_fp = p_by_s_c.fp * weight * stats_avg(playler.last_3_games, player, "totalSecondsPlayed", p_by_s_c) / (48 * 60.0)
+        #  p_by_s_c.weighted_fp = p_by_s_c.fp * weight * stats_avg(player.last_3_games, player, "totalSecondsPlayed", p_by_s_c) / (48 * 60.0)
+          p_by_s_c.weighted_fp = p_by_s_c.fp * weight
         else
           p_by_s_c.fp = stats_avg(eval(criteria), player, stat_name, p_by_s_c)
           p_by_s_c.weighted_fp = p_by_s_c.fp * weight
