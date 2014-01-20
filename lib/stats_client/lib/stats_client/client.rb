@@ -2,6 +2,9 @@ require 'httparty'
 
 module StatsClient
   class Client
+    RETRY_DELAY = 3
+    RETRIES = 5
+
     include HTTParty
     debug_output $stderr if Rails.env.development?
     #logger StatsClient.logger, :info, :apache
@@ -15,7 +18,8 @@ module StatsClient
 
       params.delete_if { |k, v| v.nil? || v.empty? }
 
-      parse_response self.class.get(api_url(action), query: params), &block
+      response = with_retries { self.class.get(api_url(action), query: params) }
+      parse_response response, &block
     end
 
     protected
@@ -41,5 +45,26 @@ module StatsClient
         StatsClient::FailureResponse.new response.body, response.body
       end
     end
+
+    def with_retries(&block)
+      begin
+        RETRIES.times do
+          response = yield
+          case response.code
+          when 500...600
+            puts "sleeping for for retry"
+            sleep RETRY_DELAY
+          else
+            return response
+          end
+          response
+        end
+      rescue Errno::ECONNREFUSED, SocketError, Net::ReadTimeout
+        puts "sleeping for for retry"
+        sleep RETRY_DELAY
+        retry
+      end
+    end
+    
   end
 end
