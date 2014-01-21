@@ -1,5 +1,6 @@
 Main::Application.routes.draw do
   get "users/leadboard"
+
   get "splash/index", as: :splash
   root to: "contests#browse"
 
@@ -27,6 +28,10 @@ Main::Application.routes.draw do
   resources :accounts, only: [:create, :edit, :show, :index] do
     collection do
       get :new_cc
+      get :profile
+      get :history
+      get :withdraw
+      get :add_fund
     end
   end
 

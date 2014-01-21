@@ -19,6 +19,22 @@ class AccountsController < ApplicationController
   def edit
   end
 
+  def history
+
+  end
+
+  def profile
+
+  end
+
+  def withdraw
+
+  end
+
+  def add_fund
+    render layout: false
+  end
+
   # POST /accounts
   def create
     @account = Account.new(account_params)

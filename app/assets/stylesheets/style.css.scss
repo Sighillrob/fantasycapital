@@ -4,10 +4,7 @@
 @font-face {
   font-family: 'droid_sansregular';
   src: font-url('droidsans-webfont.eot');
-  src: font-url('droidsans-webfont.eot?#iefix') format('embedded-opentype'),
-       font-url('droidsans-webfont.woff') format('woff'),
-       font-url('droidsans-webfont.ttf') format('truetype'),
-       font-url('droidsans-webfont.svg#droid_sansregular') format('svg');
+  src: font-url('droidsans-webfont.eot?#iefix') format('embedded-opentype'), font-url('droidsans-webfont.woff') format('woff'), font-url('droidsans-webfont.ttf') format('truetype'), font-url('droidsans-webfont.svg#droid_sansregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,10 +12,7 @@
 @font-face {
   font-family: 'droid_sansbold';
   src: font-url('droidsans-bold-webfont.eot');
-  src: font-url('droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-       font-url('droidsans-bold-webfont.woff') format('woff'),
-       font-url('droidsans-bold-webfont.ttf') format('truetype'),
-       font-url('droidsans-bold-webfont.svg#droid_sansbold') format('svg');
+  src: font-url('droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'), font-url('droidsans-bold-webfont.woff') format('woff'), font-url('droidsans-bold-webfont.ttf') format('truetype'), font-url('droidsans-bold-webfont.svg#droid_sansbold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -38,7 +32,7 @@ body {
   background: image-url('body-bg.jpg') no-repeat fixed 100% top #555555 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
-  background: image-url('body-bg.jpg') no-repeat fixed top center #555555 !important     \9;
+  background: image-url('body-bg.jpg') no-repeat fixed top center #555555 !important      \9;
   /*IE 9*/
   background: image-url('body-bg.jpg') no-repeat fixed top 100% #555555 /IE9 !important;
   background-attachment: fixed /IE9 !important;
@@ -63,10 +57,27 @@ h1, h2, h3, h4, h5, h6 {
   height: 55px;
 }
 
+.light_grey {
+  background: #f4f4f4;
+}
 
+.dark_grey {
+  background: #676767;
+}
+
+.grey_bottom_border {
+  border-bottom: 1px solid #bbbbbb;
+}
+
+.grey_right_border {
+  border-right: 1px solid #bbbbbb;
+}
+.ajax-modal{
+  cursor: pointer;
+}
 .capital_top_nav {
   height: auto;
-  .social-link a{
+  .social-link a {
     color: #FFFFFF !important;
   }
 
@@ -129,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 17px;
   font-weight: bold;
   margin: 0 5px 0 5px;
-  &:hover{
+  &:hover {
     color: $theme-green;
   }
 }
@@ -336,7 +347,6 @@ input[type=text] {
   }
 }
 
-
 @media (max-width: 768px) {
   .categoryNav {
     border-radius: none;
@@ -433,22 +443,22 @@ ul.contest, table.contestHead {
   border-top: 1px solid #bbbbbb;
   clear: both;
 
-  tr{
+  tr {
     font-family: 'droid_sansbold';
     padding: 10px 20px;
 
-    th{
+    th {
       color: #000;
     }
 
-    td{
-      &.sport-name, &.contest-type{
+    td {
+      &.sport-name, &.contest-type {
         font-weight: bold;
       }
 
       color: #555555;
 
-      img{
+      img {
         margin-right: 5px;
       }
 
@@ -463,10 +473,6 @@ ul.contest, table.contestHead {
   }
 }
 
-
-
-
-
 /*Footer Area*/
 footer {
   background: none repeat scroll 0 0 #2C2B2B;
@@ -478,17 +484,17 @@ footer {
 div.footerContainer {
   margin: 0 auto;
   min-height: 180px;
-  ul{
+  ul {
     margin: 25px 0 0;
     padding: 0;
-    &.left{
+    &.left {
 
-      li{
+      li {
         float: left;
         width: 50%;
         list-style: none;
 
-        a{
+        a {
           color: $theme-green;
           font-size: 17px;
           text-transform: uppercase;
@@ -496,18 +502,17 @@ div.footerContainer {
       }
     }
 
-    &.right{
-     li{
-       float: left;
-       list-style: none;
-       margin: 10px 0 10px 10px;
-     }
+    &.right {
+      li {
+        float: left;
+        list-style: none;
+        margin: 10px 0 10px 10px;
+      }
     }
   }
 }
 
-
-@media(max-width: 768px) {
+@media (max-width: 768px) {
   div.footerContainer {
     ul.left, ul.right {
       li {

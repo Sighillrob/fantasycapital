@@ -20,6 +20,8 @@ class WaitingList < ActiveRecord::Base
     JOINED  = 3
   end
 
+  attr_accessor :emails #Used in refer friend form
+
   belongs_to :user
 
   validates :email, uniqueness: true, presence: true

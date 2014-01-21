@@ -1,0 +1,71 @@
+<%= render partial: 'shared/account_heading' %>
+
+<h4 class="grey_bottom_border"><strong>WITHDRAWAL FORM</strong></h4>
+<div class="clearfix">&nbsp;</div>
+<div class="withdrawal">
+  <div class="col-md-9 grey_right_border">
+    <div class="radio">
+      <ul class="list-inline">
+        <li>
+          <input type="radio" value="" name="radio" id="paypal">
+          <label for="paypal"><%=image_tag "paypal2.png" %></label>
+        </li>
+        <li>
+          <input type="radio" value="" name="radio" id="check">
+          <label for="check"><%= image_tag "check.png" %></label>
+        </li>
+        <li>
+          <input type="radio" value="" name="radio" id="download">
+          <label for="download"><%= image_tag "download.png" %></label>
+        </li>
+      </ul>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class="col-md-5">
+      <h4><strong>Account Balance:</strong></h4>
+    </div>
+    <div class="col-md-3">
+      <h4>$0.00</h4>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <br>
+
+    <div class="col-md-5">
+      <h4><strong>Available for Withdrawal:</strong></h4>
+    </div>
+    <div class="col-md-3">
+      <h4>$0.00</h4>
+    </div>
+    <div class="clear">&nbsp;</div>
+    <h1>Your available funds do not meet the minimum
+      withdrawal requirement of the $20.00.</h1>
+
+    <div class="clearfix">&nbsp;</div>
+    <input type="submit" class="submit" value="WITHDRAW">
+
+    <div class="clearfix">&nbsp;</div>
+    <br>
+  </div>
+  <div class="col-md-3"><br>
+    <strong>Your Withdrawal Address:</strong><br>
+
+    <p>89 Burlington Road
+      Unionville, CT 06085</p>
+    <a href="#"><span class="green">Update Address »</span></a></div>
+</div>
+
+<div class="clearfix">&nbsp;</div>
+<br>
+<div class="pull-left"><a href="#"><span class="green">&lt; Back to My Account</span></a></div>
+<div class="clear">&nbsp;</div>
+<p>We offer withdrawal by Check or PayPal Transfer<br>
+  Minimum withdrawal is $20<br>
+  Only real money is eligible for withdrawal, not bonus credits of any kind.<br>
+  For your security, all withdrawals are manually reviewed by our support team.<br>
+  Our Withdrawal Policy is to first refund any original deposit methods, then issue the remaining funds via PayPal or by
+  Check.</p>
+<p>
+  <strong>If you have lost or cancelled one of the credit or debit cards or PayPal account that you have issued in the
+    past to deposit on FantasyCapital, please notify <a href="#">support@fantasycapital.com</a> prior to requesting your
+    withdrawal.</strong>
+</p>

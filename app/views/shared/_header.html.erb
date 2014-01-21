@@ -32,7 +32,9 @@
         </ul>
         <ul class='nav navbar-nav navbar-right capital-navbar-right'>
           <li>
-            <strong class='green'>Refer Friends for Cash »</strong>
+            <%= link_to invite_waiting_lists_path do%>
+              <strong class='green ajax-modal' >Refer Friends for Cash »</strong>
+            <%end%>
           </li>
           <li class='dropdown'>
             <% if user_signed_in? %>
@@ -63,7 +65,7 @@
     </h1>
     <div class='balanceBlock'>
       <h1>Balance: &nbsp;$0.00</h1>
-      <strong class='green'>Add Funds »</strong>
+      <strong class='green ajax-modal' id='add-fund' data-url=<%= add_fund_accounts_path %>>Add Funds »</strong>
     </div>
     <div class='clear'>&nbsp;</div>
     <div class='navbar navbar-default capitalnavbar' role="navigation">
@@ -92,8 +94,8 @@
           <li>
             <a href="#">Rules/Faq</a>
           </li>
-          <li>
-            <a href="#">Account</a>
+          <li class='<%= menu_classes 'account' %>'>
+            <%= link_to 'Account', profile_accounts_path %>
           </li>
         </ul>
       </div>

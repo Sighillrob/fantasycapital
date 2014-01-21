@@ -1,0 +1,203 @@
+<div class="container addfunds">
+  <div class="addfunds_popup">
+    <div class="popupTitle">
+      <h2>ADD FUNDS</h2>
+      <button data-dismiss="modal" class="btnClose" type="button">X</button>
+    </div>
+    <p>To play FantasyCapital for real money you need to add funds to your account. Don’t worry, you can withdraw your
+      money at any time for free.</p>
+
+    <div class="col-md-10 paypalcontainer">
+      <div class="container paypaltabs">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#creditcard" data-toggle="tab">Pay with Credit Card</a></li>
+          <li><a href="#paypal" data-toggle="tab">Pay with Paypal</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="creditcard">
+            <table class="table-responsive paypal">
+              <tbody>
+              <tr>
+                <td>Card Number</td>
+                <td><input type="text" value="" placeholder="Enter Card Number"></td>
+                <td><%= image_tag "secure-card-payment.png", class: "img-responsive" %> Amex? Use
+                  <a href="#">Paypal</a></td>
+              </tr>
+              <tr>
+                <td>Cardholder Name</td>
+                <td><input type="text" value="" placeholder="Enter Cardholder Name"></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Month</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><select>
+                        <option>Month</option>
+                      </select></td>
+                      <td><select>
+                        <option>Year</option>
+                      </select></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Security Code</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="text" placeholder="Security Code"></td>
+                      <td><%= image_tag "securitycode.png", class: "img-responsive" %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>State/Provice</td>
+                <td><select>
+                  <option>Albama</option>
+                </select></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+              </tr>
+              <tr>
+                <td>Zip Code</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="text" value="" placeholder="Enter Zip Code"></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="submit" value="Deposits Funds"></td>
+                      <td>You will be changed.... by Fan Duel Inc <br>
+                        <%= image_tag "ssl_secure.png", class:"img-responsive" %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="paypal">
+            <table class="table-responsive paypal">
+              <tbody>
+              <tr>
+                <td>Card Number</td>
+                <td><input type="text" value="" placeholder="Enter Card Number"></td>
+                <td><%= image_tag "secure-card-payment.png", class:"img-responsive" %> Amex? Use
+                  <a href="#">Paypal</a></td>
+              </tr>
+              <tr>
+                <td>Cardholder Name</td>
+                <td><input type="text" value="" placeholder="Enter Cardholder Name"></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Month</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><select>
+                        <option>Month</option>
+                      </select></td>
+                      <td><select>
+                        <option>Year</option>
+                      </select></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Security Code</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="text" placeholder="Security Code"></td>
+                      <td><%= image_tag "securitycode.png", class:"img-responsive" %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>State/Provice</td>
+                <td><select>
+                  <option>Albama</option>
+                </select></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+              </tr>
+              <tr>
+                <td>Zip Code</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="text" value="" placeholder="Enter Zip Code"></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="submit" value="Deposits Funds"></td>
+                      <td>You will be changed.... by Fan Duel Inc <br>
+                        <%= image_tag "ssl_secure.png", class:"img-responsive" %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <ul class="list-inline">
+          <li><%= image_tag "icon-mobile.png" %> 1-800-475-2250</li>
+          <li><%= image_tag "icon-email.png" %> <a href="#">support@fanduel.com</a></li>
+          <li><%= image_tag "secure_payment_by.png", class: "img-responsive" %></li>
+        </ul>
+        <p align="center">We also offer <a href="#">free Practice games</a></p>
+      </div>
+    </div>
+  </div>
+</div>

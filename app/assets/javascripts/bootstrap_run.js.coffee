@@ -3,3 +3,5 @@ $ ->
   $(".tooltip").tooltip()
   $("[rel=tooltip]").tooltip({html: true})
   $('.tabs a:first').tab('show');
+  $('.ajax-modal').on 'click', ->
+    new window.AjaxModal($(@).data('url')).load()
