@@ -13744,7 +13744,10 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     $("[rel=tooltip]").tooltip({
       html: true
     });
-    return $('.tabs a:first').tab('show');
+    $('.tabs a:first').tab('show');
+    return $('.ajax-modal').on('click', function() {
+      return new window.AjaxModal($(this).data('url')).load();
+    });
   });
 
 }).call(this);
@@ -14939,6 +14942,10 @@ var XD = (function () {
       return $("#ba-routing").val("321174851");
     });
   });
+
+}).call(this);
+(function() {
+
 
 }).call(this);
 (function() {
