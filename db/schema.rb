@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20140119160012) do
     t.integer  "user_id"
     t.string   "type"
     t.string   "ext_account_id"
-    t.decimal  "balance",        precision: 10, scale: 2
+    t.decimal  "balance",        precision: 20, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 20140119160012) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|
