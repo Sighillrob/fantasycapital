@@ -21,6 +21,7 @@ module Main
     # config.i18n.default_locale = :de
     config.secret_key_base = '78ccd5caba3ac945a43239946368f20de35064c24b43fcebc841eca98fd593a572805ecbf75d4af008579300b515eeb0ee49f5a578599311a68c79ed82944c51'
 
+    config.autoload_paths += %W(#{config.root}/services)
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     config.assets.precompile += %w( .svg .eot .woff .ttf )
 
