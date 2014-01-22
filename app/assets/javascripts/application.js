@@ -10,6 +10,9 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// These are scripts that we don't want to include
+//= stub stripe_form.js
+//
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
