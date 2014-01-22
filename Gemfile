@@ -9,6 +9,10 @@ gem 'pg'
 
 gem 'gibbon'
 
+gem 'carmen-rails', '~> 1.0.0'
+
+gem 'stripe'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
