@@ -64,7 +64,7 @@
        <% end %>
     </h1>
     <div class='balanceBlock'>
-      <h1>Balance: &nbsp;$0.00</h1>
+      <h1>Balance: &nbsp;<%= number_to_currency(current_user.account_balance) %></h1>
       <strong class='green ajax-modal' id='add-fund' data-url=<%= add_fund_accounts_path %>>Add Funds »</strong>
     </div>
     <div class='clear'>&nbsp;</div>
