@@ -16,12 +16,12 @@
       <tbody>
       <tr>
         <td><strong>Username</strong></td>
-        <td>Showpony</td>
+        <td><%= current_user.email %></td>
       </tr>
 
       <tr>
         <td><strong>Email</strong></td>
-        <td>mike.showpony@gmail.com</td>
+        <td><%= current_user.email %></td>
       </tr>
 
       <tr>
@@ -51,7 +51,7 @@
 
     <div class="col-md-10 grey_bottom_border">
       <div class="col-md-9"><strong>Balance:</strong></div>
-      <div class="col-md-3">$0.00</div>
+      <div class="col-md-3"><%= number_to_currency(current_user.account_balance) %></div>
     </div>
     <div class="clearfix">&nbsp;</div>
     <br>
