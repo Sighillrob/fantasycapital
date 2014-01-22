@@ -1,7 +1,10 @@
-<div class="container addfunds">
+<div class="container addfunds" data-stripe-action="card">
   <div class="addfunds_popup">
     <div class="popupTitle">
-      <h2>ADD FUNDS</h2>
+      <h2>ADD FUNDS
+      <button type="button" id="populate" style="display:inline;" class="btn btn-default">Populate Test Data</button>
+      </h2>
+
       <button data-dismiss="modal" class="btnClose" type="button">X</button>
     </div>
     <p>To play FantasyCapital for real money you need to add funds to your account. Don’t worry, you can withdraw your
@@ -16,17 +19,20 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="creditcard">
+
+            <div style="display:none;" class="error-container form-group has-error"></div>
+
             <table class="table-responsive paypal">
               <tbody>
               <tr>
                 <td>Card Number</td>
-                <td><input type="text" value="" placeholder="Enter Card Number"></td>
+                <td><input type="text" data-payload="number" value="" placeholder="Enter Card Number"></td>
                 <td><%= image_tag "secure-card-payment.png", class: "img-responsive" %> Amex? Use
                   <a href="#">Paypal</a></td>
               </tr>
               <tr>
                 <td>Cardholder Name</td>
-                <td><input type="text" value="" placeholder="Enter Cardholder Name"></td>
+                <td><input type="text" value="" data-payload="name" datplaceholder="Enter Cardholder Name"></td>
                 <td>&nbsp;</td>
               </tr>
               <tr>
@@ -35,12 +41,22 @@
                   <table>
                     <tbody>
                     <tr>
-                      <td><select>
-                        <option>Month</option>
-                      </select></td>
-                      <td><select>
-                        <option>Year</option>
-                      </select></td>
+                      <td>
+                        <select data-payload="exp_month">
+                          <% (1..12).each do |m| %>
+                            <option value="<%= m %>"><%= m %></option>
+                          <% end %>
+                        </select>
+                      </td>
+                      <td>
+                        <select data-payload="exp_year">
+                          <option>Year</option>
+                          <% (0..7).each do |x| %>
+                            <% year = Time.now.year + x %>
+                            <option value="<%= year %>"><%= year %></option>
+                          <% end %>
+                        </select>
+                      </td>
                     </tr>
                     </tbody>
                   </table>
@@ -53,7 +69,7 @@
                   <table>
                     <tbody>
                     <tr>
-                      <td><input type="text" placeholder="Security Code"></td>
+                      <td><input type="text" data-payload="cvc" placeholder="Security Code"></td>
                       <td><%= image_tag "securitycode.png", class: "img-responsive" %></td>
                     </tr>
                     </tbody>
@@ -63,9 +79,11 @@
               </tr>
               <tr>
                 <td>State/Provice</td>
-                <td><select>
-                  <option>Albama</option>
-                </select></td>
+                <td>
+                  <select data-payload="address_state">
+                    <%= region_options_for_select(only_us_and_canada_regions) %>
+                  </select>
+                </td>
                 <td>&nbsp;</td>
               </tr>
               <tr>
@@ -76,7 +94,7 @@
                   <table>
                     <tbody>
                     <tr>
-                      <td><input type="text" value="" placeholder="Enter Zip Code"></td>
+                      <td><input type="text" value="" data-payload="address_zip" placeholder="Enter Zip Code"></td>
                       <td>&nbsp;</td>
                     </tr>
                     </tbody>
@@ -85,12 +103,28 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
+                <td>Amount</td>
+                <td>
+                  <table>
+                    <tbody>
+                    <tr>
+                      <td><input type="text" value="" id="depositAmount" placeholder="Deposit Amount"></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+
+
+              <tr>
                 <td>&nbsp;</td>
                 <td colspan="2">
                   <table>
                     <tbody>
                     <tr>
-                      <td><input type="submit" value="Deposits Funds"></td>
+                      <td><input id="stripeSubmit" type="submit" value="Deposits Funds"></td>
                       <td>You will be changed.... by Fan Duel Inc <br>
                         <%= image_tag "ssl_secure.png", class:"img-responsive" %></td>
                     </tr>
@@ -201,3 +235,9 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  $(function() {
+      window.initializeStripeForm();
+  });
+</script>
