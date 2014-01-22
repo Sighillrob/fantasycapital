@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140119160012) do
+ActiveRecord::Schema.define(version: 20140120215151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: true do |t|
     t.integer  "user_id"
-    t.string   "type"
-    t.string   "ext_account_id"
-    t.decimal  "balance",        precision: 20, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "stripe_customer_id"
+    t.integer  "balance",            default: 0
+    t.integer  "lock_version",       default: 0
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 20140119160012) do
   end
 
   add_index "contests", ["contest_start"], name: "index_contests_on_contest_start", using: :btree
+
+  create_table "credit_cards", force: true do |t|
+    t.string   "stripe_id"
+    t.boolean  "is_default"
+    t.string   "card_brand"
+    t.string   "last_four"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "entries", force: true do |t|
     t.integer  "user_id"
@@ -248,6 +258,7 @@ ActiveRecord::Schema.define(version: 20140119160012) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "balanced_customer_id"
+    t.integer  "balance",                default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
