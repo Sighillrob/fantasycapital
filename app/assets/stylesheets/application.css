@@ -21,6 +21,7 @@
  *= require bootstrap-modal
  *= require waiting_lists
  *= require users
+ *= require account
  *= require account_information
  *= require account_history
  *= require bootstrap-override
