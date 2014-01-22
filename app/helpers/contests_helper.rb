@@ -7,6 +7,8 @@ module ContestsHelper
     Time.at(time_remaining_in_seconds).utc.strftime("%H:%M:%S")
   end
 
+
+
   def  contest_entry_fee(contest)
     contest.entry_fee.zero? ? 'Free' : number_to_currency(contest.entry_fee, precision: 0)
   end

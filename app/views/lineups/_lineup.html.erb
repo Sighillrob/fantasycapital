@@ -9,7 +9,7 @@
         <% if lineup.contest.complete? %>
             <strong>COMPLETE</strong>
         <% else %>
-            <strong>UPCOMING</strong>: <%= contest_livein_countdown lineup.contest %>
+            <strong>UPCOMING</strong>: <%= countdown_tag lineup.contest.contest_start %>
         <% end %>
       </div>
     </header>

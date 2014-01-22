@@ -1,4 +1,9 @@
 module ApplicationHelper
+  def countdown_tag(date, value =nil)
+    value ||= date.strftime("%H:%M:%S")
+    content_tag :span, value,class: 'countdown', data:{ date: date.strftime("%B %d, %Y %H:%M:%S") }
+  end
+
   def page_title
     content_for?(:title) ? yield(:title) : "Fantasy capital"
   end
