@@ -47,8 +47,6 @@
                             <option value="<%= m %>"><%= m %></option>
                           <% end %>
                         </select>
-                      </td>
-                      <td>
                         <select data-payload="exp_year">
                           <option>Year</option>
                           <% (0..7).each do |x| %>
@@ -156,12 +154,14 @@
                   <table>
                     <tbody>
                     <tr>
-                      <td><select>
-                        <option>Month</option>
-                      </select></td>
-                      <td><select>
-                        <option>Year</option>
-                      </select></td>
+                      <td>
+                       <select>
+                          <option>Month</option>
+                        </select>
+                        <select>
+                          <option>Year</option>
+                      </select>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

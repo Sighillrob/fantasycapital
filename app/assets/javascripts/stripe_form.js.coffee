@@ -12,11 +12,34 @@ class StripeForm
     throw 'There must be a form with a data-stripe-action attribute!' unless @form.length > 0
     @stripeAction = @form.data('stripe-action')
 
+  showFormErrors: (errors) ->
+    for key of errors
+      input = @form.find("[data-payload='#{key}']")
+      input.after('<div class="error">' + errors[key] + '</div>')
+
+  isValid: (payload) ->
+    valid = true
+    errors = {}
+    if @stripeAction == 'card'
+      unless Stripe.card.validateCardNumber(payload.number)
+        errors['number'] = 'Is not a valid card number'
+        valid = false
+      unless Stripe.card.validateExpiry(payload.exp_month, payload.exp_year)
+        errors['exp_year'] = 'Is not a valid expiry date'
+        valid = false
+      unless Stripe.card.validateCVC(payload.cvc)
+        errors['cvc'] = 'Is not a valid cvc number'
+        valid = false
+
+    @showFormErrors(errors) unless valid
+    valid
+
   init: (onSuccess) ->
     $('#stripeSubmit').click (e) =>
       e.preventDefault()
       @clearErrors()
       payload = @getPayload()
+      return unless @isValid(payload)
       Stripe[@stripeAction].createToken payload, (status, response) =>
         return @displayError(status, response) if status isnt 200
         onSuccess(@stripeAction, response)
@@ -26,14 +49,9 @@ class StripeForm
     @form.find('.error').remove()
 
   displayError: (status, response) ->
-    if status is 400
-      $('.error-container')
-        .show()
-        .append('<span class="error">' + response.error.message + '</span>')
-    if status is 402
-      input = @form.find('[data-payload="' + response.error.param + '"]')
-      input.parents('.form-group:first').addClass('has-error')
-      input.after('<span class="error">' + response.error.message + '</span>')
+    $('.error-container')
+      .show()
+      .append('<span class="error">' + response.error.message + '</span>')
 
   # Get the payload values.
   getPayload: ->
