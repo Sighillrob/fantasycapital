@@ -35,31 +35,6 @@ class AccountsController < ApplicationController
     render layout: false
   end
 
-  # POST /accounts
-  def create
-    @account = Account.new(account_params)
-    @account.user = current_user
-    if current_user.balanced_customer_id
-      balanced_customer = Balanced::Customer.find(current_user.balanced_customer_id)
-    else
-      balanced_customer = Balanced::Customer.new.save
-      current_user.balanced_customer_id = balanced_customer.uri
-      current_user.save!
-    end
-
-    balanced_customer.add_card(@account.ext_account_id)
-    if params[:amount].present?
-      amount = params[:amount].gsub(/\D\./, '').to_f
-      balanced_customer.debit(amount: (amount*100).to_i, source_uri: @account.ext_account_id)
-    end
-
-    if @account.save
-      render json: {status: 201, account: @account}
-    else
-      render json: @account.errors, status: :unprocessable_entity
-    end
-  end
-
   # PATCH/PUT /accounts/1
   def update
     if @account.update(account_params)

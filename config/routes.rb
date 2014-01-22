@@ -32,6 +32,8 @@ Main::Application.routes.draw do
       get :history
       get :withdraw
       get :add_fund
+      #post :create_bank
+      resources :credit_cards
     end
   end
 
