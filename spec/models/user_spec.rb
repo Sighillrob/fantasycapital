@@ -32,6 +32,22 @@ describe User do
   it { should validate_presence_of(:last_name) }
   it { should have_many(:credit_cards) }
 
+  describe 'default card' do
+
+    let(:user) { FactoryGirl.create(:user) }
+
+    it 'returns nil if no cards' do
+      user.default_card.should == nil
+    end
+
+    it 'returns the first default credit card' do
+      user.credit_cards << CreditCard.new(stripe_id: '1', card_brand: 'Visa', is_default: false, last_four: '1234')
+      user.credit_cards << CreditCard.new(stripe_id: '2', card_brand: 'Visa', is_default: true, last_four: '5678')
+      user.save!
+      user.default_card.last_four.should == '5678'
+    end
+  end
+
   describe 'account_balance' do
 
     it 'returns 0 if no account' do

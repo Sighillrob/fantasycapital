@@ -32,6 +32,7 @@ class AccountsController < ApplicationController
   end
 
   def add_fund
+    @credit_card = current_user.default_card
     render layout: false
   end
 

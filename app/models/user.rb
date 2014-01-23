@@ -38,4 +38,8 @@ class User < ActiveRecord::Base
     return 0 unless self.account
     self.account.current_balance
   end
+
+  def default_card
+    self.credit_cards.where(is_default: true).first
+  end
 end

@@ -34,6 +34,7 @@ Main::Application.routes.draw do
       get :add_fund
       #post :create_bank
       resources :credit_cards
+      post 'credit_cards/deposit' => 'credit_cards#deposit'
     end
   end
 

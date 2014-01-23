@@ -22,8 +22,13 @@ class CreditCardsController < ApplicationController
       end
 
       if params[:amount].present?
-        amount = params[:amount].gsub(/\D/, '').to_i
-        DepositService.new(current_user).deposit(amount)
+        begin
+          amount = params[:amount].gsub(/\D/, '').to_i
+          DepositService.new(current_user).deposit(amount)
+        rescue DepositError => e
+          render json: {error: e.message}, status: :unprocessable_entity
+          return
+        end
       end
 
       if credit_card.save
@@ -35,6 +40,17 @@ class CreditCardsController < ApplicationController
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
+
+  def deposit
+    begin
+      amount = (params[:amount]||'').gsub(/\D/, '').to_i
+      DepositService.new(current_user).deposit(amount)
+      render json: {status: 201}
+    rescue Exception => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
 
   private
 
