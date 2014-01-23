@@ -63,10 +63,14 @@
         <%= image_tag 'logo.png', alt: 'Fantasy Capital' %>
        <% end %>
     </h1>
-    <div class='balanceBlock'>
-      <h1>Balance: &nbsp;<%= number_to_currency(current_user.account_balance) %></h1>
-      <strong class='green ajax-modal' id='add-fund' data-url=<%= add_fund_accounts_path %>>Add Funds »</strong>
-    </div>
+
+    <% if current_user %>
+      <div class='balanceBlock'>
+        <h1>Balance: &nbsp;<%= number_to_currency(current_user.account_balance) %></h1>
+        <strong class='green ajax-modal' id='add-fund' data-url=<%= add_fund_accounts_path %>>Add Funds »</strong>
+      </div>
+    <% end %>
+
     <div class='clear'>&nbsp;</div>
     <div class='navbar navbar-default capitalnavbar' role="navigation">
       <div class='navbar-header'>
