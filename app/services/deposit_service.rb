@@ -1,3 +1,6 @@
+MIN_DEPOSIT_AMOUNT = 20
+MAX_DEPOSIT_AMOUNT = 2000
+
 class DepositService
 
   def initialize(user)
@@ -6,8 +9,9 @@ class DepositService
 
   def deposit(amount)
 
-    # Dirty safety check
-    raise 'Amount is wrong!' unless amount > 0
+    unless amount >= MIN_DEPOSIT_AMOUNT && amount <= MAX_DEPOSIT_AMOUNT
+      raise DepositError, "Amount must be between $#{MIN_DEPOSIT_AMOUNT} - $#{MAX_DEPOSIT_AMOUNT}"
+    end
 
     amount = amount * 100 # Needs to be in cents
 
