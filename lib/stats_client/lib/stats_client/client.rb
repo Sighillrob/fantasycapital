@@ -26,7 +26,7 @@ module StatsClient
       end
       response = with_retries { raw_response }
 
-      parse_response response, &block
+      parse_response raw_response, response, &block
     end
 
     protected

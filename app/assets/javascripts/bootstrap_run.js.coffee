@@ -11,3 +11,8 @@ $ ->
       date: $(@).data("date")
       render: (date) ->
         $(@el).html(date.hours+":"+date.min+":"+date.sec)
+      onEnd: ->
+        $(@.el).addClass('ended');
+        $(@.el).html($(@).data('finished-message'))
+
+        console.info $(@.el).html()

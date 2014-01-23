@@ -1,7 +1,12 @@
 module ApplicationHelper
-  def countdown_tag(date, value =nil)
-    value ||= date.strftime("%H:%M:%S")
-    content_tag :span, value,class: 'countdown', data:{ date: date.strftime("%B %d, %Y %H:%M:%S") }
+  def countdown_tag(date, finished_message= 'Contest has begun!', value = nil)
+    value ||=  date.today? ? date.strftime("%H:%M:%S") : date.strftime('%a%l:%m%P')
+
+    if date.today?
+      content_tag :span, value, class: 'countdown', data:{ date: date.strftime("%B %d, %Y %H:%M:%S"), finished_message: finished_message }
+    else
+      content_tag :span, value
+    end
   end
 
   def page_title
