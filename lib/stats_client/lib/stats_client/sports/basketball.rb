@@ -7,7 +7,7 @@ module StatsClient
           # @return Array of Team(name, location, abbreviation, and ID).
           def teams(season= nil)
              client.request 'teams/' do |response|
-               StatsClient::ResponseParser::ResponseParser.new(response, StatsClient::Team).parse 'teams'
+               StatsClient::ResponseParser::SimpleParser.new(response).parse 'teams'
              end
           end
 

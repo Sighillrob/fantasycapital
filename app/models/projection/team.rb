@@ -20,8 +20,8 @@ module Projection
       def refresh_all(stats_teams)
         Team.update_all(is_current: false)
         stats_teams.each do |stats_team|
-          team = Team.where(stats_team_id: stats_team.id).first_or_create
-          team.name = stats_team.name
+          team = Team.where(stats_team_id: stats_team["teamId"]).first_or_create
+          team.name = stats_team["nickname"]
           team.is_current = true;
           team.save!
         end
