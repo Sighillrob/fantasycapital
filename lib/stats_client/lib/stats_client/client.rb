@@ -17,14 +17,25 @@ module StatsClient
       params.merge! sig: generate_stats_signature, api_key: StatsClient.api_key
 
       params.delete_if { |k, v| v.nil? || v.empty? }
+      raw_response = self.class.get(api_url(action), query: params)
 
-      response = with_retries { self.class.get(api_url(action), query: params) }
+      if is_xml_request?(params)
+        response = StatsClient::ResponseParser::XmlParser.parse(raw_response.body)
+      else
+        response = raw_response.body
+      end
+      response = with_retries { raw_response }
+
       parse_response response, &block
     end
 
     protected
     def initialize(action_prefix)
       @action_prefix = action_prefix
+    end
+
+    def is_xml_request?(params)
+      params[:accept] == 'xml'
     end
 
     def generate_stats_signature
@@ -37,12 +48,12 @@ module StatsClient
        "/#{action_prefix}/#{action}"
     end
 
-    def parse_response(response, &block)
-      if response.success?
+    def parse_response(http_request, response, &block)
+      if http_request.success?
         results = yield response['apiResults'] if block_given?
-        StatsClient::SuccessResponse.new response.body, results
+        StatsClient::SuccessResponse.new response, results
       else
-        StatsClient::FailureResponse.new response.body, response.body
+        StatsClient::FailureResponse.new response, response
       end
     end
 

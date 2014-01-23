@@ -4,7 +4,7 @@
     <%= contest.sport %>
     <%= image_tag "sports/#{contest.sport.downcase}.png" %>
   </td>
-  <td><%= countdown_tag contest.contest_start %></td>
+  <td><%= countdown_tag contest.start_at %></td>
   <td class='entry-fee' data-value=<%= contest.entry_fee %>>
     <%= contest_entry_fee contest %>
    </td>

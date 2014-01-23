@@ -27,6 +27,10 @@ class Contest < ActiveRecord::Base
     15000
   end
 
+  def start_at
+    self.class.for_day(self.contest_start).for_sport(self.sport).order('contest_start ASC').first.contest_start
+  end
+
   def complete?
     contest_start < Time.now
   end
@@ -48,6 +52,14 @@ class Contest < ActiveRecord::Base
 
     def upcoming
       where "contest_start > ?", DateTime.now
+    end
+
+    def for_day(day)
+      where "contest_start BETWEEN ? AND ?", day.beginning_of_day, day.end_of_day
+    end
+
+    def for_sport(sport)
+      where sport: sport
     end
   end
 

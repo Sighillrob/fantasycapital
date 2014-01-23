@@ -24,6 +24,7 @@ end
 require 'stats_client/stats_gateway'
 require 'stats_client/base_resource'
 require 'stats_client/response'
+require 'stats_client/response_parser/xml_parser'
 require 'stats_client/stats/player_stats'
 require 'stats_client/stats/team_stats'
 require 'stats_client/season'
