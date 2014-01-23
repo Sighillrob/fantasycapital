@@ -22,7 +22,33 @@
 
             <div style="display:none;" class="error-container form-group has-error"></div>
 
-            <table class="table-responsive paypal">
+            <% if @credit_card  %>
+              <table id="existingCardContainer" class="table-responsive paypal"> 
+                <tbody>
+                  <tr>
+                    <td>Card Number</td>
+                    <td class="display-value"><%= @credit_card.card_brand %> xxxxx<%= @credit_card.last_four %></td>
+                  </tr>
+                  <tr>
+                    <td>Amount</td>
+                    <td>
+                      <input type="text" value="" data-value="depositAmount" placeholder="Deposit Amount">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                      <input id="existingDeposit" type="submit" value="Deposits Funds">
+                      <%= image_tag "ssl_secure.png", class:"img-responsive" %>
+                      <br />
+                      <a id="addAnotherCard" href="#">Or Add another card</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            <% end %>
+
+            <table id="newCardDeposit" class="table-responsive paypal <%= @credit_card ? 'hidden-section' : '' %>">
               <tbody>
               <tr>
                 <td>Card Number</td>

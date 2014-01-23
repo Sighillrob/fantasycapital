@@ -3,6 +3,28 @@ window.initializeStripeForm = ->
   stripeForm = new StripeForm()
   stripeForm.init initCallback
 
+  $('#addAnotherCard').click (e) ->
+    $('#existingCardContainer').hide()
+    $('#newCardDeposit').show()
+    false
+
+  $('#existingDeposit').click (e) ->
+
+    $('.error-container .error').remove()
+
+    e.preventDefault()
+    container = $('#existingCardContainer')
+    amount = container.find('input[data-value=depositAmount]').val()
+    promise = $.post '/accounts/credit_cards/deposit', amount: amount
+
+    promise.success -> window.location.reload()
+
+    promise.error (res) ->
+      $('#creditcard .error-container')
+        .show()
+        .append('<span class="error">' + res.responseJSON.error + '</span>')
+
+
 # Generic form for handling credit cards, bank accounts, etc
 class StripeForm
 
