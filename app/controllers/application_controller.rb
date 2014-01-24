@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def render_json_errors(model)
+    render json: {errors: model.errors}, status: :unprocessable_entity
+  end
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << [:first_name, :last_name]
   end

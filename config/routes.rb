@@ -32,9 +32,13 @@ Main::Application.routes.draw do
       get :history
       get :withdraw
       get :add_fund
-      #post :create_bank
+
       resources :credit_cards
       post 'credit_cards/deposit' => 'credit_cards#deposit'
+
+      get 'bank_accounts/withdrawal' => 'bank_accounts#withdrawal'
+      post 'bank_accounts/withdrawal' => 'bank_accounts#withdrawal_post'
+      resources :bank_accounts
     end
   end
 
