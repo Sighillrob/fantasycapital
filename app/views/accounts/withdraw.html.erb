@@ -3,6 +3,11 @@
 <h4 class="grey_bottom_border"><strong>WITHDRAWAL FORM</strong></h4>
 <div class="clearfix">&nbsp;</div>
 <div class="withdrawal">
+  <% if current_user.bank_accounts.count == 0 %>
+    <%= link_to 'Add bank details (temp)', new_bank_account_path %>
+  <% else %>
+    <%= link_to 'Cash out (temp)', bank_accounts_withdrawal_accounts_path %>
+  <% end %>
   <div class="col-md-9 grey_right_border">
     <div class="radio">
       <ul class="list-inline">

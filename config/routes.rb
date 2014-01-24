@@ -36,7 +36,7 @@ Main::Application.routes.draw do
       resources :credit_cards
       post 'credit_cards/deposit' => 'credit_cards#deposit'
 
-      get 'bank_accounts/withdrawal' => 'bank_accounts#withdrawal'
+      get 'bank_accounts/withdrawal' => 'bank_accounts#withdrawal', :as => :withdrawal
       post 'bank_accounts/withdrawal' => 'bank_accounts#withdrawal_post'
       resources :bank_accounts
     end
