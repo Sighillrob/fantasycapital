@@ -33,5 +33,9 @@ FactoryGirl.define do
     last_name "last"
     password "password"
     email { generate :email }
+
+    factory :user_with_account  do
+      account
+    end
   end
 end

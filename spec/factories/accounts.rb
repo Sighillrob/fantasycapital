@@ -12,11 +12,9 @@
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :account do
-    user nil
-    type ""
-    ext_account_id "MyString"
+    stripe_customer_id 'cus_123'
+    balance_in_cents 0
   end
 end

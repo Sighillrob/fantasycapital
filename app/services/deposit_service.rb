@@ -8,11 +8,7 @@ class DepositService
   end
 
   def deposit(amount)
-
-    unless amount >= MIN_DEPOSIT_AMOUNT && amount <= MAX_DEPOSIT_AMOUNT
-      raise DepositError, "Amount must be between $#{MIN_DEPOSIT_AMOUNT} - $#{MAX_DEPOSIT_AMOUNT}"
-    end
-
+    validate_amount!(amount)
     amount = amount * 100 # Needs to be in cents
 
     charge = Stripe::Charge.create(
@@ -22,14 +18,15 @@ class DepositService
       currency: 'usd'
     )
 
-    # We really need to think about how we are going to handle this. 
-    begin
-      @user.account.balance_in_cents = @user.account.balance_in_cents + amount
-      @user.account.save!
-      @user.account.balance_in_cents # For locking
-    rescue ActiveRecord::StaleObjectError
-      @user.account.reload
-      retry
+    @user.add_to_balance(amount)
+  end
+
+  private
+
+  def validate_amount!(amount)
+    unless amount >= MIN_DEPOSIT_AMOUNT && amount <= MAX_DEPOSIT_AMOUNT
+      raise ServiceError, "Amount must be between $#{MIN_DEPOSIT_AMOUNT} - $#{MAX_DEPOSIT_AMOUNT}"
     end
   end
+
 end

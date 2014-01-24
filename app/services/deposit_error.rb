@@ -1,2 +1,0 @@
-class DepositError < StandardError
-end
