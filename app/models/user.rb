@@ -31,8 +31,23 @@ class User < ActiveRecord::Base
   has_one :waiting_list
   has_one :account
   has_many :credit_cards
+  has_many :bank_accounts
 
   validates :first_name, :last_name, presence: true
+
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
+
+  def add_to_balance(cents)
+    raise 'Cents must be positive or zero!' unless cents >= 0
+    self.adjust_balance(cents)
+  end
+
+  def reduce_balance(cents)
+    raise 'Cents must be positive or zero!' unless cents >= 0
+    self.adjust_balance(-cents)
+  end
 
   def account_balance
     return 0 unless self.account
@@ -42,4 +57,18 @@ class User < ActiveRecord::Base
   def default_card
     self.credit_cards.where(is_default: true).first
   end
+
+  # We need to think about how we are going to handle this in the safest possible way
+  def adjust_balance(cents)
+    begin
+      self.account.balance_in_cents = self.account.balance_in_cents + cents
+      self.account.save!
+      self.account.balance_in_cents # For locking
+    rescue ActiveRecord::StaleObjectError
+      self.account.reload
+      retry
+    end
+  end
+
+
 end

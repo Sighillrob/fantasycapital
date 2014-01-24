@@ -3,6 +3,6 @@
 class CreditCard < ActiveRecord::Base
   belongs_to :user
   validates :stripe_id, presence: true
-  validates :last_four, presence: true
+  validates :last_4, presence: true
   validates :card_brand, presence: true
 end
