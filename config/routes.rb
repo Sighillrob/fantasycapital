@@ -43,6 +43,9 @@ Main::Application.routes.draw do
   end
 
   resources :projections, only: :index do
+    collection do
+      get :with_stats
+    end
     resources :projection_by_stats do
       resources :projection_by_stat_and_games do
         resources :projection_breakdowns

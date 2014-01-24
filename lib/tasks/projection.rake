@@ -31,8 +31,19 @@ namespace :projection do
     end
   end
 
+  desc "Send notification email"
+  task notif: [:environment] do
+    today = Time.now.in_time_zone('America/New_York').strftime("%Y-%m-%d")
+    Pony.mail(
+      :to => Rails.configuration.projection_notif_email,
+      :from => Rails.configuration.projection_notif_email, 
+      :subject => "Projection #{today}",
+      :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3>")
+
+  end
+
   desc "Run all tasks needed to build project"
-  task run_all: [:environment, :fetch_stats, :fp] do
+  task run_all: [:environment, :fetch_stats, :fp, :notif] do
   end
 
   desc "Purge projection database"

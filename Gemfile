@@ -46,6 +46,7 @@ group :doc do
 end
 
 gem 'paper_trail', '~> 3.0.0'
+gem 'pony'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
