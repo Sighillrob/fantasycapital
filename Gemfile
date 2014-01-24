@@ -85,4 +85,5 @@ group :test do
   gem 'capybara'
   gem "database_cleaner"
   gem 'selenium-webdriver'
+  gem 'stripe-ruby-mock', '>= 1.8.7.4'
 end
