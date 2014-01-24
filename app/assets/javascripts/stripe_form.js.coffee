@@ -67,7 +67,7 @@ class StripeForm
         onSuccess(@stripeAction, response)
 
   clearErrors: ->
-    @form.find('.error-container').hide()
+    $('.error-container').hide().find('.error').remove()
     @form.find('.error').remove()
 
   displayError: (status, response) ->
@@ -93,15 +93,15 @@ initCallback = (action, response) ->
       credit_card:
         stripe_id: response.card.id
         card_brand: response.card.type
-        last_four: response.card.last4
+        last_4: response.card.last4
   else if action is 'bankAccount'
-    url = 'create_bank'
+    url = 'bank_accounts'
     data =
       stripe_token: response.id
       bank_account:
         name: response.bank_account.bank_name
         stripe_id: response.bank_account.id
-        last_four: response.bank_account.last4
+        last_4: response.bank_account.last4
 
   promise = $.post '/accounts/' + url, data
 
@@ -109,9 +109,10 @@ initCallback = (action, response) ->
     window.location.reload()
 
   promise.error (res) ->
+    error = res.responseJSON.error || 'An unknown error occurred.'
     $('.error-container')
       .show()
-      .append('<span class="help-block">' + res.responseJSON.error + '>')
+      .append('<span class="error">' + error + '</span>')
 
 initTestHelpers = ->
   # Simply populates credit card and bank account fields with test data
