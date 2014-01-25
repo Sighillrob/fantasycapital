@@ -34,11 +34,12 @@ namespace :projection do
   desc "Send notification email"
   task notif: [:environment] do
     today = Time.now.in_time_zone('America/New_York').strftime("%Y-%m-%d")
+    yesterday = (Time.now.in_time_zone('America/New_York') - 1.day).strftime("%Y-%m-%d")
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
       :from => Rails.configuration.projection_notif_email, 
       :subject => "Projection #{today}",
-      :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3>")
+      :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3><h3><a href='http://fantasycapital-stg.herokuapp.com/projections/review?date=#{yesterday}'>Compare to actual: #{yesterday}</h3>")
 
   end
 
