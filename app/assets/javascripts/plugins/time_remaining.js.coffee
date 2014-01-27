@@ -12,7 +12,8 @@ $.fn.timeRemaining = ->
       date: date
       render: (date) ->
         min = if date.min > 9 then date.min else '0' + date.min.toString()
-        el.html(date.hours+":"+min+":"+date.sec)
+        sec = if date.sec > 9 then date.sec else '0' + date.sec.toString()
+        el.html(date.hours+":"+min+":"+sec)
       onEnd: ->
         el.addClass('ended')
         el.html($(@).data('finished-message'))
