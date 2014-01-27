@@ -43,6 +43,7 @@ namespace :projection do
     yesterday = (Time.now.in_time_zone('America/New_York') - 1.day).strftime("%Y-%m-%d")
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
+      :cc => "kenneth.jiang@gmail.com",
       :from => Rails.configuration.projection_notif_email, 
       :subject => "Projection #{today}",
       :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3>")
@@ -73,6 +74,7 @@ namespace :projection do
 
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
+      :cc => "kenneth.jiang@gmail.com",
       :from => Rails.configuration.projection_notif_email, 
       :subject => "Review #{today}",
       :html_body => "<h3>#{today}</h3>",
