@@ -115,6 +115,7 @@ GEM
     haml (4.0.5)
       tilt
     hike (1.2.3)
+    hpricot (0.8.6)
     htmlentities (4.3.1)
     httparty (0.8.1)
       multi_json
@@ -307,6 +308,7 @@ DEPENDENCIES
   devise
   factory_girl_rails (~> 4.0)
   gibbon
+  hpricot
   jquery-rails
   mailcatcher
   meta_request
