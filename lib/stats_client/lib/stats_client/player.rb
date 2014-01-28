@@ -17,10 +17,8 @@ module StatsClient
       end
     end
 
-    class << self
-      def method_name_for_attr(attr)
-         {'playerId' => 'id', 'firstName' => 'first_name', 'lastName' => 'last_name'}[attr] || attr
-      end
+    def method_name_for_attr(attr)
+      {'playerId' => 'id', 'firstName' => 'first_name', 'lastName' => 'last_name'}[attr] || self.class.method_name_for_attr(attr)
     end
   end
 end

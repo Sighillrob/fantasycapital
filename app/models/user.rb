@@ -35,6 +35,8 @@ class User < ActiveRecord::Base
 
   validates :first_name, :last_name, presence: true
 
+  after_create :attach_waiting_list
+
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
@@ -70,5 +72,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def invitation_token
+    waiting_list.invitation_token
+  end
 
+  protected
+  def attach_waiting_list
+    unless waiting_list
+      build_waiting_list
+    end
+  end
 end

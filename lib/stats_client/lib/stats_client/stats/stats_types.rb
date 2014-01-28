@@ -20,12 +20,10 @@ module StatsClient
 
       include StatsClient::BaseResource
 
-      class << self
-        def method_name_for_attr(attr)
-          {'totalPerGame' => 'total_per_game', 'offensivePerGame' => 'offensive_per_game',
-           'defensivePerGame' => 'defensive_per_game'
-          }[attr] || attr
-        end
+      def method_name_for_attr(attr)
+        {'totalPerGame' => 'total_per_game', 'offensivePerGame' => 'offensive_per_game',
+         'defensivePerGame' => 'defensive_per_game'
+        }[attr] || self.class.method_name_for_attr(attr)
       end
     end
   end

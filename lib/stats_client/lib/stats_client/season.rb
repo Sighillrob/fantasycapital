@@ -8,10 +8,9 @@ module StatsClient
       active
     end
 
-    class << self
-      def method_name_for_attr(attr)
-        { 'isActive' => 'active' }[attr] || attr
-      end
+    def method_name_for_attr(attr)
+      { 'isActive' => 'active' }[attr] || self.class.method_name_for_attr(attr)
     end
+
   end
 end

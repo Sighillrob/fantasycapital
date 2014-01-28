@@ -4,7 +4,8 @@ module StatsClient
 
       class << self 
         def parse(datetime_node)
-          DateTime.parse datetime_node.select {|d| d['dateType'] == 'UTC'}.first['full'] + "+00:00"
+          return datetime_node if datetime_node.is_a?(Date)
+          DateTime.parse(datetime_node.select {|d| d['dateType'] == 'UTC'}.first['full'] + "+00:00")
         end
       end
 
