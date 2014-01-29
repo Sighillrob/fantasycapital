@@ -1,54 +1,75 @@
 <footer>
   <div class='footerContainer container'>
+
+    <div class='row logo-row'>
+      <%= image_tag 'main_logo.png',  alt: "Fantasy capital logo" %>
+    </div>
+
     <div class='row'>
-      <div class='col-md-5'>
-        <%= image_tag 'footer_logo.png',  alt: "Fantasy capital logo" %>
-        <div>
-          <ul class='left'>
-            <li>
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#">Contact Us</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-          </ul>
-          <ul class='left'>
-            <li>
-              <a href="#">100% Legal</a>
-            </li>
-            <li>
-              <a href="#">Affiliates</a>
-            </li>
-            <li>
-              <a href="#">Deposit Bonus</a>
-            </li>
-            <li>
-              <a href="#">Careers</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class='col-md-7'>
-        <ul class='right'>
+      <div class='col-md-4'>
+        <ul class='company-section'>
+          <li class="item-header">Company</li>
           <li>
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#">Contact Us</a>
+          </li>
+          <li>
+            <a href="#">Terms</a>
+          </li>
+          <li>
+            <a href="#">Privacy</a>
+          </li>
+        </ul>
+        <ul class="support-section">
+          <li class="item-header">Support</li>
+          <li>
+            <a href="#">100% Legal</a>
+          </li>
+          <li>
+            <a href="#">Affiliates</a>
+          </li>
+          <li>
+            <a href="#">Deposit Bonus</a>
+          </li>
+          <li>
+            <a href="#">Careers</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class='col-md-3'>
+        <ul>
+          <li class="item-header">Connect With Us</li>
+          <li class="social-links">
+            <%= link_to '#_' do %>
+              <%= image_tag 'square_facebook.png', alt: 'Fantasy Capital Facebook page' %>
+            <% end %>
+            <%= link_to '#_' do %>
+              <%= image_tag 'square_twitter.png', alt: 'Fantasy Capital Twitter page' %>
+            <% end %>
+            <br />
+            <%= link_to '#_' do %>
+              <%= image_tag 'square_gplus.png', alt: 'Fantasy Capital Google Plus page' %>
+            <% end %>
+
+          </li>
+        </ul>
+      </div>
+
+      <div class='col-md-5'>
+        <ul>
+          <li class="item-header">Partners</li>
+          <li class="partner-links">
+            <a href="#">
+              <%= image_tag 'paypal.png' %>
+            </a>
             <a href="#">
               <%= image_tag 'stats.png', alt:'Fantasy capital Stats' %>
             </a>
-          </li>
-          <li>
             <a href="#">
               <%= image_tag 'rotowire.png' %>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <%= image_tag 'paypal.png' %>
             </a>
           </li>
         </ul>

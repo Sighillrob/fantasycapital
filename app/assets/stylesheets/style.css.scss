@@ -1,5 +1,19 @@
 @import 'variables';
 
+@font-face {
+  font-family: 'oswald-regular';
+  src: font-url('oswald-regular.eot?#iefix') format('embedded-opentype'), font-url('oswald-regular.woff') format('woff'), font-url('oswald-regular.ttf') format('truetype'), font-url('oswald-regular.svg#oswald_regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'oswald-bold';
+  src: font-url('oswald-bold.eot?#iefix') format('embedded-opentype'), font-url('oswald-bold.woff') format('woff'), font-url('oswald-bold.ttf') format('truetype'), font-url('oswald-bold.svg#oswald_bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /*External Font for the Site*/
 @font-face {
   font-family: 'droid_sansregular';
@@ -28,19 +42,19 @@ body {
 }
 
 body {
-  font-family: 'droid_sansregular';
-  background: image-url('body-bg.jpg') no-repeat fixed 100% top #555555 !important;
+  font-family: $main-font;
+  background: image-url('main-bg.png') no-repeat fixed 100% 30px #555555 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
-  background: image-url('body-bg.jpg') no-repeat fixed top center #555555 !important      \9;
+  background: image-url('main-bg.png') no-repeat fixed 30px center #555555 !important      \9;
   /*IE 9*/
-  background: image-url('body-bg.jpg') no-repeat fixed top 100% #555555 /IE9 !important;
+  background: image-url('main-bg.png') no-repeat fixed 30px 100% #555555 /IE9 !important;
   background-attachment: fixed /IE9 !important;
   background-size: 100% /IE9 !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'droid_sansregular';
+  font-family: $main-font;
   margin: 0
 }
 
@@ -54,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /*Top Bar*/
 .topbarWraper {
-  height: 55px;
+  /*height: 55px;*/
 }
 
 .light_grey {
@@ -174,27 +188,12 @@ li.dropdown {
 
 /*Header*/
 header {
-  margin: 23px auto 0;
 
   h1.logo {
     float: left;
     margin: 0;
-    padding: 0
-  }
-
-  .balanceBlock {
-    background: none repeat scroll 0 0 #1A1A1A;
-    border-radius: 10px;
-    float: right;
-    min-height: 80px;
-    margin: 0;
-    padding: 12px 25px;
-
-    h1 {
-      color: #fff;
-      font-size: 28px;
-      margin: 0 0 10px 0;
-    }
+    padding: 0;
+    margin-top: 15px;
   }
 }
 
@@ -203,17 +202,11 @@ header {
     float: none;
 
   }
-
-  header .balanceBlock {
-    float: none;
-    margin: 20px 0;
-
-  }
 }
 
 /*Radio Button and Check Boxes*/
 .radio, .login {
-  font-family: 'droid_sansbold';
+  font-family: $main-bold-font;
   border-right: 1px solid #c4c4c4;
   color: #555;
   font-size: 18px;
@@ -322,7 +315,7 @@ input[type=text] {
       padding: 15px 0px;
 
       a {
-        font-family: 'droid_sansbold';
+        font-family: $main-bold-font;
         font-size: 18px;
         color: #fff;
         border-right: 1px solid #787878;
@@ -444,7 +437,7 @@ ul.contest, table.contestHead {
   clear: both;
 
   tr {
-    font-family: 'droid_sansbold';
+    font-family: $main-sans-bold-font;
     padding: 10px 20px;
 
     th {
@@ -473,56 +466,6 @@ ul.contest, table.contestHead {
   }
 }
 
-/*Footer Area*/
-footer {
-  background: none repeat scroll 0 0 #2C2B2B;
-  padding: 30px 10px 45px;
-  width: 100%;
-  margin: 25px 0 0 0;
-}
-
-div.footerContainer {
-  margin: 0 auto;
-  min-height: 180px;
-  ul {
-    margin: 25px 0 0;
-    padding: 0;
-    &.left {
-
-      li {
-        float: left;
-        width: 50%;
-        list-style: none;
-
-        a {
-          color: $theme-green;
-          font-size: 17px;
-          text-transform: uppercase;
-        }
-      }
-    }
-
-    &.right {
-      li {
-        float: left;
-        list-style: none;
-        margin: 10px 0 10px 10px;
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  div.footerContainer {
-    ul.left, ul.right {
-      li {
-        float: none;
-      }
-    }
-
-  }
-}
-
 .downarrow {
   background: image-url('dropdownarrow.png') no-repeat center center;
   padding: 0 0 0 12px;
@@ -533,3 +476,11 @@ div.footerContainer {
   padding: 0 0 0 10px;
   float: right;
 }
+
+.refer-friends {
+  color: #0FEA6C;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
