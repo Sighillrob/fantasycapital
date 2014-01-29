@@ -38,17 +38,17 @@ html, body {
 body {
   margin: 0;
   padding: 0;
-  color: #555555;
+  color: $theme-main-font-color;
 }
 
 body {
   font-family: $main-font;
-  background: image-url('main-bg.png') no-repeat fixed 100% 30px #555555 !important;
+  background: image-url('main-bg.png') no-repeat fixed 100% 30px #000 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
-  background: image-url('main-bg.png') no-repeat fixed 30px center #555555 !important      \9;
+  background: image-url('main-bg.png') no-repeat fixed 30px center #000 !important      \9;
   /*IE 9*/
-  background: image-url('main-bg.png') no-repeat fixed 30px 100% #555555 /IE9 !important;
+  background: image-url('main-bg.png') no-repeat fixed 30px 100% #000 /IE9 !important;
   background-attachment: fixed /IE9 !important;
   background-size: 100% /IE9 !important;
 }
@@ -64,11 +64,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .container {
   padding: 0
-}
-
-/*Top Bar*/
-.topbarWraper {
-  /*height: 55px;*/
 }
 
 .light_grey {
@@ -495,4 +490,7 @@ ul.contest {
   font-size: 14px;
 }
 
+.filter-row {
+  margin-bottom: 15px;
+}
 

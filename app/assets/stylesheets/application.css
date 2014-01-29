@@ -30,4 +30,5 @@
  *= require refer
  *= require footer
  *= require grid
+ *= require_tree ./widgets
  */
