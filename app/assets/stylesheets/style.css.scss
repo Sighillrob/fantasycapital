@@ -494,3 +494,20 @@ ul.contest {
   margin-bottom: 15px;
 }
 
+.join-link {
+  color: $theme-green;
+  line-height: 40px;
+}
+
+a.join-link:hover {
+  text-decoration: none;
+}
+
+.contest-help {
+  font-style: italic;
+  color: $theme-light-grey1;
+  span {
+    margin-right: 20px;
+  }
+  padding: 10px 0;
+}
