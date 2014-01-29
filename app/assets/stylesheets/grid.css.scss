@@ -1,0 +1,46 @@
+@import 'variables';
+
+table.main-grid > thead > tr > th:hover {
+  color: #505E6C;
+}
+
+table.main-grid > thead > tr > th {
+  border-bottom: none;
+}
+
+table.main-grid > tbody > tr > td, table.main-grid > tbody > tr > th {
+  background-color: #f1f4f5;
+}
+table.main-grid > tbody > tr:nth-child(odd) > td, table.main-grid > tbody > tr:nth-child(odd) > th {
+  background-color: #fff;
+}
+
+table.main-grid {
+  th {
+    background-color: #505e6c;
+    color: #fff;
+    border-bottom: none;
+    padding: 24px 8px !important;
+  }
+  /*tbody tr:even*/
+  /*f1f4f5*/
+}
+
+table.main-grid > tbody > tr > td {
+  padding: 19px;
+}
+
+table.main-grid .table-btn {
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #0eea6c;
+  padding: 7px 20px;
+  font-size: 18px;
+  text-decoration: none;
+  span {
+    font-size: 70%;
+    color: #758493;
+    vertical-align: top;
+    line-height: 18px;
+  }
+}

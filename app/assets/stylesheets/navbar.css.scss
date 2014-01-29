@@ -1,11 +1,26 @@
 /*Navigatoin*/
+@import 'variables';
 
 .navbar {
   border: none;
+  margin-bottom: 0;
+}
+
+.navbar-nav-centered {
+  text-align: center;
+  float: none;
+  li {
+    float: none;
+  }
+
+}
+
+.navbar-static-top {
+  background-color: #22272d;
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: #0fea6c;
+  color: #fff;
 
   &:hover, &:focus {
     color: #fff;
@@ -17,10 +32,39 @@
 }
 
 .mainMenu {
-  background: #000;
+  background-color: #2E363E;
   height: 50px;
-  font-family: 'droid_sansregular';
+  font-family: $main-font; //'droid_sansregular';
 
+  .line {
+    height: 2px;
+    width: 15px;
+    margin: 0 auto;
+    background-color: #0FEA6C;
+    display: none;
+  }
+
+  li {
+    background-color: #3f4a55;
+  }
+
+  li.welcome-box {
+    text-align: center;
+    min-width: 220px;
+    a {
+      display: inline-block;
+    }
+    background-color: #2e363e;
+    .first-name {
+      color: #0FEA6C;
+    }
+    .arrow {
+      color: #666769;
+      font-size: 61%;
+      line-height: 46px;
+      vertical-align: top;
+    }
+  }
   .navbar-nav {
     a {
       font-size: 18px;
@@ -28,25 +72,21 @@
     }
 
     li {
-      background: image-url('divider.png') no-repeat right center;
-
-      &:last-child {
-        background: none
-      }
-
       &.active {
         background: #fff;
-        padding: 0 25px;
-
+        padding: 7px 14px;
+        .line {
+          display: inline;
+        }
         a {
-          background: none
+          background: none;
         }
       }
     }
   }
 
   ul li {
-    padding: 0 25px;
+    padding: 7px 14px;
 
     &:last-child {
       border-right: none;
