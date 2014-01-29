@@ -9,6 +9,7 @@
 #  prize         :decimal(, )
 #  entry_fee     :decimal(, )
 #  contest_start :datetime
+
 #  lineups_count :integer          default(0)
 #  created_at    :datetime
 #  updated_at    :datetime
@@ -41,7 +42,6 @@ class Contest < ActiveRecord::Base
     lineups.where(user_id: user.id).first
   end
 
-
   class << self
 
     def live
@@ -62,6 +62,10 @@ class Contest < ActiveRecord::Base
 
     def for_sport(sport)
       where sport: sport
+    end
+
+    def sport_names
+      group(:sport).pluck(:sport)
     end
   end
 
