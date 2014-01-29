@@ -6,8 +6,10 @@ Main::Application.routes.draw do
 
   devise_for :users
 
-  resource :entries
-  resources :lineups, only: :index
+  resources :entries
+  resources :lineups do
+    resource :entries
+  end
   resources :players, only: [] do
     member do
       get :stats

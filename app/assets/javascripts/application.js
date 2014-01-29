@@ -21,6 +21,8 @@
 //= require ajax_modal
 //= require turbolinks
 //= require social-share-button
+//= require plugins/local_date
+//= require plugins/time_remaining
 //= require bootstrap_run
 //= require jquery.currency
 //= require player

@@ -8,4 +8,3 @@ $ ->
 
   $('[data-time]').localDate()
   $('.countdown').timeRemaining()
-.html()

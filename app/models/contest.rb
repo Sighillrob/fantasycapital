@@ -18,6 +18,8 @@ class Contest < ActiveRecord::Base
   has_many :lineups, inverse_of: :contest
   has_many :users, through: :lineups
 
+  before_create :setup_contest
+
   def sport_positions
     SportPosition.where sport: self.sport
   end
@@ -32,7 +34,7 @@ class Contest < ActiveRecord::Base
   end
 
   def complete?
-    contest_start < Time.now
+    start_at < DateTime.now
   end
 
   def lineup_for_user(user)
@@ -61,6 +63,14 @@ class Contest < ActiveRecord::Base
     def for_sport(sport)
       where sport: sport
     end
+  end
+
+  protected
+
+  def setup_contest
+    self.entry_fee ||= 10
+    self.prize     = 2 * self.entry_fee * 0.95
+    self.contest_type = '50/50 '
   end
 
 end
