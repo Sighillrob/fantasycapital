@@ -1,8 +1,8 @@
 <tr class="contest <%= contest.sport.downcase %>" id='<%=dom_id(contest)%>'>
   <td class='contest-type'><%= contest.contest_type %></td>
   <td class='sport-name'>
-    <%= contest.sport %>
     <%= image_tag "sports/#{contest.sport.downcase}.png" %>
+    <%= contest.sport %>
   </td>
   <td data-value="<%= contest.contest_start %>">
     <%= countdown_tag contest.start_at %>
@@ -15,6 +15,9 @@
   </td>
   <td><%= contest.lineups.size %></td>
   <td>
-    <%= link_to 'enter', new_contest_lineup_path(contest), class: 'enter-contest'%>
+    <%= link_to new_contest_lineup_path(contest), class: 'table-btn' do %>
+      enter 
+      <span>&#10095;</span>
+    <% end %>
   </td>
 </tr>

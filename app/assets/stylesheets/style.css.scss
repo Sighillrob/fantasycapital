@@ -430,8 +430,20 @@ div.button {
   }
 }
 
+table.contestHead .sport-name {
+  vertical-align: middle;
+  img {
+    margin-right: 5px;
+  }
+}
+
+table.contestHead .countdown {
+  width: 50px;
+  display: inline-block;
+}
+
 /*Contest List*/
-ul.contest, table.contestHead {
+ul.contest {
   width: 100%;
   border-top: 1px solid #bbbbbb;
   clear: both;
