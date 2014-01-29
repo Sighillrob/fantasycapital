@@ -16,21 +16,32 @@ module Projection
         "player.last_10_games" => 0.20,
         "opponent_team" => 0.50
       }
+      # load weights and other parameters from rule file
+      self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
     end
   
-    def update(player, opponent_team, projection)
-      Rails.logger.info "Updating projection for #{player} --> #{opponent_team}"
+    def update(scheduled_game)
+      [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
+        team1.players.each do |team1_player|
+          projection = Projection.where(scheduled_game: scheduled_game, player: team1_player).first_or_create
 
-      projection.fp = @stat_weights.reduce(0.0) do |fp, (stat_name, weight)|
-        Rails.logger.debug "Calculating #{stat_name}"
-        p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
-        p_by_stat.fp = fp_of_stat(stat_name, player, opponent_team, p_by_stat)
-        p_by_stat.weighted_fp = p_by_stat.fp * weight
-        p_by_stat.save!
+          projection.fp = weighted_fp do |stat_name, weight|
+            p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
+            p_by_stat.fp = fp_of_stat(stat_name, team1_player, team2, p_by_stat)
+            p_by_stat.weighted_fp = p_by_stat.fp * weight
+            p_by_stat.save!
+            p_by_stat.fp
+          end
 
-        fp + p_by_stat.weighted_fp
+          projection.save!
+        end
       end
+    end
 
+    def weighted_fp(&block)
+      @stat_weights.reduce(0.0) do |total, (stat_name, weight)|
+        total + yield(stat_name, weight) * weight
+      end
     end
 
     def fp_of_stat(stat_name, player, opponent_team, p_by_stat)

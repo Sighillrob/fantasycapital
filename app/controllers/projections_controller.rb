@@ -11,13 +11,10 @@ class ProjectionsController < ApplicationController
     @projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game => [:home_team, :away_team]).where('projection_scheduled_games.start_date' => @time_range)
   end
  
-  # GET /projections/review
-  def review
-    @projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game).where('projection_scheduled_games.start_date' => @time_range)
-    event_ids = @projections.reduce([]) {|ids, p| ids << p.scheduled_game.stats_event_id}.uniq
-    @stats = Projection::Stat.includes(:game, :player).where('projection_games.stats_event_id' => event_ids)
+  # GET /projections/stats_by_game
+  def stats_by_game
+    @games_played = Projection::GamePlayed.includes(:player, :game).where( player_id: params['player_id'])
   end
-
 
   private
   def set_time_range

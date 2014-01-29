@@ -22,18 +22,8 @@ namespace :projection do
   desc "Projet Fantasy Points"
   task fp: [:environment] do
     Rails.logger.info "Calculating FP..."
-    c = Projection::FantasyPointCalculator.new
-    # load weights and other parameters from rule file
-    c.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
-
     Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
-      [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
-        team1.players.each do |player|
-          p = Projection::Projection.where(scheduled_game: scheduled_game, player: player).first_or_create
-          c.update(player, team2, p)
-          p.save!
-        end
-      end
+      Projection::FantasyPointCalculator.new.update scheduled_game
     end
   end
 
@@ -63,6 +53,10 @@ namespace :projection do
       csv << ["Player", "Game", "Projection"].concat( stat_names.inject([]) {|a, s| a << "#{s}(projection)"; a << "#{s}(actual)"})
       projections.each do |proj|
         line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('America/New_York'), number_with_precision(proj.fp, precision: 2)]
+        weighted_actual = Projection::FantasyPointCalculator.new.weighted_fp do |s, weight|
+          lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s).stat_value
+        end
+        line << number_with_precision(weighted_actual, precision: 2)
         stat_names.each do |s|
           line << number_with_precision(stat_of(proj, s).fp, precision: 3)
           actual = lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s)
