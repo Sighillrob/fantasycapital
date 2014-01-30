@@ -23,7 +23,7 @@ class Entry < ActiveRecord::Base
   class << self
 
     def live
-      joins(:contest).where "contests.contest_start BETWEEN ? AND ?", DateTime.now, DateTime.now + 3.hour
+      joins(:contest).where "contests.contest_start BETWEEN ? AND ?", DateTime.now - 3.hour, DateTime.now + 3.hour
     end
 
     def completed

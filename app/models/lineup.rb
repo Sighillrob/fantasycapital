@@ -18,7 +18,6 @@ class Lineup < ActiveRecord::Base
 
   before_save :mark_unused_spot_for_removal
 
-  accepts_nested_attributes_for :entries
   accepts_nested_attributes_for :lineup_spots, allow_destroy: true
 
   validates :contest, presence: true

@@ -36,7 +36,7 @@
             <td><%= number_to_currency contest.entry_fee %></td>
             <td><%= number_to_currency contest.prize %></td>
             <td>814</td>
-            <td><a class="button" href="#">RESULTS</a></td>
+            <td><%= link_to 'RESULTS', entry_path(entry), class: 'button' %></td>
           </tr>
       <% end %>
       </tbody>

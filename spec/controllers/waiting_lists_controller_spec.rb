@@ -1,3 +1,4 @@
+=begin
 require 'spec_helper'
 
 describe WaitingListsController do
@@ -58,3 +59,4 @@ describe WaitingListsController do
     end
   end
 end
+=end

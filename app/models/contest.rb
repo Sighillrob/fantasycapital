@@ -45,7 +45,7 @@ class Contest < ActiveRecord::Base
   class << self
 
     def live
-      where contest_start: DateTime.now .. DateTime.now + 3.hour
+      where "contest_start BETWEEN ? AND ?", DateTime.now - 3.hour, DateTime.now + 3.hour
     end
 
     def completed

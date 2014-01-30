@@ -30,5 +30,6 @@
  *= require refer
  *= require footer
  *= require grid
+ *= require gamecenter
  *= require_tree ./widgets
  */
