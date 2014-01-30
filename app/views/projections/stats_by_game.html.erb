@@ -18,7 +18,7 @@
         <% player_stats = Projection::Stat.where(player: gp.player, game: gp.game).all %>
         <% stats.map {|s| lookup_stat(player_stats, gp.game.stats_event_id, gp.player, s)}.each do |stat| %>
           <% if stat %>
-            <td class="text-right"><%= number_with_precision(stat.stat_value, precision: 3) %></td>
+            <td class="text-right"><%= "%.2f" % stat.stat_value %></td>
           <% else %>
             <td></td>
           <% end %>

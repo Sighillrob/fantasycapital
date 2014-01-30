@@ -52,15 +52,15 @@ namespace :projection do
     CSV.open(filename, "w") do |csv|
       csv << ["Player", "Game", "Projection"].concat( stat_names.inject([]) {|a, s| a << "#{s}(projection)"; a << "#{s}(actual)"})
       projections.each do |proj|
-        line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('America/New_York'), number_with_precision(proj.fp, precision: 2)]
+        line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('America/New_York'), "%.2f" % proj.fp]
         weighted_actual = Projection::FantasyPointCalculator.new.weighted_fp do |s, weight|
-          lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s).stat_value
+          lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s).stat_value rescue 0.0
         end
-        line << number_with_precision(weighted_actual, precision: 2)
+        line << "%.2f" % weighted_actual
         stat_names.each do |s|
-          line << number_with_precision(stat_of(proj, s).fp, precision: 3)
+          line << "%.3f" % stat_of(proj, s).fp
           actual = lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s)
-          line << number_with_precision(actual ? actual.stat_value : 0.0, precision: 3)
+          line << "%.2f" % (actual ? actual.stat_value : 0.0)
         end
         csv << line
       end
