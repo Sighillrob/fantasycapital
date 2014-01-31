@@ -59,7 +59,7 @@
 
   <div class='tab-content same-height'>
     <div class='tab-pane active' id="ALL">
-      <table class='tab lineup table sortable'>
+      <table class='tab lineup table sortable striped-grid'>
         <thead>
         <tr>
           <th>POS</th>
@@ -78,7 +78,7 @@
 
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
-          <table class='tab lineup table sortable'>
+          <table class='tab lineup table sortable striped-grid'>
             <thead>
             <tr>
               <th>POS</th>
@@ -120,7 +120,7 @@
         </h4>
       </div>
 
-      <table class='tab same-height'>
+      <table class='tab same-height striped-grid'>
         <thead>
         <tr>
           <th>POS</th>

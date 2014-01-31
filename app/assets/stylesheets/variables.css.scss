@@ -10,9 +10,12 @@ $theme-medium-grey2: #2e363e;
 $theme-dark-grey1: #2e363e;
 $theme-dark-grey2: #22282d;
 
+$theme-extra-grey1: #505e6c; // used for table header. Not in pallette though
+
 // These variables will make it easier to use the vars above
 // hopefully.
 $theme-header-dark: $theme-dark-grey1;
+$theme-header-normal: $theme-extra-grey1;
 $theme-main-font-color: $theme-dark-grey1;
 $theme-dropdown-bg: $theme-dark-grey1;
 

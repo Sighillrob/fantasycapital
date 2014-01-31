@@ -8,6 +8,14 @@ table.main-grid > thead > tr > th {
   border-bottom: none;
 }
 
+table.striped-grid > tbody > tr > td, table.striped-grid > tbody > tr > th {
+  background-color: #f1f4f5;
+}
+
+table.striped-grid > tbody > tr:nth-child(odd) > td, table.striped-grid > tbody > tr:nth-child(odd) > th {
+  background-color: #fff;
+}
+
 table.main-grid > tbody > tr > td, table.main-grid > tbody > tr > th {
   background-color: #f1f4f5;
 }
