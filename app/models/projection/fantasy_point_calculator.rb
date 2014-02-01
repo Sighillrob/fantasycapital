@@ -1,7 +1,5 @@
 module Projection
   class FantasyPointCalculator
-
-
     def initialize
       @stat_weights = { 
         "points" => 1,

@@ -11,11 +11,11 @@ describe EntriesController do
   end
 
   describe "GET 'new'" do
-    it "returns http success" do
-      get 'new', contest_id: contest.id
+    #it "returns http success" do
+     # get 'new', contest_id: contest.id
 
-      response.should be_success
-    end
+     # response.should be_success
+    #end
   end
 
 #  describe "GET 'edit'" do

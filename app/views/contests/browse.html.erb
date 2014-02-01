@@ -1,69 +1,41 @@
-<div class='categoryNav'>
-  <ul>
-    <li>
-      <%= link_to 'Best Odds', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Lowest Rake', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Fast and Secure Payments', '#_' %>
-    </li>
-    <li>
-      <%= link_to 'Refer Friends, Earn Cash', '#_' %>
-    </li>
-  </ul>
-</div>
-
 <div class='welcomeNote'>Enter the Game of your choice, then Select your Lineup and Win Cash.</div>
 
-<div class='loginSection'>
-  <div class='row'>
-    <div class='col-md-4'>
-      <div class='radio'>
-        <input id='publicContent' name="radio" type="radio" value=""/>
-        <label for="publicContent">Public</label>
-        <input id='privateContest' name="radio" type="radio" value=""/>
-        <label for="privateContest"> Private</label>
-      </div>
-    </div>
-    <div class='col-md-4'>
-      <div class='login'>
-        <ul class='nav navbar-nav navbar-right capital-navbar-right'>
-          <li class='dropdownlogin'>
-            <%= link_to '#_', class: 'dropdown-toggle', data: {toggle: 'dropdown'} do %>
-              FILTER BY SPORT<b class='downarrowblack'>&nbsp;</b>
-            <% end %>
-            <ul class='dropdown-menu contest-filter'>
-              <li><a href="#_" class="filter" data-filter='all'>All</a></li>
-              <% Contest.group(:sport).pluck(:sport).each do |sport| %>
-                  <li><a href="#_" class="filter" data-filter="<%= sport.downcase %>"><%= sport %></a></li>
-              <% end %>
-            </ul>
+<div class="row filter-row">
+  <div class="col-md-6">
+    <div class="dropdown custom-dropdown">
+      <a href="#" class="dropdown-trigger" data-toggle="dropdown">
+        Showing: <span class="selected-sport">All sports</span>
+        <i class="glyphicon glyphicon-chevron-down"></i>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#_" class="filter" data-filter="all">All</a></li>
+        <% Contest.sport_names.each do |sport| %>
+          <li>
+            <a href="#_" class="filter" data-filter="<%= sport.downcase %>">
+              <%= sport %>
+            </a>
           </li>
-        </ul>
-      </div>
-    </div>
-    <div class='col-md-4'>
-      <ul class='loginJoin'>
-        <li>
-          <input type="text" value="Name"/>
-        </li>
-        <li>
-          <div class='button'>CREATE</div>
-        </li>
-        <li>
-          <input type="text" value="Password"/>
-        </li>
-        <li>
-          <div class='button'>JOIN</div>
-        </li>
+        <% end %>
       </ul>
     </div>
   </div>
+  <div class="col-md-6">
+    <a class="join-link pull-right" href="#">
+      Start or join a private contest
+      <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+  </div>
 </div>
 
-<table class='contestHead table sortable filter-result'>
+<div class="contest-help">
+  <span>50/50: Finish in the top half and win the prize</span>
+  <span>
+    H2H: Randomly matched one-on-one contests.
+    *If there is an odd number of entrants the last player sits out.
+  </span>
+</div>
+
+<table class='contestHead main-grid table sortable filter-result'>
   <thead>
   <tr>
     <th data-defaultsort="asc" class="srt-contest-name">CONTEST</th>

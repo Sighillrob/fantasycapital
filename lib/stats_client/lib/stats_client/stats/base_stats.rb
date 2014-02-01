@@ -15,7 +15,7 @@ module StatsClient
         season_collection.each do |season_hash|
           create_stats_entry_for_season_events(season_hash)
         end
-   end
+      end
 
       def create_stats_entry_for_season_events(event_hash)
         sliced_hash = event_hash.slice!('name', 'eventTypeId')
@@ -41,12 +41,10 @@ module StatsClient
         end
       end
 
-    end
-
-    class << self
       def method_name_for_attr(attr)
-        {'nickname' => 'name', 'teamId' => 'team_id'}[attr] || attr
+        {'nickname' => 'name', 'teamId' => 'team_id'}[attr] || self.class.method_name_for_attr(attr)
       end
+
     end
   end
 end

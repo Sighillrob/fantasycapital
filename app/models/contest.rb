@@ -9,6 +9,7 @@
 #  prize         :decimal(, )
 #  entry_fee     :decimal(, )
 #  contest_start :datetime
+
 #  lineups_count :integer          default(0)
 #  created_at    :datetime
 #  updated_at    :datetime
@@ -17,6 +18,8 @@
 class Contest < ActiveRecord::Base
   has_many :lineups, inverse_of: :contest
   has_many :users, through: :lineups
+
+  before_create :setup_contest
 
   def sport_positions
     SportPosition.where sport: self.sport
@@ -32,18 +35,17 @@ class Contest < ActiveRecord::Base
   end
 
   def complete?
-    contest_start < Time.now
+    start_at < DateTime.now
   end
 
   def lineup_for_user(user)
     lineups.where(user_id: user.id).first
   end
 
-
   class << self
 
     def live
-      where contest_start: DateTime.now .. DateTime.now + 3.hour
+      where "contest_start BETWEEN ? AND ?", DateTime.now - 3.hour, DateTime.now + 3.hour
     end
 
     def completed
@@ -61,6 +63,18 @@ class Contest < ActiveRecord::Base
     def for_sport(sport)
       where sport: sport
     end
+
+    def sport_names
+      group(:sport).pluck(:sport)
+    end
+  end
+
+  protected
+
+  def setup_contest
+    self.entry_fee ||= 10
+    self.prize     = 2 * self.entry_fee * 0.95
+    self.contest_type = '50/50 '
   end
 
 end

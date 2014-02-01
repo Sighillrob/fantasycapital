@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140123202600) do
+ActiveRecord::Schema.define(version: 20140128133326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,9 +47,11 @@ ActiveRecord::Schema.define(version: 20140123202600) do
     t.integer  "lineups_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "stats_id"
   end
 
   add_index "contests", ["contest_start"], name: "index_contests_on_contest_start", using: :btree
+  add_index "contests", ["stats_id"], name: "index_contests_on_stats_id", using: :btree
 
   create_table "credit_cards", force: true do |t|
     t.string   "stripe_id"
@@ -230,7 +232,7 @@ ActiveRecord::Schema.define(version: 20140123202600) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|

@@ -1,3 +1,6 @@
+@import 'variables';
+
+// Place all the styles related to the entries controller here.
 // Place all the styles related to the entries controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
@@ -115,15 +118,14 @@
   border: none;
 
   li {
-    background: #b2b2b2;
+    background: $theme-header-dark;
     border: none;
     border-radius: none;
-    margin: 0 1px;
     text-transform: uppercase;
     font-family: 'droid_sansbold';
 
     a {
-      color: #565656;
+      color: #fff;
       font-size: 17px;
       padding: 12px;
       border: none;
@@ -135,7 +137,7 @@
     }
 
     &.active {
-      background: #d1d1d1;
+      background: $theme-header-normal;
       border: none;
       border-radius: none;
 
@@ -150,13 +152,26 @@
 table.tab {
   font-family: 'droid_sansregular';
   width: 100%;
-  border: 2px solid #d1d1d1;
+
+  strong  {
+    color: $theme-medium-grey1;
+  }
+
+  strong.home-team {
+    color: $theme-header-dark;
+  }
 
   thead tr th {
-    background: #d1d1d1;
-    font-size: 12px;
-    font-weight: normal;
-    padding: 5px 0 5px 15px;
+    background: $theme-header-normal;
+    padding: 10px 0 10px 15px;
+    color: $theme-light-grey1;
+    font-weight: bold;
+  }
+
+  .player-link {
+    color: $theme-medium-grey1;
+    text-decoration: underline;
+    font-weight: bold;
   }
 
   tbody tr td {
@@ -189,21 +204,39 @@ table.tab a[class$="-lineup"] {
   }
 }
 
-table.tab tbody tr td.action-icon {
-  background: none repeat scroll 0 0 #0FEA6C;
+$gradient-start: $theme-alternate-green;
+$gradient-stop: $theme-green;
+
+table.tab tbody tr td.action-icon, table.tab > tbody > tr > td.action-icon {
+  /*background: none repeat scroll 0 0 #0FEA6C !important;*/
   color: #FFFFFF;
   font-family: arial;
   font-size: 26px;
   width: 16px;
-  padding: 0 5px;
+  padding: 0 12px;
   text-align: center;
+  background-image: -webkit-gradient(linear, left top, left bottom,
+    color-stop(0, $gradient-start),
+    color-stop(1, $gradient-stop)
+  );
+  background-image: -o-linear-gradient(bottom,      $gradient-start, 0%, $gradient-stop, 100%);
+  background-image: -moz-linear-gradient(bottom,    $gradient-start, 0%, $gradient-stop, 100%);
+  background-image: -webkit-linear-gradient(bottom, $gradient-start, 0%, $gradient-stop, 100%);
+  background-image: -ms-linear-gradient(bottom,     $gradient-start, 0%, $gradient-stop, 100%);
+  background-image: linear-gradient(to bottom,      $gradient-start, 0%, $gradient-stop, 100%);
+}
+
+table.tab > tbody > tr > td, table.tab > thead > tr > th {
+  border-top: none;
+  border-bottom: none;
 }
 
 table.tab tbody tr {
-  border-bottom: 1px solid #d1d1d1;
 
+  td {
+    vertical-align: middle;
+  }
   td span {
-    border-left: 1px solid #d1d1d1;
     padding: 0 0 0 10px;
   }
   &.lineup-item{

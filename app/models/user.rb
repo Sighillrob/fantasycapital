@@ -27,13 +27,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :lineups, inverse_of: :user
-  has_many :contests, through: :lineups
   has_one :waiting_list
   has_one :account
   has_many :credit_cards
   has_many :bank_accounts
+  has_many :entries, inverse_of: :user
+  has_many :contests, through: :entries
 
   validates :first_name, :last_name, presence: true
+
+  after_create :attach_waiting_list
 
   def full_name
     "#{self.first_name} #{self.last_name}"
@@ -70,5 +73,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def invitation_token
+    waiting_list.invitation_token
+  end
 
+  protected
+  def attach_waiting_list
+    unless waiting_list
+      build_waiting_list
+    end
+  end
 end

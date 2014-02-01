@@ -6,9 +6,9 @@ module StatsClient
         class << self
           # @return Array of Team(name, location, abbreviation, and ID).
           def teams(season= nil)
-             client.request 'teams/' do |response|
-               StatsClient::ResponseParser::SimpleParser.new(response).parse 'teams'
-             end
+            client.request 'teams/' do |response|
+              StatsClient::ResponseParser::SimpleParser.new(response).parse 'teams'
+            end
           end
 
           def players
@@ -24,9 +24,9 @@ module StatsClient
           end
 
           def player_stats(player_id, season=nil, event_type=nil)
-            params = { season: season, event_type: event_type }
+            params = {season: season, event_type: event_type}
 
-            client.request "stats/players/#{player_id}/", params  do |response|
+            client.request "stats/players/#{player_id}/", params do |response|
               StatsClient::ResponseParser::ResponseParser.new(response, StatsClient::Stats::PlayerStats).parse 'players'
             end
           end
@@ -40,6 +40,13 @@ module StatsClient
           def events(date=Time.now)
             client.request "events/?date=#{date.strftime("%Y-%m-%d")}" do |response|
               StatsClient::ResponseParser::SimpleParser.new(response).parse 'events'
+            end
+          end
+
+          def sports_for_today
+            date = StatsClient::Utility.get_formatted_date Time.now
+            client.request "events/", date: date do |response|
+              StatsClient::ResponseParser::ResponseParser.new(response, StatsClient::Sport).parse 'events', parent_attributes: 'sportId'
             end
           end
 

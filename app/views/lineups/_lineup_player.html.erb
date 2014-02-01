@@ -5,10 +5,10 @@
       </span>
     </td>
     <td class='player player-stats' data-stats-url="<%= stats_player_path player %>">
-      <span class='green'><%= player.name %> </span>
+      <span class='player-link'><%= player.name %> </span>
     </td>
     <td class='opp'>
-      <span>Ind@SDD</span>
+      <span>Ind@<strong class='home-team'>SDD</strong></span>
     </td>
     <td class='salary currency'>
       <span data-salary=<%= player.salary %>> <%= number_to_currency player.salary, precision: 0 %></span>

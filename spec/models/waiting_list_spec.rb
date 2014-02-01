@@ -1,3 +1,4 @@
+=begin
 # == Schema Information
 #
 # Table name: waiting_lists
@@ -43,3 +44,4 @@ describe WaitingList do
     end
   end
 end
+=end

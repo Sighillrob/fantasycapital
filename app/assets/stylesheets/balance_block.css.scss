@@ -1,0 +1,47 @@
+header .balanceBlock {
+  border-top: solid 2px #0FEA6C;
+  top: -2px;
+  position: relative;
+  z-index: 1000;
+  background-color: #2e363e;
+  float: right;
+  min-height: 130px;
+  margin: 0;
+  padding: 22px 25px;
+  width: 300px;
+  strong {
+    color: #fff;
+    text-transform: uppercase;
+  }
+  strong.ajax-modal {
+    color: #0FEA6C;
+    i {
+      font-weight: bold;
+      top: -1px;
+    }
+  }
+  sup {
+    font-size: 40%;
+    vertical-align: super;
+    top: -0.3em;
+  }
+}
+
+header .balanceBlock h1 {
+  color: #fff;
+  margin: 0 0 10px 0;
+  font-size: 48px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  header h1.logo {
+    float: none;
+  }
+  header .balanceBlock {
+    float: none;
+    margin: 20px 0;
+  }
+}

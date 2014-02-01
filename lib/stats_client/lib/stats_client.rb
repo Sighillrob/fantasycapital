@@ -22,13 +22,17 @@ module StatsClient
 end
 
 require 'stats_client/stats_gateway'
+require 'stats_client/utility'
 require 'stats_client/base_resource'
 require 'stats_client/response'
 require 'stats_client/response_parser/xml_parser'
+require 'stats_client/address'
+require 'stats_client/venue'
 require 'stats_client/stats/player_stats'
 require 'stats_client/stats/team_stats'
 require 'stats_client/season'
 require 'stats_client/team'
+require 'stats_client/sport'
 require 'stats_client/failure_response'
 require 'stats_client/success_response'
 require 'stats_client/response_parser/response_parser'

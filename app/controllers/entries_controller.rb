@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  #before_action :set_contest, only: [:new, :create]
+  before_action :set_lineup, only: [:new, :create]
 
   def new
     #@positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
@@ -10,17 +10,23 @@ class EntriesController < ApplicationController
   end
 
   def show
+
   end
 
   def index
-
+    @entries = current_user.entries
   end
 
   # POST /entries
   # POST /entries.json
   def create
-    # @entry = Entry.create(entry_parameters)
-
+    entry = current_user.entries.build lineup: @lineup
+    message = if entry.save
+                "Your entry is submitted successfully!"
+              else
+                entry.errors.full_messages.first
+              end
+    redirect_to lineups_path, notice: message
     #respond_to do |format|
     # if @entry.save
     #   format.html { redirect_to [@contest, @entry], notice: 'Entry was successfully created.' }
@@ -31,10 +37,10 @@ class EntriesController < ApplicationController
     # end
   end
 
-#private
-#def set_contest
-# @contest = Contest.find(params[:contest_id])
-#end
+  private
+  def set_lineup
+    @lineup = Lineup.find(params[:lineup_id])
+  end
 
 #def entry_parameters
 #  params.require(:entry).permit(:contest_id, lineups_attributes: [:sport_position_id, :player_id])

@@ -50,7 +50,7 @@ module StatsClient
 
     def parse_response(http_request, response, &block)
       if http_request.success?
-        results = yield response['apiResults'] if block_given?
+        results =  block_given? ? yield(response['apiResults']) : response['apiResults']
         StatsClient::SuccessResponse.new response, results
       else
         StatsClient::FailureResponse.new response, response

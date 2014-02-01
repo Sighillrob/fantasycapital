@@ -27,7 +27,8 @@ describe User do
   let(:user) { FactoryGirl.create(:user) }
 
   it { should have_many(:lineups) }
-  it { should have_many(:contests).through(:lineups) }
+  it { should have_many(:entries) }
+  it { should have_many(:contests).through(:entries) }
   it { should have_one(:waiting_list) }
   it { should have_one(:account) }
 

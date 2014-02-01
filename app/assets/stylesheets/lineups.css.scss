@@ -129,41 +129,6 @@ li.dropdown ul {
   padding: 5px 0px 5px 4%;
 }
 
-/*Header*/
-header {
-  margin: 23px auto 0;
-}
-
-header h1.logo {
-  float: left;
-  margin: 0;
-  padding: 0
-}
-
-header .balanceBlock {
-  background: none repeat scroll 0 0 #1A1A1A;
-  border-radius: 10px;
-  float: right;
-  min-height: 80px;
-  margin: 0;
-  padding: 12px 25px;
-}
-
-header .balanceBlock h1 {
-  color: #fff;
-  margin: 0 0 10px 0;
-}
-
-@media (max-width: 768px) {
-  header h1.logo {
-    float: none;
-  }
-  header .balanceBlock {
-    float: none;
-    margin: 20px 0;
-  }
-}
-
 /*Radio Button and Check Boxes*/
 .radio, .login {
   font-family: 'droid_sansbold';
@@ -655,51 +620,6 @@ strong.number {
   }
   .capitalpopover ul li a {
     padding: 5px 5px;
-  }
-}
-
-/*Footer Area*/
-footer {
-  background: none repeat scroll 0 0 #2C2B2B;
-  padding: 30px 10px 45px;
-  width: 100%;
-  margin: 25px 0 0 0;
-}
-
-div.footerContainer {
-  margin: 0 auto;
-  min-height: 180px;
-}
-
-div.footerContainer ul {
-  margin: 25px 0 0;
-  padding: 0;
-}
-
-div.footerContainer ul.left li {
-  float: left;
-  width: 50%;
-  list-style: none;
-}
-
-div.footerContainer ul.left li a {
-  color: #0FEA6C;
-  font-size: 17px;
-  text-transform: uppercase;
-}
-
-div.footerContainer ul.right li {
-  float: left;
-  list-style: none;
-  margin: 10px 0 10px 10px;
-}
-
-@media (max-width: 768px) {
-  div.footerContainer ul.left li {
-    float: none;
-  }
-  div.footerContainer ul.right li {
-    float: none;
   }
 }
 
