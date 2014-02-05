@@ -16,7 +16,7 @@ class WaitingListsController < ApplicationController
   # POST /waiting_lists/inviting
 
   def inviting
-    InviteWorker.perform_async(params["invite"], current_user.id)
+    #InviteWorker.perform_async(params["invite"], current_user.id)
     redirect_to root_path
   end
 
