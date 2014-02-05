@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140128133326) do
+ActiveRecord::Schema.define(version: 20140205163541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,14 +120,18 @@ ActiveRecord::Schema.define(version: 20140128133326) do
   add_index "player_stats", ["player_id"], name: "index_player_stats_on_player_id", using: :btree
 
   create_table "players", force: true do |t|
-    t.string   "name"
     t.string   "team"
-    t.integer  "age"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sport_position_id"
     t.integer  "salary"
+    t.integer  "stats_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.date     "dob"
   end
+
+  add_index "players", ["stats_id"], name: "index_players_on_stats_id", using: :btree
 
   create_table "projection_game_playeds", force: true do |t|
     t.integer  "player_id"
@@ -296,6 +300,7 @@ ActiveRecord::Schema.define(version: 20140128133326) do
     t.string   "invitation_token"
     t.integer  "status",           default: 1
     t.integer  "user_id"
+    t.string   "message"
   end
 
   add_index "waiting_lists", ["invitation_token"], name: "index_waiting_lists_on_invitation_token", using: :btree

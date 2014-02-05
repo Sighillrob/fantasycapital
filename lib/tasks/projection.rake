@@ -10,7 +10,7 @@ namespace :projection do
     Rails.logger.info "Feteching and populating Teams from STATS"
     Projection::Team.refresh_all StatsClient::Sports::Basketball::NBA.teams.result
     Rails.logger.info "Feteching and populating Players from STATS"
-    Projection::Player.refresh_all StatsClient::Sports::Basketball::NBA.players.result
+    Projection::Player.refresh_all StatsClient::Sports::Basketball::NBA.players(true).result
     Rails.logger.info "Feteching and populating events from STATS"
     Projection::ScheduledGame.refresh_all StatsClient::Sports::Basketball::NBA.events.result
     Rails.logger.info "Feteching and populating Stats from STATS"

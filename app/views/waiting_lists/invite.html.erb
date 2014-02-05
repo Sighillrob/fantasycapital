@@ -51,15 +51,24 @@
       <p>Post your link on Facebook, Twitter or anywhere else. Everytime you send a referral to our site through YOUR link, and they play in any contest, you earn a share of th cost of the entry.</p>
     </div>
     <div class="col-md-6">
-      <h4>INVITE BY MAIL</h4>
-      <div class="clearfix">&nbsp;</div>
-      <h3>TO:</h3>
-      <input type="text" value="" placeholder="Enter emails (seperate with commas or spaces)...">
-      <h3>MESSAGE:</h3>
-      <textarea placeholder="Write a personal message (500 characters max)." rows="5"></textarea>
-      <div class="clearfix">&nbsp;</div>
-      <input type="submit" value="Send" class="submit">
-      <p>NOTE: Email will always include your personal URL, so we can credit you.</p>
+      
+        <%= form_tag("/waiting_lists/inviting", :method => "post") do %>
+
+        <h4>INVITE BY MAIL</h4>
+        <div class="clearfix">&nbsp;</div>
+        <h3>TO:</h3>
+
+        <%= text_field(:invite, :emails, placeholder: 'Enter emails (seperate with commas or spaces)...')%>
+        
+        <h3>MESSAGE:</h3>
+        
+        <%= text_area(:invite, :message, rows: 5, placeholder: "Write a personal message (500 characters max).")%>
+        
+        <div class="clearfix">&nbsp;</div>
+        <%= submit_tag "Send"%>
+        <p>NOTE: Email will always include your personal URL, so we can credit you.</p>
+
+        <% end %>
     </div>
   </div>
 

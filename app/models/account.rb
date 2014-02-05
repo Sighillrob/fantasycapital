@@ -2,13 +2,13 @@
 #
 # Table name: accounts
 #
-#  id             :integer          not null, primary key
-#  user_id        :integer
-#  type           :string(255)
+#  id                 :integer          not null, primary key
+#  user_id            :integer
+#  created_at         :datetime
+#  updated_at         :datetime
 #  stripe_customer_id :string(255)
-#  balance_in_cents :integer
-#  created_at     :datetime
-#  updated_at     :datetime
+#  balance_in_cents   :integer          default(0)
+#  lock_version       :integer          default(0)
 #
 
 class Account < ActiveRecord::Base

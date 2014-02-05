@@ -13,10 +13,16 @@ class WaitingListsController < ApplicationController
     end
   end
 
+  # POST /waiting_lists/inviting
+
+  def inviting
+    InviteWorker.perform_async(params["invite"], current_user.id)
+    redirect_to root_path
+  end
+
   # POST /waiting_lists
   def create
     @waiting_list = WaitingList.new(waiting_list_params)
-
     if @waiting_list.save
       redirect_to @waiting_list, notice: 'Waiting list was successfully created.'
     else

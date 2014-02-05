@@ -26,10 +26,14 @@ module ApplicationHelper
                 { 'home' => 'active'}
               elsif controller_name.eql? 'accounts'
                 { 'account' => 'active'}
-              else
+              elsif controller_name.eql? 'users'
+                { 'leaderboard' => 'active' }
+              else  
                 { controller_name => 'active'}
               end
     classes[menu]
   end
+
+
 end
 

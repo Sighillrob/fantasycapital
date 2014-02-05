@@ -9,6 +9,11 @@
 #  prize         :decimal(, )
 #  entry_fee     :decimal(, )
 #  contest_start :datetime
+#  lineups_count :integer          default(0)
+#  created_at    :datetime
+#  updated_at    :datetime
+#  stats_id      :integer
+#
 
 #  lineups_count :integer          default(0)
 #  created_at    :datetime

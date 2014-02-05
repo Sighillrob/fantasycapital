@@ -6,8 +6,8 @@ class WaitingListMailer < FantasyMailer
   #   en.waiting_list_mailer.invite.subject
   #
   def invite(waiting_list)
+  	@invitee = waiting_list.user if waiting_list.user
     @waiting_list =  waiting_list
-
-    mail to: @waiting_list.email
+    mail to: @waiting_list.email, from:'softmfq@gmail.com'
   end
 end

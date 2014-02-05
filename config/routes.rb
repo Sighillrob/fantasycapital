@@ -24,6 +24,7 @@ Main::Application.routes.draw do
   resources :waiting_lists, only: [:new, :create, :show] do
     collection do
       get :invite
+      post :inviting
     end
   end
 
@@ -55,6 +56,9 @@ Main::Application.routes.draw do
       end
     end
   end
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web, at: '/sidekiq'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

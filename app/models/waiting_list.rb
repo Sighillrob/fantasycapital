@@ -27,7 +27,7 @@ class WaitingList < ActiveRecord::Base
   validates :email, uniqueness: true, presence: true
 
   before_create :generate_invitation_code
-  after_create :mailchimp
+  after_create :sending_mail
 
   def to_param
     invitation_token
@@ -47,6 +47,10 @@ class WaitingList < ActiveRecord::Base
   end
 
   private
+
+  def sending_mail
+    WaitingListMailer.invite(self).deliver
+  end
 
   def mailchimp
     # This requires a few values set in order for it to work properly

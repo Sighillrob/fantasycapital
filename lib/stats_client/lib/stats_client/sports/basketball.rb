@@ -11,9 +11,15 @@ module StatsClient
             end
           end
 
-          def players
-            client.request 'participants/' do |response|
-              StatsClient::ResponseParser::SimpleParser.new(response).parse 'players'
+          def players(use_simple_parser = false)
+            if use_simple_parser
+              client.request 'participants/' do |response|
+                StatsClient::ResponseParser::SimpleParser.new(response).parse 'players'
+              end
+            else
+              client.request 'participants/' do |response|
+                StatsClient::ResponseParser::ResponseParser.new(response, StatsClient::Player).parse 'players'
+              end
             end
           end
 
