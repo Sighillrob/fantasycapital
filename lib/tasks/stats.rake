@@ -1,4 +1,5 @@
 namespace :stats do
+
   desc "Populate contests from stats api"
   task fetch_contests: [:environment] do
     response = StatsClient::Sports::Basketball::NBA.sports_for_today

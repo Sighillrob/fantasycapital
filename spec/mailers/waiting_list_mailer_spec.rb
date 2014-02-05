@@ -8,7 +8,7 @@ describe WaitingListMailer do
     it "renders the headers" do
       mail.subject.should eq("Invite")
       mail.to.should eq([waiting_list.email])
-      mail.from.should eq(["from@example.com"])
+      mail.from.should eq(["support@fantasycapital.com"])
     end
   end
 

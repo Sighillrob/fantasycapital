@@ -18,9 +18,10 @@
 
 FactoryGirl.define do
   factory :player do
-    name "Quincy Acy"
+    first_name "Quincy"
+    last_name "Acy"
     team "Tor"
-    age 23
+    dob { Date.today - 15.year }
     sport_position
   end
 end
