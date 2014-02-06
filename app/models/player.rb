@@ -36,7 +36,7 @@ class Player < ActiveRecord::Base
 
     self.salary = FP_TO_SALARY_MULTIPLIER * self.fantasy_points
     if position = player.positions.detect {|pos| pos.sequence == PRIORITIZE_SEQUENCE_NUMBER } || player.positions.first
-      player.sport_position = SportPosition.where(name: position.abbreviation, sport: 'NBA').first_or_create
+      self.sport_position = SportPosition.where(name: position.abbreviation, sport: 'NBA').first_or_create
     end
   end
 end
