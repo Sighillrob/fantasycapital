@@ -35,7 +35,7 @@ module Projection
   
     # refresh one player stats with STATS API response
     def refresh_stats(stats_games)
-      stats_games.select {|g| g["playerStats"]["totalSecondsPlayed"] > 0}.each do |stats_game|
+      stats_games.select {|g| g["playerStats"] && g["playerStats"]["totalSecondsPlayed"] > 0}.each do |stats_game|
         game = Game.find_or_create_for_stats stats_game
         GamePlayed.where(player: self, game: game).first_or_create
         Stat.refresh self, game, stats_game["playerStats"]
