@@ -32,7 +32,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'social-share-button'
 gem 'premailer-rails'
-#gem "sidekiq"
+gem "sidekiq"
 
 gem 'balanced'
 gem "stats_client", path: "lib/"

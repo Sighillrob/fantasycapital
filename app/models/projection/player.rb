@@ -15,6 +15,7 @@
 module Projection
   class Player < ActiveRecord::Base
     belongs_to :team
+    has_one :projection
 
     class << self
       # refresh players with STATS API response
@@ -22,7 +23,8 @@ module Projection
         Player.update_all(is_current: false)
         stats_players.each do |stats_player|
           player = Player.where(stats_player_id: stats_player['playerId']).first_or_initialize
-          player.name = stats_player['firstName'] + " " + stats_player['lastName']
+          player.fisrt_name = stats_player['firstName']
+          player.last_name = stats_player['lastName']
           player.is_current = true
           player.team = Team.find_by_stats_team_id(stats_player['team']['teamId'])
           player.position = (stats_player['positions'].select {|p| p['sequence'] ==1}).first['abbreviation']
