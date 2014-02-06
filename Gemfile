@@ -32,6 +32,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'social-share-button'
 gem 'premailer-rails'
+gem 'delayed_job'
 
 gem 'balanced'
 gem "stats_client", path: "lib/"
