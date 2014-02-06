@@ -339,6 +339,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers
   sidekiq
+  sinatra
   social-share-button
   stats_client!
   stripe
