@@ -3,7 +3,7 @@
 /*Footer Area*/
 footer {
   border-top: solid 2px $theme-green;
-  background: none repeat scroll 0 0 #2C2B2B;
+  background: image-url('footer-bg.png') no-repeat center center;
   padding: 30px 10px 45px;
   width: 100%;
   margin: 60px 0 0 0;
@@ -15,9 +15,14 @@ footer {
     margin-bottom: 20px;
   }
 
-  .company-section, .support-section {
+  .company-section, .support-section, .contact-section {
     float: left;
-    width: 50%;
+    width: 33.333333%;
+    padding-left: 0px;
+  }
+
+  .partners-section{
+    padding-left: 0px;
   }
 
   .partner-links img {

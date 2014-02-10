@@ -13,6 +13,6 @@
 #Player.delete_all
 #SportPosition.delete_all
 #LineupSpotProto.delete_all
-#Dir[Rails.root.join("db/seeds/*.rb")].entries.sort.each { |f| require f }
+Dir[Rails.root.join("db/seeds/*.rb")].entries.sort.each { |f| require f }
 
 SportPosition.where(name: 'UTIL', sport: 'NBA').first_or_create
