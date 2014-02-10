@@ -14,7 +14,7 @@
     <%= number_to_currency contest.prize %>
   </td>
   <td><%= contest.lineups.size %></td>
-  <td>
+  <td class="actions-column">
     <%= link_to new_contest_lineup_path(contest), class: 'table-btn' do %>
       enter 
       <span>&#10095;</span>
