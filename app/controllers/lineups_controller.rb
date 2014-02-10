@@ -23,6 +23,9 @@ class LineupsController < ApplicationController
     @lineup         = current_user.lineups.create(lineup_parameters)
     @lineup.contest = @contest
 
+    # Create an entry that new lineup belongs to
+    @entry          = current_user.entries.create(:lineup => @lineup)
+
     respond_to do |format|
       if @lineup.save
         format.html { redirect_to lineups_path, notice: 'Lineup was successfully created.' }
