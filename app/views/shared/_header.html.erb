@@ -65,7 +65,9 @@
               </a>
               <span class="arrow">&#10095;</span>
             <% else %>
-              <%= link_to "SIGN UP / LOGIN" , new_user_session_path %>
+              <%= link_to "SIGN UP" , new_user_registration_path, :class => 'link' %>
+              <a href="#" class="link">/</a>
+              <%= link_to "SIGN IN" , new_user_session_path, :class => 'link' %>
               <span class="arrow">&#10095;</span>
             <% end %>
           </li>

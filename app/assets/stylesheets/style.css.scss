@@ -60,6 +60,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h2{
   color: #555;
+  margin-bottom: 10px;
 }
 
 .clear {
@@ -250,12 +251,8 @@ header {
 }
 
 label {
-  display: inline-block;
-  cursor: pointer;
-  position: relative;
-  padding-left: 25px;
-  margin-right: 15px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 input[type=radio],
