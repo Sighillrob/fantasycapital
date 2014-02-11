@@ -156,6 +156,9 @@ GEM
     multi_json (1.8.4)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
+    newrelic-rake (1.4.1)
+      newrelic_rpm (>= 3.1.0)
+    newrelic_rpm (3.7.2.192)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
@@ -316,6 +319,8 @@ DEPENDENCIES
   jquery-rails
   mailcatcher
   meta_request
+  newrelic-rake
+  newrelic_rpm
   paper_trail (~> 3.0.0)
   pg
   pony

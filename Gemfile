@@ -37,6 +37,8 @@ gem 'delayed_job'
 gem 'balanced'
 gem "stats_client", path: "lib/"
 
+gem 'newrelic_rpm'
+gem 'newrelic-rake'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 1.2'
