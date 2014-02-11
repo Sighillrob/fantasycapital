@@ -48,11 +48,13 @@ table.main-grid .table-btn {
   background-color: $theme-green;
   padding: 7px 20px;
   font-size: 18px;
+  line-height: 20px;
   text-decoration: none;
   span {
     font-size: 70%;
-    color: #758493;
+    color: white;
     vertical-align: top;
     line-height: 18px;
+    font-size: 10px;
   }
 }

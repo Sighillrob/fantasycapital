@@ -56,13 +56,15 @@
     float: right;
     a {
       display: inline-block;
+      padding-right: 5px;
+      color: white !important;
     }
     
     .first-name {
       color: #0FEA6C;
     }
     .arrow {
-      color: #666769;
+      color: #0FEA6C;
       font-size: 61%;
       line-height: 46px;
       vertical-align: top;
@@ -86,6 +88,11 @@
           background: none;
         }
       }
+
+      a{
+        color: #e3eaf0;
+      }
+
     }
   }
 

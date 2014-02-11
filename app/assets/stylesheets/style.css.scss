@@ -58,6 +58,10 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0
 }
 
+h2{
+  color: #555;
+}
+
 .clear {
   clear: both
 }
@@ -117,6 +121,34 @@ h1, h2, h3, h4, h5, h6 {
 
   .navbar-collapse.in {
     overflow: visible
+  }
+
+  .mainMenu{
+    background: none;
+    background-color: #2e363e;
+
+    .navbar-nav{
+      margin-left: 0px;
+      li{
+        &.active{
+          background: transparent;
+          .line{
+            background: transparent;
+          }
+
+          &:hover{
+            background: transparent;
+          }
+        }
+      }
+    }
+
+    li{
+      &.welcome-box{
+        float: none;
+        text-align: left;
+      }
+    }
   }
 }
 

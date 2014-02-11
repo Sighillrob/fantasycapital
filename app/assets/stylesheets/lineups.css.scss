@@ -58,15 +58,6 @@ p.message {
   background: image-url('arrow.png') no-repeat right #F6F6F6;
 }
 
-@media (max-width: 768px) {
-  .navbar-header {
-    background: #313131;
-  }
-  .navbar-collapse.in {
-    overflow: visible
-  }
-}
-
 .navbar-collapse:before, .navbar-collapse:after {
   overflow: visible
 }
