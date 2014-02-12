@@ -42,7 +42,7 @@ body {
 }
 
 body {
-  font-family: $main-font;
+  /*font-family: $main-font;*/
   background: image-url('main-bg.png') no-repeat fixed 100% 30px #000 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
@@ -54,7 +54,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $main-font;
+  /*font-family: $main-font;*/
   margin: 0
 }
 
@@ -72,11 +72,14 @@ h2{
 }
 
 .light_grey {
-  background: #f4f4f4;
+  /*background: #f4f4f4;*/
+  background: #505e6c;
+  color: #fff;
 }
 
 .dark_grey {
-  background: #676767;
+  /*background: #676767;*/
+  background: #2e363e;
 }
 
 .grey_bottom_border {
