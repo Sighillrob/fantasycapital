@@ -1,8 +1,19 @@
+.gamecenter{
+  padding: 10px 0 20px;
+
+} 
+
 ul.title {
 }
 
 ul.title li {
-  padding-right: 15px;
+  padding-right: 0px;
+  &:last-child{
+    padding-right: 0px;
+    float: right;
+    line-height: 40px;
+    color: #bbb;
+  }
 }
 
 ul.title li span {
@@ -32,9 +43,9 @@ table.freeroll {
 }
 
 table.freeroll tr th, table.freeroll tr td {
-  padding: 5px 0;
+  padding: 10px 10px;
   border-top: 1px solid #bbbbbb;
-  text-align: center
+  text-align: right;
 }
 
 table.freeroll tr th {
@@ -53,7 +64,7 @@ table.freeroll tr td {
 table.freeroll tr td:nth-child(1) {
   font-family: 'droid_sansbold';
   font-weight: bold;
-  text-align: center
+  text-align: right;
 }
 
 table.freeroll tr td:nth-child(1):after {
@@ -109,7 +120,7 @@ ul.freeroll_status li {
 }
 
 table.status {
-  background: #333333;
+  background: #2e363e;
   font-family: 'droid_sansbold';
   font-size: 11px;
 }
@@ -135,53 +146,77 @@ table.status tr:last-child td span {
 
 /*Score Card*/
 .scorecard {
-  background: #eeeeee;
-}
-
-.scorecard {
+  /*background: #eeeeee;*/
+  background: #758493;
   padding: 10px;
-  width: 49%
+  width: 49%;
+  color: #fff;
 }
 
 .scorecard .panelOne {
-  background: #d6d6d6;
+  /*background: #d6d6d6;*/
+  background: #2e363e;
   padding: 8px 10px;
   text-align: center;
 }
 
 .scorecard .panelThree {
-  background: #fff;
+  background: #505e6c;
   padding: 8px 10px;
   text-align: center;
 }
 
 .scorecard strong.panelStrong {
-  color: #9d9d9d;
-  font-size: 16px
+  /*color: #9d9d9d;*/
+  color: #fff;
+  font-size: 15px
 }
 
 .scorecard  h2.panelHeading {
-  border-top: 1px solid #9d9d9d;
+  /*border-top: 1px solid #9d9d9d;*/
+  border-top: 1px solid #e3eaf0;
   font-size: 22px;
   margin-top: 5px;
-  padding: 5px 0
+  padding: 5px 0;
+  color: #e3eaf0;
+  margin-bottom: 0px;
 }
 
-.scorecard  .panelTwo img.user {
-  border: 2px solid #BBBBBB;
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  float: left
+.scorecard  .panelTwo {
+  .user{
+    margin-bottom: 0px;
+    line-height: 35px;
+    img {
+      border: 2px solid #BBBBBB;
+      border-radius: 50%;
+      height: 40px;
+      width: 40px;
+      float: left
+    }
+
+    span{
+      font-size: 20px;
+    }
+  }
+  
+}
+
+.users-next{
+  margin: 10px 0;
 }
 
 p.quarters {
-  margin: -14px 0 0 0
+  margin: 0px 0 0 0
 }
 
 /*Score Card Table*/
 .scorecard2 {
-  background: #f7f7f7;
+  background: #eef0f1;
+  color: #555;
+  margin-top: 5px;
+  &.white{
+    background: #fff;
+  }
 }
 
 .scorecardTable {
@@ -193,9 +228,21 @@ p.quarters {
 
 .scorecardTable tr td {
   text-align: center;
-  font-size: 12px;
+  font-size: 12x;
   padding: 5px;
   background: url(images/sep.png) no-repeat right center;
+  h1{
+    font-size: 20px;
+    &.role{
+      border-right: 1px solid;
+      line-height: 50px;  
+      width: 50px;
+    }
+  }
+
+  .por{
+    margin-bottom: 0;
+  }
 }
 
 .scorecardTable tr td:nth-child(2) {
@@ -221,7 +268,27 @@ p.quarters {
 .scorecardTable tr td h1.greeScore {
   background: none repeat scroll 0 0 #0FEA6C;
   color: #FFFFFF;
-  padding: 10px 0;
+  padding: 10px 5px;
+}
+
+progress {
+  border: 0;
+  height: 10px;
+  line-height: 20px;
+  margin-bottom: 5px;
+}
+
+progress::-webkit-progress-bar {  
+    /* style rules */  
+    background: #dad9d9;
+}  
+progress::-webkit-progress-value {  
+    /* style rules */  
+    background: #0fea6c;
+}  
+progress::-moz-progress-bar {  
+    /* style rules */  
+    background: #dad9d9;
 }
 
 @media (max-width: 768px) {
