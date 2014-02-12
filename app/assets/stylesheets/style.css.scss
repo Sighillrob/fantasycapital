@@ -42,7 +42,7 @@ body {
 }
 
 body {
-  font-family: $main-font;
+  /*font-family: $main-font;*/
   background: image-url('main-bg.png') no-repeat fixed 100% 30px #000 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
@@ -54,8 +54,13 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $main-font;
+  /*font-family: $main-font;*/
   margin: 0
+}
+
+h2{
+  color: #555;
+  margin-bottom: 10px;
 }
 
 .clear {
@@ -67,11 +72,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .light_grey {
-  background: #f4f4f4;
+  /*background: #f4f4f4;*/
+  background: #505e6c;
+  color: #fff;
 }
 
 .dark_grey {
-  background: #676767;
+  /*background: #676767;*/
+  background: #2e363e;
 }
 
 .grey_bottom_border {
@@ -117,6 +125,34 @@ h1, h2, h3, h4, h5, h6 {
 
   .navbar-collapse.in {
     overflow: visible
+  }
+
+  .mainMenu{
+    background: none;
+    background-color: #2e363e;
+
+    .navbar-nav{
+      margin-left: 0px;
+      li{
+        &.active{
+          background: transparent;
+          .line{
+            background: transparent;
+          }
+
+          &:hover{
+            background: transparent;
+          }
+        }
+      }
+    }
+
+    li{
+      &.welcome-box{
+        float: none;
+        text-align: left;
+      }
+    }
   }
 }
 
@@ -218,12 +254,8 @@ header {
 }
 
 label {
-  display: inline-block;
-  cursor: pointer;
-  position: relative;
-  padding-left: 25px;
-  margin-right: 15px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 input[type=radio],
@@ -232,7 +264,7 @@ input[type=checkbox] {
 }
 
 label:before {
-  content: "";
+  /*content: "";
   display: inline-block;
 
   width: 16px;
@@ -243,7 +275,7 @@ label:before {
   left: 0;
   bottom: 1px;
   background-color: #aaa;
-  box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+  box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);*/
 }
 
 .radio label:before {

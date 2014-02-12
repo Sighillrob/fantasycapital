@@ -32,14 +32,14 @@
           <span class='icon-bar'></span>
         </button>
       </div>
-      .<div class='navbar-collapse collapse mainMenu'>
+      <div class='navbar-collapse collapse mainMenu'>
         <ul class='nav navbar-nav'>
           <li class='<%= menu_classes 'home' %>'>
             <%= link_to 'Home', root_path %>
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'contests' %>'>
-            <%= link_to 'Contests', contests_path %>
+            <%= link_to 'Contests', entries_path %>
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'lineups' %>'>
@@ -65,7 +65,9 @@
               </a>
               <span class="arrow">&#10095;</span>
             <% else %>
-              <%= link_to "SIGN UP / LOGIN" , new_user_session_path %>
+              <%= link_to "SIGN UP" , new_user_registration_path, :class => 'link' %>
+              <a href="#" class="link">/</a>
+              <%= link_to "SIGN IN" , new_user_session_path, :class => 'link' %>
               <span class="arrow">&#10095;</span>
             <% end %>
           </li>

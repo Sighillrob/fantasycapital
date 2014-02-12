@@ -219,11 +219,11 @@ table.tab tbody tr td.action-icon, table.tab > tbody > tr > td.action-icon {
     color-stop(0, $gradient-start),
     color-stop(1, $gradient-stop)
   );
-  background-image: -o-linear-gradient(bottom,      $gradient-start, 0%, $gradient-stop, 100%);
-  background-image: -moz-linear-gradient(bottom,    $gradient-start, 0%, $gradient-stop, 100%);
-  background-image: -webkit-linear-gradient(bottom, $gradient-start, 0%, $gradient-stop, 100%);
-  background-image: -ms-linear-gradient(bottom,     $gradient-start, 0%, $gradient-stop, 100%);
-  background-image: linear-gradient(to bottom,      $gradient-start, 0%, $gradient-stop, 100%);
+  background-image: -o-linear-gradient(bottom,      $gradient-start 0%, $gradient-stop 100%);
+  background-image: -moz-linear-gradient(bottom,    $gradient-start 0%, $gradient-stop 100%);
+  background-image: -webkit-linear-gradient(bottom, $gradient-start 0%, $gradient-stop 100%);
+  background-image: -ms-linear-gradient(bottom,     $gradient-start 0%, $gradient-stop 100%);
+  background-image: linear-gradient(to bottom,      $gradient-start 0%, $gradient-stop 100%);
 }
 
 table.tab > tbody > tr > td, table.tab > thead > tr > th {

@@ -28,7 +28,7 @@ table.main-grid {
     background-color: #505e6c;
     color: #fff;
     border-bottom: none;
-    padding: 24px 8px !important;
+    padding: 24px 19px !important;
   }
   /*tbody tr:even*/
   /*f1f4f5*/
@@ -36,6 +36,10 @@ table.main-grid {
 
 table.main-grid > tbody > tr > td {
   padding: 19px;
+
+  &.actions-column{
+    text-align: center;
+  }
 }
 
 table.main-grid .table-btn {
@@ -44,11 +48,13 @@ table.main-grid .table-btn {
   background-color: $theme-green;
   padding: 7px 20px;
   font-size: 18px;
+  line-height: 20px;
   text-decoration: none;
   span {
     font-size: 70%;
-    color: #758493;
+    color: white;
     vertical-align: top;
     line-height: 18px;
+    font-size: 10px;
   }
 }
