@@ -32,7 +32,7 @@ class Contest < ActiveRecord::Base
 
   #TODO: placeholder for testing the views
   def salary_cap
-    15000
+    75000
   end
 
   def start_at

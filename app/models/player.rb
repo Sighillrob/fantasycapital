@@ -25,7 +25,7 @@ class Player < ActiveRecord::Base
   end
 
   def fantasy_points
-    Projection::Player.where(stats_player_id: stats_id).first.try(:projection).try(:fp).to_f
+    Projection::Projection.where(player_id: Projection::Player.where(stats_player_id: stats_id)).order(updated_at: :desc).first.try(:fp) || 0
   end
 
   def refresh!(player)
@@ -34,7 +34,10 @@ class Player < ActiveRecord::Base
     self.dob        = player.date_of_birth
     self.team       = player.team.name
 
-    self.salary = FP_TO_SALARY_MULTIPLIER * self.fantasy_points
+    #salary is fp * 250 rounded to nearest 100
+    salary = (self.fantasy_points * FP_TO_SALARY_MULTIPLIER / 100.0).round * 100
+    #min 3000
+    self.salary = [salary, 3000].max
     if position = player.positions.detect {|pos| pos.sequence == PRIORITIZE_SEQUENCE_NUMBER } || player.positions.first
       self.sport_position = SportPosition.where(name: position.abbreviation, sport: 'NBA').first_or_create
     end
