@@ -17,7 +17,7 @@ p.message {
 /*Dropdown*/
 .styled-select select {
   background: transparent;
-  width: 190px;
+  width: 150px;
   padding: 5px;
   font-size: 16px;
   line-height: 1;
@@ -30,7 +30,7 @@ p.message {
 
 .styled-select {
   font-family: 'droid_sansbold';
-  width: 165px;
+  /*width: 150px;*/
   height: 34px;
   overflow: hidden;
   background: image-url('arrow.jpg') no-repeat right #ddd;
@@ -140,15 +140,25 @@ li.dropdown ul {
 
 /*Completed Contest*/
 .filter_row {
-  background: none repeat scroll 0 0 #F6F6F6;
+  background: none repeat scroll 0 0 #505e6c;
   margin: 20px 0 0;
   min-height: 50px;
-  padding: 13px 10px;
+  padding: 13px 20px;
+  color: #fff;
+
+  .global-player{
+    padding: 0;
+    margin-top: 3px !important;
+  }
 }
 
 .filter_row h4 {
   font-weight: bold;
   float: left;
+}
+
+.line-height34{
+  line-height: 34px !important;
 }
 
 @media (max-width: 768px) {
@@ -175,7 +185,7 @@ li.dropdown ul {
 
 .filter_row ul li h4 {
   font-weight: normal;
-  padding: 10px 25px 0;
+  padding: 10px 10px 0;
 }
 
 .filter_row ul.dropdownsport .dropdownlogin {

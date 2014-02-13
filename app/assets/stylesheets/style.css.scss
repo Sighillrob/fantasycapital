@@ -543,3 +543,8 @@ a.join-link:hover {
   }
   padding: 10px 0;
 }
+
+
+table.sortable thead th:hover:not([data-defaultsort=disabled]) {
+  background: #929eaa;
+}
