@@ -9,7 +9,7 @@ class StripeCustomerService
   end
 
   def ensure!
-    begin
+        debugger
       if @user.account
         customer = Stripe::Customer.retrieve(@user.account.stripe_customer_id)
       else
@@ -20,9 +20,6 @@ class StripeCustomerService
         @user.account = Account.new(stripe_customer_id: customer.id)
         @user.save!
       end
-    rescue Stripe::InvalidRequestError => e
-      raise ServiceError, e.message
-    end
   end
 end
 
