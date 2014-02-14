@@ -182,11 +182,16 @@ h2{
 
 .green {
   color: $theme-green;
-  font-size: 17px;
+  /*font-size: 17px;
   font-weight: bold;
-  margin: 0 5px 0 5px;
+  margin: 0 5px 0 5px;*/
   &:hover {
     color: $theme-green;
+  }
+
+  a {
+    color: $theme-green;
+    text-decoration: none;
   }
 }
 

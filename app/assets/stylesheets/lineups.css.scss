@@ -1,3 +1,5 @@
+@import 'variables';
+
 span.border {
   border-right: 1px solid #D1D1D1;
   float: right;
@@ -80,18 +82,6 @@ p.message {
   font-size: 17px;
   position: relative;
   top: 13px;
-}
-
-.green {
-  color: #0FEA6C;
-  font-size: 17px;
-  margin: 0 5px 0 5px;
-  font-weight: bold;
-}
-
-.green a {
-  color: #0FEA6C;
-  text-decoration: none;
 }
 
 li.dropdown {
@@ -317,7 +307,7 @@ ul.completedcontest li {
 
 .draftPlayer {
   font-family: 'droid_sansbold';
-  background: none repeat scroll 0 0 #555555;
+  background: none repeat scroll 0 0 #2e363e;
   color: #0FEA6C;
   float: right;
   font-size: 25px;
@@ -368,10 +358,22 @@ table.summarymatchup tbody tr:last-child {
 /*LINE UPS*/
 .lineups {
   width: 100%;
+  .lineups-content {
+    .lineup-wrapper{
+      padding-left: 0;
+      padding-right: 7px;
+
+      .last-edit{
+        padding: 0 10px;
+      }
+      
+    }
+  }
 }
 
 .gridbox {
-  background: #e5e5e5
+  background: #929eaa;
+  color: #fff;
 }
 
 .upcoming {
@@ -379,17 +381,17 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .complete table.lineup tbody tr:last-child td:last-child {
-  background: none repeat scroll 0 0 #585858;
+  background: none repeat scroll 0 0 #505e6c;
   font-size: 16px;
   padding: 10px;
 }
 
 .gridbox header {
-  background: none repeat scroll 0 0 #CECECE;
+  background: none repeat scroll 0 0 #505e6c;
   font-size: 16px;
   height: 45px;
   margin: 0 0 10px 0;
-  padding: 3px;
+  padding: 10px;
 }
 
 .gridbox header img {
@@ -415,7 +417,7 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .gridbox .green {
-  float: left
+  /*float: left*/
 }
 
 .gridbox footer .green {
@@ -432,7 +434,7 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .gridbox table.lineup thead tr th {
-  background: #E5E5E5;
+  background: #505e6c;
 }
 
 .gridbox table.lineup tbody {
@@ -441,6 +443,10 @@ table.summarymatchup tbody tr:last-child {
 
 .gridbox table.lineup tbody tr {
   line-height: 28px;
+  border-bottom: 1px solid $theme-light-grey1;
+  td strong{
+    color: #929eaa;
+  }
 }
 
 .gridbox table.lineup tbody tr:last-child td {
@@ -449,9 +455,11 @@ table.summarymatchup tbody tr:last-child {
 
 .gridbox footer {
   background: none;
-  padding: 0;
+  padding: 0 10px;
   margin: 0;
   min-height: 40px;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 .gridbox footer ul {

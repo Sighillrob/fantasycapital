@@ -1,4 +1,4 @@
-<div class="col-md-4">
+<div class="lineup-wrapper col-md-4">
   <div class="gridbox <%= lineup.contest.complete? ? "complete" : "upcoming" %>">
     <!---Box Header-->
     <header>
@@ -18,7 +18,7 @@
       <li>PMR</li>
       <li>REM.Salary</li>
     </ul>
-    <ul class="summary">
+    <ul class="summary green">
       <li>1</li>
       <li>540</li>
       <li>$0</li>
@@ -46,14 +46,14 @@
       </tr>
       </tbody>
     </table>
-    <p class="small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
+    <p class="last-edit small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
     <footer>
       <ul>
         <% unless lineup.contest.complete? %>
           <li><span class="green"><%= link_to "Edit »", edit_contest_lineup_path(lineup.contest, lineup) %></span></li>
           <li><span class="green"><a href="#">Export »</a></span></li>
         <% end %>
-        <li><span class="green"><a href="#">Entries »</a></span></li>
+        <li><span class="green"><a href="/entries">Entries »</a></span></li>
         <% unless lineup.contest.complete? %>
           <li><span class="green"><a href="#">Challenge »</a></span></li>
           <li><span class="green"><%= link_to 'Submit »', lineup_entries_path(lineup), method: :post %></span></li>
