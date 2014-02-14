@@ -17,12 +17,5 @@ describe StripeCustomerService do
       user.account.should_not be_nil
     end
 
-    it 'wraps stripe error as a service error' do
-      stripe_error = Stripe::InvalidRequestError.new('Token is invalid', 'token')
-      StripeMock.prepare_error(stripe_error, :new_customer)
-      expect { 
-        StripeCustomerService.new(user, stripe_token).ensure! 
-      }.to raise_error(ServiceError, 'Token is invalid')
-    end
   end
 end

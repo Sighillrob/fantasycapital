@@ -9,7 +9,6 @@ class StripeCustomerService
   end
 
   def ensure!
-        debugger
       if @user.account
         customer = Stripe::Customer.retrieve(@user.account.stripe_customer_id)
       else
