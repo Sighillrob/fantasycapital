@@ -92,6 +92,9 @@
         }
         a {
           background: none;
+          &:hover{
+            background: white;
+          }
         }
       }
 
