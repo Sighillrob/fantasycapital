@@ -78,7 +78,7 @@ namespace :projection do
 
 
   desc "Run all tasks needed to build project"
-  task run_all: [:environment, :fetch_stats, :fp, :notif, :review] do
+  task run_all: [:environment, :fetch_stats, :fp, :notif] do
   end
 
   desc "Purge projection database"

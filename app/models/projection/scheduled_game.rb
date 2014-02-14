@@ -22,8 +22,8 @@ module Projection
       end
 
       def find_or_create_for_stats(stats_game)
+        begin
         game = ScheduledGame.where(stats_event_id: stats_game["eventId"]).first_or_initialize
-    
         if game.new_record?
           game.start_date = StatsClient::ResponseParser::DatetimeParser.parse stats_game["startDate"]
           stats_game["teams"].each do |stats_team|
@@ -31,6 +31,11 @@ module Projection
            end
           game.save!
         end
+        rescue Exception => e
+          logger.error e.message
+          logger.error e.backtrace.join("\n")
+        end
+
       end
     end
 
