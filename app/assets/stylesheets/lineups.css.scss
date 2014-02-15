@@ -18,24 +18,24 @@ p.message {
 
 /*Dropdown*/
 .styled-select select {
-  background: transparent;
-  width: 150px;
+  background: #eeeeee;
+  width: 160px;
   padding: 5px;
   font-size: 16px;
   line-height: 1;
-  border: 0;
-  border-radius: 0;
-  height: 34px;
-  -webkit-appearance: none;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  /*height: 34px;
+  -webkit-appearance: none;*/
   color: #555555;
 }
 
 .styled-select {
-  font-family: 'droid_sansbold';
+  font-family: 'droid_sanslight';
   /*width: 150px;*/
   height: 34px;
   overflow: hidden;
-  background: image-url('arrow.jpg') no-repeat right #ddd;
+  /*background: image-url('arrow.jpg') no-repeat right #ddd;*/
 }
 
 /*Dropdown 2*/

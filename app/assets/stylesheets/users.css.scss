@@ -1,11 +1,29 @@
-.leaderBoard{
-  .top-user{
-    td img{
-      margin-right: 10px;
-      border: 3px solid #C8C7C4;
-      border-radius: 50%;
-      height: 65px;
+.leaderboard-filter{
+  background: #505e6c;
+  .filtercheckbox-container{
+    color: #fff;
+    font-size: 20px;
+    padding: 10px 20px 0;
+    label{
+      font-size: 20px;
     }
+  }
+}
+
+.leaderBoard{
+
+  .top-user{
+    border-bottom: 1px solid #dddddd;
+    td{
+      vertical-align: middle !important;
+      img{
+        margin-right: 10px;
+        border: 3px solid #C8C7C4;
+        border-radius: 50%;
+        height: 65px;
+      }
+    } 
+    
   }
 }
 

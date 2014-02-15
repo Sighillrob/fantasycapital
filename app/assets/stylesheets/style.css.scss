@@ -265,7 +265,7 @@ label {
 
 input[type=radio],
 input[type=checkbox] {
-  display: none;
+  /*display: none;*/
 }
 
 label:before {
@@ -296,20 +296,20 @@ label:before {
 }
 
 input[type=radio]:checked + label:before {
-  content: "\2022";
+  /*content: "\2022";
   color: #f3f3f3;
   font-size: 27px;
   text-align: center;
-  line-height: 14px;
+  line-height: 14px;*/
 }
 
 input[type=checkbox]:checked + label:before {
-  content: "\2713";
+  /*content: "\2713";
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
   font-size: 15px;
   color: #f3f3f3;
   text-align: center;
-  line-height: 15px;
+  line-height: 15px;*/
 }
 
 input[type=text] {
@@ -552,4 +552,9 @@ a.join-link:hover {
 
 table.sortable thead th:hover:not([data-defaultsort=disabled]) {
   background: #929eaa;
+}
+
+.next-link{
+  font-size: 20px;
+  margin-bottom: 10px;
 }
