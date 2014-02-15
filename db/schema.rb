@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140205163541) do
+ActiveRecord::Schema.define(version: 20140214135700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,11 +47,10 @@ ActiveRecord::Schema.define(version: 20140205163541) do
     t.integer  "lineups_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stats_id"
+    t.integer  "max_entries"
   end
 
   add_index "contests", ["contest_start"], name: "index_contests_on_contest_start", using: :btree
-  add_index "contests", ["stats_id"], name: "index_contests_on_stats_id", using: :btree
 
   create_table "credit_cards", force: true do |t|
     t.string   "stripe_id"

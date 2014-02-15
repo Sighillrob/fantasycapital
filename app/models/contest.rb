@@ -15,16 +15,9 @@
 #  stats_id      :integer
 #
 
-#  lineups_count :integer          default(0)
-#  created_at    :datetime
-#  updated_at    :datetime
-#
-
 class Contest < ActiveRecord::Base
   has_many :lineups, inverse_of: :contest
   has_many :users, through: :lineups
-
-  before_create :setup_contest
 
   def sport_positions
     SportPosition.where sport: self.sport
@@ -58,7 +51,7 @@ class Contest < ActiveRecord::Base
     end
 
     def upcoming
-      where "contest_start > ?", DateTime.now
+      where("contest_start > ?", DateTime.now).order(contest_type: :asc, entry_fee: :asc)
     end
 
     def for_day(day)
@@ -72,14 +65,6 @@ class Contest < ActiveRecord::Base
     def sport_names
       group(:sport).pluck(:sport)
     end
-  end
-
-  protected
-
-  def setup_contest
-    self.entry_fee ||= 10
-    self.prize     = 2 * self.entry_fee * 0.95
-    self.contest_type = '50/50 '
   end
 
 end

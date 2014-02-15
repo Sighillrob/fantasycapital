@@ -15,7 +15,7 @@ Main::Application.routes.draw do
       get :stats
     end
   end
-  resources :contests do
+  resources :contests, only: [:index, :show] do
     collection do
       get 'browse'
     end
