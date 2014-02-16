@@ -1,4 +1,3 @@
-=begin
 # == Schema Information
 #
 # Table name: waiting_lists
@@ -12,8 +11,10 @@
 #  invitation_token :string(255)
 #  status           :integer          default(1)
 #  user_id          :integer
+#  message          :string(255)
 #
 
+=begin
 require 'spec_helper'
 
 describe WaitingList do

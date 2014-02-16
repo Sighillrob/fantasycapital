@@ -12,7 +12,7 @@
 #  lineups_count :integer          default(0)
 #  created_at    :datetime
 #  updated_at    :datetime
-#  stats_id      :integer
+#  max_entries   :integer
 #
 
 class Contest < ActiveRecord::Base
