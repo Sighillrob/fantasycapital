@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140214135700) do
+ActiveRecord::Schema.define(version: 20140216195002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,11 +67,10 @@ ActiveRecord::Schema.define(version: 20140214135700) do
     t.integer  "lineup_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "sport_position_id"
-    t.integer  "sport"
-    t.integer  "player_id"
+    t.integer  "contest_id"
   end
 
+  add_index "entries", ["contest_id"], name: "index_entries_on_contest_id", using: :btree
   add_index "entries", ["lineup_id"], name: "index_entries_on_lineup_id", using: :btree
   add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
 
@@ -100,7 +99,7 @@ ActiveRecord::Schema.define(version: 20140214135700) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "contest_id"
+    t.string   "sport"
   end
 
   add_index "lineups", ["user_id"], name: "index_lineups_on_user_id", using: :btree
@@ -232,7 +231,7 @@ ActiveRecord::Schema.define(version: 20140214135700) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|

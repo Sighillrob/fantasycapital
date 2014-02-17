@@ -1,3 +1,22 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+
+$ ->
+	$('.createnewlineups').click -> 
+    	$('.new-lineup-popup').toggle()
+    	$('.new-lineup-popup .choices li a').removeClass('selected')
+
+    $('.new-lineup-popup .btnClose').click ->
+    	$('.new-lineup-popup').hide()
+
+    $('.new-lineup-popup .cancel').click ->
+    	$('.new-lineup-popup').hide()
+
+    $('.new-lineup-popup .sport-list li a').click ->
+    	$('.new-lineup-popup .sport-list li a.selected').removeClass('selected');
+    	$(this).addClass('selected');
+
+    $('.new-lineup-popup .time-list li a').click ->
+    	$('.new-lineup-popup .time-list li a.selected').removeClass('selected');
+    	$(this).addClass('selected');
