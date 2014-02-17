@@ -19,10 +19,14 @@ class Lineup < ActiveRecord::Base
 
   accepts_nested_attributes_for :lineup_spots, allow_destroy: true
 
+  #virtual attribute: enter a contest immediately after creation
+  attr_accessor :contest_id_to_enter
+
   class << self
     def build_for_contest(contest, lineup = nil)
       lineup = Lineup.find_by_id(lineup) || Lineup.new
       lineup.sport = contest.sport
+      lineup.contest_id_to_enter = contest.id
 
       LineupSpotProto.where(sport: contest.sport).order(spot: :asc).each do |proto|
         if lineup.lineup_spots.find_by_spot(proto.spot).blank?

@@ -15,7 +15,7 @@
   </td>
   <td><%= "#{contest.entries.size}/#{contest.max_entries}" %></td>
   <td class="actions-column">
-    <%= link_to new_contest_lineup_path(contest), class: 'table-btn' do %>
+    <%= link_to new_lineup_path(contest_id: contest.id), class: 'table-btn' do %>
       enter 
       <span>&#10095;</span>
     <% end %>

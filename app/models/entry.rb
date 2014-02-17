@@ -13,6 +13,8 @@ class Entry < ActiveRecord::Base
   belongs_to :lineup, inverse_of: :entries
   belongs_to :contest, inverse_of: :entries
 
+  validates :lineup, :contest, presence: true
+
   class << self
 
     def live

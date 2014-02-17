@@ -19,8 +19,8 @@ Main::Application.routes.draw do
     collection do
       get 'browse'
     end
-    resources :lineups
   end
+
   resources :waiting_lists, only: [:new, :create, :show] do
     collection do
       get :invite

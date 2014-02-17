@@ -1,9 +1,9 @@
 class LineupsController < ApplicationController
-  before_action :set_contest, except: :index
   before_filter :authenticate_user!
   before_action :set_lineup, only: [:edit, :update]
 
   def new
+    @contest = Contest.find(params[:contest_id])
     @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
     @lineup    = Lineup.build_for_contest @contest
   end
@@ -23,7 +23,7 @@ class LineupsController < ApplicationController
     @lineup         = current_user.lineups.create(lineup_parameters)
 
     # Create an entry that new lineup belongs to
-    @entry          = @lineup.entries.create
+    @entry = @lineup.entries.create(contest_id: @lineup.contest_id_to_enter) if @lineup.contest_id_to_enter.present?
 
     respond_to do |format|
       if @lineup.save
@@ -76,15 +76,11 @@ class LineupsController < ApplicationController
   end
 
   private
-  def set_contest
-    @contest = Contest.find(params[:contest_id])
-  end
-
   def set_lineup
     @lineup = Lineup.find(params[:id])
   end
 
   def lineup_parameters
-    params.require(:lineup).permit(:sport, lineup_spots_attributes: [:player_id, :id, :sport_position_id, :spot])
+    params.require(:lineup).permit(:contest_id_to_enter, :sport, lineup_spots_attributes: [:player_id, :id, :sport_position_id, :spot])
   end
 end

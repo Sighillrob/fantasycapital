@@ -83,9 +83,9 @@
             <td><%= countdown_tag contest.start_at %></td>
             <td><%= number_to_currency contest.entry_fee %></td>
             <td><%= number_to_currency contest.prize %></td>
-            <td><%= contest.lineups.size %></td>
+            <td><%= contest.entries.size %></td>
             <td>
-              <%= link_to "EDIT", edit_contest_lineup_path(contest, contest.lineup_for_user(current_user)), class: 'button' %></td>
+              <%= link_to "EDIT", edit_lineup_path(entry.lineup), class: 'button' %></td>
             <td><%= link_to 'VIEW', entry_path(entry), class: 'button' %></td>
             
           </tr>
