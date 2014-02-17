@@ -19,16 +19,14 @@ class Lineup < ActiveRecord::Base
 
   accepts_nested_attributes_for :lineup_spots, allow_destroy: true
 
-  validates :contest, presence: true
-
   class << self
     def build_for_contest(contest, lineup = nil)
-      lineup = Lineup.find_by_id(lineup) || Lineup.new({contest: contest})
+      lineup = Lineup.find_by_id(lineup) || Lineup.new
+      lineup.sport = contest.sport
 
       LineupSpotProto.where(sport: contest.sport).order(spot: :asc).each do |proto|
         if lineup.lineup_spots.find_by_spot(proto.spot).blank?
-          lineup.lineup_spots.build sport_position: SportPosition.find_by_sport_and_name(proto.sport, proto.sport_position_name),
-                                    spot: proto.spot
+          lineup.lineup_spots.build sport_position: SportPosition.find_by_sport_and_name(proto.sport, proto.sport_position_name), spot: proto.spot
         end
       end
 
