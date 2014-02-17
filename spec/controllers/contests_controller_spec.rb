@@ -23,7 +23,6 @@ describe ContestsController do
     it "assigns all contests as @contests" do
 
       contest = create(:contest)
-      lineup = create(:lineup, contest: contest, user: user)
       get :index, {}, valid_session
       assigns(:contests).should eq(user.contests)
     end

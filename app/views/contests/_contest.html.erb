@@ -13,7 +13,7 @@
   <td data-value=<%= contest.prize %>>
     <%= number_to_currency contest.prize %>
   </td>
-  <td><%= "#{contest.lineups.size}/#{contest.max_entries}" %></td>
+  <td><%= "#{contest.entries.size}/#{contest.max_entries}" %></td>
   <td class="actions-column">
     <%= link_to new_contest_lineup_path(contest), class: 'table-btn' do %>
       enter 

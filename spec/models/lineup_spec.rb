@@ -12,7 +12,6 @@
 require 'spec_helper'
 
 describe Lineup do
-  it { should belong_to(:contest) }
   it { should belong_to(:user) }
   it { should have_many(:players).through(:lineup_spots) }
 
