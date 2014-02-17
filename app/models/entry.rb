@@ -13,9 +13,6 @@ class Entry < ActiveRecord::Base
   belongs_to :lineup, inverse_of: :entries
   belongs_to :contest, inverse_of: :entries
 
-  validates :lineup_id, uniqueness: {scope: :user_id, message: "You already have entry for this live up"}
-
-
   class << self
 
     def live

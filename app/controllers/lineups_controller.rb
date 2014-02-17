@@ -23,7 +23,7 @@ class LineupsController < ApplicationController
     @lineup         = current_user.lineups.create(lineup_parameters)
 
     # Create an entry that new lineup belongs to
-    @entry          = current_user.entries.create(:lineup => @lineup)
+    @entry          = @lineup.entries.create
 
     respond_to do |format|
       if @lineup.save

@@ -175,6 +175,7 @@
       <%= link_to 'Clear »', '#_', class: 'green', id: 'clear-lineups', confirm: "are you sure to clear lineups?" %>
     </div>
 
+    <%= f.hidden_field :sport %>
     <div class='clear'> &nbsp;</div>
     <div class='submitTeam'>
       <%= f.submit 'SUBMIT TEAM', disable_with: 'Please wait...' %>
