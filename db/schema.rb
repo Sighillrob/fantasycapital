@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140214135700) do
+ActiveRecord::Schema.define(version: 20140217180827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,17 +63,15 @@ ActiveRecord::Schema.define(version: 20140214135700) do
   end
 
   create_table "entries", force: true do |t|
-    t.integer  "user_id"
     t.integer  "lineup_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "sport_position_id"
-    t.integer  "sport"
-    t.integer  "player_id"
+    t.integer  "contest_id"
   end
 
+  add_index "entries", ["contest_id"], name: "index_entries_on_contest_id", using: :btree
+  add_index "entries", ["lineup_id", "contest_id"], name: "index_entries_on_lineup_id_and_contest_id", unique: true, using: :btree
   add_index "entries", ["lineup_id"], name: "index_entries_on_lineup_id", using: :btree
-  add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
 
   create_table "lineup_spot_protos", force: true do |t|
     t.string   "sport"
@@ -100,7 +98,7 @@ ActiveRecord::Schema.define(version: 20140214135700) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "contest_id"
+    t.string   "sport"
   end
 
   add_index "lineups", ["user_id"], name: "index_lineups_on_user_id", using: :btree

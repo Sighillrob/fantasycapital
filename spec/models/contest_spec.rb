@@ -18,6 +18,4 @@
 require 'spec_helper'
 
 describe Contest do
-  it { should have_many(:users).through(:lineups) }
-
 end

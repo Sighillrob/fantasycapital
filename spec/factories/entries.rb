@@ -3,7 +3,6 @@
 # Table name: entries
 #
 #  id         :integer          not null, primary key
-#  user_id    :integer
 #  lineup_id  :integer
 #  created_at :datetime
 #  updated_at :datetime

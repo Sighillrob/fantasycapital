@@ -21,7 +21,6 @@ class LineupsController < ApplicationController
   # POST /entries.json
   def create
     @lineup         = current_user.lineups.create(lineup_parameters)
-    @lineup.contest = @contest
 
     # Create an entry that new lineup belongs to
     @entry          = current_user.entries.create(:lineup => @lineup)
@@ -57,7 +56,7 @@ class LineupsController < ApplicationController
 
 
   def index
-    @lineups = current_user.lineups.includes([:lineup_spots, :contest]).order(updated_at: :desc).limit 3
+    @lineups = current_user.lineups.includes([:lineup_spots]).order(updated_at: :desc).limit 3
   end
 
   def update
@@ -86,6 +85,6 @@ class LineupsController < ApplicationController
   end
 
   def lineup_parameters
-    params.require(:lineup).permit(:contest_id, lineup_spots_attributes: [:player_id, :id, :sport_position_id, :spot])
+    params.require(:lineup).permit(:sport, lineup_spots_attributes: [:player_id, :id, :sport_position_id, :spot])
   end
 end

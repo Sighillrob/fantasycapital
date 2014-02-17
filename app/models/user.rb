@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_one :account
   has_many :credit_cards
   has_many :bank_accounts
-  has_many :entries, inverse_of: :user
+  has_many :entries, through: :lineups
   has_many :contests, through: :entries
 
   validates :first_name, :last_name, presence: true
