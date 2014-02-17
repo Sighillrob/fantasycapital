@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140216195002) do
+ActiveRecord::Schema.define(version: 20140214135700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,10 +67,11 @@ ActiveRecord::Schema.define(version: 20140216195002) do
     t.integer  "lineup_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "contest_id"
+    t.integer  "sport_position_id"
+    t.integer  "sport"
+    t.integer  "player_id"
   end
 
-  add_index "entries", ["contest_id"], name: "index_entries_on_contest_id", using: :btree
   add_index "entries", ["lineup_id"], name: "index_entries_on_lineup_id", using: :btree
   add_index "entries", ["user_id"], name: "index_entries_on_user_id", using: :btree
 
@@ -99,7 +100,7 @@ ActiveRecord::Schema.define(version: 20140216195002) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "sport"
+    t.integer  "contest_id"
   end
 
   add_index "lineups", ["user_id"], name: "index_lineups_on_user_id", using: :btree
