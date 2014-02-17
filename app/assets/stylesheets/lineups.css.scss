@@ -1,3 +1,5 @@
+@import 'variables';
+
 span.border {
   border-right: 1px solid #D1D1D1;
   float: right;
@@ -16,24 +18,24 @@ p.message {
 
 /*Dropdown*/
 .styled-select select {
-  background: transparent;
-  width: 190px;
+  background: #eeeeee;
+  width: 160px;
   padding: 5px;
   font-size: 16px;
   line-height: 1;
-  border: 0;
-  border-radius: 0;
-  height: 34px;
-  -webkit-appearance: none;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  /*height: 34px;
+  -webkit-appearance: none;*/
   color: #555555;
 }
 
 .styled-select {
-  font-family: 'droid_sansbold';
-  width: 165px;
+  font-family: 'droid_sanslight';
+  /*width: 150px;*/
   height: 34px;
   overflow: hidden;
-  background: image-url('arrow.jpg') no-repeat right #ddd;
+  /*background: image-url('arrow.jpg') no-repeat right #ddd;*/
 }
 
 /*Dropdown 2*/
@@ -82,18 +84,6 @@ p.message {
   top: 13px;
 }
 
-.green {
-  color: #0FEA6C;
-  font-size: 17px;
-  margin: 0 5px 0 5px;
-  font-weight: bold;
-}
-
-.green a {
-  color: #0FEA6C;
-  text-decoration: none;
-}
-
 li.dropdown {
   background: none repeat scroll 0 0 #363636;
   height: 39px;
@@ -140,15 +130,25 @@ li.dropdown ul {
 
 /*Completed Contest*/
 .filter_row {
-  background: none repeat scroll 0 0 #F6F6F6;
+  background: none repeat scroll 0 0 #505e6c;
   margin: 20px 0 0;
   min-height: 50px;
-  padding: 13px 10px;
+  padding: 13px 20px;
+  color: #fff;
+
+  .global-player{
+    padding: 0;
+    margin-top: 3px !important;
+  }
 }
 
 .filter_row h4 {
   font-weight: bold;
   float: left;
+}
+
+.line-height34{
+  line-height: 34px !important;
 }
 
 @media (max-width: 768px) {
@@ -175,7 +175,7 @@ li.dropdown ul {
 
 .filter_row ul li h4 {
   font-weight: normal;
-  padding: 10px 25px 0;
+  padding: 10px 10px 0;
 }
 
 .filter_row ul.dropdownsport .dropdownlogin {
@@ -307,7 +307,7 @@ ul.completedcontest li {
 
 .draftPlayer {
   font-family: 'droid_sansbold';
-  background: none repeat scroll 0 0 #555555;
+  background: none repeat scroll 0 0 #2e363e;
   color: #0FEA6C;
   float: right;
   font-size: 25px;
@@ -358,10 +358,22 @@ table.summarymatchup tbody tr:last-child {
 /*LINE UPS*/
 .lineups {
   width: 100%;
+  .lineups-content {
+    .lineup-wrapper{
+      padding-left: 0;
+      padding-right: 7px;
+
+      .last-edit{
+        padding: 0 10px;
+      }
+      
+    }
+  }
 }
 
 .gridbox {
-  background: #e5e5e5
+  background: #929eaa;
+  color: #fff;
 }
 
 .upcoming {
@@ -369,17 +381,17 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .complete table.lineup tbody tr:last-child td:last-child {
-  background: none repeat scroll 0 0 #585858;
+  background: none repeat scroll 0 0 #505e6c;
   font-size: 16px;
   padding: 10px;
 }
 
 .gridbox header {
-  background: none repeat scroll 0 0 #CECECE;
+  background: none repeat scroll 0 0 #505e6c;
   font-size: 16px;
   height: 45px;
   margin: 0 0 10px 0;
-  padding: 3px;
+  padding: 10px;
 }
 
 .gridbox header img {
@@ -405,7 +417,7 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .gridbox .green {
-  float: left
+  /*float: left*/
 }
 
 .gridbox footer .green {
@@ -422,7 +434,7 @@ table.summarymatchup tbody tr:last-child {
 }
 
 .gridbox table.lineup thead tr th {
-  background: #E5E5E5;
+  background: #505e6c;
 }
 
 .gridbox table.lineup tbody {
@@ -431,6 +443,10 @@ table.summarymatchup tbody tr:last-child {
 
 .gridbox table.lineup tbody tr {
   line-height: 28px;
+  border-bottom: 1px solid $theme-light-grey1;
+  td strong{
+    color: #929eaa;
+  }
 }
 
 .gridbox table.lineup tbody tr:last-child td {
@@ -439,9 +455,11 @@ table.summarymatchup tbody tr:last-child {
 
 .gridbox footer {
   background: none;
-  padding: 0;
+  padding: 0 10px;
   margin: 0;
   min-height: 40px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .gridbox footer ul {

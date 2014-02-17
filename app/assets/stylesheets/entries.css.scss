@@ -6,7 +6,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .teamDraft {
-  background: #565656;
+  background: #505e6c;
   color: #fff;
   padding: 30px 20px 60px 20px !important;
   border-radius: 10px 10px 0 0 !important;
@@ -31,7 +31,7 @@
   }
 
   p {
-    color: #949494;
+    color: #e3eaf0;
     font-size: 14px;
     padding: 5px 0;
 
@@ -41,7 +41,7 @@
   }
 }
 .timingschedule {
-  background: none repeat scroll 0 0 #3C3C3C;
+  background: none repeat scroll 0 0 #2e363e;
   border-radius: 0 0 10px 10px;
   color: #FFFFFF;
   padding: 15px 20px;
@@ -54,7 +54,7 @@
 }
 
 .contestlive {
-  background: none repeat scroll 0 0 #3C3C3C;
+  background: none repeat scroll 0 0 #2e363e;
   border-radius: 10px;
   float: right;
   font-family: 'droid_sansregular';
@@ -154,7 +154,7 @@ table.tab {
   width: 100%;
 
   strong  {
-    color: $theme-medium-grey1;
+    color: #e3eaf0;
   }
 
   strong.home-team {
@@ -260,8 +260,8 @@ table.tab tbody tr {
 }
 
 div.lineups .col-md-4 {
-  padding-right: 7px;
-  padding-left: 7px;
+  /*padding-right: 7px;
+  padding-left: 7px;*/
 }
 
 .submitTeam {
@@ -270,11 +270,11 @@ div.lineups .col-md-4 {
 }
 
 .submitTeam input[type=submit] {
-  background: none repeat scroll 0 0 #555555;
+  background: none repeat scroll 0 0 #2e363e;
   border: medium none;
   color: #0FEA6C;
   font-family: 'droid_sansbold';
-  font-size: 40px;
+  font-size: 28px;
   padding: 10px 25px;
 }
 a#clear-lineups{
