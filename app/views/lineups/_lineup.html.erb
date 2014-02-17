@@ -1,15 +1,17 @@
 <div class="lineup-wrapper col-md-4">
-  <div class="gridbox <%= lineup ? "complete" : "upcoming" %>">
+  <div class="gridbox <%= lineup.completed? ? "complete" : "upcoming" %>">
     <!---Box Header-->
     <header>
       <div class="pull-left">
         <%= image_tag "sports/#{lineup.sport.downcase}.png" %>
         <strong><%= lineup.sport %></strong></div>
       <div class="pull-right">
-        <% if lineup  %>
+        <% if lineup.completed?  %>
             <strong>COMPLETE</strong>
-        <% else %>
-            <strong>UPCOMING</strong>: <%= countdown_tag lineup.contest.start_at %>
+        <% elsif lineup.entries.empty? %>
+            <strong>NEW</strong>
+          <% else %>
+            <strong>UPCOMING</strong>: <%= countdown_tag lineup.entries[0].contest.start_at %>
         <% end %>
       </div>
     </header>
@@ -42,14 +44,14 @@
           </tr>
       <% end %>
       <tr>
-        <td colspan="4" style="color: white; text-align: center;"><%= (lineup ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
+        <td colspan="4" style="color: white; text-align: center;"><%= (lineup.completed? ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
       </tr>
       </tbody>
     </table>
     <p class="last-edit small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
     <footer>
       <ul>
-        <% unless lineup %>
+        <% unless lineup.completed? %>
           <li><span class="green"><%= link_to "Edit »", edit_lineup_path(lineup) %></span></li>
           <li><span class="green"><a href="#">Export »</a></span></li>
         <% end %>

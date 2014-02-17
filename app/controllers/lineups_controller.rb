@@ -4,21 +4,19 @@ class LineupsController < ApplicationController
 
   def new
     @contest = Contest.find(params[:contest_id])
-    @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
     @lineup    = Lineup.build_for_contest @contest
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).includes(:players).order(display_priority: :asc) 
   end
 
   def edit
-    @positions = @contest.sport_positions.where(visible: true).includes(:players).order(display_priority: :asc)
-    @lineup    = current_user.lineups.build_for_contest @contest, params[:id]
+    @contest = @lineup.entries[0].contest
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).includes(:players).order(display_priority: :asc) 
   end
 
   def result
 
   end
 
-  # POST /entries
-  # POST /entries.json
   def create
     @lineup         = current_user.lineups.create(lineup_parameters)
 

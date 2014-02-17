@@ -22,6 +22,10 @@ class Lineup < ActiveRecord::Base
   #virtual attribute: enter a contest immediately after creation
   attr_accessor :contest_id_to_enter
 
+  def completed?
+    entries[0].present? && entries[0].contest.complete?
+  end
+
   class << self
     def build_for_contest(contest, lineup = nil)
       lineup = Lineup.find_by_id(lineup) || Lineup.new

@@ -18,10 +18,6 @@
 class Contest < ActiveRecord::Base
   has_many :entries, inverse_of: :contest
 
-  def sport_positions
-    SportPosition.where sport: self.sport
-  end
-
   #TODO: placeholder for testing the views
   def salary_cap
     65000
