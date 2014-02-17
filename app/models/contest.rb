@@ -18,6 +18,7 @@
 class Contest < ActiveRecord::Base
   has_many :lineups, inverse_of: :contest
   has_many :users, through: :lineups
+  has_many :entries, inverse_of: :contest
 
   def sport_positions
     SportPosition.where sport: self.sport
