@@ -4,15 +4,16 @@
 #
 #  id         :integer          not null, primary key
 #  user_id    :integer
+#  contest_id :integer
 #  created_at :datetime
 #  updated_at :datetime
-#  sport      :string(255)
 #
 
 class Lineup < ActiveRecord::Base
   has_many :entries, inverse_of: :lineup
   has_many :lineup_spots, inverse_of: :lineup, dependent: :destroy
   has_many :players, through: :lineup_spots
+  belongs_to :contest, inverse_of: :lineups, counter_cache: true
   belongs_to :user, inverse_of: :lineups
 
   before_save :mark_unused_spot_for_removal

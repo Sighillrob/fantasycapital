@@ -2,12 +2,14 @@
 #
 # Table name: entries
 #
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  lineup_id  :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  contest_id :integer
+#  id                :integer          not null, primary key
+#  user_id           :integer
+#  lineup_id         :integer
+#  player_id         :integer
+#  sport             :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  sport_position_id :integer
 #
 
 require 'spec_helper'
