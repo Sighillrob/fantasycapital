@@ -1,0 +1,70 @@
+
+<div class="signin-popup">
+  <h2>LOGIN OR REGISTER</h2>
+  <div class="form-group">
+    <label for="user_username">Username</label>
+    <input type="text" id="user_username" name="user[username]" class="form-control">
+  </div>
+  <div class="form-group">
+    <input type="radio" id="is_login" name="login_or_register" checked="checked" value="login" class="login-or-register">
+    <label for="is_login">Yes, I already have a new password</label>
+  </div>
+  <div class="form-group">
+    <input type="radio" id="is_register" name="login_or_register" value="register" class="login-or-register">
+    <label for="is_register">No, I am a new customer</label>
+  </div>
+  <div class="login-wrapper">
+    <div class="form-group">
+      <label for="user_password">Password</label>
+      <input type="password" id="user_password" name="user[password]" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="button" class="btn btn-default" value="LOGIN">
+      <input type="button" class="btn btn-default" value="CANCEL">
+    </div>
+  </div>
+
+  <div class="register-wrapper">
+    <div class="form-group">
+      <label for="user_first_name">First Name</label>
+      <input type="text" id="user_first_name" name="user[first_name]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="user_last_name">Last Name</label>
+      <input type="text" id="user_last_name" name="user[last_name]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="user_email">Email</label>
+      <input type="text" id="user_email" name="user[email]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="user_password_reg">Password</label>
+      <input type="password" id="user_password_reg" name="user[password_reg]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="user_password_confirmation">Password Confirmation</label>
+      <input type="password" id="user_password_confirmation" name="user[password_reg]" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="button" class="btn btn-default" value="REGISTER">
+      <input type="button" class="btn btn-default" value="CANCEL">
+    </div>
+  </div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $('input[name="login_or_register"]').change(function(e){
+    if( $(this).val() == 'login' ){
+      $('.register-wrapper').hide();
+      $('.login-wrapper').show();
+    }else{
+      $('.login-wrapper').hide();
+      $('.register-wrapper').show();
+    }
+  })
+});
+  
+</script>
+

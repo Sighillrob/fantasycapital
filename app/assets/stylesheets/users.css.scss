@@ -1,3 +1,22 @@
+
+.signin-popup{
+  padding: 10px;
+  background: #505e6c;
+  color: #ddd;
+  h2{
+    color: #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .login-wrapper{
+
+  }
+
+  .register-wrapper{
+    display: none;
+  }
+}
+
 .leaderboard-filter{
   background: #505e6c;
   .filtercheckbox-container{

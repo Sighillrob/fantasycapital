@@ -1,5 +1,6 @@
 Main::Application.routes.draw do
   get "users/leadboard"
+  get "users/signin_popup"
 
   get "splash/index", as: :splash
   root to: "contests#browse"

@@ -17,6 +17,6 @@ class ApplicationController < ActionController::Base
   end
 
   def restrict_to_splash_page
-    redirect_to splash_path unless user_signed_in?
+    #redirect_to splash_path unless user_signed_in?
   end
 end

@@ -31,3 +31,11 @@
 //= require balanced
 //= require account
 //= require_tree .
+
+$(document).ready(function(){
+	$('.require-signin').click(function(e){
+		e.preventDefault();
+		var target_url = $(this).attr('href');
+		new window.AjaxModal('/users/signin_popup').load()
+	});
+});

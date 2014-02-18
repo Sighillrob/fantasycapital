@@ -39,15 +39,15 @@
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'entries' %>'>
-            <%= link_to 'Entries', entries_path %>
+            <%= link_to 'Entries', entries_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'lineups' %>'>
-            <%= link_to 'Lineups', lineups_path %>
+            <%= link_to 'Lineups', lineups_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'leaderboard' %>'>
-            <%= link_to 'Leaderboard', users_leadboard_path%>
+            <%= link_to 'Leaderboard', users_leadboard_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
           <li>
@@ -55,20 +55,21 @@
             <div class="line"></div>
           </li>
           <li class='<%= menu_classes 'account' %>'>
-            <%= link_to 'Account', profile_accounts_path %>
+            <%= link_to 'Account', profile_accounts_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
           <li class="welcome-box">
             <% if user_signed_in? %>
               <a href="#">
-                Welcome, <span class="first-name"><%= current_user.first_name%></span>
+                Welcome, <span class="first-name"><%= current_user.username%></span>
               </a>
               <span class="arrow">&#10095;</span>
             <% else %>
-              <%= link_to "SIGN UP" , new_user_registration_path, :class => 'link' %>
+              <!--<%= link_to "SIGN UP" , new_user_registration_path, :class => 'link' %>
               <a href="#" class="link">/</a>
               <%= link_to "SIGN IN" , new_user_session_path, :class => 'link' %>
-              <span class="arrow">&#10095;</span>
+              <span class="arrow">&#10095;</span>-->
+              <%= link_to "JOIN NOW" , '#', :class => 'link require-signin' %>
             <% end %>
           </li>
         </ul>
