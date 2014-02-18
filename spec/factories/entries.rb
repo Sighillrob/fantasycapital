@@ -14,6 +14,6 @@
 FactoryGirl.define do
   factory :entry do
     contest nil
-    user nil
+    lineup nil
   end
 end

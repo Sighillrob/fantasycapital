@@ -21,7 +21,7 @@ class LineupsController < ApplicationController
     @lineup         = current_user.lineups.create(lineup_parameters)
 
     # Create an entry that new lineup belongs to
-    @entry = @lineup.entries.create(contest_id: @lineup.contest_id_to_enter) if @lineup.contest_id_to_enter.present?
+    @entry = Contest.find(@lineup.contest_id_to_enter).enter(@lineup) if @lineup.contest_id_to_enter.present?
 
     respond_to do |format|
       if @lineup.save

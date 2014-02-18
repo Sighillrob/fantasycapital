@@ -13,7 +13,7 @@
 
 FactoryGirl.define do
   factory :lineup do
-    contest nil
     user nil
+    sport "NBA"
   end
 end

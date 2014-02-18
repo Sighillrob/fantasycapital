@@ -31,8 +31,24 @@ class Contest < ActiveRecord::Base
     start_at < DateTime.now
   end
 
-  def lineup_for_user(user)
-    lineups.where(user_id: user.id).first
+  def filled?
+    entries.count >= max_entries
+  end
+
+  def eligible_for?(user)
+    if user.nil?
+      true
+    else
+      max_entries_per_user = (contest_type.downcase == "tournament") ? 5 : 1
+      user.entries.select {|e| e.contest == self}.count < max_entries_per_user
+    end
+  end
+
+  def enter(lineup)
+    raise "#{lineup.user} maximized the number of entries" unless eligible_for? lineup.user
+    raise "Maximum entries reached" if filled?
+    dup.save! if entries.count == max_entries - 1
+    entries.create(lineup: lineup)
   end
 
   class << self
@@ -45,8 +61,10 @@ class Contest < ActiveRecord::Base
      where "contest_start < ?", DateTime.now
     end
 
-    def upcoming
-      where("contest_start > ?", DateTime.now).order(contest_type: :asc, entry_fee: :asc)
+    def upcoming(user=nil)
+      where("contest_start > ?", DateTime.now).order(contest_type: :asc, entry_fee: :asc).select do |c|
+        (! c.filled?) && c.eligible_for?(user)
+      end
     end
 
     def for_day(day)

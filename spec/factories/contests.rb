@@ -24,5 +24,6 @@ FactoryGirl.define do
     entry_fee 1.0
     prize 1.9
     contest_start  Time.now + 60*60*12
+    max_entries 10
   end
 end

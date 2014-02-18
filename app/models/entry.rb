@@ -15,6 +15,12 @@ class Entry < ActiveRecord::Base
 
   validates :lineup, :contest, presence: true
 
+  validate :number_of_entries
+ 
+  def number_of_entries
+    errors.add(:contest, "Number of entries can't exceed maximum.") if contest.entries.count >= contest.max_entries 
+  end
+
   class << self
 
     def live

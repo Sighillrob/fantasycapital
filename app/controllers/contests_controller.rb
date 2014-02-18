@@ -9,7 +9,7 @@ class ContestsController < ApplicationController
 
   # GET /contests/browse
   def browse
-    @contests = Contest.upcoming
+    @contests = Contest.upcoming(current_user)
   end
 
   # GET /contests/1
