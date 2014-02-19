@@ -5,7 +5,7 @@ Main::Application.routes.draw do
   get "splash/index", as: :splash
   root to: "contests#browse"
 
-  devise_for :users
+  devise_for :users, :controllers => {:sessions => 'sessions', :registrations => 'registrations' }
 
   resources :entries
   resources :lineups do

@@ -63,13 +63,15 @@
               <a href="#">
                 Welcome, <span class="first-name"><%= current_user.username%></span>
               </a>
-              <span class="arrow">&#10095;</span>
+              <a href="/users/sign_out" data-method="delete" class="sign-out" title="Sign Out">
+                <%= image_tag 'sign-out.png', alt: 'Sign Out' %>
+              </a>
             <% else %>
               <!--<%= link_to "SIGN UP" , new_user_registration_path, :class => 'link' %>
               <a href="#" class="link">/</a>
               <%= link_to "SIGN IN" , new_user_session_path, :class => 'link' %>
               <span class="arrow">&#10095;</span>-->
-              <%= link_to "JOIN NOW" , '#', :class => 'link require-signin' %>
+              <%= link_to "JOIN NOW" , '/', :class => 'link require-signin' %>
             <% end %>
           </li>
         </ul>

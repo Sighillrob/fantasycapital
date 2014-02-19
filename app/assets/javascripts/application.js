@@ -36,6 +36,15 @@ $(document).ready(function(){
 	$('.require-signin').click(function(e){
 		e.preventDefault();
 		var target_url = $(this).attr('href');
+		window.target_url = target_url;
 		new window.AjaxModal('/users/signin_popup').load()
 	});
 });
+
+function isEmailAddress(str) {
+	var emailRegxp =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	if(!emailRegxp.test(str)) {
+		return false;
+	}
+	return true;
+}
