@@ -26,6 +26,10 @@ FactoryGirl.define do
   sequence :email do |n|
     "user#{n}@example.com"
   end
+
+  sequence :username do |n|
+    "username#{n}"
+  end
 end
 
 FactoryGirl.define do
@@ -34,6 +38,7 @@ FactoryGirl.define do
     last_name "last"
     password "password"
     email { generate :email }
+    username { generate :username }
 
     factory :user_with_account  do
       account
