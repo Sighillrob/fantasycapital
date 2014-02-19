@@ -1,10 +1,11 @@
 Main::Application.routes.draw do
   get "users/leadboard"
+  get "users/signin_popup"
 
   get "splash/index", as: :splash
   root to: "contests#browse"
 
-  devise_for :users
+  devise_for :users, :controllers => {:sessions => 'sessions', :registrations => 'registrations' }
 
   resources :entries
   resources :lineups do

@@ -1,0 +1,169 @@
+
+<div class="signin-popup">
+  <form id="user_form">
+    <h2>LOGIN OR REGISTER</h2>
+    <div class="errors"></div>
+    <div class="form-group">
+      <label for="user_username">Username</label>
+      <input type="text" id="user_username" name="user[username]" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="radio" id="is_login" name="login_or_register" checked="checked" value="login" class="login-or-register">
+      <label for="is_login">Yes, I already have a new password</label>
+    </div>
+    <div class="form-group">
+      <input type="radio" id="is_register" name="login_or_register" value="register" class="login-or-register">
+      <label for="is_register">No, I am a new customer</label>
+    </div>
+
+
+    <div class="form-group for-register">
+      <label for="user_first_name">First Name</label>
+      <input type="text" id="user_first_name" name="user[first_name]" class="form-control">
+    </div>
+    <div class="form-group for-register">
+      <label for="user_last_name">Last Name</label>
+      <input type="text" id="user_last_name" name="user[last_name]" class="form-control">
+    </div>
+    <div class="form-group for-register">
+      <label for="user_email">Email</label>
+      <input type="email" id="user_email" name="user[email]" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="user_password_reg">Password</label>
+      <input type="password" id="user_password" name="user[password]" class="form-control">
+    </div>
+    <div class="form-group for-register">
+      <label for="user_password_confirmation">Password Confirmation</label>
+      <input type="password" id="user_password_confirmation" name="user[password_reg]" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="button" class="btn btn-default btn-login for-login" value="LOGIN">
+      <input type="button" class="btn btn-default btn-register for-register" value="REGISTER">
+      <input type="button" class="btn btn-default btn-cancel" value="CANCEL">
+    </div>
+  </form>
+
+</div>
+
+<script>
+$(document).ready(function(){
+
+  //switching the screen login<->register
+  $('input[name="login_or_register"]').change(function(e){
+    if( $(this).val() == 'login' ){
+      $('.for-register').hide();
+      $('.for-login').show();
+    }else{
+      $('.for-login').hide();
+      $('.for-register').show();
+    }
+  })
+
+  $('.btn-cancel').click(function(){
+    if ($('#ajax-modal').length > 0){
+      $('.modal-scrollable').remove()
+      $('.modal-backdrop').remove(); 
+    }
+  });
+
+  $('.btn-login').click(function(e){
+    var url = "/users/sign_in"
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: $('#user_form').serialize(),
+      beforeSend: function(){
+        var errorContent = '';
+        if($('#user_username').val() == ''){
+          errorContent += '<div>Please enter username!</div>';
+        }
+
+        if($('#user_password').val() == ''){
+          errorContent += '<div>Please enter password!</div>';
+        }
+
+        $('.errors').html(errorContent);
+        if(errorContent != ''){
+          return false;
+        }
+        
+      },
+      success: function(data){
+        console.log('login success');
+        console.log(data);
+        window.location.href = window.target_url;
+      },
+      statusCode: {
+        404: function() {
+          console.log( "page not found" );
+        },
+        401: function(data){
+          console.log(data)
+          $('.errors').html('Invalid username or password!');
+        }
+      },
+      dataType: "json"
+    });
+  });
+
+  $('.btn-register').click(function(e){
+    var url = "/users"
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: $('#user_form').serialize(),
+      beforeSend: function(){
+        var errorContent = '';
+
+        if($('#user_username').val() == ''){
+          errorContent += '<div>Please enter username!</div>';
+        }
+
+        if($('#user_first_name').val() == ''){
+          errorContent += '<div>Please enter first name!</div>';
+        }
+
+        if($('#user_last_name').val() == ''){
+          errorContent += '<div>Please enter last name!</div>';
+        }
+
+        if(isEmailAddress($('#user_email').val()) == false){
+          errorContent += '<div>Please enter valid email!</div>';
+        }
+
+        if($('#user_password').val() == ''){
+          errorContent += '<div>Please enter password!</div>';
+        }
+
+        if($('#user_password_confirmation').val() == ''){
+          errorContent += '<div>Please enter password confirmation!</div>';
+        }
+
+        if($('#user_password_confirmation').val() != $('#user_password').val()){
+          errorContent += '<div>Password confirmation does not match to password!</div>';
+        }
+
+        $('.errors').html(errorContent);
+
+        if(errorContent != ''){
+          return false;
+        }
+        
+      },
+      success: function(data){
+        console.log('register success');
+        console.log(data);
+        window.location.href = window.target_url;
+      },
+      statusCode: {
+
+      },
+      dataType: "json"
+    });
+  });
+
+});
+  
+</script>
+
