@@ -1,6 +1,7 @@
 PATH
   remote: lib/
   specs:
+    sportsdata-client (0.1.0)
     stats_client (0.0.0)
       crack
       httparty
@@ -39,9 +40,6 @@ GEM
       rake (>= 0.8.7)
     arel (4.0.2)
     atomic (1.1.14)
-    balanced (0.7.2)
-      faraday (>= 0.8.6)
-      faraday_middleware (~> 0.9.0)
     bcrypt-ruby (3.1.2)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
@@ -114,10 +112,6 @@ GEM
     factory_girl_rails (4.3.0)
       factory_girl (~> 4.3.0)
       railties (>= 3.0.0)
-    faraday (0.8.9)
-      multipart-post (~> 1.2.0)
-    faraday_middleware (0.9.0)
-      faraday (>= 0.7.4, < 0.9)
     ffi (1.9.3)
     fssm (0.2.10)
     gibbon (1.1.1)
@@ -164,7 +158,6 @@ GEM
     minitest (4.7.5)
     multi_json (1.8.4)
     multi_xml (0.5.5)
-    multipart-post (1.2.0)
     newrelic-rake (1.4.1)
       newrelic_rpm (>= 3.1.0)
     newrelic_rpm (3.7.2.192)
@@ -312,7 +305,6 @@ PLATFORMS
 DEPENDENCIES
   angularjs-rails (= 1.0.8)
   annotate
-  balanced
   better_errors
   binding_of_caller
   bullet
@@ -346,6 +338,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers
   social-share-button
+  sportsdata-client!
   stats_client!
   stripe
   stripe-ruby-mock (>= 1.8.7.4)

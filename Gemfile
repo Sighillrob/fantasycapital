@@ -38,8 +38,8 @@ gem 'social-share-button'
 gem 'premailer-rails'
 gem 'delayed_job'
 
-gem 'balanced'
 gem "stats_client", path: "lib/"
+gem "sportsdata-client", path: "lib/"
 
 gem 'newrelic_rpm'
 gem 'newrelic-rake'
