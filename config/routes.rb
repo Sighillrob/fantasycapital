@@ -57,6 +57,10 @@ Main::Application.routes.draw do
     end
   end
 
+  scope :api do
+    get "/searchEntries" => "api#searchEntries"
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -33,6 +33,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
+    angularjs-rails (1.0.8)
     annotate (2.6.1)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
@@ -309,6 +310,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails (= 1.0.8)
   annotate
   balanced
   better_errors

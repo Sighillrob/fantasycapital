@@ -10,6 +10,9 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require angular
+//= require angular-resource
+//= require angular-sanitize
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
@@ -17,6 +20,8 @@
 //= require bootstrap-sortable
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
+//= require app
+//= require_tree ./angular
 //= require jquery.countdown
 //= require ajax_modal
 //= require turbolinks
