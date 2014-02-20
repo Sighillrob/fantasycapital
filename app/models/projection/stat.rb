@@ -16,31 +16,23 @@ module Projection
     belongs_to :game
     belongs_to :player
   
-    STATS_ALLOWED = [
-      "points",
-      "assists",
-      "steals",
-      "rebounds",
-      "blockedShots",
-      "turnovers",
-      "totalSecondsPlayed" ]
-  
-    COMP_STAT_KEY = [
-      "made",
-      "total" ]
+    STATS_ALLOWED = { 
+      "points" => nil,
+      "assists" => nil,
+      "steals" => nil,
+      "rebounds" => nil,
+      "blocks" => nil,
+      "turnovers" => nil,
+      "minutes" => lambda {|x| (m,s) = x.split(":"); m.to_f + s.to_f/60.0}
+    }
   
     class << self
 
       def refresh(player, game, stats)
-        stats.select {|k,v| STATS_ALLOWED.include? k}.each do |stat_n, stat_v|
+        stats.select {|k,v| STATS_ALLOWED.keys.include? k}.each do |stat_n, stat_v|
           st = Stat.where(player: player, game: game, stat_name: stat_n).first_or_initialize 
           if st.new_record?
-            case stat_v
-            when Numeric
-              st.stat_value = stat_v
-            when Hash
-              st.stat_value = stat_v.select {|k,v| COMP_STAT_KEY.include? k}.values.sum
-            end
+            st.stat_value = STATS_ALLOWED[stat_n] ? STATS_ALLOWED[stat_n].call(stat_v) : stat_v
             st.save!
           end
         end

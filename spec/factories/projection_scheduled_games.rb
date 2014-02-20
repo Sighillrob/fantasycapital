@@ -2,13 +2,13 @@
 #
 # Table name: projection_scheduled_games
 #
-#  id             :integer          not null, primary key
-#  home_team_id   :integer
-#  away_team_id   :integer
-#  start_date     :datetime
-#  stats_event_id :integer
-#  created_at     :datetime
-#  updated_at     :datetime
+#  id           :integer          not null, primary key
+#  home_team_id :integer
+#  away_team_id :integer
+#  start_date   :datetime
+#  created_at   :datetime
+#  updated_at   :datetime
+#  ext_game_id  :string(255)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

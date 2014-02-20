@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140218005838) do
+ActiveRecord::Schema.define(version: 20140219224334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,11 +143,10 @@ ActiveRecord::Schema.define(version: 20140218005838) do
     t.datetime "updated_at"
     t.integer  "team_id"
     t.integer  "opponent_team_id"
-    t.integer  "stats_event_id"
+    t.string   "ext_game_id"
   end
 
   add_index "projection_games", ["opponent_team_id"], name: "index_projection_games_on_opponent_team_id", using: :btree
-  add_index "projection_games", ["team_id", "stats_event_id"], name: "index_projection_games_on_team_id_and_stats_event_id", using: :btree
   add_index "projection_games", ["team_id"], name: "index_projection_games_on_team_id", using: :btree
 
   create_table "projection_players", force: true do |t|
@@ -156,11 +155,10 @@ ActiveRecord::Schema.define(version: 20140218005838) do
     t.datetime "updated_at"
     t.integer  "team_id"
     t.boolean  "is_current"
-    t.integer  "stats_player_id"
     t.string   "position"
+    t.string   "ext_player_id"
   end
 
-  add_index "projection_players", ["stats_player_id"], name: "index_projection_players_on_stats_player_id", using: :btree
   add_index "projection_players", ["team_id"], name: "index_projection_players_on_team_id", using: :btree
 
   create_table "projection_proj_by_stat_crits", force: true do |t|
@@ -212,9 +210,9 @@ ActiveRecord::Schema.define(version: 20140218005838) do
     t.integer  "home_team_id"
     t.integer  "away_team_id"
     t.datetime "start_date"
-    t.integer  "stats_event_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ext_game_id"
   end
 
   add_index "projection_scheduled_games", ["away_team_id"], name: "index_projection_scheduled_games_on_away_team_id", using: :btree
@@ -237,8 +235,8 @@ ActiveRecord::Schema.define(version: 20140218005838) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stats_team_id"
     t.boolean  "is_current"
+    t.string   "ext_team_id"
   end
 
   create_table "sport_positions", force: true do |t|

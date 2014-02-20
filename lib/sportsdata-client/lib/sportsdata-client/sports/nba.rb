@@ -3,24 +3,38 @@ module SportsdataClient
       class NBA < SportsdataClient::SportsdataGateway
 
         class << self
-          # @return Array of Team(name, location, abbreviation, and ID).
           def teams(season= nil)
             client.request 'league/hierarchy.xml' do |response|
-              SportsdataClient::ResponseParser.new(response).parse 'teams'
+              SportsdataClient::ResponseParser.new(response).parse 'team'
             end
           end
 
-          def players(use_simple_parser = false)
-            if use_simple_parser
-              client.request 'participants/' do |response|
-                SportsdataClient::ResponseParser::SimpleParser.new(response).parse 'players'
-              end
-            else
-              client.request 'participants/' do |response|
-                SportsdataClient::ResponseParser::ResponseParser.new(response, SportsdataClient::Player).parse 'players'
-              end
+          def players(team_id)
+            client.request "teams/#{team_id}/profile.xml" do |response|
+                SportsdataClient::ResponseParser.new(response).parse 'player'
             end
           end
+
+          def games(season, nba_season)
+            client.request "games/#{season}/#{nba_season}/schedule.xml" do |response|
+                SportsdataClient::ResponseParser.new(response).parse 'game'
+            end
+          end
+
+          def game_stats(game_id)
+            client.request "games/#{game_id}/summary.xml" do |response|
+                SportsdataClient::ResponseParser.new(response).parse 'team'
+            end
+          end
+
+          def games_scheduled(date=Time.now)
+            client.request "games/#{date.strftime("%Y/%m/%d")}/schedule.xml" do |response|
+              SportsdataClient::ResponseParser.new(response).parse 'game'
+            end
+          end
+          
+
+          #######
 
           def player_game_by_game_stats(player_id)
             client.request "stats/players/#{player_id}/events/" do |response|

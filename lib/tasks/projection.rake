@@ -5,18 +5,29 @@ require 'action_view'
 include ActionView::Helpers::NumberHelper
 
 namespace :projection do
-  desc "Fetch data from STATS" 
+  desc "Fetch data from external source (SportsData)" 
   task fetch_stats: :environment do
-    Rails.logger.info "Feteching and populating Teams from STATS"
-    Projection::Team.refresh_all StatsClient::Sports::Basketball::NBA.teams.result
-    Rails.logger.info "Feteching and populating Players from STATS"
-    Projection::Player.refresh_all StatsClient::Sports::Basketball::NBA.players(true).result
-    Rails.logger.info "Feteching and populating events from STATS"
-    Projection::ScheduledGame.refresh_all StatsClient::Sports::Basketball::NBA.events.result
-    Rails.logger.info "Feteching and populating Stats from STATS"
-    Projection::Player.where(is_current: true).each do |player|
-      player.refresh_stats StatsClient::Sports::Basketball::NBA.player_game_by_game_stats(player.stats_player_id).result
+    Rails.logger.info "Feteching and populating Teams from SportsData"
+    teams = Projection::Team.refresh_all SportsdataClient::Sports::NBA.teams.result
+
+    Rails.logger.info "Feteching and populating Players from SportsData"
+    teams.each do |team|
+      Projection::Player.refresh SportsdataClient::Sports::NBA.players(team.ext_team_id).result, team
     end
+
+    Rails.logger.info "Feteching and populating Games from SportsData"
+    season = (Time.now.month < 10) ? Time.now.year - 1 : Time.now.year
+    games = Projection::Game.refresh_all( ['REG', 'PST'].reduce([]) do |sum, seg|
+      sum + SportsdataClient::Sports::NBA.games(season, seg).result
+    end)
+
+    Rails.logger.info "Feteching and populating Player stats from SportsData"
+    games.each do |game|
+      game.refresh_stats SportsdataClient::Sports::NBA.game_stats(game.ext_game_id).result
+    end
+        
+    Rails.logger.info "Feteching and populating scheduled games from SportsData"
+    Projection::ScheduledGame.refresh_all SportsdataClient::Sports::NBA.games_scheduled.result
   end
 
   desc "Projet Fantasy Points"

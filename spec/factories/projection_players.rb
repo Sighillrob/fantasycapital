@@ -2,14 +2,14 @@
 #
 # Table name: projection_players
 #
-#  id              :integer          not null, primary key
-#  name            :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  team_id         :integer
-#  is_current      :boolean
-#  stats_player_id :integer
-#  position        :string(255)
+#  id            :integer          not null, primary key
+#  name          :string(255)
+#  created_at    :datetime
+#  updated_at    :datetime
+#  team_id       :integer
+#  is_current    :boolean
+#  position      :string(255)
+#  ext_player_id :string(255)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

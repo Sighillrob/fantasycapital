@@ -13,6 +13,7 @@ module SportsdataClient
     attr_reader :action_prefix
 
     def request(action, params = {}, &block)
+      params.merge! api_key: SportsdataClient.api_key
       params.delete_if { |k, v| v.nil? || v.empty? }
       raw_response = self.class.get(api_url(action), query: params)
       response = with_retries { raw_response }
@@ -30,7 +31,7 @@ module SportsdataClient
 
     def parse_response(http_request, response, &block)
       if http_request.success?
-        results =  block_given? ? yield(response['apiResults']) : response['apiResults']
+        results =  block_given? ? yield(response.parsed_response) : response.parsed_response
         SportsdataClient::SuccessResponse.new response, results
       else
         SportsdataClient::FailureResponse.new response, response

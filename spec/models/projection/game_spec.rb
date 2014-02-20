@@ -8,7 +8,7 @@
 #  updated_at       :datetime
 #  team_id          :integer
 #  opponent_team_id :integer
-#  stats_event_id   :integer
+#  ext_game_id      :string(255)
 #
 
 require 'spec_helper'
