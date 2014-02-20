@@ -6,7 +6,7 @@ module Projection
         "assists" => 1.5,
         "steals" => 2,
         "rebounds" => 1.25,
-        "blockedShots" => 2,
+        "blocks" => 2,
         "turnovers" => -1 }
       @games_weights = {
         "player.last_1_game" => 0.15,

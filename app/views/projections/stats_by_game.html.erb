@@ -1,4 +1,4 @@
-<% stats = ["points", "rebounds", "assists", "steals", "blockedShots", "turnovers"] %>
+<% stats = Projection::Stat::STATS_ALLOWED.keys - ["minutes"] %>
 <table class="table table-striped sortable">
   <thead>
     <tr>

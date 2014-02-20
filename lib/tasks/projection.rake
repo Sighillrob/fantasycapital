@@ -57,7 +57,7 @@ namespace :projection do
     projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game).where('projection_scheduled_games.start_date' => time_range)
     event_ids = projections.reduce([]) {|ids, p| ids << p.scheduled_game.stats_event_id}.uniq
     stats = Projection::Stat.includes(:game, :player).where('projection_games.stats_event_id' => event_ids)
-    stat_names = ["points", "rebounds", "assists", "steals", "blockedShots", "turnovers"]
+    stat_names = Projection::Stat::STATS_ALLOWED.keys - ["minutes"]
 
     filename = "#{Rails.root}/tmp/review-#{today.strftime('%Y-%m-%d')}.csv"
     CSV.open(filename, "w") do |csv|
