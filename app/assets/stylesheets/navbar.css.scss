@@ -59,6 +59,14 @@
       padding-right: 5px;
       color: white !important;
 
+      &.sign-out{
+        padding: 0;
+        img{
+          width: 30px;
+        }
+        
+      }
+
       &.link{
         padding-right: 0;
         padding-left: 0;

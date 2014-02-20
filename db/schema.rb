@@ -228,7 +228,7 @@ ActiveRecord::Schema.define(version: 20140219224334) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 20140219224334) do
     t.string   "last_name"
     t.string   "balanced_customer_id"
     t.integer  "balance",                default: 0
+    t.string   "username"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

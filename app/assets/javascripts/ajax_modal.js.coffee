@@ -21,7 +21,7 @@ class AjaxModal
 
     $("<div />",
       id: "ajax-modal"
-      class: "modal fade container"
+      class: "modal fade"
       tabindex: "-1"
       role: "dialog"
       "aria-labelledby": "ajax-modal"

@@ -32,7 +32,7 @@ class Contest < ActiveRecord::Base
   end
 
   def filled?
-    entries.count >= max_entries.to_i
+    max_entries.nil? ? false : entries.count >= max_entries.to_i
   end
 
   def eligible_for?(user)
