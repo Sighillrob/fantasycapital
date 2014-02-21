@@ -39,6 +39,8 @@ FactoryGirl.define do
     password "password"
     email { generate :email }
     username { generate :username }
+    country "US"
+    state "AL"
 
     factory :user_with_account  do
       account
