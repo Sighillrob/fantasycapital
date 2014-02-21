@@ -157,7 +157,21 @@ $(document).ready(function(){
         window.location.href = window.target_url;
       },
       statusCode: {
-
+        422: function(data){
+          var res = $.parseJSON(data.responseText)
+          console.log(data);
+          var errorContent = '';
+          if(res && res.errors){
+            
+            $.each(res.errors, function(key, value){
+              errorContent += '<div>' + key + ' ' + value + '</div>';
+            })
+          }
+          $('.errors').html(errorContent);
+        },
+        500: function(data){
+          console.log(data);
+        }
       },
       dataType: "json"
     });

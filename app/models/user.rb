@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   validates_presence_of :username
   validates_uniqueness_of :username
+  validates_presence_of :email
+  validates_uniqueness_of :email
 
   after_create :attach_waiting_list
 
