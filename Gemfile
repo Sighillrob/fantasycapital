@@ -9,7 +9,7 @@ gem 'pg'
 
 gem 'gibbon'
 
-gem 'carmen-rails', '~> 1.0.0'
+gem 'carmen-rails', '~> 1.0.0', github: 'jim/carmen-rails'
 
 gem 'stripe'
 

@@ -7,6 +7,7 @@ Main::Application.routes.draw do
 
   devise_for :users, :controllers => {:sessions => 'sessions', :registrations => 'registrations' }
 
+  get '/users/subregion_options' => 'users#subregion_options'
   resources :entries
   resources :lineups do
     resource :entries

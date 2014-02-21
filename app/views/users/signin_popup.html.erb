@@ -1,10 +1,10 @@
 
 <div class="signin-popup">
-  <form id="user_form">
+  <%= form_for(@user, url: "/users", html: {id: "user_form"}) do |f| %>
     <h2>LOGIN OR REGISTER</h2>
     <div class="errors"></div>
     <div class="form-group">
-      <label for="user_username">Username</label>
+      <label for="user_username">*Username</label>
       <input type="text" id="user_username" name="user[username]" class="form-control">
     </div>
     <div class="form-group">
@@ -18,35 +18,71 @@
 
 
     <div class="form-group for-register">
-      <label for="user_first_name">First Name</label>
+      <label for="user_first_name">*First Name</label>
       <input type="text" id="user_first_name" name="user[first_name]" class="form-control">
     </div>
     <div class="form-group for-register">
-      <label for="user_last_name">Last Name</label>
+      <label for="user_last_name">*Last Name</label>
       <input type="text" id="user_last_name" name="user[last_name]" class="form-control">
     </div>
     <div class="form-group for-register">
-      <label for="user_email">Email</label>
+      <label for="user_email">*Email</label>
       <input type="email" id="user_email" name="user[email]" class="form-control">
     </div>
     <div class="form-group">
-      <label for="user_password_reg">Password</label>
+      <label for="user_password_reg">*Password</label>
       <input type="password" id="user_password" name="user[password]" class="form-control">
     </div>
     <div class="form-group for-register">
-      <label for="user_password_confirmation">Password Confirmation</label>
+      <label for="user_password_confirmation">*Password Confirmation</label>
       <input type="password" id="user_password_confirmation" name="user[password_reg]" class="form-control">
     </div>
+    <div class="form-group for-register">
+      <label for="user_country">*Country</label>
+      <%= f.country_select :country, {priority: %w(US CA)}, class: "form-control" %>
+    </div>
+
+    <div class="form-group for-register">
+      <label for="user_state">*State</label>
+      <%= render partial: 'subregion_select', locals: {parent_region: f.object.country} %>
+    </div>
+
+    <div class="form-group for-register">
+      <input type="checkbox" id="agree_terms" name="agree_terms" class="checkbox">
+      <label for="agree_terms">I agree the <a href="#" class="green">Terms of Use</a> and the <a href="#" class="green">Privacy Policy</a></label>
+    </div>
+
+    <div class="form-group for-register">
+      <input type="checkbox" id="agree_age" name="agree_age" class="checkbox">
+      <label for="agree_age">I confirm that I am at least 18 years of age. Must be 19 years of age in Alabama and Nebraska.</label>
+    </div>
+
     <div class="form-group">
       <input type="button" class="btn btn-default btn-login for-login" value="LOGIN">
       <input type="button" class="btn btn-default btn-register for-register" value="REGISTER">
       <input type="button" class="btn btn-default btn-cancel" value="CANCEL">
     </div>
-  </form>
+
+    <div class="form-group for-login">
+      <a href="#" class="green">Forgot your password?</a>
+    </div>
+  <% end %>
 
 </div>
 
 <script>
+
+$(function() {
+  $('select#user_country').change(function(e) {
+    var country_code, select_wrapper, url;
+    select_wrapper = $('#user_state_wrapper');
+    $('select', select_wrapper).attr('disabled', true);
+    country_code = $(this).val();
+    url = "/users/subregion_options?parent_region=" + country_code;
+    select_wrapper.load(url);
+  });
+});
+
 $(document).ready(function(){
 
   //switching the screen login<->register
@@ -116,6 +152,7 @@ $(document).ready(function(){
       beforeSend: function(){
         var errorContent = '';
 
+        var statesNot2Play = ['AZ', 'IA', 'MT', 'LA', 'WA'];
         if($('#user_username').val() == ''){
           errorContent += '<div>Please enter username!</div>';
         }
@@ -132,8 +169,9 @@ $(document).ready(function(){
           errorContent += '<div>Please enter valid email!</div>';
         }
 
-        if($('#user_password').val() == ''){
-          errorContent += '<div>Please enter password!</div>';
+        var password = $('#user_password').val();
+        if(password == '' || !password.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,15})$/)){
+          errorContent += '<div>Please enter valid password( 6 ~ 15 chars, at least one numbr )!</div>';
         }
 
         if($('#user_password_confirmation').val() == ''){
@@ -142,6 +180,22 @@ $(document).ready(function(){
 
         if($('#user_password_confirmation').val() != $('#user_password').val()){
           errorContent += '<div>Password confirmation does not match to password!</div>';
+        }
+
+        if($('#user_state').val() == ''){
+          errorContent += '<div>Please enter/select a state!</div>';
+        }
+
+        if($('#user_country').val() == 'US' && jQuery.inArray($('#user_state').val(), statesNot2Play) != -1){
+          errorContent += '<div>Does not allow to play in this state!</div>';
+        }
+
+        if($('#agree_terms').is(':checked') == false){
+          errorContent += '<div>You must agree to the Terms of Use and the Privacy Policy!</div>';
+        }
+
+        if($('#agree_age').is(':checked') == false){
+          errorContent += '<div>You must agree to the Age and Location Policy!</div>';
         }
 
         $('.errors').html(errorContent);
