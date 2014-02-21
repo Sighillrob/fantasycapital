@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20140221010014) do
 
   # These are extensions that must be enabled in order to support this database
@@ -269,6 +270,8 @@ ActiveRecord::Schema.define(version: 20140221010014) do
     t.string   "balanced_customer_id"
     t.integer  "balance",                default: 0
     t.string   "username"
+    t.string   "country"
+    t.string   "state"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -299,6 +302,6 @@ ActiveRecord::Schema.define(version: 20140221010014) do
 
   add_index "waiting_lists", ["invitation_token"], name: "index_waiting_lists_on_invitation_token", using: :btree
   add_index "waiting_lists", ["invited_by_token"], name: "index_waiting_lists_on_invited_by_token", using: :btree
-  add_index "waiting_lists", ["status"], name: "index_waiting_lists_on_status", using: :btree
+  add_index "waiting_lists", ["status"], name: "index_waiting_lists_on_status", using: :btree\
 
 end
