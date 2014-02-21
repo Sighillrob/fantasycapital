@@ -33,7 +33,7 @@ class ContestFactory
 
     def create_nba_contests(date=Time.now)
       NBA_CONTESTS.each do |row|
-        Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(date))
+        Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(date), contest_end: contest_end_time(date))
       end
     end
 
@@ -41,6 +41,10 @@ class ContestFactory
 
     def contest_start_time(date)
       date.in_time_zone('America/New_York').beginning_of_day.change({hour: 19})
+    end
+
+    def contest_end_time(date)
+      date.in_time_zone('America/New_York').beginning_of_day.change({hour: 23})
     end
 
   end

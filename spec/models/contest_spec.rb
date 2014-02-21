@@ -13,6 +13,7 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  max_entries   :integer
+#  contest_end   :datetime
 #
 
 require 'spec_helper'

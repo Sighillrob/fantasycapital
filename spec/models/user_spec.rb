@@ -19,6 +19,7 @@
 #  last_name              :string(255)
 #  balanced_customer_id   :string(255)
 #  balance                :integer          default(0)
+#  username               :string(255)
 #
 
 require 'spec_helper'

@@ -3,7 +3,6 @@
 # Table name: users
 #
 #  id                     :integer          not null, primary key
-#  username                  :string(255)      default(""), not null
 #  email                  :string(255)      default(""), not null
 #  encrypted_password     :string(255)      default(""), not null
 #  reset_password_token   :string(255)
@@ -20,6 +19,7 @@
 #  last_name              :string(255)
 #  balanced_customer_id   :string(255)
 #  balance                :integer          default(0)
+#  username               :string(255)
 #
 
 class User < ActiveRecord::Base

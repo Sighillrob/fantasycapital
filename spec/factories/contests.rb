@@ -13,6 +13,7 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  max_entries   :integer
+#  contest_end   :datetime
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
