@@ -30,6 +30,8 @@ Gem::Specification.new do |s|
     "lib/sportsdata-client/sports/nba.rb",
     "lib/sportsdata-client/sportsdata_gateway.rb",
     "lib/sportsdata-client/success_response.rb",
+    "spec/spec_helper.rb",
+    "spec/sportsdata_client_spec.rb",
     "sportsdata-client.gemspec"
   ]
   s.homepage = "http://github.com/kennethjiang/sportsdata-client"
@@ -43,29 +45,35 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, [">= 0"])
+      s.add_runtime_dependency(%q<httparty>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 2.0.1"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<debugger>, [">= 0"])
     else
       s.add_dependency(%q<activesupport>, [">= 0"])
+      s.add_dependency(%q<httparty>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.0"])
       s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
       s.add_dependency(%q<simplecov>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<debugger>, [">= 0"])
     end
   else
     s.add_dependency(%q<activesupport>, [">= 0"])
+    s.add_dependency(%q<httparty>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.0"])
     s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
     s.add_dependency(%q<simplecov>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<debugger>, [">= 0"])
   end
 end
 
