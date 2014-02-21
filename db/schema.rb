@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20140221010014) do
+ActiveRecord::Schema.define(version: 20140221090850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -302,6 +301,6 @@ ActiveRecord::Schema.define(version: 20140221010014) do
 
   add_index "waiting_lists", ["invitation_token"], name: "index_waiting_lists_on_invitation_token", using: :btree
   add_index "waiting_lists", ["invited_by_token"], name: "index_waiting_lists_on_invited_by_token", using: :btree
-  add_index "waiting_lists", ["status"], name: "index_waiting_lists_on_status", using: :btree\
+  add_index "waiting_lists", ["status"], name: "index_waiting_lists_on_status", using: :btree
 
 end
