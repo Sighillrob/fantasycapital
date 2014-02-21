@@ -54,6 +54,29 @@
     min-width: 220px;
     background-color: #2e363e;
     float: right;
+
+    .welcome-text{
+      padding-top: 13px;
+      padding-bottom: 13px;
+
+      a:hover{
+        text-decoration: none;
+      }
+    }
+
+    ul.usermenu{
+      position: absolute;
+      background: #505E6C;
+      right: 0;
+      list-style: none;
+      padding-left: 0;
+      margin-top: 5px;
+      display:none;
+
+      a:hover{
+        text-decoration: none;
+      }
+    }
     a {
       display: inline-block;
       padding-right: 5px;

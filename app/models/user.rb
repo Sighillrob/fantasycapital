@@ -37,9 +37,11 @@ class User < ActiveRecord::Base
   has_many :entries, through: :lineups
   has_many :contests, through: :entries
 
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, :country, :state, presence: true
   validates_presence_of :username
   validates_uniqueness_of :username
+  validates_presence_of :email
+  validates_uniqueness_of :email
 
   after_create :attach_waiting_list
 

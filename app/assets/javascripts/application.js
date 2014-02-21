@@ -44,6 +44,11 @@ $(document).ready(function(){
 		window.target_url = target_url;
 		new window.AjaxModal('/users/signin_popup').load()
 	});
+
+	$('.welcome-text > a').click(function(e){
+		e.preventDefault();
+		$('.usermenu').toggle();
+	});
 });
 
 function isEmailAddress(str) {
