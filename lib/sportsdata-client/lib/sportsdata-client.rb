@@ -1,3 +1,6 @@
+require 'active_support/all'
+require 'httparty'
+
 module SportsdataClient
   # stats account secret
   mattr_accessor :api_secret

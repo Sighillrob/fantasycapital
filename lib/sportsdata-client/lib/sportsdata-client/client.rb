@@ -6,7 +6,7 @@ module SportsdataClient
     RETRIES = 5
 
     include HTTParty
-    debug_output $stderr if Rails.env.development?
+    debug_output $stderr if (defined? Rails && Rails.env.development?)
     #logger SportsdataClient.logger, :info, :apache
     base_uri SportsdataClient.base_url
 
@@ -40,12 +40,12 @@ module SportsdataClient
 
     def with_retries(&block)
       begin
-        RETRIES.times do
+        max_retries.times do
           response = yield
           case response.code
           when 500...600
             puts "sleeping for for retry"
-            sleep RETRY_DELAY
+            sleep interval
           else
             return response
           end
@@ -53,10 +53,17 @@ module SportsdataClient
         end
       rescue Errno::ECONNREFUSED, SocketError, Net::ReadTimeout
         puts "sleeping for for retry"
-        sleep RETRY_DELAY
+        sleep interval
         retry
       end
     end
+
+    def max_retries
+      RETRIES
+    end
     
+    def interval
+      RETRY_DELAY
+    end
   end
 end

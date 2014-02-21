@@ -20,7 +20,7 @@ namespace :projection do
     games = Projection::Game.refresh_all(
       ['REG', 'PST'].reduce([]) do |sum, seg|
         sum + SportsdataClient::Sports::NBA.games(season, seg).result
-      end, Time.now - 3000.days
+      end, Time.now - 100.days
     )
 
     Rails.logger.info "Feteching and populating Player stats from SportsData"

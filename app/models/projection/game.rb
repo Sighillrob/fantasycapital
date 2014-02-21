@@ -46,7 +46,7 @@ module Projection
 
     def refresh_stats(teams_src)
       teams_src.select {|t| t["id"] == team.ext_team_id}.each do |team_src|
-        team_src['players']['player'].each do |player_src|
+        team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each do |player_src|
           player = Player.find_by_ext_player_id player_src["id"]
           if player.nil?
             logger.warn "#{player_src["id"]} not found...."
