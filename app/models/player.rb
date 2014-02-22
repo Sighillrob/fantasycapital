@@ -8,10 +8,10 @@
 #  updated_at        :datetime
 #  sport_position_id :integer
 #  salary            :integer
-#  stats_id          :integer
 #  first_name        :string(255)
 #  last_name         :string(255)
 #  dob               :date
+#  ext_player_id     :string(255)
 #
 
 class Player < ActiveRecord::Base

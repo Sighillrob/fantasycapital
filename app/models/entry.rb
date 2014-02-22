@@ -11,7 +11,7 @@
 
 class Entry < ActiveRecord::Base
   belongs_to :lineup, inverse_of: :entries
-  belongs_to :contest, inverse_of: :entries
+  belongs_to :contest, inverse_of: :entries, counter_cache: true
 
   validates :lineup, :contest, presence: true
 
