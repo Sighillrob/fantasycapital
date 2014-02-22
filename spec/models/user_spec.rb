@@ -20,6 +20,8 @@
 #  balanced_customer_id   :string(255)
 #  balance                :integer          default(0)
 #  username               :string(255)
+#  country                :string(255)
+#  state                  :string(255)
 #
 
 require 'spec_helper'

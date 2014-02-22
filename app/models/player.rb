@@ -8,15 +8,16 @@
 #  updated_at        :datetime
 #  sport_position_id :integer
 #  salary            :integer
-#  stats_id          :integer
 #  first_name        :string(255)
 #  last_name         :string(255)
 #  dob               :date
+#  ext_player_id     :string(255)
 #
 
 class Player < ActiveRecord::Base
   PRIORITIZE_SEQUENCE_NUMBER = 1
   FP_TO_SALARY_MULTIPLIER    = 250
+  PLAYER_MIN_SALARY = 3000
 
   belongs_to :sport_position
 
@@ -25,21 +26,24 @@ class Player < ActiveRecord::Base
   end
 
   def fantasy_points
-    Projection::Projection.where(player_id: Projection::Player.where(stats_player_id: stats_id)).order(updated_at: :desc).first.try(:fp) || 0
+    Projection::Projection.where(player_id: Projection::Player.where(ext_player_id: ext_player_id).first).order(updated_at: :desc).first.try(:fp) || 0
   end
 
-  def refresh!(player)
-    self.first_name = player.first_name
-    self.last_name  = player.last_name
-    self.dob        = player.date_of_birth
-    self.team       = player.team.name
+  def self.refresh_all(players_src, team_src)
+    players_src.each do |player_src|
+      player = Player.where(ext_player_id: player_src['id']).first_or_initialize
+      player.last_name = player_src['last_name']
+      player.first_name = player_src['first_name']
+      player.team = team_src['name']
+      player.dob = Time.parse(player_src['birthdate'])
 
-    #salary is fp * 250 rounded to nearest 100
-    salary = (self.fantasy_points * FP_TO_SALARY_MULTIPLIER / 100.0).round * 100
-    #min 3000
-    self.salary = [salary, 3000].max
-    if position = player.positions.detect {|pos| pos.sequence == PRIORITIZE_SEQUENCE_NUMBER } || player.positions.first
-      self.sport_position = SportPosition.where(name: position.abbreviation, sport: 'NBA').first_or_create
+      #salary is fp * 250 rounded to nearest 100
+      salary = (player.fantasy_points * FP_TO_SALARY_MULTIPLIER / 100.0).round * 100
+      #min 3000
+      player.salary = [salary, PLAYER_MIN_SALARY].max
+
+      player.sport_position = SportPosition.where(name: player_src['primary_position'], sport: 'NBA').first
+      player.save!
     end
   end
 end

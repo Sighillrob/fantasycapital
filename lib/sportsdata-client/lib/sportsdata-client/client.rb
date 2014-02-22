@@ -15,9 +15,8 @@ module SportsdataClient
     def request(action, params = {}, &block)
       params.merge! api_key: SportsdataClient.api_key
       params.delete_if { |k, v| v.nil? || v.empty? }
-      raw_response = self.class.get(api_url(action), query: params)
-      response = with_retries { raw_response }
-      parse_response raw_response, response, &block
+      response = with_retries { self.class.get(api_url(action), query: params) }
+      parse_response response, &block
     end
 
     protected
@@ -29,8 +28,8 @@ module SportsdataClient
        "/#{action_prefix}/#{action}"
     end
 
-    def parse_response(http_request, response, &block)
-      if http_request.success?
+    def parse_response(response, &block)
+      if response.success?
         results =  block_given? ? yield(response.parsed_response) : response.parsed_response
         SportsdataClient::SuccessResponse.new response, results
       else
@@ -39,8 +38,10 @@ module SportsdataClient
     end
 
     def with_retries(&block)
+      retries_left = max_retries
       begin
-        max_retries.times do
+        response = nil
+        retries_left.times do
           response = yield
           case response.code
           when 500...600
@@ -49,12 +50,16 @@ module SportsdataClient
           else
             return response
           end
-          response
         end
+        response
       rescue Errno::ECONNREFUSED, SocketError, Net::ReadTimeout
+        if (retries_left -= 1) > 0
         puts "sleeping for for retry"
         sleep interval
         retry
+        else
+          raise
+        end
       end
     end
 

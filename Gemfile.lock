@@ -11,6 +11,7 @@ PATH
   specs:
     sportsdata-client (0.1.0)
       activesupport
+      httparty
     stats_client (0.0.0)
       crack
       httparty
