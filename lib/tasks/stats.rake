@@ -29,25 +29,18 @@ namespace :stats do
 
   desc "Populate contests from stats api"
   task fetch_contests: [:environment] do
-    response = StatsClient::Sports::Basketball::NBA.sports_for_today
+    response = SportsdataClient::Sports::NBA.games_scheduled(Time.now)
     #populate contests only when there are 3 or more games for the day
     if response.success? && response.result.count >= 3
       ContestFactory.create_nba_contests
     end
   end
 
-  desc "Populate players for NBA from stats api"
+  desc "Populate players for NBA from SportsData api"
   task fetch_players: [:environment] do
-    response = StatsClient::Sports::Basketball::NBA.players
-    if response.success?  
-      response.result.each do |p|
-        #TODO: we'll update this for all sports soon, for now we are focusing on NBA only
-        Rails.logger.info "creating player with stats ID #{p.id}"
-        player  = Player.where(stats_id: p.id).first_or_create
-        player.refresh! p
-        player.save
-      end
-
+    teams = SportsdataClient::Sports::NBA.teams.result
+    teams.each do |team|
+      Player.refresh_all SportsdataClient::Sports::NBA.players(team['id']).result, team
     end
   end
 
