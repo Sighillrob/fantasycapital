@@ -24,15 +24,15 @@ class Entry < ActiveRecord::Base
   class << self
 
     def live
-      joins(:contest).where "contests.contest_start BETWEEN ? AND ?", DateTime.now - 3.hour, DateTime.now + 3.hour
+      joins(:contest).for_day(DateTime.now).where "contests.contest_start <= ? AND contests.contest_end >= ?", DateTime.now, DateTime.now
     end
 
     def completed
-      joins(:contest).where "contests.contest_start < ?", DateTime.now
+      joins(:contest).for_day(DateTime.now).where "contests.contest_end < ?", DateTime.now
     end
 
     def upcoming
-      joins(:contest).where "contests.contest_start > ?", DateTime.now
+      joins(:contest).for_day(DateTime.now).where "contests.contest_start > ?", DateTime.now
     end
 
     def for_day(day)
