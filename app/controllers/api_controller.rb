@@ -35,7 +35,7 @@ class ApiController < ApplicationController
       upcomingContest['entry_fee'] = contest.entry_fee
       upcomingContest['prize'] = contest.prize
       upcomingContest['entry_size'] = contest.entries.size
-      upcomingContest['edit_path'] = edit_lineup_path(entry.lineup)
+      upcomingContest['edit_path'] = edit_lineup_path(Lineup.find_by_id(entry.lineup_id))
       upcomingContest['view_path'] = entry_path(entry)
 
       upcomingContests.push(upcomingContest)
