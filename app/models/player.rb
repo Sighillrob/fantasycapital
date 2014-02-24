@@ -20,6 +20,7 @@ class Player < ActiveRecord::Base
   PLAYER_MIN_SALARY = 3000
 
   belongs_to :sport_position
+  has_many :player_stats, inverse_of: :player
 
   def name
     "#{first_name} #{last_name}"

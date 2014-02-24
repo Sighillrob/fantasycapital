@@ -44,4 +44,17 @@ namespace :stats do
     end
   end
 
+  task dummy_stats: [:environment ] do
+    PlayerStat.delete_all
+    Player.all.each do |player|
+      ["summary", "matchup"].each do |dim|
+        ["12/1", "11/24", "11/17", "Home Games", "Away Games", "2013 Season"].each do |span|
+          ["MPG", "RPG", "APG", "BLKPG", "STLPG", "PFPG", "TOPG", "PPG", "FPPG"].each do |stat|
+            PlayerStat.create(dimension: dim, time_span: span, stat_name: stat, stat_value: "10.0", player: player)
+          end
+        end
+      end
+    end
+  end
+
 end
