@@ -14,6 +14,7 @@ class Lineup
         that.clear()
 
     $('a.add-to-lineup').on 'click', ->
+      console.log('add to lineup');
       player = new window.Player($(@).closest('tr.contest-player'))
       if that.canAddPlayer(player)
         eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)

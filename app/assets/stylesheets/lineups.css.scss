@@ -288,6 +288,7 @@ ul.completedcontest li {
   border-bottom: 2px solid #D44600;
   margin: 10px 0;
   min-height: 40px;
+  text-transform: uppercase;
 }
 
 .capitalpopup h2, .capitalpopup h3, .capitalpopup h4 {
@@ -314,6 +315,7 @@ ul.completedcontest li {
   float: right;
   font-size: 25px;
   padding: 10px 20px;
+  cursor: pointer;
 }
 
 table.summarymatchup {
