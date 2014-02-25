@@ -9,9 +9,9 @@ module Projection
         "blocks" => 2,
         "turnovers" => -1 }
       @games_weights = {
-        "player.stats_in_last_1_game" => lambda {|x| x * 0.15 / 1.0},
-        "player.stats_in_last_3_games" => lambda {|x| x * 0.15 / 3.0},
-        "player.stats_in_last_10_games" => lambda {|x| x * 0.20 / 10.0},
+        "player.last_1_game" => lambda {|x| x * 0.15 },
+        "player.last_3_games" => lambda {|x| x * 0.15 },
+        "player.last_10_games" => lambda {|x| x * 0.20 },
         "opponent_team" => lambda {|x| x * 0.50 }
       }
       # load weights and other parameters from rule file
@@ -53,7 +53,7 @@ module Projection
           avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp) * avg_mins / 48.0
         else
-          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name}
+          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
         end
         p_by_s_c.save!
@@ -66,7 +66,7 @@ module Projection
       stat_name = "minutes"
       p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
       p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: "last_3_games").first_or_create
-      p_by_s_c.fp = (stats_sum(player.stats_in_last_3_games, p_by_s_c) {|stat| stat.stat_name == stat_name})  / 3.0
+      p_by_s_c.fp = stats_sum(player.last_3_games, p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
       p_by_stat.fp = p_by_s_c.fp
       p_by_s_c.weighted_fp = 0.0
       p_by_stat.weighted_fp = 0.0
@@ -79,14 +79,18 @@ module Projection
       games = Game.includes(:opponent_team, stats: :player).where(opponent_team: team).order(start_date: :desc).limit(10)
       return 0 if games.size == 0
       stats = games.reduce([]) {|stats, game| stats + game.stats}
-      stats_sum(stats.select {|stat| stat.stat_name == stat_name && stat.player.position == position}, p_by_s_c) / games.size
+      stats_sum(games, p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == position}
     end
 
-    def stats_sum(stats, proj_by_stat_crit)
-      (block_given? ? stats.select {|s| yield s} : stats).reduce(0.0) do |fp, stat|
+    def stats_sum(games, proj_by_stat_crit)
+      return 0 if games.size == 0
+
+      stats =  Stat.includes(:game).where(game_id: games)
+      eligible_stats = block_given? ? stats.select {|s| yield s} : stats
+      eligible_stats.reduce(0.0) do |fp, stat|
         pb = ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create
         fp += stat.stat_value
-      end
+      end / games.size
     end
 
     def method_missing(method_name, *args, &block)
