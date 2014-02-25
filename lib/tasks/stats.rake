@@ -29,7 +29,7 @@ namespace :stats do
 
   desc "Populate contests from stats api"
   task fetch_contests: [:environment] do
-    ContestFactory.create_nba_contests SportsdataClient::Sports::NBA.games_scheduled(Time.now).result
+    ContestFactory.create_nba_contests
   end
 
   desc "Populate players for NBA from SportsData api"
@@ -42,7 +42,7 @@ namespace :stats do
 
   desc "Populate player's historical stats"
   task stats: [:environment] do
-    Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
+    Projection::ScheduledGame.games_on.each do |scheduled_game|
       StatService.new.update_player_stats(scheduled_game)
     end
   end

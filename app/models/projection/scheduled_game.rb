@@ -33,6 +33,10 @@ module Projection
           game.save!
         end
       end
+
+      def games_on(date=Time.now)
+        where(start_date: date.in_est.beginning_of_day..date.in_est.end_of_day)
+      end
     end
 
   end

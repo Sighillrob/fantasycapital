@@ -10,7 +10,7 @@ class LineupsController < ApplicationController
 
   def edit
     @contest = @lineup.entries[0].contest
-    @positions = SportPosition.where(sport: @lineup.sport, visible: true).includes(:players).order(display_priority: :asc) 
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc) 
   end
 
   def result

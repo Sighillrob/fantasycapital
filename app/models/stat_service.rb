@@ -30,6 +30,7 @@ class StatService
       [[scheduled_game.home_team, scheduled_game.away_team], [scheduled_game.away_team, scheduled_game.home_team]].each do |(team1, team2)|
         team1.players.each do |p_player|
           player = Player.where(ext_player_id: p_player.ext_player_id).first
+          next if player.nil?
           player.player_stats.delete_all
           p_opponent_team = team2
 

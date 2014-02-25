@@ -71,7 +71,7 @@
         </tr>
         </thead>
         <tbody>
-          <%= render partial: 'lineups/lineup_player', collection: Player.eager_load(:sport_position).all, as: :player %>
+          <%= render partial: 'lineups/lineup_player', collection: @contest.eligible_players, as: :player %>
         </tbody>
       </table>
     </div>
