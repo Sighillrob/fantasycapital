@@ -1,16 +1,10 @@
 require 'spec_helper'
 
 describe Projection::FantasyPointCalculator do
-  let(:player) do
-    p = create(:projection_player)
-    create(:projection_stat, stat_name: "Points", stat_value: 10)
-    create(:projection_stat, stat_name: "Rebounds", stat_value: 8)
-  end
 
-  subject { Projection::FantasyPointCalculator.new(player) }
+  subject { Projection::FantasyPointCalculator.new }
 
   describe "only 1 game exists" do
-#    its(:latest_points) { should == 10 + 8*1.25 }
 
     context "all NBA stats are in" do
       before(:each) do

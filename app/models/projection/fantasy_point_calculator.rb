@@ -9,10 +9,10 @@ module Projection
         "blocks" => 2,
         "turnovers" => -1 }
       @games_weights = {
-        "player.last_1_game" => 0.15,
-        "player.last_3_games" => 0.15,
-        "player.last_10_games" => 0.20,
-        "opponent_team" => 0.50
+        "player.stats_in_last_1_game" => lambda {|x| x * 0.15 / 1.0},
+        "player.stats_in_last_3_games" => lambda {|x| x * 0.15 / 3.0},
+        "player.stats_in_last_10_games" => lambda {|x| x * 0.20 / 10.0},
+        "opponent_team" => lambda {|x| x * 0.50 }
       }
       # load weights and other parameters from rule file
       self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
@@ -44,17 +44,17 @@ module Projection
 
     def fp_of_stat(stat_name, player, opponent_team, p_by_stat)
 
-      p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, weight)|
+      p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, calculation)|
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
         if ( criteria == "opponent_team" )
           p_by_s_c.fp = team_stat(opponent_team, player.position, stat_name, p_by_s_c)
           # opponent's stat should be factored by minutes played
           avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
-          p_by_s_c.weighted_fp = p_by_s_c.fp * weight * avg_mins / 48.0
+          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp) * avg_mins / 48.0
         else
-          p_by_s_c.fp = stats_avg(eval(criteria), player, stat_name, p_by_s_c)
-          p_by_s_c.weighted_fp = p_by_s_c.fp * weight
+          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name}
+          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
         end
         p_by_s_c.save!
 
@@ -66,19 +66,13 @@ module Projection
       stat_name = "minutes"
       p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
       p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: "last_3_games").first_or_create
-      p_by_s_c.fp = stats_avg(player.last_3_games, player, stat_name, p_by_s_c) 
-      p_by_stat.fp = stats_avg(player.last_3_games, player, stat_name, p_by_s_c)
+      p_by_s_c.fp = (stats_sum(player.stats_in_last_3_games, p_by_s_c) {|stat| stat.stat_name == stat_name})  / 3.0
+      p_by_stat.fp = p_by_s_c.fp
       p_by_s_c.weighted_fp = 0.0
       p_by_stat.weighted_fp = 0.0
       p_by_s_c.save!
       p_by_stat.save!
       p_by_s_c.fp
-    end
-
-    def stats_avg(games, player, stat_name, p_by_s_c)
-      return 0 if games.size == 0
-      stats = games.reduce([]) {|stats, game| stats + game.stats}
-      stats_sum(stats.select {|stat| stat.stat_name == stat_name && stat.player == player}, p_by_s_c) / games.size
     end
 
     def team_stat(team, position, stat_name, p_by_s_c)
@@ -89,7 +83,7 @@ module Projection
     end
 
     def stats_sum(stats, proj_by_stat_crit)
-      stats.reduce(0.0) do |fp, stat|
+      (block_given? ? stats.select {|s| yield s} : stats).reduce(0.0) do |fp, stat|
         pb = ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create
         fp += stat.stat_value
       end

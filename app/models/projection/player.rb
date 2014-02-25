@@ -32,15 +32,15 @@ module Projection
     end
 
     def method_missing(method_name, *args, &block)
-      if m = /^last_(\d+)_game[s]*$/.match(method_name)
-        self._last_games(m[1].to_i)
+      if m = /^stats_in_last_(\d+)_game[s]*$/.match(method_name)
+        self.stats_in_last_games(m[1].to_i)
       else
         super
       end
     end
     
-    def _last_games(x)
-      GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game}
+    def stats_in_last_games(x)
+      Stat.where( player: self, game_id: (GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game} ) )
     end
 
   end
