@@ -32,14 +32,14 @@ module Projection
 
     def method_missing(method_name, *args, &block)
       if m = /^defense_allowed_in_last_(\d+)_game[s]*$/.match(method_name)
-        self.defense_allowed_in_last_games(m[1].to_i, args)
+        self.defense_allowed_in_last_games(m[1].to_i)
       else
         super
       end
     end
     
-    def defense_allowed_in_last_games(x, position)
-      Stat.where( player: self, game_id: (GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game} ) )
+    def defense_allowed_in_last_games(x)
+      Game.includes(:opponent_team, stats: :player).where(opponent_team: self).order(start_date: :asc).last(x)
     end
 
   end

@@ -5,7 +5,7 @@ rebounds 1.25
 blocks 2
 turnovers -1 
 
-last_1_game lambda {|x| x * 0.15}
-last_3_games lambda {|x| x * 0.15}
-last_10_games lambda {|x| x * 0.20}
-opponent_team lambda {|x| x * 0.50 }
+player__last_1_game lambda {|x| x * 0.15}
+player__last_3_games lambda {|x| x * 0.15}
+player__last_10_games lambda {|x| x * 0.20}
+opponent_team__defense_allowed_in_last_10_games lambda {|x| x * 0.50 }

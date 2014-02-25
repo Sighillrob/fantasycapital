@@ -12,7 +12,7 @@ module Projection
         "player.last_1_game" => lambda {|x| x * 0.15 },
         "player.last_3_games" => lambda {|x| x * 0.15 },
         "player.last_10_games" => lambda {|x| x * 0.20 },
-        "opponent_team" => lambda {|x| x * 0.50 }
+        "opponent_team.defense_allowed_in_last_10_games" => lambda {|x| x * 0.50 }
       }
       # load weights and other parameters from rule file
       self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
@@ -47,8 +47,8 @@ module Projection
       p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, calculation)|
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
-        if ( criteria == "opponent_team" )
-          p_by_s_c.fp = team_stat(opponent_team, player.position, stat_name, p_by_s_c)
+        if ( criteria.start_with? "opponent_team" )
+          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == player.position}
           # opponent's stat should be factored by minutes played
           avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp) * avg_mins / 48.0
@@ -75,13 +75,6 @@ module Projection
       p_by_s_c.fp
     end
 
-    def team_stat(team, position, stat_name, p_by_s_c)
-      games = Game.includes(:opponent_team, stats: :player).where(opponent_team: team).order(start_date: :desc).limit(10)
-      return 0 if games.size == 0
-      stats = games.reduce([]) {|stats, game| stats + game.stats}
-      stats_sum(games, p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == position}
-    end
-
     def stats_sum(games, proj_by_stat_crit)
       return 0 if games.size == 0
 
@@ -96,10 +89,8 @@ module Projection
     def method_missing(method_name, *args, &block)
       if @stat_weights.keys.include?(method_name.to_s)
         @stat_weights[method_name.to_s] = args[0]
-      elsif @games_weights.keys.include?(method_name.to_s)
-        @games_weights[method_name.to_s] = args[0]
-      elsif @games_weights.keys.include?("player." +method_name.to_s)
-        @games_weights["player."+method_name.to_s] = args[0]
+      elsif @games_weights.keys.include?(method_name.to_s.sub("__", "."))
+        @games_weights[method_name.to_s.sub("__", ".")] = args[0]
       else
         super
       end
