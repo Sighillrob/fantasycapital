@@ -16,11 +16,10 @@ namespace :projection do
     end
 
     Rails.logger.info "Feteching and populating Games from SportsData"
-    season = (Time.now.month < 10) ? Time.now.year - 1 : Time.now.year
+    cutoff = ENV['cutoff'] || "10"
     games = Projection::Game.refresh_all(
-      ['REG', 'PST'].reduce([]) do |sum, seg|
-        sum + SportsdataClient::Sports::NBA.games(season, seg).result
-      end, Time.now - 10.days
+        ( SportsdataClient::Sports::NBA.regular_season_games.result + SportsdataClient::Sports::NBA.post_season_games.result ),
+      Time.now - cutoff.to_i.days
     )
 
     Rails.logger.info "Feteching and populating Player stats from SportsData"

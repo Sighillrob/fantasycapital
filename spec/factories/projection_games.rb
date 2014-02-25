@@ -9,6 +9,8 @@
 #  team_id          :integer
 #  opponent_team_id :integer
 #  ext_game_id      :string(255)
+#  home_team_id     :integer
+#  away_team_id     :integer
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

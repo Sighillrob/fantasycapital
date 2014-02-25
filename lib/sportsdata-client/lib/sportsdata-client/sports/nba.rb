@@ -3,6 +3,10 @@ module SportsdataClient
       class NBA < SportsdataClient::SportsdataGateway
 
         class << self
+          def current_season
+            season = (Time.now.month < 10) ? Time.now.year - 1 : Time.now.year
+          end
+
           def teams(season= nil)
             client.request 'league/hierarchy.xml' do |response|
               SportsdataClient::ResponseParser.new(response).parse 'team'
@@ -14,6 +18,14 @@ module SportsdataClient
                 SportsdataClient::ResponseParser.new(response).parse 'player'
             end
           end
+
+          def regular_season_games(season=current_season)
+            games(season, 'REG')
+          end
+
+          def post_season_games(season=current_season)
+            games(season, 'PST')
+          end 
 
           def games(season, nba_season)
             client.request "games/#{season}/#{nba_season}/schedule.xml" do |response|

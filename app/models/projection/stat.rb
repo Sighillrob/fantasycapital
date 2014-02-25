@@ -17,12 +17,14 @@ module Projection
     belongs_to :player
   
     STATS_ALLOWED = { 
+      "fp" => nil,
       "points" => nil,
       "assists" => nil,
       "steals" => nil,
       "rebounds" => nil,
       "blocks" => nil,
       "turnovers" => nil,
+      "personal_fouls" => nil,
       "minutes" => lambda {|x| (m,s) = x.split(":"); m.to_f + s.to_f/60.0}
     }
   

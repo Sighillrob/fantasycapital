@@ -48,12 +48,12 @@ module Projection
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
         if ( criteria.start_with? "opponent_team" )
-          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == player.position}
+          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == player.position}
           # opponent's stat should be factored by minutes played
           avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp) * avg_mins / 48.0
         else
-          p_by_s_c.fp = stats_sum(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
+          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
         end
         p_by_s_c.save!
@@ -66,7 +66,7 @@ module Projection
       stat_name = "minutes"
       p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
       p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: "last_3_games").first_or_create
-      p_by_s_c.fp = stats_sum(player.last_3_games, p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
+      p_by_s_c.fp = avg_stats_per_game(player.last_3_games, p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
       p_by_stat.fp = p_by_s_c.fp
       p_by_s_c.weighted_fp = 0.0
       p_by_stat.weighted_fp = 0.0
@@ -75,13 +75,13 @@ module Projection
       p_by_s_c.fp
     end
 
-    def stats_sum(games, proj_by_stat_crit)
+    def avg_stats_per_game(games, proj_by_stat_crit=nil)
       return 0 if games.size == 0
 
       stats =  Stat.includes(:game).where(game_id: games)
       eligible_stats = block_given? ? stats.select {|s| yield s} : stats
       eligible_stats.reduce(0.0) do |fp, stat|
-        pb = ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create
+        ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create unless proj_by_stat_crit.nil?
         fp += stat.stat_value
       end / games.size
     end

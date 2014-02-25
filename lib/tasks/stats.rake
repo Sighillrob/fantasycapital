@@ -44,6 +44,13 @@ namespace :stats do
     end
   end
 
+  desc "Populate player's historical stats"
+  task stats: [:environment] do
+    Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
+      StatService.new.update_player_stats(scheduled_game)
+    end
+  end
+
   task dummy_stats: [:environment ] do
     PlayerStat.delete_all
     Player.all.each do |player|

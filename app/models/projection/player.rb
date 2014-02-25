@@ -34,13 +34,31 @@ module Projection
     def method_missing(method_name, *args, &block)
       if m = /^last_(\d+)_game[s]*$/.match(method_name)
         self.last_games(m[1].to_i)
+      elsif m = /^the_(\d+)\w\w_game_to_last$/.match(method_name)
+        self.the_game_to_last(m[1].to_i)
       else
         super
       end
     end
     
     def last_games(x)
-      GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|x| x.game} 
+      GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|g| g.game} 
+    end
+
+    def the_game_to_last(x)
+      self.last_games(x+1).reverse[x,1]
+    end
+
+    def home_games
+      GamePlayed.includes(:game).where(player: self, "projection_games.home_team_id" => self.team).map {|g| g.game} 
+    end
+
+    def away_games
+      GamePlayed.includes(:game).where(player: self, "projection_games.away_team_id" => self.team).map {|g| g.game} 
+    end
+
+    def all_games
+      GamePlayed.includes(:game).where(player: self).map {|g| g.game} 
     end
 
   end
