@@ -17,7 +17,7 @@ class Player
 
   bindAll: ->
     $(".player-stats").on 'click', ->
-      new window.AjaxModal($(@).data('stats-url')).load()
+      new window.AjaxModal4Container($(@).data('stats-url')).load()
 
 $ ->
   window.Player = Player
