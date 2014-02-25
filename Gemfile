@@ -87,6 +87,8 @@ group :development, :test do
   gem "rspec-rails"
   gem 'meta_request'
   gem 'debugger'
+  gem 'ruby-prof'
+  gem 'rails-perftest'
 end
 
 group :test do

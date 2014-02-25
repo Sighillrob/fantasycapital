@@ -31,9 +31,18 @@ class ContestFactory
 
   class << self
 
-    def create_nba_contests(date=Time.now)
+    def create_nba_contests(games_src)
+      #populate contests only when there are 3 or more games for the day
+      return if games_src.nil? || games_src.count < 3
+      p_teams = Projection::Team.includes(:players).where(ext_team_id: games_src.reduce([]) {|teams, game| teams + [game['home_team'], game['away_team']]})
+      players = p_teams.reduce([]) {|p, t| p + Player.where(ext_player_id: t.players.map {|pp| pp.ext_player_id})}
+
+      contest_date = Time.parse(games_src[0]["scheduled"])
       NBA_CONTESTS.each do |row|
-        Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(date), contest_end: contest_end_time(date))
+        c = Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(contest_date), contest_end: contest_end_time(contest_date))
+        players.each do |p|
+          PlayerContest.where(contest: c, player: p).first_or_create
+        end
       end
     end
 

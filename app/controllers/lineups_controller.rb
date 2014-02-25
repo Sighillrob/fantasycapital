@@ -3,9 +3,9 @@ class LineupsController < ApplicationController
   before_action :set_lineup, only: [:edit, :update]
 
   def new
-    @contest = Contest.find(params[:contest_id])
-    @lineup    = Lineup.build_for_contest @contest
-    @positions = SportPosition.where(sport: @lineup.sport, visible: true).includes(:players).order(display_priority: :asc) 
+    @contest = Contest.includes(:eligible_players).find(params[:contest_id])
+    @lineup  = Lineup.build_for_contest @contest
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc) 
   end
 
   def edit

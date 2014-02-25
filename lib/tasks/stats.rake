@@ -29,11 +29,7 @@ namespace :stats do
 
   desc "Populate contests from stats api"
   task fetch_contests: [:environment] do
-    response = SportsdataClient::Sports::NBA.games_scheduled(Time.now)
-    #populate contests only when there are 3 or more games for the day
-    if response.success? && response.result.count >= 3
-      ContestFactory.create_nba_contests
-    end
+    ContestFactory.create_nba_contests SportsdataClient::Sports::NBA.games_scheduled(Time.now).result
   end
 
   desc "Populate players for NBA from SportsData api"
