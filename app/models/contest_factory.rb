@@ -36,10 +36,9 @@ class ContestFactory
       #populate contests only when there are 3 or more games for the day
       return if games.count < 3
       p_teams = games.reduce([]) {|t,g| t + [g.home_team, g.away_team]}
-      debugger
       players = p_teams.reduce([]) {|p, t| p + Player.where(ext_player_id: t.players.map {|pp| pp.ext_player_id})}
 
-      contest_date = game[0].start_date
+      contest_date = games[0].start_date
       NBA_CONTESTS.each do |row|
         c = Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(contest_date), contest_end: contest_end_time(contest_date))
         players.each do |p|
