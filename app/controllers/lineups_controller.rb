@@ -57,20 +57,8 @@ class LineupsController < ApplicationController
     @lineups = current_user.lineups.includes([:lineup_spots]).order(updated_at: :desc).limit 3
   end
 
-  def update
-   @lineup = current_user.lineups.find(params[:id])
-
-   respond_to do |format|
-     if @lineup.update_attributes(lineup_parameters)
-       format.html { redirect_to lineups_path, notice: 'Lineup was successfully updated.' }
-       format.json { render action: 'show', status: :created, location: @lineup }
-     else
-       @positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
-       format.html { render action: 'edit' }
-       format.json { render json: @entry.errors, status: :unprocessable_entity }
-     end
-   end
-
+  def export
+    render layout: false
   end
 
   private

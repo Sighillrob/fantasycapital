@@ -291,6 +291,14 @@ ul.completedcontest li {
   text-transform: uppercase;
 }
 
+.capitalpopup .popupSubTitle {
+  padding-bottom: 10px;
+  border-bottom: 2px solid #d1d1d1;
+  h3{
+    float: none;
+  }
+}
+
 .capitalpopup h2, .capitalpopup h3, .capitalpopup h4 {
   float: left;
 }
@@ -640,3 +648,48 @@ table.summarymatchup tbody tr:last-child {
     }
   }
 }
+/*------------------------------------- -----------------*/
+
+/*-----------export lineup popup -----------------*/
+
+.contests-container{
+  .contests{
+    width: 100%;
+    font-size: 15px;
+    tr{
+      border-bottom: 1px solid #d1d1d1;
+      th{
+        padding: 7px 5px;
+        text-align: right;
+        &:nth-child(1){
+          text-align: left;
+        }
+      }
+
+      td{
+        padding: 7px 5px;
+        text-align: right;
+
+        &:nth-child(1){
+          text-align: left;
+        }
+
+        .table-btn{
+          background: #505e6c;
+          padding: 5px 15px;
+          color: $theme-green;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+.actions-container{
+  padding: 10px 0;
+  .no-thanks{
+    float: right;
+  }
+}
+
+/*------------------------------------- -----------------*/
