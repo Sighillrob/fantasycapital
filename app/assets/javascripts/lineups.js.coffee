@@ -20,3 +20,6 @@ $ ->
     $('.new-lineup-popup .time-list li a').click ->
     	$('.new-lineup-popup .time-list li a.selected').removeClass('selected');
     	$(this).addClass('selected');
+
+    $(".lineup-export").click ->
+        new window.AjaxModal4Container($(@).data('stats-url')).load();

@@ -10,6 +10,9 @@ Main::Application.routes.draw do
   get '/users/subregion_options' => 'users#subregion_options'
   resources :entries
   resources :lineups do
+    member do
+      get :export
+    end
     resource :entries
   end
   resources :players, only: [] do
