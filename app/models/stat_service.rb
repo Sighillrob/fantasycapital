@@ -38,7 +38,7 @@ class StatService
             @span_map.each do |span, span_display|
               @stat_map.each do |stat_name, stat_display|
                 games = eval(subject + span)
-                next if games.nil?
+                next if games.nil? || games.size == 0
                 stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
                 PlayerStat.create(dimension: dim_display, time_span: span_display.call(games), stat_name: stat_display, stat_value: stat_value.to_s, player: player)
               end # of stat
