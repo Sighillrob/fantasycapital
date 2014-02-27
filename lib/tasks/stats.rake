@@ -41,9 +41,9 @@ namespace :stats do
   end
 
   desc "Populate player's historical stats"
-  task stats: [:environment] do
+  task player_stats: [:environment] do
     Projection::ScheduledGame.games_on.each do |scheduled_game|
-      StatService.new.update_player_stats(scheduled_game)
+      Resque.enqueue(PlayerStatsWorker, scheduled_game.id)
     end
   end
 

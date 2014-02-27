@@ -35,6 +35,7 @@ class ContestFactory
       games = Projection::ScheduledGame.games_on
       #populate contests only when there are 3 or more games for the day
       return if games.count < 3
+
       p_teams = games.reduce([]) {|t,g| t + [g.home_team, g.away_team]}
       players = p_teams.reduce([]) {|p, t| p + Player.where(ext_player_id: t.players.map {|pp| pp.ext_player_id})}
 
