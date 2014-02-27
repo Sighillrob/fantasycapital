@@ -78,7 +78,7 @@ module Projection
     def avg_stats_per_game(games, proj_by_stat_crit=nil)
       return 0 if games.size == 0
 
-      stats =  Stat.includes(:game).where(game_id: games)
+      stats =  Stat.includes(:game, :player).where(game_id: games)
       eligible_stats = block_given? ? stats.select {|s| yield s} : stats
       eligible_stats.reduce(0.0) do |fp, stat|
         ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create unless proj_by_stat_crit.nil?

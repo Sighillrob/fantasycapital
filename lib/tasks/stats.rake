@@ -23,12 +23,12 @@ namespace :stats do
 
   desc "Daily task"
   task daily_task: [:environment] do
-    safe_rake_tasks "stats:fetch_contests"
+    safe_rake_tasks "stats:create_contests"
     safe_rake_tasks "stats:fetch_players"
   end
 
   desc "Populate contests from stats api"
-  task fetch_contests: [:environment] do
+  task create_contests: [:environment] do
     ContestFactory.create_nba_contests
   end
 

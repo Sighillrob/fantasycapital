@@ -35,7 +35,7 @@ namespace :projection do
   task fp: [:environment] do
     Rails.logger.info "Calculating FP..."
     Projection::ScheduledGame.where("start_date > ?", 1.days.ago).each do |scheduled_game|
-      Projection::FantasyPointCalculator.new.update scheduled_game
+      Resque.enqueue(FPCalculationWorker, scheduled_game.id)
     end
   end
 

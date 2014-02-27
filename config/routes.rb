@@ -1,4 +1,10 @@
+require "resque_web"
+
 Main::Application.routes.draw do
+
+
+  mount ResqueWeb::Engine => "/resque_web"
+
   get "users/leadboard"
   get "users/signin_popup"
 

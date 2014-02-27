@@ -44,6 +44,9 @@ gem "sportsdata-client", path: "lib/"
 gem 'newrelic_rpm'
 gem 'newrelic-rake'
 
+gem 'resque', require: "resque/server"
+gem 'resque-web', require: 'resque_web'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 1.2'
 
