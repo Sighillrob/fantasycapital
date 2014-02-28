@@ -60,7 +60,7 @@
     <div class="form-group">
       <input type="button" class="btn btn-default btn-login for-login" value="LOGIN">
       <input type="button" class="btn btn-default btn-register for-register" value="REGISTER">
-      <input type="button" class="btn btn-default btn-cancel" value="CANCEL">
+      <input type="button" class="btn btn-default btn-cancel" data-dismiss="modal" value="CANCEL">
     </div>
 
     <div class="form-group for-login">
@@ -96,12 +96,6 @@ $(document).ready(function(){
     }
   })
 
-  $('.btn-cancel').click(function(){
-    if ($('#ajax-modal').length > 0){
-      $('.modal-scrollable').remove()
-      $('.modal-backdrop').remove(); 
-    }
-  });
 
   $('.btn-login').click(function(e){
     var url = "/users/sign_in"
