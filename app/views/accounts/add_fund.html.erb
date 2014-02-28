@@ -1,263 +1,144 @@
-<div class="container addfunds" data-stripe-action="card">
-  <div class="addfunds_popup">
+<div class="addfunds" data-stripe-action="card">
+  <div class="addfunds-popup">
     <div class="popupTitle">
-      <h2>ADD FUNDS
-      <button type="button" id="populate" style="display:inline;" class="btn btn-default">Populate Test Data</button>
-      </h2>
-
+      <h2 class="pull-left">ADD FUNDS</h2>
       <button data-dismiss="modal" class="btnClose" type="button">X</button>
     </div>
     <p>To play FantasyCapital for real money you need to add funds to your account. Don’t worry, you can withdraw your
       money at any time for free.</p>
 
-    <div class="col-md-10 paypalcontainer">
-      <div class="container paypaltabs">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#creditcard" data-toggle="tab">Pay with Credit Card</a></li>
-          <li><a href="#paypal" data-toggle="tab">Pay with Paypal</a></li>
-        </ul>
-
-        <div class="tab-content">
-          <div class="tab-pane active" id="creditcard">
-
-            <div style="display:none;" class="error-container form-group has-error"></div>
-
-            <% if @credit_card  %>
-              <table id="existingCardContainer" class="table-responsive paypal"> 
-                <tbody>
-                  <tr>
-                    <td>Card Number</td>
-                    <td class="display-value"><%= @credit_card.card_brand %> xxxxx<%= @credit_card.last_4 %></td>
-                  </tr>
-                  <tr>
-                    <td>Amount</td>
-                    <td>
-                      <input type="text" value="" data-value="depositAmount" placeholder="Deposit Amount">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                      <input id="existingDeposit" type="submit" value="Deposits Funds">
-                      <%= image_tag "ssl_secure.png", class:"img-responsive" %>
-                      <br />
-                      <a id="addAnotherCard" href="#">Or Add another card</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            <% end %>
-
-            <table id="newCardDeposit" class="table-responsive paypal <%= @credit_card ? 'hidden-section' : '' %>">
-              <tbody>
-              <tr>
-                <td>Card Number</td>
-                <td><input type="text" data-payload="number" value="" placeholder="Enter Card Number"></td>
-                <td><%= image_tag "secure-card-payment.png", class: "img-responsive" %> Amex? Use
-                  <a href="#">Paypal</a></td>
-              </tr>
-              <tr>
-                <td>Cardholder Name</td>
-                <td><input type="text" value="" data-payload="name" datplaceholder="Enter Cardholder Name"></td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td>
-                        <select data-payload="exp_month">
-                          <% (1..12).each do |m| %>
-                            <option value="<%= m %>"><%= m %></option>
-                          <% end %>
-                        </select>
-                        <select data-payload="exp_year">
-                          <option>Year</option>
-                          <% (0..7).each do |x| %>
-                            <% year = Time.now.year + x %>
-                            <option value="<%= year %>"><%= year %></option>
-                          <% end %>
-                        </select>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>Security Code</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="text" data-payload="cvc" placeholder="Security Code"></td>
-                      <td><%= image_tag "securitycode.png", class: "img-responsive" %></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>State/Provice</td>
-                <td>
-                  <select data-payload="address_state">
-                    <%= region_options_for_select(only_us_and_canada_regions) %>
-                  </select>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-              </tr>
-              <tr>
-                <td>Zip Code</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="text" value="" data-payload="address_zip" placeholder="Enter Zip Code"></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>Amount</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="text" value="" id="depositAmount" placeholder="Deposit Amount"></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-
-
-              <tr>
-                <td>&nbsp;</td>
-                <td colspan="2">
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input id="stripeSubmit" type="submit" value="Deposits Funds"></td>
-                      <td>You will be changed.... by Fan Duel Inc <br>
-                        <%= image_tag "ssl_secure.png", class:"img-responsive" %></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-
-              </tr>
-              </tbody>
-            </table>
+    <div class="addfunds-content">
+      <div class="deposit-amount">
+        <div class="deposit-item pull-left">
+          <input type="radio" name="deposit_type" id="deposit_10"> $10
+        </div>
+        <div class="deposit-item pull-left">
+          <input type="radio" name="deposit_type" id="deposit_10"> $25
+        </div>
+        <div class="deposit-item pull-left">
+          <input type="radio" name="deposit_type" id="deposit_10"> $50
+        </div>
+        <div class="deposit-item pull-left">
+          <div class="pull-left">
+            <input type="radio" name="deposit_type" id="deposit_10">&nbsp;$&nbsp;
           </div>
-          <div class="tab-pane" id="paypal">
-            <table class="table-responsive paypal">
-              <tbody>
-              <tr>
-                <td>Card Number</td>
-                <td><input type="text" value="" placeholder="Enter Card Number"></td>
-                <td><%= image_tag "secure-card-payment.png", class:"img-responsive" %> Amex? Use
-                  <a href="#">Paypal</a></td>
-              </tr>
-              <tr>
-                <td>Cardholder Name</td>
-                <td><input type="text" value="" placeholder="Enter Cardholder Name"></td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>Month</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td>
-                       <select>
-                          <option>Month</option>
-                        </select>
-                        <select>
-                          <option>Year</option>
-                      </select>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>Security Code</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="text" placeholder="Security Code"></td>
-                      <td><%= image_tag "securitycode.png", class:"img-responsive" %></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>State/Provice</td>
-                <td><select>
-                  <option>Albama</option>
-                </select></td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-              </tr>
-              <tr>
-                <td>Zip Code</td>
-                <td>
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="text" value="" placeholder="Enter Zip Code"></td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>&nbsp;</td>
-                <td colspan="2">
-                  <table>
-                    <tbody>
-                    <tr>
-                      <td><input type="submit" value="Deposits Funds"></td>
-                      <td>You will be changed.... by Fan Duel Inc <br>
-                        <%= image_tag "ssl_secure.png", class:"img-responsive" %></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
+          <div class="pull-left">
+            <input type="text" class="form-control" id="deposit_custom_amount">
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+      </div>
 
-              </tr>
-              </tbody>
-            </table>
+      <div class="addfunds-form form-horizontal">
+        <div class="form-group">
+          <label for="payment_type" class="col-sm-4 control-label payment-type-label">* Payment Type</label>
+          <div class="col-sm-7 payment-type-wrapper">
+            <input type="radio" name="payment_type" id="credit_card" value="credit" checked="checked"> Credit Card&nbsp;&nbsp;
+            <input type="radio" name="payment_type" id="paypal" value="paypal"> Paypal&nbsp;&nbsp;
+            <input type="radio" name="payment_type" id="dwolla" value="dwolla"> Dwolla&nbsp;&nbsp;
           </div>
         </div>
-        <div class="clearfix">&nbsp;</div>
-        <ul class="list-inline">
-          <li><%= image_tag "icon-mobile.png" %> 1-800-475-2250</li>
-          <li><%= image_tag "icon-email.png" %> <a href="#">support@fanduel.com</a></li>
-          <li><%= image_tag "secure_payment_by.png", class: "img-responsive" %></li>
-        </ul>
-        <p align="center">We also offer <a href="#">free Practice games</a></p>
+        <div class="form-group for-credit">
+          <label for="creditcard_type" class="col-sm-4 control-label">* Credit Card Type</label>
+          <div class="col-sm-4">
+            <select class="form-control" id="creditcard_type" name="creditcard_type">
+              <option selected="selected">Visa</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="full_name" class="col-sm-4 control-label">* Credit Card Number</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="exp_date" class="col-sm-4 control-label">* Exp. Date</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control">
+          </div>
+          <label class="col-sm-2 format">mm/yyyy</label>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="cvv" class="col-sm-4 control-label">* CVV</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control">
+          </div>
+          <label class="col-sm-3 format"><a href="#">What is this?</a></label>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="full_name" class="col-sm-4 control-label">* Full Name</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="street_address" class="col-sm-4 control-label">* Street Address</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="street_address2" class="col-sm-4 control-label">Street Address 2</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="city" class="col-sm-4 control-label">* City</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="zip" class="col-sm-4 control-label">* Zip/Postal Code</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control">
+          </div>
+          <div class="col-sm-4 for-credit">
+            <select class="form-control" id="country" name="country">
+              <option selected="selected">United States</option>
+              <option>Canada</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="state" class="col-sm-4 control-label">* State</label>
+          <div class="col-sm-3">
+            <select class="form-control" id="state" name="state">
+              <option selected="selected">Arizona</option>
+            </select>
+          </div>
+          <div class="col-sm-4">
+            <a href="#">Is your state missing?</a> 
+          </div>
+        </div>
+
+        <div class="form-group for-credit">
+          <label for="phone" class="col-sm-4 control-label">* Phone</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control">
+          </div>
+          
+        </div>
+        
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-10">
+            <button type="submit" class="btn btn-default btn-deposit">Deposit</button>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -265,5 +146,13 @@
 <script type="text/javascript">
   $(function() {
       window.initializeStripeForm();
+
+      $('input[name="payment_type"]').change(function(){
+        if($(this).val() == 'credit'){
+          $('.for-credit').show();
+        }else{
+          $('.for-credit').hide();
+        }
+      });
   });
 </script>
