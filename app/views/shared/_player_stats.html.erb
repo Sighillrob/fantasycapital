@@ -11,7 +11,7 @@
       <h3>Next Gm:</h3>
       <h4>Ten @Den (12/08 4:05 PM EST)</h4>
       <!--<div class="draftPlayer">DRAFT PLAYER</div>-->
-      <%= content_tag :div, class: 'draftPlayer', data: {player_id: @player.id, player_name: @player.name, player_salary: @player.salary, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: @player.sport_position.name} do %>
+      <%= content_tag :div, class: 'draftPlayer', data: {dismiss: 'modal', player_id: @player.id, player_name: @player.name, player_salary: @player.salary, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: @player.sport_position.name} do %>
         DRAFT PLAYER
       <% end %>
 
@@ -83,10 +83,6 @@
     $(document).ready(function(){
       $('.draftPlayer').click(function(){
         $('#player_<%= @player.id %> .add-to-lineup').first().click();
-        if ($('#ajax-modal').length > 0){
-          $('.modal-scrollable').remove()
-          $('.modal-backdrop').remove(); 
-        }
       });
       
     });
