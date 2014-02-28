@@ -9,7 +9,7 @@ class PlayersController < ApplicationController
   		@summary[time_span.time_span] = stat_line
   	end
 
-  	@matchup_time_spans = PlayerStat.where("player_id = ? AND dimension = ?", params[:id], 'matchup').group('time_span').select('time_span').all
+  	@matchup_time_spans = PlayerStat.where("player_id = ? AND dimension = ?", params[:id], 'matchup').group('time_span', 'display_priority').select('time_span').order('display_priority').all
   	@matchup_time_spans.each do |time_span|
   		stat_line = PlayerStat.player_stat_line @player.id, 'matchup', time_span.time_span
   		@matchup[time_span.time_span] = stat_line
