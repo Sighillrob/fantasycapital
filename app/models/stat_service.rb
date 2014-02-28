@@ -15,9 +15,9 @@ class StatService
         "p_player." => "summary",
         "p_opponent_team.defense_allowed_in_" => "matchup" }
       @span_map = {
-        "the_0th_game_to_last" => lambda {|games| games[0].start_date},
-        "the_1rd_game_to_last" => lambda {|games| games[0].start_date},
-        "the_2nd_game_to_last" => lambda {|games| games[0].start_date},
+        "the_0th_game_to_last" => lambda {|games| games[0].start_date.strftime("%m/%d") },
+        "the_1rd_game_to_last" => lambda {|games| games[0].start_date.strftime("%m/%d") },
+        "the_2nd_game_to_last" => lambda {|games| games[0].start_date.strftime("%m/%d") },
         "home_games" => lambda {|games| "Home Games"},
         "away_games" => lambda {|games| "Away Games"},
         "all_games" => lambda {|games| "2013 season"}
@@ -45,7 +45,11 @@ class StatService
           @stat_map.each do |stat_name, stat_display|
             games = eval(subject + span)
             next if games.nil? || games.size == 0
-            stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
+            if ( subject.start_with? "p_opponent_team" )
+              stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player.position == p_player.position}
+            else
+              stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
+            end
             PlayerStat.create(dimension: dim_display, time_span: span_display.call(games), stat_name: stat_display, stat_value: stat_value.to_s, player: player, display_priority: priority+=1)
           end # of stat
         end # of span
