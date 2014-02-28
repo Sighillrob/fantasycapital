@@ -37,7 +37,7 @@
                   <tr>
                     <td><%= key %></td>
                   <% stats.each do |v| %>
-                    <th><%= stat_line[v] %></th>
+                    <th><%= number_with_precision(stat_line[v], precision: 2) %></th>
                   <% end %>
                   </tr>
                 <% end %>
@@ -60,7 +60,7 @@
                   <tr>
                     <td><%= key %></td>
                   <% stats.each do |v| %>
-                    <th><%= stat_line[v] %></th>
+                    <th><%= number_with_precision(stat_line[v], precision: 2) %></th>
                   <% end %>
                   </tr>
                 <% end %>
