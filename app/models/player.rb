@@ -30,7 +30,8 @@ class Player < ActiveRecord::Base
     Projection::Projection.where(player_id: Projection::Player.where(ext_player_id: ext_player_id).first).order(updated_at: :desc).first.try(:fp) || 0
   end
 
-  def self.refresh_all(players_src, team_src)
+  class << self
+  def refresh_all(players_src, team_src)
     players_src.each do |player_src|
       player = Player.where(ext_player_id: player_src['id']).first_or_initialize
       player.last_name = player_src['last_name']
@@ -46,5 +47,17 @@ class Player < ActiveRecord::Base
       player.sport_position = SportPosition.where(name: player_src['primary_position'], sport: 'NBA').first
       player.save!
     end
+  end
+
+  def player_of_ext_id(ext_id)
+    player = find_by_ext_player_id ext_id
+    if player.nil?
+      logger.warn "#{ext_id} not found.... Skipped"
+    else
+      yield player
+    end
+    player
+  end
+
   end
 end

@@ -53,17 +53,14 @@ module Projection
     def refresh_stats(teams_src)
       teams_src.select {|t| t["id"] == team.ext_team_id}.each do |team_src|
         team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each do |player_src|
-          player = Player.find_by_ext_player_id player_src["id"]
-          if player.nil?
-            logger.warn "#{player_src["id"]} not found...."
-            logger.warn "Skipping #{player_src}"
-            next
+          Player.player_of_ext_id player_src["id"] do |player|
+            #keep track of what games this player has played
+            GamePlayed.where(player: player, game: self).first_or_create
+            fp = Projection.joins(:scheduled_game).where(player: player, projection_scheduled_games: {ext_game_id: self.ext_game_id}).reduce(0.0) {|sum, p| p.fp}
+            Stat.refresh player, self, player_src["statistics"].merge({"fp"=>fp})
           end
-          GamePlayed.where(player: player, game: self).first_or_create
-          fp = Projection.joins(:scheduled_game).where(player: player, projection_scheduled_games: {ext_game_id: self.ext_game_id}).reduce(0.0) {|sum, p| p.fp}
-          Stat.refresh player, self, player_src["statistics"].merge({"fp"=>fp})
-        end
-      end
+        end #of team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each
+      end #of teams_src.select {|t| t["id"] == team.ext_team_id}.each
     end
 
   end

@@ -82,7 +82,7 @@ module Projection
       eligible_stats = block_given? ? stats.select {|s| yield s} : stats
       eligible_stats.reduce(0.0) do |fp, stat|
         ProjectionBreakdown.where(proj_by_stat_crit: proj_by_stat_crit, stat: stat).first_or_create unless proj_by_stat_crit.nil?
-        fp += stat.stat_value
+        fp += stat.stat_value || 0.0
       end / games.size
     end
 
