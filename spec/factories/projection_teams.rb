@@ -15,5 +15,6 @@
 FactoryGirl.define do
   factory :project_team, :class => 'Projection::Team' do
     name "MyString"
+    players []
   end
 end

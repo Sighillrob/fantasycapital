@@ -36,7 +36,7 @@ class ContestFactory
       #populate contests only when there are 3 or more games for the day
       return if games.count < 3
 
-      p_teams = games.reduce([]) {|t,g| t + [g.home_team, g.away_team]}
+      p_teams = games.map {|g| [g.home_team, g.away_team]}.flatten
       players = p_teams.reduce([]) {|p, t| p + Player.where(ext_player_id: t.players.map {|pp| pp.ext_player_id})}
 
       contest_date = games[0].start_date
@@ -51,11 +51,11 @@ class ContestFactory
     private 
 
     def contest_start_time(date)
-      date.in_est.beginning_of_day.change({hour: 19})
+      date
     end
 
     def contest_end_time(date)
-      date.in_est.beginning_of_day.change({hour: 23})
+      date.in_time_zone("EST").beginning_of_day.change({hour: 23})
     end
 
   end

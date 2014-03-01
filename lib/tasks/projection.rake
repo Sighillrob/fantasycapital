@@ -41,8 +41,8 @@ namespace :projection do
 
   desc "Send notification email"
   task notif: [:environment] do
-    today = Time.now.in_est.strftime("%Y-%m-%d")
-    yesterday = (Time.now.in_est - 1.day).strftime("%Y-%m-%d")
+    today = Time.now.in_time_zone("EST").strftime("%Y-%m-%d")
+    yesterday = (Time.now.in_time_zone("EST") - 1.day).strftime("%Y-%m-%d")
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
       :cc => "kenneth.jiang@gmail.com",
@@ -53,7 +53,7 @@ namespace :projection do
 
   desc "Generates report that compares projection and actual"
   task review: [:environment] do
-    today = Time.now.in_est.beginning_of_day
+    today = Time.now.in_time_zone("EST").beginning_of_day
     time_range = (today-1.day)..today
     projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game).where('projection_scheduled_games.start_date' => time_range)
     event_ids = projections.reduce([]) {|ids, p| ids << p.scheduled_game.stats_event_id}.uniq

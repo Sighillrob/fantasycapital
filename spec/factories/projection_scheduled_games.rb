@@ -15,9 +15,9 @@
 
 FactoryGirl.define do
   factory :projection_scheduled_game, :class => 'Projection::ScheduledGame' do
-    team1 nil
-    team2 nil
+    association :home_team, factory: :project_team
+    association :away_team, factory: :project_team
     start_date "2014-01-16 07:17:34"
-    stats_event_id 1
+    ext_game_id "1" 
   end
 end

@@ -21,7 +21,7 @@ class ProjectionsController < ApplicationController
     if params[:date].present?
       start = Time.parse(params[:date] + " 00:00:00-05:00")
     else
-      start = Time.now.in_est.beginning_of_day
+      start = Time.now.in_time_zone("EST").beginning_of_day
     end
     @time_range = start..(start+1.day)
   end

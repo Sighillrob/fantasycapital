@@ -55,7 +55,6 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-gem 'paper_trail', '~> 3.0.0'
 gem 'pony'
 gem 'hpricot'
 

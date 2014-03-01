@@ -15,7 +15,7 @@
     <% @projections.each do |proj| %>
       <tr>
         <td><%= link_to proj.player.name, stats_by_game_projections_path(player_id: proj.player.id) %></td>
-        <td><%= proj.scheduled_game.start_date.in_est %></td>
+        <td><%= proj.scheduled_game.start_date.in_time_zone("EST") %></td>
         <td class="text-right"><%= link_to "%.2f" % proj.fp, projection_projection_by_stats_path(proj), style: 'font-size:20px;' %></td>
         <% stats.map {|s| stat_of(proj, s)}.each do |stat| %>
           <% if stat %>

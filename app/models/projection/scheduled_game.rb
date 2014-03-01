@@ -35,7 +35,7 @@ module Projection
       end
 
       def games_on(date=Time.now)
-        where(start_date: date.in_est.beginning_of_day..date.in_est.end_of_day)
+        where(start_date: date.in_time_zone("EST").beginning_of_day..date.in_time_zone("EST").end_of_day)
       end
     end
 
