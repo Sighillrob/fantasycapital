@@ -17,6 +17,9 @@ config/secrets.yml
 config/database.yml
 config/initializers/setup_mail.rb
 
+#compiled assets
+/public/assets
+
 ## Environment normalisation:
 /.bundle
 /vendor/bundle

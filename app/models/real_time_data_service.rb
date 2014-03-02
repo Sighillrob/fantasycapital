@@ -9,16 +9,21 @@ class RealTimeDataService
   ]
 
   def refresh_game(game_src)
+    changed_scores = []
     game_src.map {|t| t['players']['player'] }.flatten.each do |player_src|
 
       Player.player_of_ext_id player_src["id"] do |player|
         player_src["statistics"].each do |name, value|
           next unless REALTIME_STATS.include? name
           score = PlayerRealTimeScore.where(player: player, name: name).first_or_initialize
-          score.value = value
-          score.save!
+          if score.value != value 
+            score.value = value
+            score.save!
+            changed_scores << score
+          end
         end
       end
+
     end # of all player loop
   end
 end
