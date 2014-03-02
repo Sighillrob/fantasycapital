@@ -10,7 +10,8 @@ Main::Application.configure do
   config.eager_load = false
 
   # Force SSL on site - user can login in from front page ==> need sure front page.
-  config.force_ssl = true
+  # Nils: temporarily commented out to see if front-page issue is related to SSL.
+  # config.force_ssl = true
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
