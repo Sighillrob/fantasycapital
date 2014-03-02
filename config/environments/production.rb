@@ -38,6 +38,10 @@ Main::Application.configure do
   # set the flag here to be explicit.
   config.assets.digest = true
 
+  # don't compile assets at runtime if they don't already exist. This is necessary for rack-zippy
+  #  to serve files, a la https://github.com/eliotsykes/rack-zippy/issues/12
+  config.assets.compile = false
+
   # static assets control and expiry
   config.serve_static_assets = true
   config.static_cache_control = 'public, max-age=31536000' # 1 year
