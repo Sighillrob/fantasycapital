@@ -40,8 +40,9 @@ class StatService
     def update_stats(player, p_player, p_opponent_team)
       cal = Projection::FantasyPointCalculator.new
       @dimension_map.each do |subject, dim_display|
+        priority=0
         @span_map.each do |span, span_display|
-          priority=0
+          priority+=1
           @stat_map.each do |stat_name, stat_display|
             games = eval(subject + span)
             next if games.nil? || games.size == 0
@@ -50,7 +51,7 @@ class StatService
             else
               stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
             end
-            PlayerStat.create(dimension: dim_display, time_span: span_display.call(games), stat_name: stat_display, stat_value: stat_value.to_s, player: player, display_priority: priority+=1)
+            PlayerStat.create(dimension: dim_display, time_span: span_display.call(games), stat_name: stat_display, stat_value: stat_value.to_s, player: player, display_priority: priority)
           end # of stat
         end # of span
       end # of dim
