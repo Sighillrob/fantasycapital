@@ -9,10 +9,6 @@ Main::Application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Force SSL on site - user can login in from front page ==> need sure front page.
-  # Nils: temporarily commented out to see if front-page issue is related to SSL.
-  # config.force_ssl = true
-
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -30,6 +26,12 @@ Main::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # Allow log level to be configured via env variable (and thus heroku CLI)
+  config.log_level = ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].to_sym : ('info').to_sym
+
+  # Force SSL on site - user can login in from front page ==> need sure front page.
+  config.force_ssl = true
 
 end
 Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
