@@ -31,6 +31,9 @@ Main::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # Allow log level to be configured via env variable (and thus heroku CLI)
+  config.log_level = ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].to_sym : ('info').to_sym
+
 end
 Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
 Rails.configuration.projection_notif_email = "ammanncapital@gmail.com"
