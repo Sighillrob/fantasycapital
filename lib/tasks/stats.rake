@@ -23,8 +23,9 @@ namespace :stats do
 
   desc "Daily task"
   task daily_task: [:environment] do
-    safe_rake_tasks "stats:create_contests"
     safe_rake_tasks "stats:fetch_players"
+    safe_rake_tasks "stats:create_contests"
+    safe_rake_tasks "stats:player_stats"
   end
 
   desc "Populate contests from stats api"

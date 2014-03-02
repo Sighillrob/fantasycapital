@@ -20,8 +20,13 @@ describe Contest do
     end
 
     it { should have_at_least(1).items }
-
     it { subject.first.contest_start.should == games[0].start_date }
+
+    it "should be idemopotent (identical results when called more than once)" do
+      count = subject.count
+      ContestFactory.create_nba_contests
+      subject.count.should == count
+    end
   end
 
   describe "when 2 games are scheduled for the day" do

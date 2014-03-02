@@ -41,7 +41,7 @@ class ContestFactory
 
       contest_date = games[0].start_date
       NBA_CONTESTS.each do |row|
-        c = Contest.create(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(contest_date), contest_end: contest_end_time(contest_date))
+        c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(contest_date), contest_end: contest_end_time(contest_date)).first_or_create
         players.each do |p|
           PlayerContest.where(contest: c, player: p).first_or_create
         end
