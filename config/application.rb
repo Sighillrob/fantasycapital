@@ -25,6 +25,9 @@ module Main
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     config.assets.precompile += %w( .svg .eot .woff .ttf )
 
+    # serve precompressed assets (.gz files) directly for static assets using rack-zippy gem.
+    config.middleware.swap(ActionDispatch::Static, Rack::Zippy::AssetServer)
+
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, dir: "spec/factories"

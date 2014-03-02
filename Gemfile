@@ -73,6 +73,9 @@ gem 'hpricot'
 gem 'devise'
 gem "bullet"
 
+# send gzip encoding on static assets from precompiled asset files
+gem 'rack-zippy'
+
 group :development do
   gem 'mailcatcher'
 end
