@@ -25,13 +25,21 @@ Main::Application.configure do
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
-  config.assets.debug = true
+  config.assets.debug = false
 
   # Allow log level to be configured via env variable (and thus heroku CLI)
   config.log_level = ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].to_sym : ('info').to_sym
 
   # Force SSL on site - user can login in from front page ==> need sure front page.
   config.force_ssl = true
+
+  # use 'fingerprint' versioning in static assets to make them CDN-friendly. NOTE: This is actually
+  # 'true' in production by default already, but this file is also included by 'staging.rb' so I
+  # set the flag here to be explicit.
+  config.assets.digest = true
+
+  # Host for static assets in PRODUCTION environment - Amazon CloudFront (thru AWS panel)
+  config.action_controller.asset_host = "d1d2dib6t3chcj.cloudfront.net"
 
 end
 Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
