@@ -36,5 +36,8 @@ Main::Application.configure do
    Bullet.add_footer    = true
   end
 end
-Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
 Rails.configuration.projection_notif_email = "ammanncapital@gmail.com"
+
+Pusher.app_id = '67528'
+Pusher.key    = '86296472974842e38cce'
+Pusher.secret = 'dd06bc0253079462418e'

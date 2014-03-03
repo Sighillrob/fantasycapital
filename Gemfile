@@ -46,6 +46,7 @@ gem "sportsdata-client", path: "lib/"
 gem 'newrelic_rpm'
 gem 'newrelic-rake'
 
+gem 'pusher'
 gem 'resque', require: "resque/server"
 gem 'resque-web', require: 'resque_web'
 

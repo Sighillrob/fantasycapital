@@ -136,6 +136,7 @@ GEM
     httparty (0.12.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
+    httpclient (2.3.4.1)
     i18n (0.6.9)
     jimson-temp (0.9.5)
       blankslate (>= 3.1.2)
@@ -192,6 +193,10 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
+    pusher (0.12.0)
+      httpclient (~> 2.3.0)
+      multi_json (~> 1.0)
+      signature (~> 0.1.6)
     rack (1.5.2)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
@@ -271,6 +276,7 @@ GEM
       websocket (~> 1.0.4)
     shoulda-matchers (2.5.0)
       activesupport (>= 3.0.0)
+    signature (0.1.7)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -362,6 +368,7 @@ DEPENDENCIES
   pony
   premailer-rails
   pry-rails
+  pusher
   rack-google-analytics
   rails (= 4.0.2)
   rails-perftest
