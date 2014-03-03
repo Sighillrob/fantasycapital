@@ -42,7 +42,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		var target_url = $(this).attr('href');
 		window.target_url = target_url;
-		new window.AjaxModal('/users/signin_popup').load()
+		new window.AjaxModal('/users/signin_popup').load();
 	});
 
 	$('.welcome-text > a').click(function(e){
@@ -50,6 +50,7 @@ $(document).ready(function(){
 		$('.usermenu').toggle();
 	});
 });
+
 
 function isEmailAddress(str) {
 	var emailRegxp =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
