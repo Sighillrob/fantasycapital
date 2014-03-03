@@ -77,6 +77,9 @@ gem "bullet"
 # send gzip encoding on static assets from precompiled asset files
 gem 'rack-zippy'
 
+# unicorn web server for production
+gem 'unicorn'
+
 group :development do
   gem 'mailcatcher'
 end
