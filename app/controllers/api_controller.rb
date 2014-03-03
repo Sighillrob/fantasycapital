@@ -61,4 +61,42 @@ class ApiController < ApplicationController
     render json: {liveContests: liveContests, upcomingContests: upcomingContests, completedContests: completedContests}
     
   end
+
+  def gc_data
+
+    entry = {}
+    contest = {}
+    lineup = {}
+    lineup_spots = []
+    users = []
+    my = []
+
+    entry_id = params[:entry_id]
+    entry = Entry.find_by_id(entry_id)
+
+    unless entry.nil?
+      #contest['id'] = entry.contest.id
+      #contest['sport'] = entry.contest.sport
+      #contest['start_at'] = entry.contest.contest_start.utc.strftime('%Y-%m-%d %H:%M:%S')
+      #contest['end_at'] = entry.contest.contest_end.utc
+      #contest['entry_fee'] = entry.contest.entry_fee
+      #contest['prize'] = entry.contest.prize
+      #contest['place'] = 814
+
+      #users = contest.users
+      lineup = entry.lineup
+      my = lineup.user
+      lineup.lineup_spots.each do |lineup_spot|
+        ls = {}
+        ls['player'] = lineup_spot.player
+        ls['sport_position'] = lineup_spot.sport_position
+        ls['score'] = 0
+        lineup_spots.push(ls)
+      end
+
+    end
+
+    render json: {contest: contest, entry: entry, users: users, lineup: lineup, lineup_spots: lineup_spots, my: my}
+  end
+
 end

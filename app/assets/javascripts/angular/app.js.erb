@@ -1,6 +1,14 @@
-var fantasysport = angular.module('fantasysport', ['ngResource','ngSanitize'])
+var fantasysport = angular.module('fantasysport', ['ngResource','ngSanitize', 'doowb.angular-pusher'])
 
-fantasysport.config(function($interpolateProvider){
+fantasysport.config	(function($interpolateProvider){
     $interpolateProvider.startSymbol('{{');
     $interpolateProvider.endSymbol('}}');
 })
+
+fantasysport.config(['PusherServiceProvider',
+  function(PusherServiceProvider) {
+    PusherServiceProvider
+      .setToken('ebefeb61f4df6bd25670')
+      .setOptions({});
+  }
+]);

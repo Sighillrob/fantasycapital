@@ -70,6 +70,7 @@ Main::Application.routes.draw do
 
   scope :api do
     get "/searchEntries" => "api#searchEntries"
+    get "/gc_data/:entry_id" => "api#gc_data"
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

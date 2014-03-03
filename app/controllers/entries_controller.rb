@@ -10,7 +10,7 @@ class EntriesController < ApplicationController
   end
 
   def show
-
+    @entry_id = params[:id]
   end
 
   def index

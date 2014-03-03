@@ -21,6 +21,9 @@ class Contest < ActiveRecord::Base
   has_many :player_contests, inverse_of: :contest
   has_many :eligible_players, source: :player, through: :player_contests
 
+  has_many :lineups, through: :entries
+  has_many :users, through: :lineups
+
   #TODO: placeholder for testing the views
   def salary_cap
     65000
