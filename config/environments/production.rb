@@ -44,7 +44,8 @@ Main::Application.configure do
 
   # static assets control and expiry
   config.serve_static_assets = true
-  config.static_cache_control = 'public, max-age=31536000' # 1 year
+  config.static_cache_control = 'public, max-age=3600' # 1 hour, temporarily
+  #config.static_cache_control = 'public, max-age=31536000' # 1 year
 
   # Host for static assets in PRODUCTION environment - Amazon CloudFront (thru AWS panel)
   config.action_controller.asset_host = "d1d2dib6t3chcj.cloudfront.net"
