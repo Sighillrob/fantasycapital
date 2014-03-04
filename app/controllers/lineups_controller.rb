@@ -8,7 +8,7 @@ class LineupsController < ApplicationController
     @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc)
 
     #for testing...
-    @eligible_players = Player.all 
+    #@eligible_players = Player.all 
   end
 
   def edit
