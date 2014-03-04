@@ -314,8 +314,10 @@
           <td><h1 class="role">{{lineup_spot.sport_position.name}}</h1></td>
           <td><strong>{{lineup_spot.player.first_name}} {{lineup_spot.player.last_name}}</strong>
 
-            <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-              36 P, 6 R, 6 A, 3 S, 1 B</p>
+            <p class="por">
+              <strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
+              {{lineup_spot.stats['RPG']/1.2}} R, {{lineup_spot.stats['APG']/1.5}} A, {{lineup_spot.stats['STLPG']/2}} S, {{lineup_spot.stats['BLKPG']/2}} B
+            </p>
           </td>
           <td>
             ${{lineup_spot.player.salary}} <br>
