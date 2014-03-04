@@ -27,8 +27,8 @@ window.GameCenterCtrl = ($scope, $http, Pusher) ->
 			j = 0
 			while j < $scope.lineup_spots.length
 				if data.players[i].player is $scope.lineup_spots[j].player.id
-				  	$scope.lineup_spots.score += data.players[i].stat_value
-				  	$scope.my_total_score += data.players[i].stat_value
-		    	j++
-		  	i++
-		$scope.player_stats = data.players
+					$scope.lineup_spots[j].score =  $scope.lineup_spots[j].score + data.players[i].stat_value - $scope.lineup_spots[j].stats[data.player[i].stat_name]
+					$scope.my_total_score =  $scope.my_total_score + data.players[i].stat_value - $scope.lineup_spots[j].stats[data.player[i].stat_name]
+					$scope.lineup_spots[j].stats[data.player[i].stat_name] = data.players[i].stat_value
+				j++
+			i++

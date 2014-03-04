@@ -90,7 +90,19 @@ class ApiController < ApplicationController
         ls = {}
         ls['player'] = lineup_spot.player
         ls['sport_position'] = lineup_spot.sport_position
+
+        stats = {}
+        ["MPG", "RPG", "APG", "BLKPG", "STLPG", "PFPG", "TOPG", "PPG", "FPPG"].each do |stat_name|
+          stats[stat_name] = 0
+        end
+
         ls['score'] = 0
+        ls['stats'] = stats
+        rt_scores = PlayerRealTimeScore.where(player: lineup_spot.player)
+        rt_scores.each do |score|
+          ls['stats'][score.name] = score.value
+          ls['score'] += score.value
+        end
         lineup_spots.push(ls)
       end
 
