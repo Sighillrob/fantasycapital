@@ -14,4 +14,15 @@ namespace :realtime do
     end
   end
 
+  desc "Send dummy stats to webscoket client every 15s"
+  task dummy_games_refresh: :environment do
+    v = 0.0
+    while true
+      msg = [ { "id" => Player.last.id, "stat_name" => 'points', "stat_value" => v+=1.0 } ]
+      Rails.logger.info "sending #{msg}"
+      Pusher['gamecenter'].trigger('stats', { "players" => msg })
+      sleep 15
+    end
+  end
+
 end

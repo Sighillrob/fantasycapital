@@ -28,7 +28,7 @@ class RealTimeDataService
 
     #trigger event to frontend
     if changed_scores.size > 0
-      msg = changed_scores.map {|score| { "player" => score.player_id, score.name => score.value }}
+      msg = changed_scores.map {|score| { "id" => score.player_id, "stat_name" => score.name, "stat_value" => score.value }}
       Pusher['gamecenter'].trigger('stats', { "players" => msg }) 
     end
   end
