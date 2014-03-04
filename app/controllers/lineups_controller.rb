@@ -5,7 +5,10 @@ class LineupsController < ApplicationController
   def new
     @contest = Contest.includes(:eligible_players).find(params[:contest_id])
     @lineup  = Lineup.build_for_contest @contest
-    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc) 
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc)
+
+    #for testing...
+    @eligible_players = Player.all 
   end
 
   def edit

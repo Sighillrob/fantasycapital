@@ -71,7 +71,7 @@
         </tr>
         </thead>
         <tbody>
-          <%= render partial: 'lineups/lineup_player', collection: @contest.eligible_players, as: :player %>
+          <%= render partial: 'lineups/lineup_player', collection: @eligible_players, as: :player %>
         </tbody>
       </table>
     </div>
@@ -90,7 +90,7 @@
             </tr>
             </thead>
             <tbody>
-              <%= render partial: 'lineups/lineup_player', collection: @contest.eligible_players.select {|p| p.sport_position == position}, as: :player %>
+              <%= render partial: 'lineups/lineup_player', collection: @eligible_players.select {|p| p.sport_position == position}, as: :player %>
             </tbody>
           </table>
         </div>
