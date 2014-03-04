@@ -559,3 +559,63 @@ table.sortable thead th:hover:not([data-defaultsort=disabled]) {
   font-size: 20px;
   margin-bottom: 10px;
 }
+
+
+/*-------------------fantacycapital accordion panel-------------------*/
+
+h3.panel-group-title{
+  color: #aaaaaa;  
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+
+.panel-group-intro{
+  padding: 0px 0 10px;
+}
+
+.fc-panel{
+  margin-bottom: 30px;
+  .panel{
+    border: 0;
+    border-radius: 0;
+    .panel-heading{
+      padding: 15px;
+      color: $theme-green;
+      .panel-title{
+        font-size: 22px;
+        a{
+          background: url(/assets/down-arrow.png) no-repeat right center;
+          padding-right: 25px;
+
+          &.collapsed{
+            background: url(/assets/right-arrow.png) no-repeat right center;
+            padding-right: 20px;
+          }
+          
+          &:hover{
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .panel-body{
+      padding: 0;
+
+      ul.scoring-list{
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+
+        li{
+          padding: 10px;
+          border-bottom: 1px solid #d1d1d1;
+        }
+      }
+
+      .text-container{
+        padding: 10px;
+      }
+    }
+  }
+}
