@@ -95,9 +95,8 @@
           </table>
         </div>
     <% end %>
-    <p class='green'>Export to CSV »</p>
-
   </div>
+  <p class='green'>Export to CSV »</p>
 </div>
 <%= form_for @lineup do |f| %>
     <div class='col-md2'>
@@ -112,7 +111,7 @@
         </h4>
       </div>
       <div class='col-lg-6'>
-        <h4>
+        <h4 class="salary-wrapper">
           <strong> REM./SALARY:</strong>
           <span id='contest-salary-cap' class="currency" data-salary=<%= @contest.salary_cap %>>
              <%= number_to_currency @contest.salary_cap - consumed_salary(@lineup), precision: 0 %>

@@ -3,7 +3,9 @@ class Lineup
   entries:    []
 
   constructor: ->
+    ###
     @fixHeight()
+    ###
     that        = @
     @salary_cap = $('#contest-salary-cap').data('salary')
     $(".lineup-spot").each (i, obj) ->
