@@ -8,7 +8,7 @@ fantasysport.config	(function($interpolateProvider){
 fantasysport.config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
-      .setToken('86296472974842e38cce')
+    .setToken('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>')
       .setOptions({});
   }
 ]);
