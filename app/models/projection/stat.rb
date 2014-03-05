@@ -33,10 +33,8 @@ module Projection
       def refresh(player, game, stats)
         stats.select {|k,v| STATS_ALLOWED.keys.include? k}.each do |stat_n, stat_v|
           st = Stat.where(player: player, game: game, stat_name: stat_n).first_or_initialize 
-          if st.new_record?
-            st.stat_value = STATS_ALLOWED[stat_n] ? STATS_ALLOWED[stat_n].call(stat_v) : stat_v
-            st.save!
-          end
+          st.stat_value = STATS_ALLOWED[stat_n] ? STATS_ALLOWED[stat_n].call(stat_v) : stat_v
+          st.save!
         end
       end
 
