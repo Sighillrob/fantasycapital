@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
       # whitelist some pages that don't need login
       vars = [params[:controller], params[:action], request.method]
       case vars
+        when ['splash', 'index', 'GET'] # I think this is unused right now (was splashscreen)
+          return
         when ['contests', 'browse', 'GET'] # homepage
           return
         when ['users', 'signin_popup', 'GET'] # user getting login popup
