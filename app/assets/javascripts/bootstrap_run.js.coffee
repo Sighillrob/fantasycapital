@@ -3,8 +3,11 @@ $ ->
   $(".tooltip").tooltip()
   $("[rel=tooltip]").tooltip({html: true})
   $('.tabs a:first').tab('show')
-  $('.ajax-modal').on 'click', ->
+  $("html").on 'click', '.ajax-modal', ->
+    console.log @
     new window.AjaxModal($(@).data('url')).load()
 
   $('[data-time]').localDate()
   $('.countdown').timeRemaining()
+
+
