@@ -92,7 +92,7 @@ class ApiController < ApplicationController
         ls['sport_position'] = lineup_spot.sport_position
 
         stats = {}
-        ["MPG", "RPG", "APG", "BLKPG", "STLPG", "PFPG", "TOPG", "PPG", "FPPG"].each do |stat_name|
+        ["points", "assists", "steals", "rebounds", "blocks", "turnovers"].each do |stat_name|
           stats[stat_name] = 0
         end
 
@@ -103,6 +103,7 @@ class ApiController < ApplicationController
           ls['stats'][score.name] = score.value
           ls['score'] += score.value
         end
+
         lineup_spots.push(ls)
       end
 

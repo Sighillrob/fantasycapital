@@ -316,11 +316,11 @@
 
             <p class="por">
               <strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-              {{lineup_spot.stats['RPG']/1.2}} R, {{lineup_spot.stats['APG']/1.5}} A, {{lineup_spot.stats['STLPG']/2}} S, {{lineup_spot.stats['BLKPG']/2}} B
+              {{lineup_spot.stats['points']}} P, {{lineup_spot.stats['rebounds']}} R, {{lineup_spot.stats['assists']}} A, {{lineup_spot.stats['steals']}} S, {{lineup_spot.stats['blocks']/2}} B, {{lineup_spot.stats['turnovers']}} T
             </p>
           </td>
           <td>
-            ${{lineup_spot.player.salary}} <br>
+            ${{lineup_spot.player.salary | number}} <br>
             SALARY
           </td>
           <td>27.5% <br>
