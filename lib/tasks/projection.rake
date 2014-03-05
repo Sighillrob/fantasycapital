@@ -53,25 +53,25 @@ namespace :projection do
 
   desc "Generates report that compares projection and actual"
   task review: [:environment] do
+    stat_names = Projection::Stat::STATS_ALLOWED.keys - ["minutes", "personal_fouls", "fp"]
+
     today = Time.now.in_time_zone("EST").beginning_of_day
-    time_range = (today-1.day)..today
+    time_range = (today-3.day)..today
     projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game).where('projection_scheduled_games.start_date' => time_range)
-    event_ids = projections.reduce([]) {|ids, p| ids << p.scheduled_game.stats_event_id}.uniq
-    stats = Projection::Stat.includes(:game, :player).where('projection_games.stats_event_id' => event_ids)
-    stat_names = Projection::Stat::STATS_ALLOWED.keys - ["minutes"]
 
     filename = "#{Rails.root}/tmp/review-#{today.strftime('%Y-%m-%d')}.csv"
     CSV.open(filename, "w") do |csv|
-      csv << ["Player", "Game", "Projection"].concat( stat_names.inject([]) {|a, s| a << "#{s}(projection)"; a << "#{s}(actual)"})
+      csv << ["Player", "Game", "fp(projection)", "fp(actual)"].concat( stat_names.inject([]) {|a, s| a << "#{s}(projection)"; a << "#{s}(actual)"})
       projections.each do |proj|
-        line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('America/New_York'), "%.2f" % proj.fp]
-        weighted_actual = Projection::FantasyPointCalculator.new.weighted_fp do |s, weight|
-          lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s).stat_value rescue 0.0
-        end
-        line << "%.2f" % weighted_actual
+        player = proj.player
+        game = Projection::Game.where(ext_game_id: proj.scheduled_game.ext_game_id, team: player.team).first
+        next if game.nil?
+
+        actual_fp = Projection::Stat.where(game: game, player: player, stat_name: "fp").first.try(:stat_value) || 0.0
+        line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('EST'), "%.2f" % (proj.fp || 0.0), "%0.2f" % actual_fp]
         stat_names.each do |s|
-          line << "%.3f" % stat_of(proj, s).fp
-          actual = lookup_stat(stats, proj.scheduled_game.stats_event_id, proj.player, s)
+          line << "%.3f" % (stat_of(proj, s).try(:fp) || 0.0)
+          actual = Projection::Stat.where(game: game, player: player, stat_name: s).first
           line << "%.2f" % (actual ? actual.stat_value : 0.0)
         end
         csv << line
@@ -90,7 +90,7 @@ namespace :projection do
 
 
   desc "Run all tasks needed to build project"
-  task run_all: [:environment, :fetch_stats, :fp, :notif] do
+  task run_all: [:environment, :fetch_stats, :fp, :notif, :review] do
   end
 
   desc "Purge projection database"
