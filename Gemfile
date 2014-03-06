@@ -15,6 +15,9 @@ gem 'stripe'
 
 gem 'activerecord-session_store', '0.1.0'
 
+# Use jasmine for unit tests
+gem 'jasmine'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

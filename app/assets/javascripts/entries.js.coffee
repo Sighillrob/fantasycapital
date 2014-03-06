@@ -108,4 +108,6 @@ class Entry
     dom.find('td.fppg span').html @player.fppg || "&nbsp;"
 
 $ ->
+  window.Lineup = Lineup
+  window.Entry = Entry
   new Lineup
