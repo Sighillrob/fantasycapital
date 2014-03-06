@@ -22,7 +22,11 @@ module Main
 
     config.autoload_paths += %W(#{config.root}/services)
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
-    config.assets.precompile += %w( .svg .eot .woff .ttf )
+    # Apparently the below is wrong (was causing ttf / woff not to be found). 
+    # See
+    # http://stackoverflow.com/questions/10905905/using-fonts-with-rails-asset-pipeline, 
+    #   and especially comment below first answer.
+    #config.assets.precompile += %w( .svg .eot .woff .ttf )
 
 
     config.generators do |g|
