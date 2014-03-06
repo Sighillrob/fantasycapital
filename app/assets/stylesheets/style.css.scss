@@ -2,17 +2,36 @@
 
 @font-face {
   font-family: 'oswald-regular';
-  src: url('oswald-regular.eot?#iefix') format('embedded-opentype'), url('oswald-regular.woff') format('woff'), url('oswald-regular.ttf') format('truetype'), url('oswald-regular.svg#oswald_regular') format('svg');
+  src: font-url('oswald-regular.eot');
+  src: font-url('oswald-regular.eot?#iefix') format('embedded-opentype'),
+       font-url('oswald-regular.woff') format('woff'),
+       font-url('oswald-regular.ttf') format('truetype'),
+       font-url('oswald-regular.svg#oswald_regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'oswald-bold';
-  src: font-url('oswald-bold.eot?#iefix') format('embedded-opentype'), font-url('oswald-bold.woff') format('woff'), font-url('oswald-bold.ttf') format('truetype'), font-url('oswald-bold.svg#oswald_bold') format('svg');
+  src: font-url('oswald-bold.eot?#iefix') format('embedded-opentype'),
+       font-url('oswald-bold.woff') format('woff'),
+       font-url('oswald-bold.ttf') format('truetype'),
+       font-url('oswald-bold.svg#oswald_bold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: font-url('glyphicons-halflings-regular.eot');
+  src: font-url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  font-url('glyphicons-halflings-regular.woff') format('woff'),
+  font-url('glyphicons-halflings-regular.ttf') format('truetype'),
+  font-url('glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+
+}
+
+
 
 /*External Font for the Site*/
 @font-face {
