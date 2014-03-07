@@ -2,12 +2,13 @@ class Lineup
   salary_cap: 0
   entries:    []
 
-  constructor: ->
+  constructor: (salary_param, entries_param) ->
     ###
     @fixHeight()
     ###
     that        = @
-    @salary_cap = $('#contest-salary-cap').data('salary')
+    @salary_cap = $('#contest-salary-cap').data('salary') || salary_param
+    @entries = entries_param || []
     $(".lineup-spot").each (i, obj) ->
       that.entries.push(new Entry($(@)))
 
@@ -42,9 +43,22 @@ class Lineup
       spots = (spot for spot in that.entries when not spot.player)
       if spots.length is 0
         return true
-      alert "Team needds to be completely filled before it can be submitted."
+      alert "Team needs to be completely filled before it can be submitted."
       return false
-
+  setSalaryCap: (value) ->
+    if typeof value == "Number"
+      @salary_cap = value
+  addEntry: (el) ->
+    if el instanceof Entry
+      @entries.push(el)
+    else
+      @entries.push(new Entry($(el)))
+  getNumberOfEntries: ->
+    @entries.length
+  clearEntries: ->
+    @entries = []
+  getSalaryCap: ->
+    @salary_cap
   consumedSalary: ->
     alloted_spots = (spot for spot in @entries when not not spot.player)
     alloted_spots.map((entry) ->
@@ -52,7 +66,6 @@ class Lineup
     ).reduce (a, b) ->
       a + b
     , 0
-
   canAddPlayer: (player) ->
     @consumedSalary() + player.salary <= @salary_cap
 
@@ -84,21 +97,32 @@ class Lineup
     $('.same-height').css({height: minHeight+'px'})
 
 class Entry
-  player: ''
-  position: ''
-  spot: ''
+  player: ""
+  position: ""
+  spot: ""
 
   constructor: (dom) ->
-    @position = dom.data('sport-position-name')
-    @spot     = dom.data('spot')
+    @position = dom.data('sport-position-name') || ""
+    @spot     = dom.data('spot') || ""
+    @player   = ""
     player_id = dom.data('player-id')
 
     if player_id?
       player_dom = $('tr.contest-player#player_'+player_id)
-      @player = new window.Player(player_dom)
-      player_dom.hide()
+      if player_dom.length
+        @player = new window.Player(player_dom)
+        player_dom.hide()
     @spot = dom.data('spot')
 
+  addPlayer: (player) ->
+    if player instanceof Player
+      @.player = player
+  getPlayer: ->
+    @.player
+  removePlayer: ->
+    @.player = ""
+  playerExists: ->
+    @.player != ""
   render: ->
     dom = $("tr.lineup-spot[data-spot="+@spot+"]")
     dom.find('td.player input').val @player.id
