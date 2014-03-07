@@ -22,23 +22,26 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_src)
     end
 
-    it { PlayerRealTimeScore.all.should have(3).items }
-    it { @message.should have(3).items }
+    it { PlayerRealTimeScore.all.should have(4).items }
+    it { @message.should have(4).items }
+    it "should includes fp" do
+      stats = @message.select {|s| s["stat_name"] == "fp"}
+      stats.should have(1).items
+      stats[0]["stat_value"].should == 9.25
+    end
   end
 
   context "called again with no change" do
     before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      mock_channel.should_receive(:trigger) do |event, msg|
-         event.should == 'stats'
-         @message = msg['players']
-      end
+      mock_channel.should_receive(:trigger).once()
+
       RealTimeDataService.new.refresh_game(game_src)
       RealTimeDataService.new.refresh_game(game_src) 
     end
 
-    it { PlayerRealTimeScore.all.should have(3).items }
+    it { PlayerRealTimeScore.all.should have(4).items }
   end
 
   context "caglled again with changes in scores" do
@@ -46,7 +49,7 @@ describe RealTimeDataService do
   let(:game_src1) do
     [ { 'players' => { 'player'=> [ 
           { "id" => "a",
-            "statistics" => {"assists" => 2.0}
+            "statistics" => {"assists" => 2.0, "steals" => 2.0, "rebounds" => 3.0 }
           }
         ]
      } } ]
@@ -63,7 +66,12 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_src1) 
     end
 
-    it { @message.should have(1).items }
+    it { @message.should have(2).items }
+    it "should includes fp" do
+      stats = @message.select {|s| s["stat_name"] == "fp"}
+      stats.should have(1).items
+      stats[0]["stat_value"].should == 10.75
+    end
   end
 end
 
