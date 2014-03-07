@@ -217,6 +217,10 @@ p.quarters {
   &.white{
     background: #fff;
   }
+
+  &.template{
+    display: none;
+  }
 }
 
 .scorecardTable {
@@ -242,6 +246,9 @@ p.quarters {
 
   .por{
     margin-bottom: 0;
+    .records{
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -251,7 +258,8 @@ p.quarters {
 }
 
 .scorecardTable tr td:last-child {
-  background: none
+  background: none;
+  width: 70px;
 }
 
 .scorecardTable tr td:first-child {

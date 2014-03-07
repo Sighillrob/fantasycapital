@@ -35,6 +35,7 @@
 //= require contest
 //= require balanced
 //= require account
+//= require gamecenter
 //= require_tree .
 
 $(document).ready(function(){
