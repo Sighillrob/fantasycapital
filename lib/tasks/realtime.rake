@@ -20,8 +20,11 @@ namespace :realtime do
     while true
       msg = [ { "id" => Player.last.id, "stat_name" => 'points', "stat_value" => v+=1.0 } ]
       Rails.logger.info "sending #{msg}"
+      puts "sending #{msg}"
       Pusher['gamecenter'].trigger('stats', { "players" => msg })
-      sleep 15
+
+      sleep 5
+
     end
   end
 

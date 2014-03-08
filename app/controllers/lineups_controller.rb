@@ -41,7 +41,7 @@ class LineupsController < ApplicationController
   # PATCH /entries
   # PATCH /entries.json
   def update 
-    @lineup.contest = @contest
+    #@lineup.contest = @contest ## Nils: This causes a bug, maybe it's outdated code?
 
     respond_to do |format|
       if @lineup.update(lineup_parameters)

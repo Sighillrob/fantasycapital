@@ -1,4 +1,4 @@
-<div ng-controller="GameCenterCtrl" ng-init="gc_init(<%= @entry_id %>)" class="capitalcontent gamecenter ng-bootstrap-angular">
+<div data-entry_id="<%= @entry_id %>" class="capitalcontent gamecenter ng-bootstrap-angular">
 <!--Login Section-->
 
 <ul class="list-inline title">
@@ -290,10 +290,10 @@
 <div class="col-md-5 scorecard pull-left">
   <div class="col-md-2 panelOne"><strong class="panelStrong">POS</strong>
 
-    <h2 class="panelHeading">831</h2>
+    <h2 class="panelHeading">1</h2>
   </div>
   <div class="col-md-8 panelTwo">
-    <p class="user"><%= image_tag "user.png" %> <span class="green">{{my.username}}</span></p>
+    <p class="user"><%= image_tag "user.png" %> <span class="green mylineup-username">{{my.username}}</span></p>
 
     <div class="clearfix"></div>
     <p class="quarters"> 6 Quarters Remaining
@@ -302,11 +302,40 @@
   </div>
   <div class="col-md-2 panelThree"><strong class="panelStrong">SCORE</strong>
 
-    <h2 class="panelHeading">{{my_total_score}}</h2>
+    <h2 class="panelHeading mylineup-total-score">{{my_total_score}}</h2>
   </div>
   <div class="clearfix"></div>
   <!--Score Card-->
-  <div ng-repeat="lineup_spot in lineup_spots">
+  <div class="mylineup-spots">
+    <div class="scorecard2 template">
+      <table class="scorecardTable" cellpadding="10" cellspacing="10">
+        <tbody>
+        <tr>
+          <td><h1 class="role">PG</h1></td>
+          <td><strong class="player-name">Damian Lillard</strong>
+
+            <p class="por">
+              <strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
+              <span class="records">
+                0 P, 0 R, 0 A, 0 S, 0 B, 0 T
+              </span>
+            </p>
+          </td>
+          <td>
+            $<span class="salary">79</span> <br>
+            SALARY
+          </td>
+          <td>27.5% <br>
+            OWNED
+          </td>
+          <td><h1 class="score">57.2</h1></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!--<div ng-repeat="lineup_spot in lineup_spots">
     <div class="scorecard2">
       <table class="scorecardTable" cellpadding="10" cellspacing="10">
         <tbody>
@@ -331,215 +360,7 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <!--<div class="clearfix"></div>
-  <div class="scorecard2 white">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">PG</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1 class="greeScore">57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">SG</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1>57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2 white">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">SG</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1 class="greeScore">57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">SF</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1>57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2 white">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">SF</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1 class="greeScore">57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">PF</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1>57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2 white">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">PF</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1 class="greeScore">57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">C</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1>57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>
-  <div class="scorecard2 white">
-    <table class="scorecardTable" cellpadding="10" cellspacing="10">
-      <tbody>
-      <tr>
-        <td><h1 class="role">UTL</h1></td>
-        <td><strong>Damian Lillard</strong>
-
-          <p class="por"><strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL<br>
-            36 P, 6 R, 6 A, 3 S, 1 B</p>
-        </td>
-        <td>
-          $79 <br>
-          SALARY
-        </td>
-        <td>27.5% <br>
-          OWNED
-        </td>
-        <td><h1 class="greeScore">57.2</h1></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="clearfix"></div>-->
+  </div>-->
   <!--End Score Card--> 
 </div>
 <div class="col-md-5 scorecard pull-right">
