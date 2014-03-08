@@ -7,4 +7,4 @@ bundle install
 export RAILS_ENV=test
 bundle exec rake db:schema:load
 bundle exec rake db:test:prepare
-bundle exec rspec
+bundle exec rspec && bundle exec rake jasmine:ci
