@@ -23,6 +23,7 @@ module Projection
   
     def self.refresh_all(games_src, cutoff=(Time.now-10.days))
       updated_games = []
+      # "closed" status means the game has finished
       games_src.select {|g| g["status"] == "closed"}.each do |game_src|
 
         game_start = Time.parse(game_src["scheduled"])
@@ -54,18 +55,21 @@ module Projection
       cal = FantasyPointCalculator.new
       teams_src.select {|t| t["id"] == team.ext_team_id}.each do |team_src|
         team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each do |player_src|
+
           player = Player.find_by_ext_player_id player_src["id"]
           if player.nil?
             logger.warn "#{player_src["id"]} not found...."
             logger.warn "Skipping #{player_src}"
             next
           end
+
           #keep track of what games this player has played
           GamePlayed.where(player: player, game: self).first_or_create
 
-          stats = player_src["statistics"]
-          fp = cal.weighted_fp { |stat_name, weight| stats[stat_name].to_f }
-          Stat.refresh player, self, stats.merge({"fp"=>fp})
+          #Refresh stats accordingly, also add calculated fp (Fantasy Point)
+          fp = cal.weighted_fp { |stat_name, weight| player_src["statistics"][stat_name].to_f }
+          Stat.refresh player, self, player_src["statistics"].merge({"fp"=>fp})
+
         end #of team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each
       end #of teams_src.select {|t| t["id"] == team.ext_team_id}.each
     end
