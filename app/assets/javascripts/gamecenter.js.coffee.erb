@@ -1,106 +1,114 @@
-class GameCenter
-	entry_id: 0
-	my_total_score: 0
-	entry: {}
-	contest: {}
-	lineup: {}
-	lineup_spots: []
-	my: {}
+class window.GameCenterCls
+    entry_id: 0
+    my_total_score: 0
+    entry: {}
+    contest: {}
+    lineup: {}
+    lineup_spots: []
+    my: {}
 
-	pusher: new Pusher('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>');
+    pusher: null
 
-	stat_names: ['points', 'assists', 'steals', 'rebounds', 'blocks', 'turnovers']
-	stat_rules:
-		points: 1
-		assists: 1.5
-		steals: 2
-		rebounds: 1.25
-		blocks: 2
-		turnovers: -1
+    stat_names: ['points', 'assists', 'steals', 'rebounds', 'blocks', 'turnovers']
+    stat_rules:
+        points: 1
+        assists: 1.5
+        steals: 2
+        rebounds: 1.25
+        blocks: 2
+        turnovers: -1
 
-	constructor: ->
-		that = @
+    handlePushedStats: (data) ->
+        # handle stats received from Pusher()
 
-		console.log "GameCenter Constructor"
-		this.setEntryID($('.gamecenter').data('entry_id'))
-		console.log(this.entry_id)
-		this.getData()
+        console.log(data)
+        i = 0
+        while i < data.players.length
+            j = 0
+            while j < this.lineup_spots.length
+                if data.players[i].id == this.lineup_spots[j].player.id
+                    this.lineup_spots[j].stats[data.players[i].stat_name] = data.players[i].stat_value
+                j++
+            i++
+        this.calculateScores()
 
-		channel = this.pusher.subscribe('gamecenter');
 
-		channel.bind('stats', (data) ->
-			console.log(data)
-			i = 0
-			while i < data.players.length
-				j = 0
-				while j < that.lineup_spots.length
-					if data.players[i].id > that.lineup_spots[j].player.id
-						that.lineup_spots[j].stats[data.players[i].stat_name] = data.players[i].stat_value
-					j++
-				i++
-			that.calculateScores()
-		);
-		
+    constructor: ->
+        that = @
 
-	setEntryID: (entry_id) ->
-		this.entry_id = entry_id
+        console.log "GameCenter Constructor"
+        this.pusher = new Pusher('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>')
+        this.setEntryID($('.gamecenter').data('entry_id'))
+        console.log(this.entry_id)
+        this.getData()
 
-	calculateScores: ->
-		console.log "calculateScores"
-		i = 0
-		this.my_total_score = 0
-		while i < this.lineup_spots.length
-			this.my_total_score += this.lineup_spots[i].stats['fp']
-			i++
+        channel = this.pusher.subscribe('gamecenter')
 
-		this.refreshMyLineup()
+        channel.bind('stats',  (data) -> that.handlePushedStats(data) )
 
-	refreshMyLineup: ->
-		that = @
-		$('.mylineup-username').html(that.my.username)
-		$('.mylineup-total-score').html(that.my_total_score)
 
-		$('.mylineup-spots .scorecard2:not(".template")').each(->
-			$(this).remove()
-		)
-		$(that.lineup_spots).each((index) -> 
-			scorecard = $('.mylineup-spots .scorecard2.template').clone().removeClass('template').appendTo( $('.mylineup-spots') )
+    setEntryID: (entry_id) ->
+        this.entry_id = entry_id
 
-			scorecard.find('.role').html(that.lineup_spots[index].sport_position.name)
-			scorecard.find('.player-name').html(that.lineup_spots[index].player.first_name + " " + that.lineup_spots[index].player.last_name)
+    calculateScores: ->
+        console.log "calculateScores"
+        i = 0
+        this.my_total_score = 0
+        while i < this.lineup_spots.length
+            this.my_total_score += this.lineup_spots[i].stats['fp']
+            i++
 
-			scorecard.find('.salary').html(that.lineup_spots[index].player.salary)
-			scorecard.find('.score').html(that.lineup_spots[index].stats['fp'])
+        this.refreshMyLineup()
 
-			records = []
-			$(that.stat_names).each((i) -> 
-				records.push(that.lineup_spots[index].stats[that.stat_names[i]] + " " + that.stat_names[i].charAt(0)) 
-			)
+    refreshMyLineup: ->
+        that = @
+        $('.mylineup-username').html(that.my.username)
+        $('.mylineup-total-score').html(that.my_total_score)
 
-			scorecard.find('.records').html(records.join(', '))
+        $('.mylineup-spots .scorecard2:not(".template")').each(->
+            $(this).remove()
+        )
+        $(that.lineup_spots).each((index) ->
+            scorecard = $('.mylineup-spots .scorecard2.template').clone().removeClass('template').appendTo($('.mylineup-spots'))
 
-		)
+            scorecard.find('.role').html(that.lineup_spots[index].sport_position.name)
+            scorecard.find('.player-name').html(that.lineup_spots[index].player.first_name + " " + that.lineup_spots[index].player.last_name)
 
-	getData: ->
-		that = @
-		$.ajax(
-  			method: "GET"
-  			url: "/api/gc_data/" + that.entry_id
-		).success((data, status, headers, config) ->
-			console.log(data)
-			that.entry = data.entry
-			that.contest = data.contest
-			that.lineup = data.lineup
-			that.lineup_spots = data.lineup_spots
-			that.my = data.my
-			that.calculateScores()
-			
-		).error (data, status, headers, config) ->
-			console.log('error')
+            scorecard.find('.salary').html(that.lineup_spots[index].player.salary)
+            scorecard.find('.score').html(that.lineup_spots[index].stats['fp'])
 
-	
+            records = []
+            $(that.stat_names).each((i) ->
+                records.push(that.lineup_spots[index].stats[that.stat_names[i]] + " " + that.stat_names[i].charAt(0))
+            )
 
-$(document).on('ready', ->
-	if $('.gamecenter').length > 0
-		window.gamecenter = new GameCenter
+            scorecard.find('.records').html(records.join(', '))
+
+        )
+
+    getData: ->
+        that = @
+        $.ajax(
+            method: "GET"
+            url: "/api/gc_data/" + that.entry_id
+            context: this
+        ).success(this.handleAjaxData
+
+        ).error (data, status, headers, config) ->
+            console.log('error')
+
+    handleAjaxData: (data, status, headers, config) ->
+        console.log(data)
+        this.entry = data.entry
+        this.contest = data.contest
+        this.lineup = data.lineup
+        this.lineup_spots = JSON.parse(JSON.stringify(data.lineup_spots));
+        # WAS this.lineup_spots = data.lineup_spots
+        this.my = data.my
+        this.calculateScores()
+
+
+$(document).on('page:load ready', ->
+    if $('.gamecenter').length > 0
+        window.gamecenter = new GameCenterCls
 )
