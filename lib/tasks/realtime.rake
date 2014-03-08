@@ -14,6 +14,19 @@ namespace :realtime do
     end
   end
 
+  desc "capture realtime game stats and save them to files"
+  task games_to_file: :environment do
+    while true do
+      ts = Time.now.strftime("%H-%M-%S")
+      SportsdataClient::Sports::NBA.games_scheduled.result.select {|g| g['status'] == 'inprogress'}.each do |game|
+        File.open("tmp/#{ts}__#{game['id']}.json","w") do |f|
+          f.write(SportsdataClient::Sports::NBA.game_stats(game['id']).result.to_json)
+        end
+      end
+      sleep 150
+    end
+  end
+
   desc "Send dummy stats to webscoket client every 15s"
   task dummy_games_refresh: :environment do
     v = 0.0
