@@ -17,7 +17,6 @@ class Lineup
         that.clear()
 
     $('a.add-to-lineup').on 'click', ->
-      console.log('add to lineup');
       player = new window.Player($(@).closest('tr.contest-player'))
       if that.canAddPlayer(player)
         eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
@@ -46,8 +45,13 @@ class Lineup
       alert "Team needs to be completely filled before it can be submitted."
       return false
   setSalaryCap: (value) ->
-    if typeof value == "Number"
-      @salary_cap = value
+    if typeof value == "number"
+      if value > 0
+        @salary_cap = value
+      else
+        @salary_cap = 0
+    else
+      @salary_cap = 0  
   addEntry: (el) ->
     if el instanceof Entry
       @entries.push(el)
@@ -57,13 +61,19 @@ class Lineup
     @entries.length
   clearEntries: ->
     @entries = []
-  getSalaryCap: ->
-    @salary_cap
-  consumedSalary: ->
+  getAllSalaries: ->
     alloted_spots = (spot for spot in @entries when not not spot.player)
     alloted_spots.map((entry) ->
       entry.player.salary
-    ).reduce (a, b) ->
+    )
+  getMinPlayerSalary: ->
+    Math.min.apply(Math, @getAllSalaries())
+  getMaxPlayerSalary: ->
+    Math.max.apply(Math, @getAllSalaries())
+  getSalaryCap: ->
+    @salary_cap
+  consumedSalary: ->
+    @getAllSalaries().reduce (a, b) ->
       a + b
     , 0
   amountLeft: ->
@@ -112,7 +122,7 @@ class Entry
     @position = dom.data('sport-position-name') || ""
     @spot     = dom.data('spot') || ""
     @player   = ""
-    player_id = dom.data('player-id')
+    player_id = dom.data('player-id') || ""
 
     if player_id?
       player_dom = $('tr.contest-player#player_'+player_id)
@@ -124,6 +134,8 @@ class Entry
   addPlayer: (player) ->
     if player instanceof Player
       @.player = player
+    else
+      return null
   getPlayer: ->
     @.player
   removePlayer: ->
@@ -131,8 +143,10 @@ class Entry
   playerExists: ->
     @.player != ""
   render: ->
-    dom = $("tr.lineup-spot[data-spot="+@spot+"]")
-    dom.find('td.player input').val @player.id
+    that = @
+
+    dom = $("tr.lineup-spot[data-spot="+ @spot+"]")
+    dom.find('td.player input').attr("value", that.player.id) 
     dom.find('td.player span').html @player.name || "&nbsp;"
     dom.find('td.opp span').html @player.opp || "&nbsp;"
     dom.find('td.salary span').html @player.salary || "&nbsp;"

@@ -21,9 +21,15 @@ class Player < ActiveRecord::Base
 
   belongs_to :sport_position
   has_many :player_stats, inverse_of: :player
+  has_many :player_real_time_scores
 
   def name
     "#{first_name} #{last_name}"
+  end
+
+  def realtime_fantasy_points
+    fps = player_real_time_scores.find_by(name: "fp")
+    return fps ? fps['value'] : 0
   end
 
   def fantasy_points

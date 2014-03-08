@@ -1,5 +1,5 @@
 "use strict";
-/*globals $, describe, it, expect, Entry */
+/*globals $, describe, it, expect, Entry, Player */
 
 describe("Tests for an Entry", function () {
     
@@ -34,6 +34,17 @@ describe("Tests for an Entry", function () {
 
     it("Entry should have a render method in it's prototype", function () {
         expect(typeof Entry.prototype.render).toBe("function");
+    });
+
+    it("Entry should return null if player added via the addPlayer method is not an instance of a Player constructor", function () {
+        var entry = createEntry("SPORT1", "SF", "null");
+
+        entry.addPlayer({
+            name: "Some player",
+            id: "Bob"
+        });
+        expect( entry.addPlayer() ).toBe(null);
+        
     });
 
     it("Entry should receive a dom node which has sport-position-name, spot and played-id data attributes set", function () {
@@ -86,6 +97,59 @@ describe("Tests for an Entry", function () {
         entry.removePlayer();
         expect(entry.playerExists()).toBe(false);
 
+    });
+
+    it("Entry should have a render method", function () {
+        var entry = createEntry("SPORT1", "SF", "null");
+        expect(typeof entry.render).toBe("function");
+    });
+
+    it("Entry render method should change content of td elements inside a tr element that's used for this entry", function () {
+        var entry = createEntry("SPORT1", "SF", "null");
+        var player = createPlayer({
+            id: "XAB1",
+            name: "Micheal Jordan",
+            salary: 20000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+        entry.addPlayer(player);
+        console.log(player);
+        // it would be best to have rails endpoint which will provide
+        // the html templates for the mockups
+        // this way this test could check if those elements exist
+        var content = "<div id=\"mockup\" style=\"display:none;\">" +
+            "<table>" +
+                "<tbody>" +
+                    "<tr class=\"lineup-spot\" data-spot=\"" + entry.spot +  "\">" +
+                        "<td class=\"player\">" +
+                            "<span></span><p><input></p>" +
+                        "</td>" +
+                        "<td class=\"opp\">" +
+                            "<span></span>" +
+                        "</td>" +
+                        "<td class=\"salary\">" +
+                            "<span></span>" +
+                        "</td>" +
+                        "<td class=\"fppg\">" +
+                            "<span></span>" +
+                        "</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>" +
+        "</div>";
+        $("body").append(content);
+        entry.render();
+        console.log($("#mockup").html());
+        expect( $("#mockup .lineup-spot").attr("data-spot") ).toBe("SF");
+        expect( $("#mockup td.player input").val() ).toBe("XAB1");
+        expect( $("#mockup td.player span").html() ).toBe("Micheal Jordan");
+        expect( $("#mockup td.salary span").html() ).toBe("20000");
+        expect( $("#mockup td.opp span").html() ).toBe("XAB2");
+        expect( $("#mockup td.fppg span").html() ).toBe("XAB3");
+        $("#mockup").remove();
+        
     });
 
 });

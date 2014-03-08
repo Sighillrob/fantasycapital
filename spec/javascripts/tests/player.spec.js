@@ -48,4 +48,40 @@ describe("Tests for a Player", function () {
 
     });
 
+    it("You should be able to create many players", function () {
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal Jordan",
+            salary: 20000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        var player2 = createPlayer({
+            id: "YAB1",
+            name: "Micheal Bordan",
+            salary: 30000,
+            opp: "YAB2",
+            fppg: "YAB3",
+            position: "SE"
+        });
+
+        expect(player1.id).toBe("XAB1");
+        expect(player1.name).toBe("Micheal Jordan");
+        expect(player1.salary).toBe(20000);
+        expect(player1.opp).toBe("XAB2");
+        expect(player1.fppg).toBe("XAB3");
+        expect(player1.position).toBe("SF");
+
+        expect(player2.id).toBe("YAB1");
+        expect(player2.name).toBe("Micheal Bordan");
+        expect(player2.salary).toBe(30000);
+        expect(player2.opp).toBe("YAB2");
+        expect(player2.fppg).toBe("YAB3");
+        expect(player2.position).toBe("SE");
+
+    });
+
 });
