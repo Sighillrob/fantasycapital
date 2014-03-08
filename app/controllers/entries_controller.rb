@@ -11,6 +11,9 @@ class EntriesController < ApplicationController
 
   def show
     @entry_id = params[:id]
+    @entry = Entry.find(params[:id])
+    @contest = @entry.contest
+    @entries = @entry.contest.entries
   end
 
   def index

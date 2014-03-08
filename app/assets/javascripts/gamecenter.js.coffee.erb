@@ -63,7 +63,9 @@ class window.GameCenterCls
     refreshMyLineup: ->
         that = @
         $('.mylineup-username').html(that.my.username)
-        $('.mylineup-total-score').html(that.my_total_score)
+        # Nils: temporarily comment out so it doesn't clobber server-provided score. Will
+        # re-add
+        #$('.mylineup-total-score').html(that.my_total_score)
 
         $('.mylineup-spots .scorecard2:not(".template")').each(->
             $(this).remove()

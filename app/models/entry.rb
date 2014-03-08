@@ -21,6 +21,12 @@ class Entry < ActiveRecord::Base
     errors.add(:contest, "Number of entries can't exceed maximum.") if contest.entries.count >= contest.max_entries 
   end
 
+  def current_fantasypoints
+    # returns total fantasy points of the entry at the moment.
+    player_fps = lineup.players.map { |player| player.realtime_fantasy_points }
+    return player_fps.sum
+
+  end
   class << self
 
     def live

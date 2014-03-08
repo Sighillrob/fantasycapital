@@ -3,11 +3,13 @@
 
 <ul class="list-inline title">
   <li>
-    <h2>DAILY NBA FREEROLL </h2>
+    <!--<h2>DAILY NBA FREEROLL </h2>-->
+    <h2><%= @contest.title || "No contest title" %></h2>
   </li>
-  <li><span>10x $300k nfl bomb entries</span></li>
-  <li><a href="#">LIVE IN PLAY</a></li>
-  <li><span>Started 7:00pm ET 12/18</span></li>
+  <!--<li><span>10x $300k nfl bomb entries</span></li>-->
+  <li><span><%= number_to_currency(@contest.prize, :unit => '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
+  <li><a href="#">FIX LIVE IN PLAY</a></li>
+  <li><span>FIX Started 7:00pm ET 12/18</span></li>
 </ul>
 <div class="clearfix"></div>
 <!--Tab Section-->
@@ -17,13 +19,15 @@
       <h4><strong>Multiplayer League</strong></h4>
     </li>
     <li>
-      <h4>6325 Entries</h4>
+      <h4><%= @entries.count %> Entries</h4>
     </li>
     <li>
 
-      <h4>&nbsp;&nbsp;<strong>Entry:</strong>&nbsp;$0</h4>
+      <h4>&nbsp;&nbsp;<strong>Entry:</strong><%= number_to_currency(@contest.entry_fee, :unit => '$') %></h4>
     </li>
-    <li>&nbsp;&nbsp;<a href="#"><span class="green">$0.00 Prize Pool</span></a></li>
+    <li>&nbsp;&nbsp;<a href="#"><span class="green">
+         <%= number_to_currency(@contest.prize, :unit => '$') %> Prize Pool</span></a>
+    </li>
   </ul>
 </div>
 <!--/Tab Section-->
@@ -250,36 +254,20 @@
     <th>SCORE</th>
     <th>PRIZES</th>
   </tr>
+  <% @entries.each do |entry| %>
   <tr>
     <td>1</td>
     <td><%= image_tag "user.png", class: "user"%></td>
-    <td><span class="green">julius100</span></td>
+    <td><span class="green"><%= entry.lineup.user.username %></span></td>
     <td>5
       <progress value="10" max="100"></progress>
     </td>
-    <td>335.2</td>
-    <td>$300K NFL Bomb Entry</td>
+    <td><%= entry.current_fantasypoints %></td>
+    <!--<td>$300K NFL Bomb Entry</td>-->
+    <td><%= number_to_currency(@contest.prize, :unit => '$') %> <%= @contest.sport %> <%= @contest.contest_type %></td>
   </tr>
-  <tr>
-    <td>2</td>
-    <td><%= image_tag "user.png", class: "user"%></td>
-    <td><span class="green">julius100</span></td>
-    <td>5
-      <progress value="20" max="100"></progress>
-    </td>
-    <td>335.2</td>
-    <td>$300K NFL Bomb Entry</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td><%= image_tag "user.png", class: "user"%></td>
-    <td><span class="green">julius100</span></td>
-    <td>5
-      <progress value="50" max="100"></progress>
-    </td>
-    <td>335.2</td>
-    <td>$300K NFL Bomb Entry</td>
-  </tr>
+  <% end %>
+
   </tbody>
 </table>
 <div class="clearfix"></div>
@@ -302,7 +290,7 @@
   </div>
   <div class="col-md-2 panelThree"><strong class="panelStrong">SCORE</strong>
 
-    <h2 class="panelHeading mylineup-total-score">{{my_total_score}}</h2>
+    <h2 class="panelHeading mylineup-total-score"><%= @entry.current_fantasypoints %></h2>
   </div>
   <div class="clearfix"></div>
   <!--Score Card-->
