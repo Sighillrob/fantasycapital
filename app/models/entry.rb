@@ -23,10 +23,9 @@ class Entry < ActiveRecord::Base
 
   def current_fantasypoints
     # returns total fantasy points of the entry at the moment.
-    player_fps = lineup.players.map { |player| player.realtime_fantasy_points }
-    return player_fps.sum
-
+    lineup.players.map { |player| player.realtime_fantasy_points }.sum
   end
+
   class << self
 
     def live

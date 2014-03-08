@@ -28,8 +28,8 @@ class Player < ActiveRecord::Base
   end
 
   def realtime_fantasy_points
-    fps = player_real_time_scores.find_by(name: "fp")
-    return fps ? fps['value'] : 0
+    fps = player_real_time_scores.find_by_name("fp")
+    fps.try(:value) || 0
   end
 
   def fantasy_points

@@ -7,7 +7,7 @@
     <h2><%= @contest.title || "No contest title" %></h2>
   </li>
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
-  <li><span><%= number_to_currency(@contest.prize, :unit => '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
+  <li><span><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
   <li><a href="#">FIX LIVE IN PLAY</a></li>
   <li><span>FIX Started 7:00pm ET 12/18</span></li>
 </ul>
@@ -23,10 +23,10 @@
     </li>
     <li>
 
-      <h4>&nbsp;&nbsp;<strong>Entry:</strong><%= number_to_currency(@contest.entry_fee, :unit => '$') %></h4>
+      <h4>&nbsp;&nbsp;<strong>Entry:</strong><%= number_to_currency(@contest.entry_fee, unit: '$') %></h4>
     </li>
     <li>&nbsp;&nbsp;<a href="#"><span class="green">
-         <%= number_to_currency(@contest.prize, :unit => '$') %> Prize Pool</span></a>
+         <%= number_to_currency(@contest.prize, unit: '$') %> Prize Pool</span></a>
     </li>
   </ul>
 </div>
@@ -264,7 +264,7 @@
     </td>
     <td><%= entry.current_fantasypoints %></td>
     <!--<td>$300K NFL Bomb Entry</td>-->
-    <td><%= number_to_currency(@contest.prize, :unit => '$') %> <%= @contest.sport %> <%= @contest.contest_type %></td>
+    <td><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></td>
   </tr>
   <% end %>
 
