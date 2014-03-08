@@ -66,19 +66,26 @@ class Lineup
     ).reduce (a, b) ->
       a + b
     , 0
+  amountLeft: ->
+    @salary_cap - @consumedSalary()
   canAddPlayer: (player) ->
     @consumedSalary() + player.salary <= @salary_cap
-
+  spotsTaken: ->
+    (spot for spot in @entries when not not spot.player).length
+  spotsLeft: ->
+    (spot for spot in @entries when not spot.player).length
+  averagePlayerSalary: ->
+    (@consumedSalary()/@spotsTaken()) || 0
+  averageRemainingPlayerSalary: ->
+    @amountLeft()/@spotsLeft()
   clear: ->
     @entries.map (entry) ->
       entry.player = ''
     @updateView()
-
   updateView: ->
     $('tr.entry-item').find('td.val span').html '&nbsp;'
-    $('#contest-salary-cap').html (@salary_cap - @consumedSalary())
-    spots = (spot for spot in @entries when not spot.player)
-    $('#avg-rem-salary').html ((@salary_cap - @consumedSalary())/spots.length).toFixed(2)
+    $('#contest-salary-cap').html (@amountLeft())
+    $('#avg-rem-salary').html (@averageRemainingPlayerSalary()).toFixed(2)
 
     $.each @entries, (i, entry) ->
       entry.render()

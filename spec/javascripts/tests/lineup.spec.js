@@ -179,5 +179,224 @@ describe("Tests for a Lineup", function () {
 
     });
 
+    it("You should be able to remove all players from the lineup", function () {
+        var entry1 = createEntry("POS1", "SF", "UNIQUE_ID_1");
+        var entry2 = createEntry("POS2", "SM", "UNIQUE_ID_2");
+        var entry3 = createEntry("POS3", "SG", "UNIQUE_ID_3");
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal A",
+            salary: 6000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        var player2 = createPlayer({
+            id: "YBB1",
+            name: "Micheal B",
+            salary: 2000,
+            opp: "YBB2",
+            fppg: "YBB3",
+            position: "SM"
+        });
+
+        var player3 = createPlayer({
+            id: "ZCB1",
+            name: "Micheal C",
+            salary: 15000,
+            opp: "ZCB2",
+            fppg: "ZCB3",
+            position: "SG"
+        });
+
+        entry1.addPlayer(player1);
+        entry2.addPlayer(player2);
+        entry3.addPlayer(player3);
+
+        var lineup = new Lineup(65000);
+        lineup.addEntry(entry1);
+        lineup.addEntry(entry2);
+        lineup.addEntry(entry3);
+        expect(lineup.consumedSalary()).toBe(23000);
+        lineup.clear();
+        expect(lineup.consumedSalary()).toBe(0);
+        expect(lineup.getNumberOfEntries()).toBe(3);
+    });
+
+    it("You should be able to count how much money you've still got", function () {
+        var entry1 = createEntry("POS1", "SF", "UNIQUE_ID_1");
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal A",
+            salary: 6000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        entry1.addPlayer(player1);
+
+
+        var lineup = new Lineup(65000);
+        lineup.addEntry(entry1);
+        expect(lineup.getSalaryCap()).toBe(65000);
+        expect(lineup.consumedSalary()).toBe(6000);
+        expect(lineup.amountLeft()).toBe(59000);
+
+
+    });
+
+    it("You should be able to find out how many spots are still empty", function () {
+        var entry1 = createEntry("POS1", "SF", "UNIQUE_ID_1");
+        var entry2 = createEntry("POS2", "SM", "UNIQUE_ID_2");
+        var entry3 = createEntry("POS3", "SG", "UNIQUE_ID_3");
+
+        var lineup = new Lineup(100000);
+        lineup.addEntry(entry1);
+        lineup.addEntry(entry2);
+        lineup.addEntry(entry3);
+        expect(lineup.spotsLeft()).toBe(3);
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal A",
+            salary: 6000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        entry1.addPlayer(player1);
+        expect(lineup.spotsLeft()).toBe(2);
+
+        var player2 = createPlayer({
+            id: "YBB1",
+            name: "Micheal B",
+            salary: 2000,
+            opp: "YBB2",
+            fppg: "YBB3",
+            position: "SM"
+        });
+
+        entry2.addPlayer(player2);
+        expect(lineup.spotsLeft()).toBe(1);
+
+        var player3 = createPlayer({
+            id: "ZCB1",
+            name: "Micheal C",
+            salary: 15000,
+            opp: "ZCB2",
+            fppg: "ZCB3",
+            position: "SG"
+        });
+
+        entry3.addPlayer(player3);
+        expect(lineup.spotsLeft()).toBe(0);
+
+        lineup.clear();
+        expect(lineup.spotsLeft()).toBe(3);
+
+    });
+
+    it("You should be able to count all players in the lineup", function () {
+        var entry1 = createEntry("POS1", "SF", "UNIQUE_ID_1");
+        var entry2 = createEntry("POS2", "SM", "UNIQUE_ID_2");
+        var entry3 = createEntry("POS3", "SG", "UNIQUE_ID_3");
+
+        var lineup = new Lineup(100000);
+        lineup.addEntry(entry1);
+        lineup.addEntry(entry2);
+        lineup.addEntry(entry3);
+        expect(lineup.spotsLeft()).toBe(3);
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal A",
+            salary: 6000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        entry1.addPlayer(player1);
+        expect(lineup.spotsTaken()).toBe(1);
+
+        var player2 = createPlayer({
+            id: "YBB1",
+            name: "Micheal B",
+            salary: 2000,
+            opp: "YBB2",
+            fppg: "YBB3",
+            position: "SM"
+        });
+
+        entry2.addPlayer(player2);
+        expect(lineup.spotsTaken()).toBe(2);
+
+        var player3 = createPlayer({
+            id: "ZCB1",
+            name: "Micheal C",
+            salary: 15000,
+            opp: "ZCB2",
+            fppg: "ZCB3",
+            position: "SG"
+        });
+
+        entry3.addPlayer(player3);
+        expect(lineup.spotsTaken()).toBe(3);
+
+        lineup.clear();
+        expect(lineup.spotsTaken()).toBe(0);
+    });
+
+    it("You should be able to find out what's the average remaining salary in the lineup", function () {
+      
+        var entry1 = createEntry("POS1", "SF", "UNIQUE_ID_1");
+        var entry2 = createEntry("POS2", "SM", "UNIQUE_ID_2");
+        var entry3 = createEntry("POS3", "SG", "UNIQUE_ID_3");
+
+        var player1 = createPlayer({
+            id: "XAB1",
+            name: "Micheal A",
+            salary: 6000,
+            opp: "XAB2",
+            fppg: "XAB3",
+            position: "SF"
+        });
+
+        var player2 = createPlayer({
+            id: "YBB1",
+            name: "Micheal B",
+            salary: 2000,
+            opp: "YBB2",
+            fppg: "YBB3",
+            position: "SM"
+        });
+
+        var player3 = createPlayer({
+            id: "ZCB1",
+            name: "Micheal C",
+            salary: 13000,
+            opp: "ZCB2",
+            fppg: "ZCB3",
+            position: "SG"
+        });
+
+        entry1.addPlayer(player1);
+        entry2.addPlayer(player2);
+        entry3.addPlayer(player3);
+
+        var lineup = new Lineup(65000);
+        lineup.addEntry(entry1);
+        lineup.addEntry(entry2);
+        lineup.addEntry(entry3);
+        // ( 13000 + 2000 + 6000 ) / 3 
+        expect(lineup.averagePlayerSalary()).toBe(7000);
+        expect(lineup.averageRemainingPlayerSalary()).toBe(Infinity);
+
+    });
 
 });
