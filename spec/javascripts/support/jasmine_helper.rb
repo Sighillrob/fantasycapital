@@ -1,3 +1,3 @@
 Jasmine.configure do |config|
-     config.server_port = 3001
+     config.server_port = 8888
 end
