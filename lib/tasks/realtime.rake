@@ -17,13 +17,28 @@ namespace :realtime do
   desc "capture realtime game stats and save them to files"
   task games_to_file: :environment do
     while true do
-      ts = Time.now.strftime("%H-%M-%S")
-      SportsdataClient::Sports::NBA.games_scheduled.result.select {|g| g['status'] == 'inprogress'}.each do |game|
-        File.open("tmp/#{ts}__#{game['id']}.json","w") do |f|
-          f.write(SportsdataClient::Sports::NBA.game_stats(game['id']).result.to_json)
+      begin
+        ts = Time.now.strftime("%H-%M-%S")
+        SportsdataClient::Sports::NBA.games_scheduled.result.select {|g| g['status'] == 'inprogress'}.each do |game|
+          File.open("tmp/#{ts}__#{game['id']}.json","w") do |f|
+            f.write(SportsdataClient::Sports::NBA.game_stats(game['id']).result.to_json)
+          end
         end
+        sleep 150
+      rescue => e
+        logger.error e.message
+        logger.error e.backtrace.join("\n")
       end
-      sleep 150
+    end
+  end
+
+  desc "play back game stats from saved json files"
+  task games_playback: :environment do
+    Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..7]}.uniq.sort.each do |ts|
+      Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
+        RealTimeDataService.new.refresh_game JSON.parse(File.open(feed).read)
+      end
+      sleep 5
     end
   end
 

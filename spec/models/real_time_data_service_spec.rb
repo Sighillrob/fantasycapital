@@ -5,7 +5,7 @@ describe RealTimeDataService do
   let(:game_src) do
     [ { 'players' => { 'player'=> [ 
           { "id" => "a",
-            "statistics" => {"assists" => 1.0, "steals" => 2.0, "rebounds" => 3.0 }
+            "statistics" => {"assists" => "1.0", "steals" => "2", "rebounds" => "3" }
           }
         ]
      } } ]
@@ -49,7 +49,7 @@ describe RealTimeDataService do
   let(:game_src1) do
     [ { 'players' => { 'player'=> [ 
           { "id" => "a",
-            "statistics" => {"assists" => 2.0, "steals" => 2.0, "rebounds" => 3.0 }
+            "statistics" => {"assists" => "2.0", "steals" => "2.0", "rebounds" => 3.0 }
           }
         ]
      } } ]

@@ -20,8 +20,8 @@ class RealTimeDataService
         stats.each do |name, value|
           next unless REALTIME_STATS.include? name
           score = PlayerRealTimeScore.where(player: player, name: name).first_or_initialize
-          if score.value != value 
-            score.value = value
+          if score.value != value.to_f
+            score.value = value.to_f
             score.save!
             changed_scores << score
             changed = true
