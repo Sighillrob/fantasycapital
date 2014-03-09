@@ -1,11 +1,9 @@
 class window.GameCenterCls
-    entry_id: 0
-    my_total_score: 0
-    entry: {}
-    contest: {}
-    lineup: {}
-    lineup_spots: []
+    my_entry_id: 0
+
+    # client-side models:
     players: {}
+    entries: {}
 
     my: {}
 
@@ -22,7 +20,7 @@ class window.GameCenterCls
 
     handlePushedStats: (data) ->
         # handle stats received from Pusher(). We only receive stats that have changed. Update the
-        # client-side player entry with the data.
+        # client-side player model with the data.
         context = this
         console.log (data)
         $(data.players).each( (index, player) ->
@@ -35,15 +33,14 @@ class window.GameCenterCls
 
         console.log "GameCenter Constructor"
         this.pusher = new Pusher('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>')
-        this.setEntryID($('.gamecenter').data('entry_id'))
-        console.log(this.entry_id)
+        this.my_entry_id = ($('.gamecenter').data('entry_id'))
         this.getData()
 
         channel = this.pusher.subscribe('gamecenter')
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
         $("table.freeroll tr").click (e) ->
-            # user clicked on one of the users in top row. Get its entry id, populate that same entry ID
+            # user clicked on one of the contestants in top row. Get its entry id, populate that same entry ID
             # in the competitive scorecard, and then get the data for the scorecard from server.
             entryid = $(e.currentTarget).data("entry-id")
             console.log(e)
@@ -55,18 +52,15 @@ class window.GameCenterCls
                 url: "/api/gc_data/" + entryid
                 context: that
             ).success( (data, status, headers, config) ->
-                this.handleAjaxData(data, status, headers, config)
+                this.handleEntryData(data, status, headers, config)
             ).error (data, status, headers, config) ->
                 console.log('error')
 
 
-    setEntryID: (entry_id) ->
-        this.entry_id = entry_id
-
     update_lineup_player: (player) ->
 
-        # got a player instance to update on the UI. Find matching rows (there could be more than
-        # 1) and change their HTML.
+        # accept a player instance, and update it in the DOM. Find matching DOM rows (there could
+        # be more than 1) and change their HTML.
         context = this
         $(".scorecard tr[data-player-id=" + player.id + "]").each( (index, scorecardrow) ->
             $(scorecardrow).find('.player-name').html(player.first_name + " " + player.last_name)
@@ -82,7 +76,7 @@ class window.GameCenterCls
         )
 
     refreshMyLineup: (data) ->
-        # update scorecard using data received from server.
+        # update a scorecard's DOM using data received from server.
         scorecard_to_update = $(".scorecard[data-entry-id=" + data.entry.id + "]")
         scorecard_tbody = scorecard_to_update.find("tbody")
         $(scorecard_to_update).find(".username").html(data.my.username)
@@ -107,20 +101,21 @@ class window.GameCenterCls
         $(scorecard_to_update).show()
 
     getData: ->
+        # ajax call to get an entry's static information.
         that = @
         $.ajax(
             method: "GET"
-            url: "/api/gc_data/" + that.entry_id
+            url: "/api/gc_data/" + that.my_entry_id
             context: this
         ).success(
-                this.handleAjaxData
+                this.handleEntryData
 
         ).error (data, status, headers, config) ->
             console.log('error')
 
-    handleAjaxData: (data, status, headers, config) ->
-        #console.log(data)
-        # save player data as a client-side model so it can be partially updated via realtime
+    handleEntryData: (data, status, headers, config) ->
+        # callback from ajax to get an entry. save the player data as a client-side model so it
+        # can be partially updated via websocket.
         context = this
         $(data.lineup_spots).each((index, lineup_spot) ->
             context.players[lineup_spot.player.id] = lineup_spot.player
@@ -130,13 +125,6 @@ class window.GameCenterCls
             context.players[lineup_spot.player.id].stats = lineup_spot.stats
         )
         this.refreshMyLineup(data)
-        #this.entry = data.entry
-        #this.contest = data.contest
-        #this.lineup = data.lineup
-        #this.lineup_spots = JSON.parse(JSON.stringify(data.lineup_spots));
-        ## WAS this.lineup_spots = data.lineup_spots
-        #this.my = data.my
-        #this.refreshMyLineup(data)
 
 
 $(document).on('page:load ready', ->
