@@ -60,7 +60,7 @@ describe RealTimeDataService do
     it { PlayerRealTimeScore.all.should have(4).items }
   end
 
-  context "caglled again with changes in scores" do
+  context "called again with changes in scores" do
 
     let(:game_src1) do
       [ { 'players' => { 'player'=> [ 
@@ -90,7 +90,7 @@ describe RealTimeDataService do
     end
   end
 
-  context "when there are may stats to message" do
+  context "when there are many stats to message" do
 
     let(:game_src1) do
       1000.times.map do
@@ -112,6 +112,18 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_src1) 
     end
 
+  end
+
+  context "when a contest ends" do
+    it 'will receive a contest object over realtimedataservice' do
+      pending "need to add this"
+    end
+  end
+
+  context "when a contest starts" do
+    it 'will receive a contest object over realtimedataservice' do
+      pending "need to add this"
+    end
   end
 end
 

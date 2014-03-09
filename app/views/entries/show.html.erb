@@ -1,5 +1,11 @@
-<div data-entry_id="<%= @entry_id %>" class="capitalcontent gamecenter">
+<div data-entry_id="<%= @entry_id %>" data-contest_id="<%= @entry.contest.id %>"
+            class="capitalcontent gamecenter">
 <!--Login Section-->
+<%= form_tag({controller:"entries", action:"admin"}, remote: true, id: "admin_buttons_form") do %>
+    <% if ! @contest.live? %>
+        <%= submit_tag(value="Make Live", :name => "command") %>
+    <% end %>
+<% end %>
 
 <ul class="list-inline title">
   <li>
@@ -8,8 +14,9 @@
   </li>
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
   <li><span><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
-  <li><a href="#">FIX LIVE IN PLAY</a></li>
-  <li><span>FIX Started 7:00pm ET 12/18</span></li>
+  <li><a id="is_contest_live_text" href="#"><%=  @contest.live? ?  'LIVE IN PLAY' :  'not live' %></a></li>
+  <li><span>Started <%= time_ago_in_words(@contest.contest_start) + " ago" %></span></li>
+  <!--<li><span>Started 7:00pm ET 12/18</span></li>-->
 </ul>
 <div class="clearfix"></div>
 <!--Tab Section-->
@@ -262,7 +269,7 @@
     <td>5
       <progress value="10" max="100"></progress>
     </td>
-    <td><%= entry.current_fantasypoints %></td>
+    <td class="fantasypoints"><%= entry.current_fantasypoints %></td>
     <!--<td>$300K NFL Bomb Entry</td>-->
     <td><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></td>
   </tr>

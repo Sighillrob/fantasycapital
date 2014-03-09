@@ -9,6 +9,17 @@ class EntriesController < ApplicationController
   def edit
   end
 
+  def admin
+    # functions that a site admin can do (some might be only pre-launch)
+    if params['command'] == "Make Live"
+      # adjust this contest's start time to make it live, and execute captured data via resque
+      @entry = Entry.find(params[:id])
+      Resque.enqueue(GamePlaybackWorker, params[:id])
+      render nothing: true
+
+    end
+  end
+
   def show
     @entry_id = params[:id]
     @entry = Entry.find(params[:id])

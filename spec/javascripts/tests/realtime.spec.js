@@ -40,7 +40,14 @@ describe("Gamecenter", function () {
         });
 
     });
-    describe("when pushing one player update", function () {
+    describe("when pushing a player that browser doesn't know about", function () {
+       it("will be a no-op", function () {
+           gamecenter.handlePushedStats({players:[{id:9994, stat_name: "points", stat_value:320}]});
+           expect(1).toBe(1);
+       }) ;
+    });
+
+        describe("when pushing one player update", function () {
         it("will update only that one player", function () {
             var playeridx = 4;
             var playerid = stubdata.lineup_spots[playeridx].player.id;
