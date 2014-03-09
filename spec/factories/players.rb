@@ -22,6 +22,6 @@ FactoryGirl.define do
     last_name "Acy"
     team "Tor"
     dob { Date.today - 15.year }
-    sport_position SportPosition.first
+    sport_position
   end
 end

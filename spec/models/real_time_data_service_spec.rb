@@ -106,8 +106,8 @@ describe RealTimeDataService do
     it "should not exceed 50 stats/msg" do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      mock_channel.should_receive(:trigger) do |event, msg|
-         msg['players'].count.should <= 50
+      mock_channel.should_receive(:trigger).twice do |event, msg|
+         msg['players'].count.should <= 50 unless !msg['players']
       end
       RealTimeDataService.new.refresh_game(game_src1) 
     end
