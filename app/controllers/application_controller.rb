@@ -45,6 +45,6 @@ class ApplicationController < ActionController::Base
       # I'm not 100% happy with this... redirect to homepage if user hits a page requiring login.
       # Ideally we'd cause the "sign-in" overlay to pop up. But there's no
       # URL I can redirect to for the sign-in URL -- it only pops up due to client-side JS.
-      redirect_to root_path
+      redirect_to main_app.root_url
     end
 end
