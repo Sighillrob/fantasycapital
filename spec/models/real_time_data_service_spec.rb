@@ -46,14 +46,14 @@ describe RealTimeDataService do
 
   context "caglled again with changes in scores" do
 
-  let(:game_src1) do
-    [ { 'players' => { 'player'=> [ 
-          { "id" => "a",
-            "statistics" => {"assists" => "2.0", "steals" => "2.0", "rebounds" => 3.0 }
-          }
-        ]
-     } } ]
-  end
+    let(:game_src1) do
+      [ { 'players' => { 'player'=> [ 
+            { "id" => "a",
+              "statistics" => {"assists" => "2.0", "steals" => "2.0", "rebounds" => 3.0 }
+            }
+          ]
+       } } ]
+    end
 
     before do
       mock_channel = double('channel')
@@ -72,6 +72,30 @@ describe RealTimeDataService do
       stats.should have(1).items
       stats[0]["stat_value"].should == 10.75
     end
+  end
+
+  context "when there are may stats to message" do
+
+    let(:game_src1) do
+      1000.times.map do
+        { 'players' => { 'player'=> [ 
+            { "id" => "a",
+              "statistics" => {"assists" => "2.0", "steals" => "2.0", "rebounds" => 3.0 }
+            }
+          ]
+       } }
+      end
+    end
+
+    it "should not exceed 50 stats/msg" do
+      mock_channel = double('channel')
+      Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
+      mock_channel.should_receive(:trigger) do |event, msg|
+         msg['players'].count.should <= 50
+      end
+      RealTimeDataService.new.refresh_game(game_src1) 
+    end
+
   end
 end
 

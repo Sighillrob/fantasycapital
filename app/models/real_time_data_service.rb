@@ -44,7 +44,7 @@ class RealTimeDataService
     if changed_scores.size > 0
       msg = changed_scores.map {|score| { "id" => score.player_id, "stat_name" => score.name, "stat_value" => score.value.to_f }}
       #Limit the size of each message (pusher's limit is 10240)
-      msg.each_slice(50).to_a.each do |msg_chunk|
+      msg.each_slice(50).each do |msg_chunk|
         Pusher['gamecenter'].trigger('stats', { "players" => msg_chunk })
       end
     end
