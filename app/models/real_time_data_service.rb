@@ -11,7 +11,7 @@ class RealTimeDataService
   def refresh_game(game_src)
     cal = Projection::FantasyPointCalculator.new
     changed_scores = []
-    
+
     game_src.map {|t| t['players']['player'] }.flatten.each do |player_src|
 
       Player.player_of_ext_id player_src["id"] do |player|
@@ -40,13 +40,18 @@ class RealTimeDataService
 
     end # of all player loop
 
-    #trigger event to frontend
+    # Recompute all entries' current fantasypoints for sending to front end.
+    # Multiple messages sent to stay within Pusher limits.
     if changed_scores.size > 0
       msg = changed_scores.map {|score| { "id" => score.player_id, "stat_name" => score.name, "stat_value" => score.value.to_f }}
       #Limit the size of each message (pusher's limit is 10240)
       msg.each_slice(50).each do |msg_chunk|
         Pusher['gamecenter'].trigger('stats', { "players" => msg_chunk })
       end
+
+      # Recalculate all live entries' fantasy points and send as a message.
+      @entries = Entry.live.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
+      Pusher['gamecenter'].trigger('stats', { "entries" => @entries })
     end
   end
 end
