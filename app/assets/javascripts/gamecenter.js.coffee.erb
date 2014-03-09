@@ -5,6 +5,8 @@ class window.GameCenterCls
     contest: {}
     lineup: {}
     lineup_spots: []
+    players: {}
+
     my: {}
 
     pusher: null
@@ -19,19 +21,14 @@ class window.GameCenterCls
         turnovers: -1
 
     handlePushedStats: (data) ->
-        # handle stats received from Pusher()
-
-        console.log(data)
-        i = 0
-        while i < data.players.length
-            j = 0
-            while j < this.lineup_spots.length
-                if data.players[i].id == this.lineup_spots[j].player.id
-                    this.lineup_spots[j].stats[data.players[i].stat_name] = data.players[i].stat_value
-                j++
-            i++
-        this.calculateScores()
-
+        # handle stats received from Pusher(). We only receive stats that have changed. Update the
+        # client-side player entry with the data.
+        context = this
+        console.log (data)
+        $(data.players).each( (index, player) ->
+            context.players[player.id].stats[player.stat_name] = player.stat_value
+            context.update_lineup_player(context.players[player.id])
+        )
 
     constructor: ->
         that = @
@@ -45,48 +42,69 @@ class window.GameCenterCls
         channel = this.pusher.subscribe('gamecenter')
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
+        $("table.freeroll tr").click (e) ->
+            # user clicked on one of the users in top row. Get its entry id, populate that same entry ID
+            # in the competitive scorecard, and then get the data for the scorecard from server.
+            entryid = $(e.currentTarget).data("entry-id")
+            console.log(e)
+            console.log(entryid)
+            $("#competitor-scorecard").attr("data-entry-id", entryid).hide()
+
+            $.ajax(
+                method: "GET"
+                url: "/api/gc_data/" + entryid
+                context: that
+            ).success( (data, status, headers, config) ->
+                this.handleAjaxData(data, status, headers, config)
+            ).error (data, status, headers, config) ->
+                console.log('error')
 
 
     setEntryID: (entry_id) ->
         this.entry_id = entry_id
 
-    calculateScores: ->
-        console.log "calculateScores"
-        i = 0
-        this.my_total_score = 0
-        while i < this.lineup_spots.length
-            this.my_total_score += this.lineup_spots[i].stats['fp']
-            i++
+    update_lineup_player: (player) ->
 
-        this.refreshMyLineup()
+        # got a player instance to update on the UI. Find matching rows (there could be more than
+        # 1) and change their HTML.
+        context = this
+        $(".scorecard tr[data-player-id=" + player.id + "]").each( (index, scorecardrow) ->
+            $(scorecardrow).find('.player-name').html(player.first_name + " " + player.last_name)
+            $(scorecardrow).find('.salary').html(player.salary)
+            $(scorecardrow).find('.score').html(player.stats['fp'])
+            records = []
+            # fill out the detailed stats ("0 P 1 A ...")
+            $(context.stat_names).each((i, stat_name) ->
+                txt = player.stats[stat_name] + " " + stat_name.charAt(0)
+                records.push(txt)
+            )
+            $(scorecardrow).find('.records').html(records.join(', '))
+        )
 
-    refreshMyLineup: ->
-        that = @
-        $('.mylineup-username').html(that.my.username)
-        # Nils: temporarily comment out so it doesn't clobber server-provided score. Will
-        # re-add
-        #$('.mylineup-total-score').html(that.my_total_score)
+    refreshMyLineup: (data) ->
+        # update scorecard using data received from server.
+        scorecard_to_update = $(".scorecard[data-entry-id=" + data.entry.id + "]")
+        scorecard_tbody = scorecard_to_update.find("tbody")
+        $(scorecard_to_update).find(".username").html(data.my.username)
+        $(scorecard_to_update).find(".total-score").html(data.curr_fp)
 
-        $('.mylineup-spots .scorecard2:not(".template")').each(->
+        # remove the table rows before refreshing.
+        $(scorecard_tbody.find("tr")).each(->
             $(this).remove()
         )
-        $(that.lineup_spots).each((index) ->
-            scorecard = $('.mylineup-spots .scorecard2.template').clone().removeClass('template').appendTo($('.mylineup-spots'))
+        this.data = data
+        context = this
+        $(context.data.lineup_spots).each((index, lineup_spot) ->
+            # Build each row in the scorecard and attach it to DOM.
 
-            scorecard.find('.role').html(that.lineup_spots[index].sport_position.name)
-            scorecard.find('.player-name').html(that.lineup_spots[index].player.first_name + " " + that.lineup_spots[index].player.last_name)
-
-            scorecard.find('.salary').html(that.lineup_spots[index].player.salary)
-            scorecard.find('.score').html(that.lineup_spots[index].stats['fp'])
-
-            records = []
-            $(that.stat_names).each((i) ->
-                records.push(that.lineup_spots[index].stats[that.stat_names[i]] + " " + that.stat_names[i].charAt(0))
-            )
-
-            scorecard.find('.records').html(records.join(', '))
+            scorecardrow = $('tr.lineup-row-template').clone() \
+                .removeClass('lineup-row-template').attr("data-player-id", lineup_spot.player.id) \
+                .appendTo(scorecard_tbody)
+            $(scorecardrow).find('.role').html(lineup_spot.sport_position.name)
+            context.update_lineup_player(context.players[lineup_spot.player.id], scorecardrow)
 
         )
+        $(scorecard_to_update).show()
 
     getData: ->
         that = @
@@ -94,20 +112,31 @@ class window.GameCenterCls
             method: "GET"
             url: "/api/gc_data/" + that.entry_id
             context: this
-        ).success(this.handleAjaxData
+        ).success(
+                this.handleAjaxData
 
         ).error (data, status, headers, config) ->
             console.log('error')
 
     handleAjaxData: (data, status, headers, config) ->
-        console.log(data)
-        this.entry = data.entry
-        this.contest = data.contest
-        this.lineup = data.lineup
-        this.lineup_spots = JSON.parse(JSON.stringify(data.lineup_spots));
-        # WAS this.lineup_spots = data.lineup_spots
-        this.my = data.my
-        this.calculateScores()
+        #console.log(data)
+        # save player data as a client-side model so it can be partially updated via realtime
+        context = this
+        $(data.lineup_spots).each((index, lineup_spot) ->
+            context.players[lineup_spot.player.id] = lineup_spot.player
+
+            # slight friction between AJAX and Pusher API -- stats is in lineup in AJAX, while
+            # it's in "player" in the Pusher.
+            context.players[lineup_spot.player.id].stats = lineup_spot.stats
+        )
+        this.refreshMyLineup(data)
+        #this.entry = data.entry
+        #this.contest = data.contest
+        #this.lineup = data.lineup
+        #this.lineup_spots = JSON.parse(JSON.stringify(data.lineup_spots));
+        ## WAS this.lineup_spots = data.lineup_spots
+        #this.my = data.my
+        #this.refreshMyLineup(data)
 
 
 $(document).on('page:load ready', ->

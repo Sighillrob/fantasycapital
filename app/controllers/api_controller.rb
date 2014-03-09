@@ -63,6 +63,7 @@ class ApiController < ApplicationController
   end
 
   def gc_data
+    # get AJAX data for an Entry identified by entry_id, to populate gamecenter.
 
     entry = {}
     contest = {}
@@ -86,6 +87,7 @@ class ApiController < ApplicationController
       #users = contest.users
       lineup = entry.lineup
       my = lineup.user
+      curr_fp = entry.current_fantasypoints
       lineup.lineup_spots.each do |lineup_spot|
         ls = {}
         ls['player'] = lineup_spot.player
@@ -100,8 +102,8 @@ class ApiController < ApplicationController
         ls['stats'] = stats
         rt_scores = PlayerRealTimeScore.where(player: lineup_spot.player)
         rt_scores.each do |score|
-          ls['stats'][score.name] = score.value
-          ls['score'] += score.value
+          ls['stats'][score.name] = score.value.floor
+          ls['score'] += score.value.floor
         end
 
         lineup_spots.push(ls)
@@ -109,7 +111,7 @@ class ApiController < ApplicationController
 
     end
 
-    render json: {contest: contest, entry: entry, users: users, lineup: lineup, lineup_spots: lineup_spots, my: my}
+    render json: {contest: contest, entry: entry, users: users, lineup: lineup, lineup_spots: lineup_spots, my: my, curr_fp:curr_fp}
   end
 
 end

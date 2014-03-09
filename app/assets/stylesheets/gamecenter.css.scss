@@ -40,6 +40,10 @@ ul.title a {
 /*Table freeroll*/
 table.freeroll {
   width: 100%;
+  tr:hover {
+    background-color:#ffe;
+    cursor:pointer;
+  }
 }
 
 table.freeroll tr th, table.freeroll tr td {
@@ -211,23 +215,29 @@ p.quarters {
 
 /*Score Card Table*/
 .scorecard2 {
-  background: #eef0f1;
   color: #555;
   margin-top: 5px;
   &.white{
     background: #fff;
   }
 
-  &.template{
-    display: none;
-  }
 }
 
+.lineup-row-template {
+  display:none;
+}
 .scorecardTable {
-  width: 100%
+  width: 100%;
+  border-collapse:separate;
+  border-spacing:0 5px;
+}
+
+#competitor-scorecard {
+  display:none;
 }
 
 .scorecardTable tr {
+  background: #eef0f1;
 }
 
 .scorecardTable tr td {
