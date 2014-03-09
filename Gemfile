@@ -100,7 +100,7 @@ group :development, :test do
   gem "factory_girl_rails", "~> 4.0"
   gem "rspec-rails"
   gem 'meta_request'
-  gem 'debugger'
+  gem 'debugger' unless ENV["RM_INFO"]  # don't use debugger if IDE is RubyMine
   gem 'ruby-prof'
   gem 'rails-perftest'
 end
