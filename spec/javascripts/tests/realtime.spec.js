@@ -29,66 +29,41 @@ var stubdata = {"contest": {}, "entry": {"id": 1, "lineup_id": 1, "created_at": 
 ],
     "my": {"id": 1, "email": "nilsbunger@gmail.com", "created_at": "2014-02-28 04:34:51", "updated_at": "2014-03-07 17:52:20", "first_name": "Nils", "last_name": "Bunger", "balanced_customer_id": null, "balance": 0, "username": "nilsbunger", "country": "US", "state": "CA"}}
 
-describe("Tests for realtime", function () {
-    var foo = new GameCenterCls;
-    foo.handleAjaxData(stubdata);
+describe("Gamecenter", function () {
+    var gamecenter = new GameCenterCls;
+    gamecenter.handleEntryData(stubdata);
 
-    it("Should be able to create Gamecenter", function () {
+    describe("after initial ajax call", function () {
+        it("has player list populated in memory", function () {
+            var numplayers = Object.keys(gamecenter.players).length
+            expect(numplayers).toBe(10);
+        });
 
-        var foo = new GameCenterCls;
-        expect(typeof(foo)).toBe("object");
     });
-    it("Should have a lineup and a starting Fantasy Point score", function () {
+    describe("when pushing one player update", function () {
+        it("will update only that one player", function () {
+            var playeridx = 4;
+            var playerid = stubdata.lineup_spots[playeridx].player.id;
+            gamecenter.handlePushedStats({players:[{id:playerid, stat_name: "points", stat_value:320}]});
+            var j=0;
 
-        expect(foo.lineup_spots.length).toBe(10);
-        expect(foo.my_total_score).toBe(48);
-    });
-    it("Realtime push of one player should update one player", function () {
-        var playeridx = 4;
-        var playerid = stubdata.lineup_spots[playeridx].player.id;
-        foo.handlePushedStats({players:[{id:playerid, stat_name: "points", stat_value:320}]});
-        var j=0;
-        while (j < foo.lineup_spots.length) {
-            if (foo.lineup_spots[j].player.id == playerid) {
-                expect(foo.lineup_spots[j].stats['points']).toBe(320);
-            } else {
-                expect(foo.lineup_spots[j].stats['points']).toBe(stubdata.lineup_spots[j].stats['points']);
-                console.log("Spot ", j, " found points ", foo.lineup_spots[j].stats['points']);
-                console.log("expected ", stubdata.lineup_spots[j].stats['points']);
+            for (k in gamecenter.players) {
+                var player = gamecenter.players[k];
+                if (player.id === playerid) {
+                    expect(player.stats['points']).toBe(320);
+                } else {
+                    expect(player.stats['points']).toBe(stubdata.lineup_spots[j].stats['points']);
 
+                }
             }
-            j++;
-        }
+            var k = Object.keys(gamecenter.players);
 
 
-        expect(foo.lineup_spots.length).toBe(10);
-        expect(foo.my_total_score).toBe(48);
+            expect(Object.keys(gamecenter.players).length).toBe(10);
 
-        console.log("done");
-    });
+            console.log("done");
+        });
+    })
 
-//    it("Entry shouldn't have position, player and spot by default", function () {
-//        expect(Entry.prototype.position).toBe("");
-//        expect(Entry.prototype.player).toBe("");
-//        expect(Entry.prototype.spot).toBe("");
-//    });
-//
-//    it("Entry should have a render method in it's prototype", function () {
-//        expect(typeof Entry.prototype.render).toBe("function");
-//    });
-//
-//    it("Entry should receive a dom node which has sport-position-name, spot and played-id data attributes set", function () {
-//
-//        var node = document.createElement("li");
-//        node.setAttribute("data-sport-position-name", "SPORT1");
-//        node.setAttribute("data-spot", "SF");
-//        node.setAttribute("data-player-id", "null");
-//
-//        var entry = new Entry($(node));
-//        expect(entry.position).toBe("SPORT1");
-//        expect(entry.spot).toBe("SF");
-//        expect(entry.player).toBe("");
-//
-//    });
 
 });
