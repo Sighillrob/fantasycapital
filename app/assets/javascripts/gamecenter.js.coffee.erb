@@ -4,7 +4,7 @@ class window.GameCenterCls
     # client-side models:
     players: {}
     entries: {}
-
+    contest: {}
     my: {}
 
     pusher: null
@@ -23,9 +23,26 @@ class window.GameCenterCls
         # client-side player model with the data.
         context = this
         console.log (data)
+        # update player stats.
         $(data.players).each( (index, player) ->
-            context.players[player.id].stats[player.stat_name] = player.stat_value
-            context.update_lineup_player(context.players[player.id])
+            # skip players we don't have in this contest.
+            if (context.players[player.id])
+                context.players[player.id].stats[player.stat_name] = player.stat_value
+                context.update_dom_for_player(context.players[player.id])
+        )
+
+        # update entry values (fp scores).
+        $(data.entries).each( (index, entry) ->
+            context.entries[entry.id] = entry
+            context.update_dom_for_entry(context.entries[entry.id])
+        )
+
+        # update contest states
+        $(data.contests).each ((index, contest) ->
+            # ignore non-matching contests (this is a broadcast channel to multiple recipients)
+            if contest.id == context.my_contest_id
+                context.contest = contest
+                context.update_dom_for_contest(contest)
         )
 
     constructor: ->
@@ -34,6 +51,8 @@ class window.GameCenterCls
         console.log "GameCenter Constructor"
         this.pusher = new Pusher('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>')
         this.my_entry_id = ($('.gamecenter').data('entry_id'))
+        this.my_contest_id = ($('.gamecenter').data('contest_id'))
+
         this.getData()
 
         channel = this.pusher.subscribe('gamecenter')
@@ -56,8 +75,33 @@ class window.GameCenterCls
             ).error (data, status, headers, config) ->
                 console.log('error')
 
+    update_dom_for_contest: (contest) ->
+        # take the current self.contest value and update fields in the DOM.
+        make_live_btn = $('#admin_buttons_form input[value="Make Live"]')
+        if (contest.live)
+            livetext = "LIVE IN PLAY"
+            make_live_btn.hide()
+        else
+            livetext = "not live"
+            make_live_btn.show()
+        $('#is_contest_live_text').html(livetext)
 
-    update_lineup_player: (player) ->
+    update_dom_for_entry: (entry) ->
+        # accept an entry instance, and update it in the DOM. It might exist both in a scorecard,
+        # as well as in the contestants in the top.
+        matched_scorecards = $(".scorecard[data-entry-id=" + entry.id + "]")
+        matched_contestants = $(".freeroll tr[data-entry-id=" + entry.id + "]")
+
+        matched_scorecards.each( (index, scorecard) ->
+            $(scorecard).find('.total-score').html(entry.fps)
+
+        )
+        matched_contestants.each( (index, contestant) ->
+            $(contestant).find('td.fantasypoints').html(entry.fps)
+        )
+
+
+    update_dom_for_player: (player) ->
 
         # accept a player instance, and update it in the DOM. Find matching DOM rows (there could
         # be more than 1) and change their HTML.
@@ -95,7 +139,7 @@ class window.GameCenterCls
                 .removeClass('lineup-row-template').attr("data-player-id", lineup_spot.player.id) \
                 .appendTo(scorecard_tbody)
             $(scorecardrow).find('.role').html(lineup_spot.sport_position.name)
-            context.update_lineup_player(context.players[lineup_spot.player.id], scorecardrow)
+            context.update_dom_for_player(context.players[lineup_spot.player.id], scorecardrow)
 
         )
         $(scorecard_to_update).show()

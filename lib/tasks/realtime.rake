@@ -34,11 +34,16 @@ namespace :realtime do
 
   desc "play back game stats from saved json files"
   task games_playback: :environment do
+    if !File.directory?("#{Rails.root}/db/gamefeeds")
+      `cd db && tar xzvf gamefeeds.tgz`
+    end
+
     Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..7]}.uniq.sort.each do |ts|
       Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
+        puts "Sending file #{feed}"
         RealTimeDataService.new.refresh_game JSON.parse(File.open(feed).read)
       end
-      sleep 5
+      sleep 1
     end
   end
 

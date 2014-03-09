@@ -2,6 +2,7 @@ require "resque_web"
 
 Main::Application.routes.draw do
 
+  ResqueWeb::Engine.eager_load!
 
   mount ResqueWeb::Engine => "/resque_web"
 
@@ -19,7 +20,12 @@ Main::Application.routes.draw do
       get :rules_faq
     end
   end
-  resources :entries
+  resources :entries do
+    member do
+        post 'admin'
+    end
+  end
+
   resources :lineups do
     member do
       get :export

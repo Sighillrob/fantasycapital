@@ -24,6 +24,25 @@ class Contest < ActiveRecord::Base
   has_many :lineups, through: :entries
   has_many :users, through: :lineups
 
+  def start!
+    # mark contest as started right now.
+    self.contest_start = Time.now
+    self.contest_end = Time.now + 60*60*2
+    update({contest_start: self.contest_start, contest_end: self.contest_end})
+    # send as an array of one contest update.
+    Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: true}] })
+
+
+  end
+
+  def end!
+    # mark contest as finished right now.
+    self.contest_end = Time.now
+    update({contest_end: self.contest_end})
+    Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: false}] })
+
+  end
+
   #TODO: placeholder for testing the views
   def salary_cap
     65000
@@ -36,6 +55,12 @@ class Contest < ActiveRecord::Base
   def complete?
     start_at < DateTime.now
   end
+
+  def live?
+    # is current contest live right now?
+    contest_start < DateTime.now && contest_end > DateTime.now
+  end
+
 
   def filled?
     max_entries.nil? ? false : entries.count >= max_entries.to_i
