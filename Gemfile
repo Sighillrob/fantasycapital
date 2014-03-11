@@ -77,6 +77,8 @@ gem 'hpricot'
 gem 'devise'
 gem "bullet"
 
+gem 'heroku'
+
 # send gzip encoding on static assets from precompiled asset files
 gem 'rack-zippy'
 
