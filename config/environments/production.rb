@@ -53,3 +53,4 @@ Main::Application.configure do
 end
 Rails.configuration.balanced_marketplace_uri = "/v1/marketplaces/TEST-MPEO3uigheQUEL2WW6VnaCQ"
 Rails.configuration.projection_notif_email = "ammanncapital@gmail.com"
+Rails.configuration.app_name = "fantasycapital"
