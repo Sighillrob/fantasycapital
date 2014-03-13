@@ -33,6 +33,10 @@ module SportsdataClient
             end
           end
 
+          def full_game_stats(game_id)
+            client.request "games/#{game_id}/summary.xml"
+          end
+
           def game_stats(game_id)
             client.request "games/#{game_id}/summary.xml" do |response|
                 SportsdataClient::ResponseParser.new(response).parse 'team'

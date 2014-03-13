@@ -5,6 +5,7 @@ class window.GameCenterCls
     players: {}
     entries: {}
     contest: {}
+    games: {}
     my: {}
 
     pusher: null
@@ -23,6 +24,13 @@ class window.GameCenterCls
         # client-side player model with the data.
         context = this
         console.log (data)
+
+        # update game states (do this first, b/c player states depend on it).
+        $(data.games).each ((index, game) ->
+            context.games[game.id] = game
+            context.update_dom_for_game(game)
+        )
+
         # update player stats.
         $(data.players).each( (index, player) ->
             # skip players we don't have in this contest.
@@ -74,6 +82,23 @@ class window.GameCenterCls
                 this.handleEntryData(data, status, headers, config)
             ).error (data, status, headers, config) ->
                 console.log('error')
+
+    update_dom_for_game: (game) ->
+        # take the current self.game value and update main game-info fields in the DOM
+
+        game_to_update = $(".game-status[data-game-id=" + game.id + "]")
+        if (game_to_update.length == 0)
+            # DOM items haven't been created.
+            game_to_update = $('li.game-status-template').clone()
+                            .removeClass('game-status-template').attr("data-game-id", game.id)
+                            .appendTo($(".freeroll_status"))
+            $(game_to_update).find('.home-team-alias').html(game.home_team.alias)
+            $(game_to_update).find('.away-team-alias').html(game.away_team.alias)
+            $(game_to_update).show()
+        $(game_to_update).find('.home-team-score').html(game.home_team.score)
+        $(game_to_update).find('.away-team-score').html(game.away_team.score)
+        $(game_to_update).find('.game-state-text').html(game.playstate)
+
 
     update_dom_for_contest: (contest) ->
         # take the current self.contest value and update fields in the DOM.

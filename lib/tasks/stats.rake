@@ -30,6 +30,7 @@ namespace :stats do
 
   desc "Populate contests from stats api"
   task create_contests: [:environment] do
+    # populate upcoming contests in main webapp
     ContestFactory.create_nba_contests
   end
 
