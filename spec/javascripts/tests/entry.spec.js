@@ -1,26 +1,28 @@
 "use strict";
-/*globals $, describe, it, expect, Entry, Player */
+/*globals $, describe, it, expect, Entry, Player, console */
+
+function createEntry (position, spot, id) {
+    var node = document.createElement("li");
+    node.setAttribute("data-sport-position-name", position);
+    node.setAttribute("data-spot", spot);
+    node.setAttribute("data-player-id", id);
+    return new Entry($(node));
+}
+
+ function createPlayer (cfg) {
+    var node = document.createElement("li");
+    node.setAttribute("data-player-id", cfg.id);
+    node.setAttribute("data-player-name", cfg.name);
+    node.setAttribute("data-player-salary", cfg.salary);
+    node.setAttribute("data-player-opp", cfg.opp);
+    node.setAttribute("data-player-fppg", cfg.fppg);
+    node.setAttribute("data-player-position", cfg.position);
+    return new Player($(node));
+}
 
 describe("Tests for an Entry", function () {
     
-    function createEntry (position, spot, id) {
-        var node = document.createElement("li");
-        node.setAttribute("data-sport-position-name", position);
-        node.setAttribute("data-spot", spot);
-        node.setAttribute("data-player-id", id);
-        return new Entry($(node));
-    }
 
-     function createPlayer (cfg) {
-        var node = document.createElement("li");
-        node.setAttribute("data-player-id", cfg.id);
-        node.setAttribute("data-player-name", cfg.name);
-        node.setAttribute("data-player-salary", cfg.salary);
-        node.setAttribute("data-player-opp", cfg.opp);
-        node.setAttribute("data-player-fppg", cfg.fppg);
-        node.setAttribute("data-player-position", cfg.position);
-        return new Player($(node));
-    }
 
     it("Entry should be a function", function () {
         expect(typeof Entry).toBe("function");
@@ -115,7 +117,6 @@ describe("Tests for an Entry", function () {
             position: "SF"
         });
         entry.addPlayer(player);
-        console.log(player);
         // it would be best to have rails endpoint which will provide
         // the html templates for the mockups
         // this way this test could check if those elements exist
@@ -141,7 +142,6 @@ describe("Tests for an Entry", function () {
         "</div>";
         $("body").append(content);
         entry.render();
-        console.log($("#mockup").html());
         expect( $("#mockup .lineup-spot").attr("data-spot") ).toBe("SF");
         expect( $("#mockup td.player input").val() ).toBe("XAB1");
         expect( $("#mockup td.player span").html() ).toBe("Micheal Jordan");
