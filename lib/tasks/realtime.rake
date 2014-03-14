@@ -4,9 +4,9 @@ namespace :realtime do
 
     while true do
       begin
-        rtdata = SportsdataClient::Sports::NBA.games_scheduled.result
-        rtdata.each do |game|
-          RealTimeDataService.new.refresh_game game
+        ongoing_games = RealTimeDataService.new.refresh_schedule SportsdataClient::Sports::NBA.games_scheduled.result
+        ongoing_games.each do |game|
+          RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game['id']).result['game']
         end
         sleep 15
       rescue => e
@@ -21,10 +21,10 @@ namespace :realtime do
   task games_to_file: :environment do
     while true do
       begin
-        ts = Time.now.strftime("%H-%M-%S")
-        SportsdataClient::Sports::NBA.games_scheduled.result.select {|g| g['status'] == 'inprogress'}.each do |game|
-          File.open("tmp/#{ts}__#{game['id']}.json","w") do |f|
-            f.write(SportsdataClient::Sports::NBA.game_stats(game['id']).result.to_json)
+        ts = Time.now.strftime("%d-%H-%M-%S")
+          Projection::ScheduledGame.games_on.each do |game|
+          File.open("tmp/#{ts}__#{game.ext_game_id}.json","w") do |f|
+            f.write(SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result.to_json)
           end
         end
         sleep 150
@@ -44,28 +44,9 @@ namespace :realtime do
     Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..7]}.uniq.sort.each do |ts|
       Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
         puts "Sending file #{feed}"
-        RealTimeDataService.new.refresh_game JSON.parse(File.open(feed).read)
+        RealTimeDataService.new.refresh_game JSON.parse(File.open(feed).read)['game']
       end
       sleep 1
-    end
-  end
-
-  desc "Send dummy stats to webscoket client every 15s"
-  task dummy_games_refresh: :environment do
-    v = 0.0
-    u = 0.0
-    while true
-      msg = [ { "id" => 118, "stat_name" => 'points', "stat_value" => v+=1.0 },
-              { "id" => 394, "stat_name" => 'points', "stat_value" => u+=3.0 },
-              { "id" => 118, "stat_name" => 'fp', "stat_value" => v * 2 },
-              { "id" => 394, "stat_name" => 'fp', "stat_value" => u * 2 }
-      ]
-      Rails.logger.info "sending #{msg}"
-      puts "sending #{msg}"
-      Pusher['gamecenter'].trigger('stats', { "players" => msg })
-
-      sleep 5
-
     end
   end
 

@@ -8,46 +8,46 @@ class RealTimeDataService
       "turnovers"
   ]
 
-  def refresh_game(game_summary, game_src_for_test=nil)
-    # one game received from the external API. Check if we need to update our local Game data, and
-    # if we need to get realtime play info.
-
+  def refresh_schedule(schedule_summary)
     ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-    # find or create the teams and game model entries for this game.
-    home_team = Team.where(ext_team_id: game_summary['home_team']).first_or_create do |team|
-      team.name = game_summary['home']['name']
-      team.teamalias = game_summary['home']['alias']
+    schedule_summary.select do |game_summary|
+      # one game received from the external API. Check if we need to update our local Game data, and
+      # if we need to get realtime play info.
+
+      # find or create the teams and game model entries for this game.
+      (home_team, away_team) = ['home', 'away'].map do |home_or_away|
+        home_team = Team.where(ext_team_id: game_summary["#{home_or_away}_team"]).first_or_create do |team|
+          team.name = game_summary[home_or_away]['name']
+          team.teamalias = game_summary[home_or_away]['alias']
+        end
+      end
+
+      game_score = GameScore.where(ext_game_id: game_summary['id']).first_or_create do |game|
+        game.status = game_summary['status']
+        game.playdate = game_summary['scheduled'].in_time_zone('EST')
+        game.scheduledstart = game_summary['scheduled']
+        game.home_team = home_team
+        game.away_team = away_team
+      end
+
+      # skip the game if the game hasn't started.
+      !(game_score.in_future? || game_score.closed?)
     end
-    away_team = Team.where(ext_team_id: game_summary['away_team']).first_or_create do |team|
-      team.name = game_summary['away']['name']
-      team.teamalias = game_summary['away']['alias']
+  end
+
+  def refresh_game(game_src)
+    game_score = GameScore.where(ext_game_id: game_src['id']).first
+    unless game_score
+      Rails.logger.warn("GameScore not found for #{game_src['id']}")
+      return
     end
-
-    game_score = GameScore.where(ext_game_id: game_summary['id']).first_or_create do |game|
-      game.status = game_summary['status']
-      game.playdate = game_summary['scheduled'].in_time_zone('EST')
-      game.scheduledstart = game_summary['scheduled']
-      game.home_team = home_team
-      game.away_team = away_team
-    end
-
-    # nothing to do here if the game hasn't started.
-    return if game_score.in_future? || game_score.closed?
-
-    if game_src_for_test.nil?  # space for test to inject something here...
-      # game is not already marked done... get realtime stats, update our state, and push to browser.
-      game_src = SportsdataClient::Sports::NBA.full_game_stats(game_summary['id']).result['game']
-    else
-      game_src = game_src_for_test
-    end
-
-    game_score.record_sportsdata(game_summary, game_src)
-    game_score.save
-
+    game_score.record_sportsdata(game_src)
 
     cal = Projection::FantasyPointCalculator.new
     changed_scores = []
+
+    return unless game_src['team']
 
     # iterate through each of the players in both teams of the game, updating their realtime stats.
     game_src['team'].map {|t| t['players']['player'] }.flatten.each do |player_src|

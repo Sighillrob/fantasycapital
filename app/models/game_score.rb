@@ -91,11 +91,11 @@ class GameScore < ActiveRecord::Base
 
   end
   # record game status for this game from sportsdata API (sportsdata 'game-summary' data)
-  def record_sportsdata (game_summary, game_src)
+  def record_sportsdata (game_src)
     # get realtime stats on any game that is in progress and hasn't been resolved in our DB yet.
     # games are only resolved in our DB once they are "closed" from the external API, or if
     # some other exception (like 'postponed', 'unnecessary', 'cancelled') happens.
-    return if game_summary['status'] == 'scheduled'  # game hasn't started yet - nothing to update.
+    return if game_src['status'] == 'scheduled'  # game hasn't started yet - nothing to update.
     return if closed?  # we're done with this game, no changes made.
     if !exception_ending?
       # good status
@@ -105,8 +105,8 @@ class GameScore < ActiveRecord::Base
       self.away_team_score=game_src['team'][1]['points'].to_i
     end
     # record status at end of update so we still capture one 'closed' state.
-    self.status = game_summary['status']
-
+    self.status = game_src['status']
+    save!
   end
 
   class << self

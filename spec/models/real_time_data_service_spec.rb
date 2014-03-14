@@ -4,18 +4,27 @@ describe RealTimeDataService do
   before { Player.create(ext_player_id: "a") }
   let(:user) { create(:user) }
   let(:user2) { create(:user) }
-  let(:game_summary) do
-    { 'id' => "aaa-id-of-game-1",
+  let(:game_schedule) do
+    [{ 'id' => "aaa-id-of-game-1",
         'home' => {},
         'away' => {},
         'home_team' => "xxx-id-of-team-1",
         'away_team' => "yyy-id-of-team-2",
         'status' => 'inprogress',
-        'scheduled' => DateTime.now
-      }
+        'scheduled' => DateTime.now,
+        "home"=>
+          {"name"=>"Philadelphia 76ers",
+               "alias"=>"PHI",
+                  "id"=>"xxx-id-of-team-1"},
+        "away"=>
+          {"name"=>"Indiana Pacers",
+               "alias"=>"IND",
+                  "id"=>"yyy-id-of-team-2"},
+      }]
   end
   let (:game_details) do
-    { 'period' => "2",
+    { 'id' => "aaa-id-of-game-1",
+      'period' => "2",
       'clock' => "4:25",
       'team' => [{'points' => "54",
                   'players' => { 'player'=> [
@@ -55,7 +64,8 @@ describe RealTimeDataService do
          @message = msg['players'] unless !msg['players']
          @entries = msg['entries'] unless !msg['entries']
       end
-      RealTimeDataService.new.refresh_game(game_summary, game_details)
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_details)
     end
 
     it { PlayerRealTimeScore.all.should have(4).items }
@@ -77,9 +87,11 @@ describe RealTimeDataService do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
       mock_channel.should_receive(:trigger).exactly(3).times
-
-      RealTimeDataService.new.refresh_game(game_summary, game_details)
-      RealTimeDataService.new.refresh_game(game_summary, game_details)
+ 
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_details)
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_details)
     end
 
     it { PlayerRealTimeScore.all.should have(4).items }
@@ -95,10 +107,12 @@ describe RealTimeDataService do
       mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
          @message = msg['players'] unless !msg['players']
       end
-      RealTimeDataService.new.refresh_game(game_summary, game_details)
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_details)
       game_src1 = game_details.clone
       game_src1['team'][0]['players']['player'][0]['statistics']['steals'] = 82
-      RealTimeDataService.new.refresh_game(game_summary, game_src1)
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_src1)
     end
 
     it { @message.should have(2).items }
@@ -127,7 +141,8 @@ describe RealTimeDataService do
                                 "rebounds" => "3" }
              }
       end
-      RealTimeDataService.new.refresh_game(game_summary, game_src1)
+      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_game(game_src1)
     end
 
   end
