@@ -8,7 +8,7 @@ class RealTimeDataService
       "turnovers"
   ]
 
-  def refresh_game(game_summary)
+  def refresh_game(game_summary, game_src_for_test=nil)
     # one game received from the external API. Check if we need to update our local Game data, and
     # if we need to get realtime play info.
 
@@ -33,15 +33,17 @@ class RealTimeDataService
     end
 
     # nothing to do here if the game hasn't started.
-    return if game.in_future?
+    return if game_score.in_future? || game_score.closed?
 
-    unless game_score.closed?
+    if game_src_for_test.nil?  # space for test to inject something here...
       # game is not already marked done... get realtime stats, update our state, and push to browser.
       game_src = SportsdataClient::Sports::NBA.full_game_stats(game_summary['id']).result['game']
-
-      game_score.record_sportsdata(game_summary, game_src)
-      game_score.save
+    else
+      game_src = game_src_for_test
     end
+
+    game_score.record_sportsdata(game_summary, game_src)
+    game_score.save
 
 
     cal = Projection::FantasyPointCalculator.new
@@ -59,7 +61,7 @@ class RealTimeDataService
           #   adjust this to point to real game score reference from above, once we get rid of
           #   the old-style of real-time input.
           score = PlayerRealTimeScore.where(player: player, name: name,
-                                            game_score_id:nil).first_or_initialize
+                                            game_score:game_score).first_or_initialize
           if score.value != value.to_f
             score.value = value.to_f
             score.save!
@@ -71,7 +73,7 @@ class RealTimeDataService
         # add "fp" stat if anything changed
         if changed
           score = PlayerRealTimeScore.where(player: player, name: "fp",
-                                            game_score_id:nil).first_or_initialize
+                                            game_score:game_score).first_or_initialize
           score.value = cal.weighted_fp { |stat_name, weight| stats[stat_name].to_f }
           score.save!
           changed_scores << score
@@ -91,6 +93,7 @@ class RealTimeDataService
       # we want to.
       game_score_to_push = {"games" =>  [{"id" => game_score.id,
                                         "playstate" => game_score.pretty_play_state,
+                                        "min_remaining" => game_score.minutes_remaining,
                                         "home_team" => {
                                             "score" => game_score.home_team_score,
                                             "alias" => game_score.home_team.teamalias

@@ -6,6 +6,7 @@ class window.GameCenterCls
     entries: {}
     contest: {}
     games: {}
+    teams: {}
     my: {}
 
     pusher: null
@@ -39,7 +40,7 @@ class window.GameCenterCls
                 context.update_dom_for_player(context.players[player.id])
         )
 
-        # update entry values (fp scores).
+        # update entry values (fp scores, minutes remaining).
         $(data.entries).each( (index, entry) ->
             context.entries[entry.id] = entry
             context.update_dom_for_entry(context.entries[entry.id])
@@ -131,10 +132,18 @@ class window.GameCenterCls
         # accept a player instance, and update it in the DOM. Find matching DOM rows (there could
         # be more than 1) and change their HTML.
         context = this
+        gameid=undefined
+        gamescore = "&nbsp"
+        if (player.team_id in context.teams)
+            gameid = context.teams[player.team_id].game
+            game = context.games[gameid]
+            gamescore = game.away_team.alias + " " + game.away_team.score +
+                " @ " + game.home_team.alias + " " + game.home_team.score + " " + game.playstate
         $(".scorecard tr[data-player-id=" + player.id + "]").each( (index, scorecardrow) ->
             $(scorecardrow).find('.player-name').html(player.first_name + " " + player.last_name)
             $(scorecardrow).find('.salary').html(player.salary)
             $(scorecardrow).find('.score').html(player.stats['fp'])
+            $(scorecardrow).find('.player-score').html(gamescore)
             records = []
             # fill out the detailed stats ("0 P 1 A ...")
             $(context.stat_names).each((i, stat_name) ->
@@ -186,6 +195,7 @@ class window.GameCenterCls
         # callback from ajax to get an entry. save the player data as a client-side model so it
         # can be partially updated via websocket.
         context = this
+        context.teams = data.teams
         $(data.lineup_spots).each((index, lineup_spot) ->
             context.players[lineup_spot.player.id] = lineup_spot.player
 

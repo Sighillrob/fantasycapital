@@ -19,7 +19,9 @@ class Player < ActiveRecord::Base
   FP_TO_SALARY_MULTIPLIER    = 250
   PLAYER_MIN_SALARY = 3000
 
+  belongs_to :team
   belongs_to :sport_position
+  belongs_to :game_score
   has_many :player_stats, inverse_of: :player
   has_many :player_real_time_scores
 
@@ -42,7 +44,13 @@ class Player < ActiveRecord::Base
       player = Player.where(ext_player_id: player_src['id']).first_or_initialize
       player.last_name = player_src['last_name']
       player.first_name = player_src['first_name']
-      player.team = team_src['name']
+
+      # for some reason the team 'name' is different here than in the other API. Add 'market' to it
+      player.team = Team.where(ext_team_id: team_src['id']).first_or_create do |team|
+        team.name = "#{team_src['market']} #{team_src['name']}"
+        team.teamalias = team_src['alias']
+      end
+
       player.dob = Time.parse(player_src['birthdate'])
 
       #salary is fp * 250 rounded to nearest 100

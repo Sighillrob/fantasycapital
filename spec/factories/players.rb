@@ -20,7 +20,7 @@ FactoryGirl.define do
   factory :player do
     sequence(:first_name, 1) { |n| "Bruce#{n}" }
     last_name "Acy"
-    team "Tor"
+    team
     dob { Date.today - 15.year }
     sport_position
   end
