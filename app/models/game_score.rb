@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: game_scores
+#
+#  id              :integer          not null, primary key
+#  playdate        :date
+#  ext_game_id     :string(255)
+#  scheduledstart  :datetime
+#  home_team_id    :integer
+#  away_team_id    :integer
+#  home_team_score :integer
+#  away_team_score :integer
+#  status          :string(255)
+#  clock           :string(255)
+#  period          :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 class GameScore < ActiveRecord::Base
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'

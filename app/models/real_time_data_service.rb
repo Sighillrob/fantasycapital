@@ -57,9 +57,6 @@ class RealTimeDataService
         stats = player_src["statistics"]
         stats.each do |name, value|
           next unless REALTIME_STATS.include? name
-          # get the Live real-time score (designated by no game_score_id yet). BUGBUG: later
-          #   adjust this to point to real game score reference from above, once we get rid of
-          #   the old-style of real-time input.
           score = PlayerRealTimeScore.where(player: player, name: name,
                                             game_score:game_score).first_or_initialize
           if score.value != value.to_f

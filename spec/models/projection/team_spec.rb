@@ -1,13 +1,13 @@
 # == Schema Information
 #
-# Table name: projection_teams
+# Table name: teams
 #
 #  id          :integer          not null, primary key
 #  name        :string(255)
+#  teamalias   :string(255)
+#  ext_team_id :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
-#  is_current  :boolean
-#  ext_team_id :string(255)
 #
 
 require 'spec_helper'
