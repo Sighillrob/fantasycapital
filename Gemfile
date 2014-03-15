@@ -105,6 +105,7 @@ group :development, :test do
   gem 'debugger' unless ENV["RM_INFO"]  # don't use debugger if IDE is RubyMine
   gem 'ruby-prof'
   gem 'rails-perftest'
+  gem 'simplecov', '~> 0.7.1'
 end
 
 group :test do

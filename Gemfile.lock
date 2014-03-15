@@ -300,6 +300,10 @@ GEM
     shoulda-matchers (2.5.0)
       activesupport (>= 3.0.0)
     signature (0.1.7)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -411,6 +415,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers
+  simplecov (~> 0.7.1)
   social-share-button
   sportsdata-client!
   stats_client!
