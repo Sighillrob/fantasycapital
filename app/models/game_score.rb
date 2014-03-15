@@ -69,11 +69,22 @@ class GameScore < ActiveRecord::Base
     (self.status=='closed') && !exception_ending?
   end
 
+  def pending_final?
+    (self.status=='complete')
+  end
+
   # Minutes left in play. Hardcoded to NBA for now, this is different for college basketball
   # and other sports!
   def minutes_remaining
     # NBA has 4 12-minute periods
-    48 - (12 * (self.period - 1) + self.clock)
+    if self.period && self.period > 4
+      0
+    elsif self.period && self.period > 0
+      48 - (12 * (self.period - 1) + self.clock)
+    else
+      48
+    end
+
   end
 
   # pretty-printed play state for user, ie "5 min left" or "FINAL" or "scheduled" (if scheduled)
@@ -84,6 +95,8 @@ class GameScore < ActiveRecord::Base
       "CANCELLED"
     elsif in_prog?
       "#{minutes_remaining} MIN LEFT"
+    elsif pending_final?
+      "PENDING..."
     else
       "SCHEDULED"   # remaining states should all map to scheduled... if not, we'll learn :)
     end
@@ -99,7 +112,7 @@ class GameScore < ActiveRecord::Base
     return if closed?  # we're done with this game, no changes made.
     if !exception_ending?
       # good status
-      self.period=game_src['period'].to_i  # NBA, a period is a quarter
+      self.period=game_src['quarter'].to_i  # NBA, a period is a quarter
       self.clock=game_src['clock'].to_i
       self.home_team_score=game_src['team'][0]['points'].to_i  # BUGBUG: Not sure if [0] is always home
       self.away_team_score=game_src['team'][1]['points'].to_i
@@ -113,6 +126,10 @@ class GameScore < ActiveRecord::Base
 
     def recent_and_upcoming
       where "scheduledstart > ?", DateTime.now - 1.day
+    end
+
+    def in_future
+      where "status = scheduled"
     end
 
   end

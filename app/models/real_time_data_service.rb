@@ -23,16 +23,37 @@ class RealTimeDataService
         end
       end
 
-      game_score = GameScore.where(ext_game_id: game_summary['id']).first_or_create do |game|
-        game.status = game_summary['status']
-        game.playdate = game_summary['scheduled'].in_time_zone('EST')
-        game.scheduledstart = game_summary['scheduled']
-        game.home_team = home_team
-        game.away_team = away_team
+      game = GameScore.where(ext_game_id: game_summary['id']).first_or_initialize
+      game.status = game_summary['status']
+      game.playdate = game_summary['scheduled'].in_time_zone('EST')
+      game.scheduledstart = game_summary['scheduled']
+      game.home_team = home_team
+      game.away_team = away_team
+      game.save!
+
+      # send this game's updated score to the browser if anything has changed. Do this first
+      # since in the browser, player computation depends on the game scores.
+      # Note we send a single-entry araray of "games" to be consistent with the API for entries and
+      # players. That way we can change the implementation here to send multiple scores at once if
+      # we want to.
+      if game.changed?
+        game_score_to_push = {"games" =>  [{"id" => game.id,
+                                            "playstate" => game.pretty_play_state,
+                                            "min_remaining" => game.minutes_remaining,
+                                            "home_team" => {
+                                                "score" => game.home_team_score,
+                                                "alias" => game.home_team.teamalias
+                                            } ,
+                                            "away_team" => {
+                                                "score" => game.away_team_score,
+                                                "alias" => game.away_team.teamalias
+                                            }} ]
+        }
+        Pusher['gamecenter'].trigger('stats', game_score_to_push)
       end
 
       # skip the game if the game hasn't started.
-      !(game_score.in_future? || game_score.closed?)
+      !(game.in_future? || game.closed?)
     end
   end
 
@@ -83,24 +104,6 @@ class RealTimeDataService
     # Recompute each Entry's current fantasypoints for sending to front end.
     # Multiple messages sent to stay within Pusher limits.
     if changed_scores.size > 0
-      # send this game's updated score to the browser if anything has changed. Do this first
-      # since in the browser, player computation depends on the game scores.
-      # Note we send a single-entry araray of "games" to be consistent with the API for entries and
-      # players. That way we can change the implementation here to send multiple scores at once if
-      # we want to.
-      game_score_to_push = {"games" =>  [{"id" => game_score.id,
-                                        "playstate" => game_score.pretty_play_state,
-                                        "min_remaining" => game_score.minutes_remaining,
-                                        "home_team" => {
-                                            "score" => game_score.home_team_score,
-                                            "alias" => game_score.home_team.teamalias
-                                        } ,
-                                        "away_team" => {
-                                            "score" => game_score.away_team_score,
-                                            "alias" => game_score.away_team.teamalias
-                                        }} ]
-                          }
-      Pusher['gamecenter'].trigger('stats', game_score_to_push)
 
       msg = changed_scores.map {|score| { "id" => score.player_id, "stat_name" => score.name,
                                           "stat_value" => score.value.to_f }}

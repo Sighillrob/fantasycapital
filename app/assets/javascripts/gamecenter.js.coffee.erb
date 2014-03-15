@@ -27,32 +27,55 @@ class window.GameCenterCls
         console.log (data)
 
         # update game states (do this first, b/c player states depend on it).
-        $(data.games).each ((index, game) ->
-            context.games[game.id] = game
-            context.update_dom_for_game(game)
-        )
+        if data.games
+            $.each(data.games, (index, game) ->
+                context.games[game.id] = game
+                context.update_dom_for_game(game)
+            )
 
         # update player stats.
-        $(data.players).each( (index, player) ->
-            # skip players we don't have in this contest.
-            if (context.players[player.id])
-                context.players[player.id].stats[player.stat_name] = player.stat_value
-                context.update_dom_for_player(context.players[player.id])
-        )
+        if data.players
+            $.each(data.players, (index, player) ->
+                # skip players we don't have in this contest.
+                if (context.players[player.id])
+                    context.players[player.id].stats[player.stat_name] = player.stat_value
+                    context.update_dom_for_player(context.players[player.id])
+            )
 
-        # update entry values (fp scores, minutes remaining).
-        $(data.entries).each( (index, entry) ->
-            context.entries[entry.id] = entry
-            context.update_dom_for_entry(context.entries[entry.id])
-        )
+        # recalculate entry's minutes remaining from the players' minutes remaining
+        if context.entries
+            $.each(context.entries, (entry_id, entry) ->
+                entry_min_left = 0
+                if entry.players
+                    $.each(entry.players, (index, playerid) ->
+                        teamid = context.players[playerid]['team_id']
+                        gameid = context.teams[teamid]['game']
+                        if gameid of context.games
+                            min_left = context.games[gameid]['min_remaining']
+                        else
+                            console.log "Couldn't find game id " + gameid
+                            min_left = 0
+                        context.players[playerid]['min_left'] = min_left
+                        entry_min_left += min_left
+                    )
+                    context.entries[entry_id]['min_left'] = entry_min_left
+            )
+
+        # update entry's model values from incoming data (fp scores) then update the DOM.
+        if data.entries
+            $.each(data.entries, (index, entry) ->
+                context.entries[entry.id]['fps'] = entry['fps']
+                context.update_dom_for_entry(entry.id, context.entries[entry.id])
+            )
 
         # update contest states
-        $(data.contests).each ((index, contest) ->
-            # ignore non-matching contests (this is a broadcast channel to multiple recipients)
-            if contest.id == context.my_contest_id
-                context.contest = contest
-                context.update_dom_for_contest(contest)
-        )
+        if data.contests
+            $.each(data.contests, (index, contest) ->
+                # ignore non-matching contests (this is a broadcast channel to multiple recipients)
+                if contest.id == context.my_contest_id
+                    context.contest = contest
+                    context.update_dom_for_contest(contest)
+            )
 
     constructor: ->
         that = @
@@ -98,7 +121,7 @@ class window.GameCenterCls
             $(game_to_update).show()
         $(game_to_update).find('.home-team-score').html(game.home_team.score)
         $(game_to_update).find('.away-team-score').html(game.away_team.score)
-        $(game_to_update).find('.game-state-text').html(game.playstate)
+        $(game_to_update).find('.game-state-text').html(game.playstate + " (id=" + game.id + ")")
 
 
     update_dom_for_contest: (contest) ->
@@ -112,18 +135,23 @@ class window.GameCenterCls
             make_live_btn.show()
         $('#is_contest_live_text').html(livetext)
 
-    update_dom_for_entry: (entry) ->
+    update_dom_for_entry: (entry_id, entry) ->
         # accept an entry instance, and update it in the DOM. It might exist both in a scorecard,
         # as well as in the contestants in the top.
-        matched_scorecards = $(".scorecard[data-entry-id=" + entry.id + "]")
-        matched_contestants = $(".freeroll tr[data-entry-id=" + entry.id + "]")
+        matched_scorecards = $(".scorecard[data-entry-id=" + entry_id + "]")
+        matched_contestants = $(".freeroll tr[data-entry-id=" + entry_id + "]")
 
-        matched_scorecards.each( (index, scorecard) ->
-            $(scorecard).find('.total-score').html(entry.fps)
-
+        if matched_scorecards
+            $.each(matched_scorecards, (index, scorecard) ->
+                $(scorecard).find('.total-score').html(entry.fps)
+                $(scorecard).find('.entry-min-remaining').html(entry.min_left)
+                $(scorecard).find('.entry-progress-bar').attr('value', entry.min_left)
         )
-        matched_contestants.each( (index, contestant) ->
-            $(contestant).find('td.fantasypoints').html(entry.fps)
+        if matched_contestants
+            $.each(matched_contestants, (index, contestant) ->
+                $(contestant).find('td.fantasypoints').html(entry.fps)
+                $(contestant).find('.entry-min-remaining').html(entry.min_left)
+                $(contestant).find('.entry-progress-bar').attr('value', entry.min_left)
         )
 
 
@@ -134,14 +162,18 @@ class window.GameCenterCls
         context = this
         gameid=undefined
         gamescore = "&nbsp"
-        if (player.team_id in context.teams)
+        if (player.team_id of context.teams)
             gameid = context.teams[player.team_id].game
             game = context.games[gameid]
-            gamescore = game.away_team.alias + " " + game.away_team.score +
-                " @ " + game.home_team.alias + " " + game.home_team.score + " " + game.playstate
+            if game && ('away_team' of game)
+                gamescore = game.away_team.alias + " " + game.away_team.score +
+                    " @ " + game.home_team.alias + " " + game.home_team.score + " " + game.playstate
         $(".scorecard tr[data-player-id=" + player.id + "]").each( (index, scorecardrow) ->
-            $(scorecardrow).find('.player-name').html(player.first_name + " " + player.last_name)
-            $(scorecardrow).find('.salary').html(player.salary)
+            $(scorecardrow).find('.player-name').html(player.first_name + " " + player.last_name + " id:" + player.id + "  gameid:" + gameid)
+            min_left_str = ""
+            if (typeof player.min_left != undefined)
+                min_left_str = " " + player.min_left + " min left"
+            $(scorecardrow).find('.salary').html(player.salary + min_left_str)
             $(scorecardrow).find('.score').html(player.stats['fp'])
             $(scorecardrow).find('.player-score').html(gamescore)
             records = []
@@ -150,7 +182,7 @@ class window.GameCenterCls
                 txt = player.stats[stat_name] + " " + stat_name.charAt(0)
                 records.push(txt)
             )
-            $(scorecardrow).find('.records').html(records.join(', '))
+            $(scorecardrow).find('.player-record').html(records.join(', '))
         )
 
     refreshMyLineup: (data) ->
@@ -203,6 +235,11 @@ class window.GameCenterCls
             # it's in "player" in the Pusher.
             context.players[lineup_spot.player.id].stats = lineup_spot.stats
         )
+        # record the player IDs that are part of this entry
+        if ! (data.entry.id of context.entries)
+            context.entries[data.entry.id] = {}
+        context.entries[data.entry.id]['players'] = data.lineup_spots.map( (x) -> return x.player.id )
+
         this.refreshMyLineup(data)
 
 
