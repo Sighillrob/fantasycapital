@@ -47,14 +47,14 @@ class RealTimeDataService
     cal = Projection::FantasyPointCalculator.new
     changed_scores = []
 
-    return unless game_src['team']
+    teams_src = game_src['team'] || []
 
     # iterate through each of the players in both teams of the game, updating their realtime stats.
-    game_src['team'].map {|t| t['players']['player'] }.flatten.each do |player_src|
+    teams_src.map {|t| t['players']['player'] }.flatten.each do |player_src|
 
       Player.player_of_ext_id player_src["id"] do |player|
         changed = false
-        stats = player_src["statistics"]
+        stats = player_src["statistics"] || []
         stats.each do |name, value|
           next unless REALTIME_STATS.include? name
           score = PlayerRealTimeScore.where(player: player, name: name,
