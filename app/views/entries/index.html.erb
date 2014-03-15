@@ -1,4 +1,4 @@
-<div ng-controller="ContestCtrl" ng-init="search()" class="ng-bootstrap-angular">
+<div>
   <div class="welcomeNote">Enter the Game of your choice, then Select your Lineup and Win Cash.</div>
 
   <h2>MY CONTEST</h2>
@@ -14,37 +14,7 @@
     </div>
   </div>
 
-  <div ng-if="liveContests.length>0">
-      <table class='contestHead table sortable'>
-        <thead>
-        <tr>
-          <th data-defaultsort="asc" class="srt-contest-name">ID</th>
-          <th data-defaultsort="asc" class="srt-sport">GAME</th>
-          <th data-defaultsort="asc" class="srt-live-in">STARTED AT</th>
-          <th data-defaultsort="asc" class="srt-end-in">ENDS IN</th>
-          <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
-          <th data-defaultsort="asc">PRIZE POOL</th>
-          <th data-defaultsort="asc">PLACE</th>
-          <th data-defaultsort="disabled"></th>
-        </tr>
-        </thead>
-        <tbody ng-repeat="contest in liveContests">
-          <tr class="completedcontest">
-            <td>{{contest.id}}</td>
-            <td>{{contest.sport}}</td>
-            <td>{{contest.start_at}}</td>
-            <td time-counting>{{contest.end_at}}</td>
-            <td>{{contest.entry_fee}}</td>
-            <td>{{contest.prize}}</td>
-            <td>{{contest.place}}</td>
-            <td><a class="button" href="{{contest.results_path}}">RESULTS</a></td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-  <div ng-if="liveContests.length==0">
-      <p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
-  </div>
+  <div class="live-contests-dest"></div>
 
   <div class="filter_row">
     <div class="row">
@@ -58,37 +28,7 @@
     </div>
   </div>
 
-  <div ng-if="upcomingContests.length>0">
-      <table class='contestHead table sortable'>
-        <thead>
-        <tr>
-          <th data-defaultsort="asc" class="srt-contest-name">ID</th>
-          <th data-defaultsort="asc" class="srt-sport">GAME</th>
-          <th data-defaultsort="asc" class="srt-live-in">STARTS IN</th>
-          <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
-          <th data-defaultsort="asc">PRIZE POOL</th>
-          <th data-defaultsort="asc">ENTRIES</th>
-          <th data-defaultsort="disabled"></th>
-          <th data-defaultsort="disabled"></th>
-        </tr>
-        </thead>
-        <tbody ng-repeat="contest in upcomingContests">
-          <tr class="completedcontest">
-            <td>{{contest.id}}</td>
-            <td>{{contest.sport}}</td>
-            <td time-counting>{{contest.start_at}}</td>
-            <td>{{contest.entry_fee}}</td>
-            <td>{{contest.prize}}</td>
-            <td>{{contest.entry_size}}</td>
-            <td><a class="button" href="{{contest.edit_path}}">EDIT</a></td>
-            <td><a class="button" href="{{contest.view_path}}">VIEW</a></td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-  <div ng-if="upcomingContests.length==0">
-      <p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
-  </div>
+  <div class="upcoming-contests-dest"></div>
 
   <div class="filter_row">
     <div class="row">
@@ -121,38 +61,112 @@
     </div>
   </div>
 
-  <div ng-if="completedContests.length>0">
+  <div class="completed-contests-dest"></div>
 
-      <table class='contestHead table sortable'>
-        <thead>
-        <tr>
-          <th data-defaultsort="asc" class="srt-contest-name">ID</th>
-          <th data-defaultsort="asc" class="srt-sport">GAME</th>
-          <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
-          <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
-          <th data-defaultsort="asc">PRIZE POOL</th>
-          <th data-defaultsort="asc">PLACE</th>
-          <th data-defaultsort="asc">$WON</th>
-          <th data-defaultsort="disabled"></th>
-        </tr>
-        </thead>
-        <tbody ng-repeat="contest in completedContests">
-          <tr class="completedcontest">
-            <td>{{contest.id}}</td>
-            <td>{{contest.sport}}</td>
-            <td>{{contest.complete}}</td>
-            <td>{{contest.entry_fee}}</td>
-            <td>{{contest.prize}}</td>
-            <td>{{contest.place}}</td>
-            <td>{{contest.won}}</td>
-            <td><a class="button" href="{{contest.results_path}}">RESULTS</a></td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-
-  <div ng-if="completedContests.length==0">
-      <p class="message">YOU HAVE NO FINISHED CONTEST RIGHT NOW.CONTEST WILL APPEAR HERE ONCE THE GAMES WILL BE
-        FINISHED.</p>
-  </div>
 </div>
+
+<script type="text/template" id="live-contests-template">
+  <%% if (liveContests.length > 0) { %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">STARTED AT</th>
+        <th data-defaultsort="asc" class="srt-end-in">ENDS IN</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <%% _(liveContests).each(function (contest) { %>
+        <tr class="completedcontest">
+          <td><%%= contest.id %></td>
+          <td><%%= contest.sport %></td>
+          <td data-start-at="<%%= contest.start_at %>"><%%= contest.render.start_at %></td>
+          <td data-end-at="<%%= contest.end_at %>" class="js-time-count"><%%= contest.render.end_at %></td>
+          <td><%%= contest.entry_fee %></td>
+          <td><%%= contest.prize %></td>
+          <td><%%= contest.place %></td>
+          <td><a class="button" href="<%%= contest.results_path %>">RESULTS</a></td>
+        </tr>
+        <%% }); %>
+      </tbody>
+    </table>
+  <%% } else { %>
+    <p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
+  <%% } %>
+</script>
+<script type="text/template" id="upcoming-contests-template">
+  <%% if (upcomingContests.length > 0) { %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">STARTS IN</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">ENTRIES</th>
+        <th data-defaultsort="disabled"></th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+      
+      <tbody>
+        <%% _(upcomingContests).each(function (contest) { %>
+        <tr class="completedcontest">
+          <td><%%= contest.id %></td>
+          <td><%%= contest.sport %></td>
+          <td class="js-time-count"><%%= contest.render.start_at %></td>
+          <td><%%= contest.entry_fee %></td>
+          <td><%%= contest.prize %></td>
+          <td><%%= contest.entry_size %></td>
+          <td><a class="button" href="<%%= contest.edit_path %>">EDIT</a></td>
+          <td><a class="button" href="<%%= contest.view_path %>">VIEW</a></td>
+        </tr>
+        <%% }); %>
+      </tbody>
+    </table>
+  <%% } else { %>
+    <p class="message">YOU HAVE NO UPCOMING CONTEST RIGHT NOW. JOIN MORE CONTEST NOW!</p>
+  <%% } %>
+</script>
+<script type="text/template" id="completed-contests-template">
+  <%% if (completedContests.length > 0) { %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="asc">$WON</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <%% _(completedContests).each(function (contest) { %>
+        <tr class="completedcontest">
+          <td><%%= contest.id %></td>
+          <td><%%= contest.sport %></td>
+          <td><%%= contest.complete %></td>
+          <td><%%= contest.entry_fee %></td>
+          <td><%%= contest.prize %></td>
+          <td><%%= contest.place %></td>
+          <td><%%= contest.won %></td>
+          <td><a class="button" href="<%%= contest.results_path %>">RESULTS</a></td>
+        </tr>
+        <%% }); %>
+      </tbody>
+    </table>
+  <%% } else { %>
+    <p class="message">YOU HAVE NO FINISHED CONTEST RIGHT NOW. CONTEST WILL APPEAR HERE ONCE THE GAMES WILL BE FINISHED.</p>
+  <%% } %>
+</script>
