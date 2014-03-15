@@ -58,7 +58,11 @@ class window.GameCenterCls
         channel = this.pusher.subscribe('gamecenter')
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
-        $("table.freeroll tr").click (e) ->
+        this.attach_contestant_handler()
+        this.attach_sort_handler()
+
+    attach_contestant_handler: ->
+        $("table.freeroll tbody tr").click (e) ->
             # user clicked on one of the contestants in top row. Get its entry id, populate that same entry ID
             # in the competitive scorecard, and then get the data for the scorecard from server.
             entryid = $(e.currentTarget).data("entry-id")
@@ -74,7 +78,31 @@ class window.GameCenterCls
                 this.handleEntryData(data, status, headers, config)
             ).error (data, status, headers, config) ->
                 console.log('error')
+    attach_sort_handler: ->
+        $table  = $(".js-gamecenter");
+        $button = $(".js-gamecenter .js-sort-score");
+        if !$table.length || !$button.length
+            return null;
+        $button.click (e) ->
+            $rows = $table.find("tbody tr")
+            direction = $(this).attr("data-direction")
+            if $rows.length < 2
+                return null
+            else
 
+                if direction == "desc"
+                    opposite = "asc"
+                    character = "&#x25B2;"
+                else
+                    opposite = "desc"
+                    character = "&#x25BC;"
+                $rows.tsort(".fantasypoints", {
+                    order: opposite
+                })
+                $(this).removeClass("asc desc").addClass(opposite)
+                $(this).find(".direction").html(character)
+                $(this).attr("data-direction", opposite)
+                return true
     update_dom_for_contest: (contest) ->
         # take the current self.contest value and update fields in the DOM.
         make_live_btn = $('#admin_buttons_form input[value="Make Live"]')
