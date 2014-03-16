@@ -49,7 +49,9 @@ class window.GameCenterCls
                 if entry.players
                     $.each(entry.players, (index, playerid) ->
                         teamid = context.players[playerid]['team_id']
-                        gameid = context.teams[teamid]['game']
+                        if teamid of context.teams
+                            gameid = context.teams[teamid]['game']
+                        else gameid = null
                         if gameid of context.games
                             min_left = context.games[gameid]['min_remaining']
                         else
@@ -162,7 +164,7 @@ class window.GameCenterCls
         context = this
         gameid=undefined
         gamescore = "&nbsp"
-        if (player.team_id of context.teams)
+        if (player.team of context.teams)
             gameid = context.teams[player.team_id].game
             game = context.games[gameid]
             if game && ('away_team' of game)
@@ -227,7 +229,10 @@ class window.GameCenterCls
         # callback from ajax to get an entry. save the player data as a client-side model so it
         # can be partially updated via websocket.
         context = this
-        context.teams = data.teams
+        if !data.teams
+            console.log "HUH?"
+        else
+            context.teams = data.teams
         $(data.lineup_spots).each((index, lineup_spot) ->
             context.players[lineup_spot.player.id] = lineup_spot.player
 
