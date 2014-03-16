@@ -72,32 +72,31 @@ class RealTimeDataService
 
     # iterate through each of the players in both teams of the game, updating their realtime stats.
     teams_src.map {|t| t['players']['player'] }.flatten.each do |player_src|
+      player = Player.where(ext_player_id: player_src['id']).first_or_create
 
-      Player.player_of_ext_id player_src["id"] do |player|
-        changed = false
-        stats = player_src["statistics"] || []
-        stats.each do |name, value|
-          next unless REALTIME_STATS.include? name
-          score = PlayerRealTimeScore.where(player: player, name: name,
-                                            game_score:game_score).first_or_initialize
-          if score.value != value.to_f
-            score.value = value.to_f
-            score.save!
-            changed_scores << score
-            changed = true
-          end
-        end # of player_src["statistics"].each do |name, value|
-
-        # add "fp" stat if anything changed
-        if changed
-          score = PlayerRealTimeScore.where(player: player, name: "fp",
-                                            game_score:game_score).first_or_initialize
-          score.value = cal.weighted_fp { |stat_name, weight| stats[stat_name].to_f }
+      changed = false
+      stats = player_src["statistics"] || []
+      stats.each do |name, value|
+        next unless REALTIME_STATS.include? name
+        score = PlayerRealTimeScore.where(player: player, name: name,
+                                          game_score:game_score).first_or_initialize
+        if score.value != value.to_f
+          score.value = value.to_f
           score.save!
           changed_scores << score
+          changed = true
         end
+      end # of player_src["statistics"].each do |name, value|
 
-      end # of Player.player_of_ext_id player_src["id"] do |player|
+      # add "fp" stat if anything changed
+      if changed
+        score = PlayerRealTimeScore.where(player: player, name: "fp",
+                                          game_score:game_score).first_or_initialize
+        score.value = cal.weighted_fp { |stat_name, weight| stats[stat_name].to_f }
+        score.save!
+        changed_scores << score
+      end
+
 
     end # of all player loop
 

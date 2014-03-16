@@ -37,7 +37,7 @@ describe RealTimeDataService do
                  {'points' => "22",
                   'players' => { 'player'=> [
                       { "id" => "4",
-                        "statistics" => {"assists" => "3.0", "steals" => "4", "rebounds" => "5" }
+                        "statistics" => {"assists" => "2.0", "steals" => "4", "rebounds" => "6" }
                       }
                   ]
                   }
@@ -57,8 +57,8 @@ describe RealTimeDataService do
       @entry = create(:entry, contest: @contest, lineup: @lineup)
       @entry = create(:entry, contest: @contest, lineup: @lineup2)
 
-      # will get a game update, a players update, and an entry update message
-      pusher_mock.should_receive(:trigger).exactly(3).times do |event, msg|
+      # will get a players update, and an entry update message (games are only sent on a change)
+      pusher_mock.should_receive(:trigger).exactly(2).times do |event, msg|
          event.should == 'stats'
          @games = msg['games'] unless !msg['games']
          @message = msg['players'] unless !msg['players']
@@ -67,13 +67,15 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
     end
-
-    it { PlayerRealTimeScore.all.should have(4).items }
-    it { @message.should have(4).items }
+    # we'll be getting 4 player stats per player, so 8 stats total
+    it { PlayerRealTimeScore.all.should have(8).items }
+    it { @message.should have(8).items }
     it "should includes fp" do
       stats = @message.select {|s| s["stat_name"] == "fp"}
-      stats.should have(1).items
-      stats[0]["stat_value"].should == 9.25
+      stats.should have(2).items
+      stats[0]["stat_value"].should == 9.25 # player 0
+      stats[1]["stat_value"].should == 18.5 # player 1
+
     end
     it "will have an entry" do
       expect(@entries).to be_true
@@ -86,7 +88,8 @@ describe RealTimeDataService do
     before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      mock_channel.should_receive(:trigger).exactly(3).times
+      # expect a player message and an entries message.
+      mock_channel.should_receive(:trigger).exactly(2).times
  
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
@@ -94,7 +97,7 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_details)
     end
 
-    it { PlayerRealTimeScore.all.should have(4).items }
+    it { PlayerRealTimeScore.all.should have(8).items }  # 4 stats, times 2 players
   end
 
   context "called again with changes in scores" do
@@ -102,9 +105,13 @@ describe RealTimeDataService do
     before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      # receive 3 times for initial refresh, then 3 times for second refresh
-      mock_channel.should_receive(:trigger).exactly(3).times.ordered
-      mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
+      # receive push msg 2x (players, entries) during initial call to refresh_schedule/game,
+      # then 2x for second refresh.
+      mock_channel.should_receive(:trigger).exactly(2).times.ordered do |event, msg|
+        puts "received #{msg}"
+      end
+      mock_channel.should_receive(:trigger).exactly(2).times.ordered do |event, msg|
+        puts "second block, received #{msg}"
          @message = msg['players'] unless !msg['players']
       end
       RealTimeDataService.new.refresh_schedule(game_schedule)
@@ -115,7 +122,9 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_src1)
     end
 
-    it { @message.should have(2).items }
+    it {
+      @message.should have(2).items
+    }
     it "should includes fp" do
       stats = @message.select {|s| s["stat_name"] == "fp"}
       stats.should have(1).items
@@ -128,17 +137,19 @@ describe RealTimeDataService do
     it "should not exceed 50 stats/msg" do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      # with 100 changes in pipe, we should get 2 message batches. Each message batch has 4
-      # Pusher msgs in it, so in total 8 Pusher messages.
-      mock_channel.should_receive(:trigger).exactly(8).times do |event, msg|
-         msg['players'].count.should <= 50 unless !msg['players']
+      # with 30 changes, 3 stats per msg, plus fantasy point stat, there are 120 messages to send.
+      # That means 3 Pusher messages, plus 1 for the entries message.
+      mock_channel.should_receive(:trigger).exactly(4).times do |event, msg|
+        msg['players'].count.should <= 50 unless !msg['players']
       end
       game_src1 = game_details.clone
-      100.times do
+      game_src1['team'][0]['players']['player'] = []  # clear out old value.
+      game_src1['team'][1]['players']['player'] = []  # clear out old value.
+      30.times do |idx|
         game_src1['team'][0]['players']['player'] <<
             { "id" => "a",
-               "statistics" => {"assists" => rand(20).to_s, "steals" => rand(10).to_s,
-                                "rebounds" => "3" }
+               "statistics" => {"assists" => (15+idx).to_s, "steals" => (15+idx*2).to_s,
+                                "rebounds" => (15+idx*3).to_s }
              }
       end
       RealTimeDataService.new.refresh_schedule(game_schedule)
