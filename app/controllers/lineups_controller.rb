@@ -21,10 +21,14 @@ class LineupsController < ApplicationController
   end
 
   def create
-    @lineup         = current_user.lineups.create(lineup_parameters)
-
-    # Create an entry that new lineup belongs to
-    @entry = Contest.find(@lineup.contest_id_to_enter).enter(@lineup) if @lineup.contest_id_to_enter.present?
+    begin
+      @lineup         = current_user.lineups.create(lineup_parameters)
+      # Create an entry that new lineup belongs to
+      @entry = Contest.find(@lineup.contest_id_to_enter).enter(@lineup) if @lineup.contest_id_to_enter.present?
+    rescue RuntimeError => e
+      redirect_to "/", notice: e.message
+      return
+    end
 
     respond_to do |format|
       if @lineup.save
