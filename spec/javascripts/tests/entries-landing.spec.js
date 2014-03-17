@@ -51,7 +51,6 @@ describe("Tests for the entries landing script", function () {
         console.log(data);
         // render property is being added to the liveContests
         expect(typeof data.liveContests[0].render).toBe("object");
-        expect(data.liveContests[0].render.start_at).toBe("09:44 pm");
         // render property is being added to the upcomingContests
         expect(typeof data.upcomingContests[0].render).toBe("object");
 
