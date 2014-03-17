@@ -62,6 +62,19 @@ class ApiController < ApplicationController
     
   end
 
+  def gc_data2
+    # get AJAX data for an Entry, refactored for Backbone models
+    entry_id = params[:entry_id]
+    entry = Entry.find_by_id(entry_id)
+    render json: {id: entry.id, contest_id: entry.contest_id,
+                  player_ids: entry.lineup.lineup_spots.pluck('player_id'),
+                  fps: entry.current_fantasypoints,
+                  username: entry.lineup.user.username
+
+    }
+
+  end
+
   def gc_data
     # get AJAX data for an Entry identified by entry_id, to populate gamecenter.
 
@@ -82,7 +95,7 @@ class ApiController < ApplicationController
       teams[game.home_team.id] = teams[game.away_team.id] = {game: game.id}
     }
 
-      unless entry.nil?
+    unless entry.nil?
       #contest['id'] = entry.contest.id
       #contest['sport'] = entry.contest.sport
       #contest['start_at'] = entry.contest.contest_start.utc.strftime('%Y-%m-%d %H:%M:%S')

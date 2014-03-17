@@ -43,7 +43,7 @@ module SportsdataClient
             end
           end
 
-          def games_scheduled(date=Time.now.in_time_zone("EST"))
+          def games_scheduled(date=Time.now.in_time_zone("EST").to_date)
             client.request "games/#{date.strftime("%Y/%m/%d")}/schedule.xml" do |response|
               SportsdataClient::ResponseParser.new(response).parse 'game'
             end

@@ -28,10 +28,18 @@ namespace :stats do
     safe_rake_tasks "stats:player_stats"
   end
 
-  desc "Populate contests from stats api"
+  desc "Create games and contests from stats api"
   task create_contests: [:environment] do
+    today = Time.now.in_time_zone("EST").to_date
+    # create games and contests for multiple days in future so that we can always have contests to
+    # enter.
+    (today.. today+4).each do |date|
+      games_scheduled = SportsdataClient::Sports::NBA.games_scheduled(date).result
+      RealTimeDataService.new.refresh_schedule games_scheduled
+    end
     # populate upcoming contests in main webapp
     ContestFactory.create_nba_contests
+
   end
 
   desc "Populate players for NBA from SportsData api"

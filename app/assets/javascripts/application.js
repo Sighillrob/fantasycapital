@@ -21,6 +21,9 @@
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
 //= require app
+//= require underscore
+//= require backbone
+//= require backbone/main
 //= require_tree ./angular
 //= require jquery.countdown
 //= require ajax_modal

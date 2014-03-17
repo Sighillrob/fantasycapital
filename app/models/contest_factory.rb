@@ -32,18 +32,41 @@ class ContestFactory
   class << self
 
     def create_nba_contests
-      games = Projection::ScheduledGame.games_on
-      #populate contests only when there are 3 or more games for the day
-      return if games.count < 3
+      # create games and contests for all days where there are 3 or more games being played.
 
-      p_teams = games.map {|g| [g.home_team, g.away_team]}.flatten
-      players = p_teams.reduce([]) {|p, t| p + Player.where(ext_player_id: t.players.map {|pp| pp.ext_player_id})}
+      # generate hash of how many games are played on each date.
+      games_per_day = GameScore.recent_and_upcoming.group(:playdate).uniq.count
+      games_per_day.each do |gamedate, gamecount |
+        # skip days with fewer than 3 games.
+        next if gamecount < 3
 
-      contest_date = games[0].start_date
-      NBA_CONTESTS.each do |row|
-        c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2], max_entries: row[3], sport: "NBA", contest_start: contest_start_time(contest_date), contest_end: contest_end_time(contest_date)).first_or_create
-        players.each do |p|
-          PlayerContest.where(contest: c, player: p).first_or_create
+        # generate contests for this gamedate if they don't exist yet.
+        games_of_day = GameScore.where(playdate:gamedate)
+
+        # contests start at the earliest gametime of that day.
+        contest_time = games_of_day.pluck(:scheduledstart).sort()[0].to_time
+
+        p_teams = games_of_day.map {|g| [g.home_team, g.away_team]}.flatten
+
+        players = p_teams.reduce([]) {|p, t| p + Player.where(
+                                    ext_player_id: t.players.map {|pp| pp.ext_player_id})}
+
+        # Create contests for this day, and mark eligible players, if they don't already exist.
+        NBA_CONTESTS.each do |row|
+          c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2],
+                          max_entries: row[3], sport: "NBA", contestdate:gamedate).first_or_initialize
+          c.contest_start = contest_time
+          c.save! if c.changed?
+          puts "Creating PlayerContests..."
+          # Create a playercontest entry per player and contest. So it's ~6K entries per day.
+          # this keeps the logic general (we could make some players not eligible for a given day).
+          # we might want to optimize what's stored in a playercontest (e.g. remove the statistics)
+          # or find a way to do a batch update. This is expensive in the DB at the moment, at least
+          # in dev machine.
+          players.each do |p|
+            PlayerContest.where(contest: c, player: p).first_or_create
+          end
+          puts "Created #{players.count} PlayerContests"
         end
       end
     end
