@@ -77,7 +77,9 @@ class GameScore < ActiveRecord::Base
   # and other sports!
   def minutes_remaining
     # NBA has 4 12-minute periods
-    if self.period && self.period > 4
+    if self.in_future?
+      48
+    elsif self.period && self.period > 4
       0
     elsif self.period && self.period > 0
       48 - (12 * (self.period - 1) + self.clock)
@@ -120,6 +122,14 @@ class GameScore < ActiveRecord::Base
     # record status at end of update so we still capture one 'closed' state.
     self.status = game_src['status']
     save!
+  end
+
+  def as_json(options = { })
+    # add computed parameters for json serialization (for sending to browser)
+    h = super(options)
+    h[:pretty_play_state]   = self.pretty_play_state
+    h[:minutes_remaining] = self.minutes_remaining
+    h
   end
 
   class << self

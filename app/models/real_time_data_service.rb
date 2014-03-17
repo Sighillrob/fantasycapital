@@ -9,6 +9,8 @@ class RealTimeDataService
   ]
 
   def refresh_schedule(schedule_summary)
+    # update the GameScore models with game schedules and state. This happens for several days ahead
+    # during overnight tasks, and regularly (every 15 seconds) during gametimes.
     ActiveRecord::Base.logger = Logger.new(STDOUT)
 
     schedule_summary.select do |game_summary|
@@ -52,8 +54,9 @@ class RealTimeDataService
         Pusher['gamecenter'].trigger('stats', game_score_to_push)
       end
 
-      # skip the game if the game hasn't started.
-      !(game.in_future? || game.closed?)
+      # skip the game if the game hasn't started. we're in a select, so a TRUE means return this
+      #  schedule item.
+      !game.in_future? && !game.closed?
     end
   end
 
