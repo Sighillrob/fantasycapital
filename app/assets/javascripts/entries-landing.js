@@ -1,6 +1,7 @@
-/* globals jQuery, _, FANTASY */
+"use strict";
+/* globals jQuery, _, FANTASY, moment */
+
 (function ($) {
-    "use strict";
 
     var ns = {};
 
@@ -16,38 +17,53 @@
             upcoming:  $("#upcoming-contests-template").html(),
             completed: $("#completed-contests-template").html()
         };
-    }
+    };
+
+    ns.detach = function () {
+        delete ns.dest;
+        delete ns.tpl;
+    };
 
     ns.url = "api/searchEntries";
 
-    ns.cache = {};
+    ns.cache = null;
 
     ns.checkConditions = function () {
 
-        return this.dest.live.length &&
-            this.dest.upcoming.length &&
-            this.dest.completed.length &&
+        return typeof this.dest !== "undefined" &&
+            typeof this.tpl !== "undefined" &&
+            (this.dest.live.length > 0) &&
+            (this.dest.upcoming.length > 0) &&
+            (this.dest.completed.length > 0) &&
             this.tpl.live &&
             this.tpl.upcoming &&
             this.tpl.completed;
     };
 
-    ns.ajax = function (callback) {
+    ns.ajax = function (callback, cached) {
 
         var self = this;
 
-        $.ajax({
-            type: "GET",
-            url: self.url,
-            success: function (data) {
-                if (data && typeof data === "object") {
-                    // save the original version in cache
-                    ns.cache = data;
-                    // fire off a callback with a cloned, parsed version
-                    callback.call(self, self.parse(data));
+        if (typeof cached === "object") {
+            ns.cache = cached;
+            callback(self.parse(cached));
+        } else {
+
+            $.ajax({
+                type: "GET",
+                url: self.url,
+                success: function (data) {
+                    if (data && typeof data === "object") {
+                        // save the original version in cache
+                        ns.cache = data;
+                        // fire off a callback with a cloned, parsed version
+                        callback.call(self, self.parse(data));
+                    }
                 }
-            }
-        });
+            });
+
+        }
+
     };
 
     ns.parse = function (data) {
@@ -66,7 +82,14 @@
 
 
         return data;
-    }
+    };
+
+    ns.manage = function (data) {
+
+        this.render(data);
+        this.countdown();
+
+    };
 
     ns.render = function (data) {
 
@@ -76,23 +99,60 @@
 
     };
 
+    ns.handle = function () {
+
+        this.ajax(this.manage);
+
+    };
+
+    ns.padding = function (value) {
+
+        if (value < 10 && value >= 0) {
+            return "0" + value;
+        }
+        return value.toString();
+
+    }
+
+    ns.countdown = function () {
+
+
+        var self = this;
+
+        $(".js-time-count").countdown({
+            date: $(this).attr("data-time"),
+            render: function (date) {
+                var min, sec, days;
+                min = self.padding(date.min);
+                sec = self.padding(date.sec);
+
+                days = date.days;
+                $(this).html(date.days * 24 + date.hours + ":" + min + ":" + sec);
+
+            },
+            onEnd: function () {
+                self.handle();
+            }
+        });
+
+    };
+
     ns.init = function () {
         ns.attach();
         // if there're no dest nodes
         if ( !this.checkConditions() ) {
+            ns.detach();
             return null;
         }
-
-        this.ajax(this.render);
-
+        // do an ajax call, render and attach countdown
+        this.handle();
 
     };
 
-    window.FANTASY = ns;
+    window.fantasyEntries = ns;
 
 })(jQuery);
 
-jQuery(document).ready(function ($) {
-    
-    FANTASY.init(); 
+jQuery(document).ready(function () {
+    fantasyEntries.init();
 });
