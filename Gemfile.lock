@@ -48,6 +48,9 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
+    airbrake (3.1.16)
+      builder
+      multi_json
     angularjs-rails (1.2.12.1)
     annotate (2.6.1)
       activerecord (>= 2.3.0)
@@ -374,6 +377,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store (= 0.1.0)
+  airbrake
   angularjs-rails (~> 1.2)
   annotate
   better_errors
