@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 "use strict";
 /* globals jQuery, _, FANTASY, moment */
 
 (function ($) {
+=======
+/* globals jQuery, _, FANTASY */
+(function ($) {
+    "use strict";
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
 
     var ns = {};
 
@@ -17,6 +23,7 @@
             upcoming:  $("#upcoming-contests-template").html(),
             completed: $("#completed-contests-template").html()
         };
+<<<<<<< HEAD
     };
 
     ns.detach = function () {
@@ -35,11 +42,25 @@
             (this.dest.live.length > 0) &&
             (this.dest.upcoming.length > 0) &&
             (this.dest.completed.length > 0) &&
+=======
+    }
+
+    ns.url = "api/searchEntries";
+
+    ns.cache = {};
+
+    ns.checkConditions = function () {
+
+        return this.dest.live.length &&
+            this.dest.upcoming.length &&
+            this.dest.completed.length &&
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
             this.tpl.live &&
             this.tpl.upcoming &&
             this.tpl.completed;
     };
 
+<<<<<<< HEAD
     ns.ajax = function (callback, cached) {
 
         var self = this;
@@ -64,6 +85,24 @@
 
         }
 
+=======
+    ns.ajax = function (callback) {
+
+        var self = this;
+
+        $.ajax({
+            type: "GET",
+            url: self.url,
+            success: function (data) {
+                if (data && typeof data === "object") {
+                    // save the original version in cache
+                    ns.cache = data;
+                    // fire off a callback with a cloned, parsed version
+                    callback.call(self, self.parse(data));
+                }
+            }
+        });
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
     };
 
     ns.parse = function (data) {
@@ -82,6 +121,7 @@
 
 
         return data;
+<<<<<<< HEAD
     };
 
     ns.manage = function (data) {
@@ -90,6 +130,9 @@
         this.countdown();
 
     };
+=======
+    }
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
 
     ns.render = function (data) {
 
@@ -99,6 +142,7 @@
 
     };
 
+<<<<<<< HEAD
     ns.handle = function () {
 
         this.ajax(this.manage);
@@ -137,10 +181,13 @@
 
     };
 
+=======
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
     ns.init = function () {
         ns.attach();
         // if there're no dest nodes
         if ( !this.checkConditions() ) {
+<<<<<<< HEAD
             ns.detach();
             return null;
         }
@@ -156,3 +203,21 @@
 jQuery(document).ready(function () {
     fantasyEntries.init();
 });
+=======
+            return null;
+        }
+
+        this.ajax(this.render);
+
+
+    };
+
+    window.FANTASY = ns;
+
+})(jQuery);
+
+jQuery(document).ready(function ($) {
+    
+    FANTASY.init(); 
+});
+>>>>>>> e9aac2227b03e6782c8925abc905e60510910221
