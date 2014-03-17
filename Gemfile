@@ -92,6 +92,7 @@ end
 group :production, :staging do
   gem 'rails_12factor'
   gem "rack-google-analytics"
+  gem 'airbrake'
 end
 
 group :development, :test do
