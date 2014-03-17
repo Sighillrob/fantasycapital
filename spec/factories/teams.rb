@@ -10,8 +10,11 @@
 #  updated_at  :datetime
 #
 
-require 'spec_helper'
+# Read about factories at https://github.com/thoughtbot/factory_girl
 
-describe Projection::Team do
-  pending "add some examples to (or delete) #{__FILE__}"
+FactoryGirl.define do
+  factory :team do
+    name "MyString"
+    teamalias "MyString"
+  end
 end

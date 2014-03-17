@@ -254,11 +254,12 @@ p.quarters {
     }
   }
 
-  .por{
+  .player-score{
     margin-bottom: 0;
-    .records{
+  }
+  .player-record-row {
       text-transform: uppercase;
-    }
+      margin-bottom: 0;
   }
 }
 

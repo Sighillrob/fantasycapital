@@ -88,11 +88,6 @@ namespace :projection do
     )
   end
 
-
-  desc "Run all tasks needed to build project"
-  task run_all: [:environment, :fetch_stats, :fp, :notif, :review] do
-  end
-
   desc "Purge projection database"
   task purge: :environment do
     input = ''
@@ -113,3 +108,6 @@ namespace :projection do
 
   end
 end
+
+desc "Run all tasks needed to build project"
+task projection: [:environment, "projection:fetch_stats", "projection:fp", "projection:notif", "projection:review"]

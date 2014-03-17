@@ -21,6 +21,7 @@ class EntriesController < ApplicationController
   end
 
   def show
+    # this is the real-time "gamecenter" action.
     @entry_id = params[:id]
     @entry = Entry.find(params[:id])
     @contest = @entry.contest

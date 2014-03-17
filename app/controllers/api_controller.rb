@@ -71,11 +71,18 @@ class ApiController < ApplicationController
     lineup_spots = []
     users = []
     my = []
+    teams = {}
 
     entry_id = params[:entry_id]
     entry = Entry.find_by_id(entry_id)
 
-    unless entry.nil?
+    # create hash of team-id to game-ids of relevant games, used by browser to map scores
+    # to players.
+    GameScore.recent_and_upcoming.all.each { |game|
+      teams[game.home_team.id] = teams[game.away_team.id] = {game: game.id}
+    }
+
+      unless entry.nil?
       #contest['id'] = entry.contest.id
       #contest['sport'] = entry.contest.sport
       #contest['start_at'] = entry.contest.contest_start.utc.strftime('%Y-%m-%d %H:%M:%S')
@@ -111,7 +118,10 @@ class ApiController < ApplicationController
 
     end
 
-    render json: {contest: contest, entry: entry, users: users, lineup: lineup, lineup_spots: lineup_spots, my: my, curr_fp:curr_fp}
+    render json: {contest: contest, entry: entry, users: users, lineup: lineup,
+                  lineup_spots: lineup_spots, my: my, curr_fp:curr_fp,
+                  teams: teams
+                  }
   end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140302000421) do
+ActiveRecord::Schema.define(version: 20140314183252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,24 @@ ActiveRecord::Schema.define(version: 20140302000421) do
   add_index "entries", ["lineup_id", "contest_id"], name: "index_entries_on_lineup_id_and_contest_id", using: :btree
   add_index "entries", ["lineup_id"], name: "index_entries_on_lineup_id", using: :btree
 
+  create_table "game_scores", force: true do |t|
+    t.date     "playdate"
+    t.string   "ext_game_id"
+    t.datetime "scheduledstart"
+    t.integer  "home_team_id"
+    t.integer  "away_team_id"
+    t.integer  "home_team_score"
+    t.integer  "away_team_score"
+    t.string   "status"
+    t.integer  "clock"
+    t.integer  "period"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "game_scores", ["away_team_id"], name: "index_game_scores_on_away_team_id", using: :btree
+  add_index "game_scores", ["home_team_id"], name: "index_game_scores_on_home_team_id", using: :btree
+
   create_table "lineup_spot_protos", force: true do |t|
     t.string   "sport"
     t.string   "sport_position_name"
@@ -120,8 +138,10 @@ ActiveRecord::Schema.define(version: 20140302000421) do
     t.integer  "player_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "game_score_id"
   end
 
+  add_index "player_real_time_scores", ["game_score_id"], name: "index_player_real_time_scores_on_game_score_id", using: :btree
   add_index "player_real_time_scores", ["player_id"], name: "index_player_real_time_scores_on_player_id", using: :btree
 
   create_table "player_stats", force: true do |t|
@@ -138,7 +158,6 @@ ActiveRecord::Schema.define(version: 20140302000421) do
   add_index "player_stats", ["player_id"], name: "index_player_stats_on_player_id", using: :btree
 
   create_table "players", force: true do |t|
-    t.string   "team"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sport_position_id"
@@ -147,6 +166,7 @@ ActiveRecord::Schema.define(version: 20140302000421) do
     t.string   "last_name"
     t.date     "dob"
     t.string   "ext_player_id"
+    t.integer  "team_id"
   end
 
   create_table "projection_game_playeds", force: true do |t|
@@ -254,7 +274,7 @@ ActiveRecord::Schema.define(version: 20140302000421) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|
@@ -285,6 +305,14 @@ ActiveRecord::Schema.define(version: 20140302000421) do
   end
 
   add_index "sport_positions", ["name", "sport"], name: "index_sport_positions_on_name_and_sport", unique: true, using: :btree
+
+  create_table "teams", force: true do |t|
+    t.string   "name"
+    t.string   "teamalias"
+    t.string   "ext_team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

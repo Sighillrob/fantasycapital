@@ -10,8 +10,5 @@
 #  updated_at  :datetime
 #
 
-require 'spec_helper'
-
-describe Projection::Team do
-  pending "add some examples to (or delete) #{__FILE__}"
+class Team < ActiveRecord::Base
 end
