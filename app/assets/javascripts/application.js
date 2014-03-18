@@ -18,7 +18,6 @@
 //= require bootstrap-sortable
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
-//= require app
 //= require jquery.countdown
 //= require ajax_modal
 //= require turbolinks
