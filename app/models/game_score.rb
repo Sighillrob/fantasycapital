@@ -18,6 +18,13 @@
 #
 
 class GameScore < ActiveRecord::Base
+
+  # existence of a scheduled start time is important - contest starts are based on it. So
+  #  even if a game didn't have a fixed start time yet, we should populate it with an early time.
+  #  Alternatively, we could make games without a start time become ineligible for contests,
+  #  and make sure contests aren't created on days with fewer than 3 SCHEDULED games.
+  validates :scheduledstart, presence: true
+
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
 
@@ -135,7 +142,8 @@ class GameScore < ActiveRecord::Base
   class << self
 
     def recent_and_upcoming
-      where "scheduledstart > ?", DateTime.now - 1.day
+      # games from up to 24 hours ago, plus future games.
+      where "playdate > ?", Time.now.in_time_zone("US/Eastern").to_date - 1
     end
 
     def in_future

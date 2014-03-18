@@ -17,6 +17,8 @@
 #
 
 class Contest < ActiveRecord::Base
+  validates :contestdate, presence: true
+
   has_many :entries, inverse_of: :contest
   has_many :player_contests, inverse_of: :contest
   has_many :eligible_players, source: :player, through: :player_contests

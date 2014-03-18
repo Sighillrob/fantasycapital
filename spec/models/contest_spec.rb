@@ -26,7 +26,9 @@ describe Contest do
 
 
   describe "Eligible contests for a user" do
-    subject { Contest.upcoming(user) }
+    subject {
+      Contest.upcoming(user)
+    }
 
     before { create(:entry, contest: contest, lineup: lineup) }
 
@@ -52,7 +54,9 @@ describe Contest do
     context "Tournament contests" do
       before { @tournament = create(:contest, contest_type: "Tournament") }
 
-      it { should == [@tournament] }
+      it {
+        should == [@tournament]
+      }
 
       context "Entered 5 times" do
         before do
