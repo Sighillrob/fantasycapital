@@ -11,9 +11,6 @@
 // about supported directives.
 //
 //= require underscore.min
-//= require angular
-//= require angular-resource
-//= require angular-sanitize
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
@@ -22,7 +19,6 @@
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
 //= require app
-//= require_tree ./angular
 //= require jquery.countdown
 //= require ajax_modal
 //= require turbolinks
