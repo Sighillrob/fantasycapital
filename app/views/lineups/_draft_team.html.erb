@@ -55,19 +55,34 @@
           <%= link_to position.name, "##{position.name} ", data: {toggle: 'tab'} %>
         </li>
     <% end %>
- </ul>
+  </ul>
+  
+  <div class="js-draft-emitter">
+    <table class="tab lineup table striped-grid no-margin-bottom">
+      <thead>
+        <tr>
+          <th class="position">POS</th>
+          <th class="player">PLAYER</th>
+          <th class="opp">OPP</th>
+          <th class="salary">SALARY</th>
+          <th class="ffpg">FPPG</th>
+          <th class="add">&nbsp;</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
 
-  <div class='tab-content same-height'>
+  <div class="tab-content same-height js-draft-receiver">
     <div class='tab-pane active' id="ALL">
       <table class='tab lineup table sortable striped-grid'>
-        <thead>
+        <thead class="hide">
         <tr>
-          <th>POS</th>
-          <th data-defaultsort="asc">PLAYER</th>
-          <th>OPP</th>
-          <th>SALARY</th>
-          <th>FPPG</th>
-          <th>&nbsp;</th>
+          <th class="position">POS</th>
+          <th data-defaultsort="asc" class="player">PLAYER</th>
+          <th class="opp">OPP</th>
+          <th class="salary">SALARY</th>
+          <th class="ffpg">FPPG</th>
+          <th class="add">&nbsp;</th>
         </tr>
         </thead>
         <tbody>
@@ -79,14 +94,14 @@
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
           <table class='tab lineup table sortable striped-grid'>
-            <thead>
+            <thead class="hide">
             <tr>
-              <th>POS</th>
-              <th data-defaultsort="asc">PLAYER</th>
-              <th>OPP</th>
-              <th>SALARY</th>
-              <th>FPPG</th>
-              <th>&nbsp;</th>
+              <th class="position">POS</th>
+              <th data-defaultsort="asc" class="player">PLAYER</th>
+              <th class="opp">OPP</th>
+              <th class="salary">SALARY</th>
+              <th class="ffpg">FPPG</th>
+              <th class="add">&nbsp;</th>
             </tr>
             </thead>
             <tbody>

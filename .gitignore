@@ -37,3 +37,6 @@ config/database.yml
 *.swp
 *~
 .idea/*
+
+# Ignore sandbox folder, which is used for mockups
+/sandbox
