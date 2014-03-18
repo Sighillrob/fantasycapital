@@ -27,6 +27,8 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id])
     @contest = @entry.contest
     @entrysummarys = @entry.contest.entries
+
+
     @games = GameScore.recent_and_upcoming  # BUGBUG: do we need this? or just today's games?
 
 

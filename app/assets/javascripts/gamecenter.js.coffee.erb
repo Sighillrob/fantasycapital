@@ -1,3 +1,14 @@
+
+# create empty global collections if they don't exist (mostly for jasmine tests)
+window.games_coll = window.games_coll || new Main.Collections.GamesCollection
+window.teams_coll = window.teams_coll || new Backbone.Collection
+window.players_coll = window.players_coll || new Main.Collections.PlayersCollection
+window.entrysummarys_coll = window.entrysummarys_coll || new Main.Collections.EntrySummarysCollection
+window.sportpositions_coll = window.sportpositions_coll || new Backbone.Collection
+window.playerscores_coll = window.playerscores_coll || new Main.Collections.PlayerScoresCollection
+window.contest = window.contest || new Backbone.Model
+
+
 class window.GameCenterCls
     my_entry_id: 0
 
@@ -255,6 +266,7 @@ class window.GameCenterCls
 #        context.entries[data.entry.id]['players'] = data.lineup_spots.map( (x) -> return x.player.id )
 #
 #        this.refreshMyLineup(data)
+
 
 
 $(document).on('page:load ready', ->

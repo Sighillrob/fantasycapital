@@ -12,7 +12,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
   render: () ->
     rendered = ""
     @entrysummarys_coll.each( (entrysummary) ->
-        rendered += _.template(this.template, {entrysummary: entrysummary})
+        rendered += _.template(this.template, {entrysummary: entrysummary, user_img: window.user_img_placeholder})
       , this )
     $(@el).html(rendered)
     return this
