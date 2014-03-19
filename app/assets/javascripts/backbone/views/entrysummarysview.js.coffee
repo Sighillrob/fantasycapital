@@ -33,7 +33,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
       @render(num * 10, 10)
       return true
     return false
-  # check if next page is available, if yes then increment the internal page value
+  # DRY for nextPage and prevPage
   changePage: (direction) ->
     if direction == "next"
       value = 1
@@ -42,7 +42,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
       value = -1
     if @debug
       console.log "Trying to render " + direction + " page";
-    if @paginate(@page + 1)
+    if @paginate(@page + value)
       @page += value
       if @debug
         console.log direction + " page was rendered successfully";
@@ -50,6 +50,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
     if @debug
         console.log direction + " page is not available";
     return false
+  # check if next page is available, if yes then increment the internal page value
   nextPage: () ->
     @changePage("next")
   # check if prev page is available, if yes then decrement the internal page value
