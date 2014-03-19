@@ -62,9 +62,9 @@ describe RealTimeDataService do
       # will get a games update, players update, and an entry update message
       pusher_mock.should_receive(:trigger).exactly(3).times do |event, msg|
          event.should == 'stats'
-         @games = msg['games'] unless !msg['games']
-         @playermsg = msg['players'] unless !msg['players']
-         @entries = msg['entries'] unless !msg['entries']
+         @games = msg[:games] unless !msg[:games]
+         @playermsg = msg[:players] unless !msg[:players]
+         @entries = msg[:entries] unless !msg[:entries]
       end
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
@@ -113,12 +113,9 @@ describe RealTimeDataService do
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
       # receive push msg 3x (games, players, entries) during initial call to refresh_schedule/game,
       # then 3x for second refresh.
+      @msgs = []
       mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
-        puts "received #{msg}"
-      end
-      mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
-        puts "second block, received #{msg}"
-         @playermessage = msg['players'] unless !msg['players']
+        @msgs << msg
       end
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
@@ -129,41 +126,48 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_src1)
     end
 
-    it "message should contain update for one player" do
-      @playermessage.should have(1).items
+    it "will result in game, player, and player update messages" do
+      @msgs.should have(3).items
+      expect(@msgs[0]).to have_key(:games)
+      expect(@msgs[1]).to have_key(:players)
+      expect(@msgs[2]).to have_key(:players)
     end
     it "message should include fantasy points" do
-      expect(@playermessage[0][:currfps]).to eq(169)
+      expect(@msgs[2][:players][0][:currfps]).to eq(169)
     end
     it "message should include realtime stats update with 82 steals" do
-      expect(@playermessage[0][:rtstats]).to match(/82 S/)
+      expect(@msgs[2][:players][0][:rtstats]).to match(/82 S/)
     end
   end
 
-  context "when there are 30 player changes" do
+  context "when there are 80 player changes" do
 
-    it "should not exceed 50 stats/msg" do
+    before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      # with 30 changes, 3 stats per msg, plus fantasy point stat, there are 120 messages to send.
-      # That means 3 Pusher messages, plus 1 for the entries message.
-      mock_channel.should_receive(:trigger).exactly(4).times do |event, msg|
-        @playermsg = msg['players'] unless !msg['players']
-        # BUGBUG: WHY AREN"T THERE 30 UPDATES??
+      # with 80 changes, there are 80 messages to send.
+      # That means 2 Pusher messages, plus 1 for the games message.
+      mock_channel.should_receive(:trigger).exactly(3).times do |event, msg|
+        @playermsgs << msg[:players] unless !msg[:players]
       end
+      @playermsgs = []
       game_src1 = game_details.clone
       game_src1['team'][0]['players']['player'] = []  # clear out old value.
       game_src1['team'][1]['players']['player'] = []  # clear out old value.
-      30.times do |idx|
+      80.times do |idx|
         game_src1['team'][0]['players']['player'] <<
-            { "id" => "a",
-               "statistics" => {"assists" => (15+idx).to_s, "steals" => (15+idx*2).to_s,
-                                "rebounds" => (15+idx*3).to_s }
-             }
+            { "id" => "a#{idx}",
+              "statistics" => {"assists" => (15+idx).to_s, "steals" => (15+idx*2).to_s,
+                               "rebounds" => (15+idx*3).to_s }
+            }
       end
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_src1)
-      @playermsg.count.should <= 50
+
+    end
+    it "will send one msg with 50, and one with 30" do
+      expect(@playermsgs[0].count).to be(50)
+      expect(@playermsgs[1].count).to be(30)
     end
 
   end

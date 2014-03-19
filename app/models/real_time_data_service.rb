@@ -42,7 +42,7 @@ class RealTimeDataService
       # we want to.
       if game.changed?
         # NOTE: I'm sure this can now be simplified -- all the keys and values match
-        game_score_to_push = {"games" =>  [{"id" => game.id,
+        game_score_to_push = {:games =>  [{"id" => game.id,
                                             "pretty_playstate" => game.pretty_play_state,
                                             "minutes_remaining" => game.minutes_remaining,
                                             "home_team_score" => game.home_team_score,
@@ -67,7 +67,7 @@ class RealTimeDataService
     if game_score.record_sportsdata(game_src)
       game = game_score
       # NOTE: I'm sure this can now be simplified -- all the keys and values match
-      game_score_to_push = {"games" =>  [{"id" => game.id,
+      game_score_to_push = {:games =>  [{"id" => game.id,
                                           "pretty_playstate" => game.pretty_play_state,
                                           "minutes_remaining" => game.minutes_remaining,
                                           "home_team_score" => game.home_team_score,
@@ -126,7 +126,7 @@ class RealTimeDataService
       #                                    "stat_value" => score.value.to_f }}
       ##Limit the size of each message (pusher's limit is 10240)
       playerstats.each_slice(50).each do |msg_chunk|
-        Pusher['gamecenter'].trigger('stats', { "players" => msg_chunk })
+        Pusher['gamecenter'].trigger('stats', { :players => msg_chunk })
       end
 
       # send player stats update as a string
@@ -135,7 +135,7 @@ class RealTimeDataService
       # Recalculate all live entries' fantasy points and send as a message.
       @entries = Entry.live.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
       if !@entries.empty?
-        Pusher['gamecenter'].trigger('stats', { "entries" => @entries })
+        Pusher['gamecenter'].trigger('stats', { :entries => @entries })
       end
 
     end
