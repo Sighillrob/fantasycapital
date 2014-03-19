@@ -17,7 +17,6 @@
 //= require bootstrap-sortable
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
-//= require app
 //= require underscore
 //= require backbone
 //= require backbone/main
