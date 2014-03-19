@@ -19,8 +19,10 @@ class Main.Models.Player extends Backbone.Model
     # out of the games on this JS page, return the one he's playing in.
     team = @team()
     gamedate = contest.get('contestdate')
-    games = games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
-            games_coll.where({home_team_id: team.id, playdate:gamedate}))
+    games = []
+    if team
+      games = games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
+              games_coll.where({home_team_id: team.id, playdate:gamedate}))
     if games.length > 1
       console.log("Player in multiple games?")
       console.log(games)

@@ -65,6 +65,17 @@ class window.GameCenterCls
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
         this.attach_contestant_handler()
         this.attach_sort_handler()
+        this.attach_pagination_handlers()
+
+    # this piece of code should be moved to a parent view, however the "parent view" is rendered via server side atm
+    # this can be rebuilded if needed, it's just a little maintenance issue
+    attach_pagination_handlers: ->
+
+        self = @
+        $(".js-gc-paginate-previous").click (e) ->
+            self.entrysummarys_view.prevPage()
+        $(".js-gc-paginate-next").click (e) ->
+            self.entrysummarys_view.nextPage()
 
     attach_contestant_handler: ->
         $("table.freeroll tbody tr").click (e) ->
