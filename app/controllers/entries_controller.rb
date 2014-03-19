@@ -21,11 +21,28 @@ class EntriesController < ApplicationController
   end
 
   def show
-    # this is the real-time "gamecenter" action.
+    # this is the real-time "gamecenter" action. It shows a contest from a particular
+    # day.
     @entry_id = params[:id]
     @entry = Entry.find(params[:id])
     @contest = @entry.contest
-    @entries = @entry.contest.entries
+    @entrysummarys = @entry.contest.entries
+
+
+    @games = GameScore.recent_and_upcoming  # BUGBUG: do we need this? or just today's games?
+
+
+    # get all the player scores for today's games
+    @todaysgames = GameScore.where({playdate: @contest.contestdate})  # BUGBUG: Remove -1 !!!
+    todaygameids = @todaysgames.pluck('id')
+    @playerscores = PlayerRealTimeScore.where(game_score_id: todaygameids)
+
+    # get player scores from that days' games.
+    #@playerscores = PlayerRealTimeScore.joins(:game_score).where(
+    #                  game_scores:{playdate: @contest.contestdate-1})
+    @teams = Team.all
+    @players = Player.all
+    @sportpositions = SportPosition.all
   end
 
   def index

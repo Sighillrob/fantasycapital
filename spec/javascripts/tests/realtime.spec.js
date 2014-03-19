@@ -30,25 +30,41 @@ var stubdata = {"contest": {}, "entry": {"id": 1, "lineup_id": 1, "created_at": 
     "my": {"id": 1, "email": "nilsbunger@gmail.com", "created_at": "2014-02-28 04:34:51", "updated_at": "2014-03-07 17:52:20", "first_name": "Nils", "last_name": "Bunger", "balanced_customer_id": null, "balance": 0, "username": "nilsbunger", "country": "US", "state": "CA"}}
 
 describe("Gamecenter", function () {
-    var gamecenter = new GameCenterCls;
-    gamecenter.handleEntryData(stubdata);
+    // load backbone templates
+    var gamecenter;
+    beforeEach(function () {
+        var orig_fixtures_path = jasmine.getFixtures().fixturesPath;
+        jasmine.getFixtures().fixturesPath = '/app/assets/javascripts/backbone/templates';
+        appendLoadFixtures("entry-summary-template.html");
+        appendLoadFixtures("games-template.html");
+        appendLoadFixtures("entry-template.html");
 
-    describe("after initial ajax call", function () {
-        it("has player list populated in memory", function () {
-            var numplayers = Object.keys(gamecenter.players).length
-            expect(numplayers).toBe(10);
-        });
+        jasmine.getFixtures().fixturesPath = orig_fixtures_path;
+        appendLoadFixtures("backbone_fixture.html");
+        console.log("Fixtures loaded");
+        gamecenter = new GameCenterCls;
+
+        //gamecenter.handleEntryData(stubdata); // do callback of first entry
 
     });
+    // BUGBUG: PENDING for now until we hook up realtime updates to backbone.
+    xit("has player list populated in memory", function () {
+        var numplayers = Object.keys(gamecenter.players).length
+            expect(numplayers).toBe(10);
+
+    });
+
+    // BUGBUG: PENDING for now until we hook up realtime updates to backbone.
     describe("when pushing a player that browser doesn't know about", function () {
-       it("will be a no-op", function () {
+       xit("will be a no-op", function () {
            gamecenter.handlePushedStats({players:[{id:9994, stat_name: "points", stat_value:320}]});
            expect(1).toBe(1);
        }) ;
     });
 
-        describe("when pushing one player update", function () {
-        it("will update only that one player", function () {
+    describe("when pushing one player update", function () {
+        // BUGBUG: PENDING for now until we hook up realtime updates to backbone.
+        xit("will update only that one player", function () {
             var playeridx = 4;
             var playerid = stubdata.lineup_spots[playeridx].player.id;
             gamecenter.handlePushedStats({players:[{id:playerid, stat_name: "points", stat_value:320}]});
@@ -70,7 +86,8 @@ describe("Gamecenter", function () {
 
             console.log("done");
         });
-    })
+    });
+
 
 
 });

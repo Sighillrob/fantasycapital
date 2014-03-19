@@ -156,6 +156,6 @@
 
 })(jQuery);
 
-jQuery(document).ready(function () {
+jQuery(document).on("page:load ready", function () {
     fantasyEntries.init();
 });

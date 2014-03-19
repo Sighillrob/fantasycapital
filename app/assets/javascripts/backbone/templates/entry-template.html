@@ -1,0 +1,55 @@
+<script type="text/template" id="entry-template">
+    <div class="col-md-2 panelOne"><strong class="panelStrong">POS</strong>
+
+        <h2 class="panelHeading">1</h2>
+    </div>
+    <div class="col-md-8 panelTwo">
+        <p class="user">  <img alt="User" class="user" src="<%= user_img %>">
+            <span class="green username"><%= entry.get('username') %></span></p>
+
+        <div class="clearfix"></div>
+        <p><span class="entry-min-remaining"><%= entry.min_left() %></span> Minutes Remaining
+        <p><progress class="entry-progress-bar" value="<%= entry.min_left() %>" max="480"></progress>
+        </p>
+    </div>
+    <div class="col-md-2 panelThree"><strong class="panelStrong">SCORE</strong>
+
+        <h2 class="panelHeading total-score"><%= entry.get('fps') %></h2>
+    </div>
+    <div class="clearfix"></div>
+    <!--Score Card-->
+    <div class="mylineup-spots">
+        <div class="scorecard2">
+            <table class="scorecardTable" cellpadding="10" cellspacing="10">
+                <tbody>
+                <% $.each(players, function (idx, player) { %>
+                <tr class="">
+                    <td><h1 class="role"><%= player.sportposition() %></h1></td>
+                    <td><strong class="player-name"> <%= player.name() %> </strong>
+
+                        <p class="player-score">
+                            <%= player.scorestring() %>
+                            <!--<strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL-->
+                        </p>
+                        <p class="player-record-row">
+                                  <span class="player-record">
+                                    <!--99 P, 0 R, 0 A, 0 S, 0 B, 0 T--> blank 0 P, 0R, ...
+                                  </span>
+                        </p>
+                    </td>
+                    <td>
+                        $<span class="salary"><%= player.get('salary') %></span> <br>
+                        SALARY
+                    </td>
+                    <td>27.5% <br>
+                        OWNED
+                    </td>
+                    <td><h1 class="score">57.2</h1></td>
+                </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</script>

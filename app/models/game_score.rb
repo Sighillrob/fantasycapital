@@ -18,6 +18,13 @@
 #
 
 class GameScore < ActiveRecord::Base
+
+  # existence of a scheduled start time is important - contest starts are based on it. So
+  #  even if a game didn't have a fixed start time yet, we should populate it with an early time.
+  #  Alternatively, we could make games without a start time become ineligible for contests,
+  #  and make sure contests aren't created on days with fewer than 3 SCHEDULED games.
+  validates :scheduledstart, presence: true
+
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
 
@@ -77,7 +84,9 @@ class GameScore < ActiveRecord::Base
   # and other sports!
   def minutes_remaining
     # NBA has 4 12-minute periods
-    if self.period && self.period > 4
+    if self.in_future?
+      48
+    elsif self.period && self.period > 4
       0
     elsif self.period && self.period > 0
       48 - (12 * (self.period - 1) + self.clock)
@@ -122,10 +131,19 @@ class GameScore < ActiveRecord::Base
     save!
   end
 
+  def as_json(options = { })
+    # add computed parameters for json serialization (for sending to browser)
+    h = super(options)
+    h[:pretty_play_state]   = self.pretty_play_state
+    h[:minutes_remaining] = self.minutes_remaining
+    h
+  end
+
   class << self
 
     def recent_and_upcoming
-      where "scheduledstart > ?", DateTime.now - 1.day
+      # games from up to 24 hours ago, plus future games.
+      where "playdate > ?", Time.now.in_time_zone("US/Eastern").to_date - 1
     end
 
     def in_future

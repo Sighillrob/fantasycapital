@@ -10,7 +10,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require underscore.min
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
@@ -18,6 +17,9 @@
 //= require bootstrap-sortable
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
+//= require underscore
+//= require backbone
+//= require backbone/main
 //= require jquery.countdown
 //= require ajax_modal
 //= require turbolinks

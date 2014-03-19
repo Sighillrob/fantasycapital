@@ -7,7 +7,7 @@ class ContestsController < ApplicationController
     @contests = current_user.contests
   end
 
-  # GET /contests/browse
+  # This is our homepage (/)
   def browse
     @contests = Contest.upcoming(current_user)
   end

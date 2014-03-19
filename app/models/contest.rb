@@ -17,6 +17,8 @@
 #
 
 class Contest < ActiveRecord::Base
+  validates :contestdate, presence: true
+
   has_many :entries, inverse_of: :contest
   has_many :player_contests, inverse_of: :contest
   has_many :eligible_players, source: :player, through: :player_contests
@@ -92,8 +94,10 @@ class Contest < ActiveRecord::Base
      where "contest_start < ?", DateTime.now
     end
 
-    def upcoming(user=nil)
-      where("contest_start > ?", DateTime.now).order(contest_type: :asc, entry_fee: :asc).select do |c|
+    def upcoming(user=nil, date=Time.now.in_time_zone("US/Eastern").to_date)
+
+      where("contestdate >= ?", date).order(
+              contestdate: :asc, contest_type: :asc, entry_fee: :asc).select do |c|
         (! c.filled?) && c.eligible_for?(user)
       end
     end
@@ -109,6 +113,19 @@ class Contest < ActiveRecord::Base
     def sport_names
       group(:sport).pluck(:sport)
     end
+
+    def pretty_contest_name
+      "#{number_to_currency(self.prize, unit: '$')} #{self.sport} #{selfcontest_type}"
+    end
+
+    def as_json(options = { })
+      # add computed parameters for json serialization (for sending to browser)
+      h = super(options)
+      h[:pretty_contest_name]   = self.pretty_contest_name
+      h
+    end
+
+
   end
 
 end
