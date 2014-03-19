@@ -26,24 +26,22 @@ class Contest < ActiveRecord::Base
   has_many :lineups, through: :entries
   has_many :users, through: :lineups
 
-  def start!
-    # mark contest as started right now.
-    self.contest_start = Time.now
-    self.contest_end = Time.now + 60*60*2
-    update({contest_start: self.contest_start, contest_end: self.contest_end})
-    # send as an array of one contest update.
-    Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: true}] })
+  #def start!
+  #  # mark contest as started right now.
+  #  self.contest_start = Time.now
+  #  self.contest_end = Time.now + 60*60*2
+  #  update({contest_start: self.contest_start, contest_end: self.contest_end})
+  #  # send as an array of one contest update.
+  #  Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: true}] })
+  #end
 
-
-  end
-
-  def end!
-    # mark contest as finished right now.
-    self.contest_end = Time.now
-    update({contest_end: self.contest_end})
-    Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: false}] })
-
-  end
+  #def end!
+  #  # mark contest as finished right now.
+  #  self.contest_end = Time.now
+  #  update({contest_end: self.contest_end})
+  #  Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: false}] })
+  #
+  #end
 
   #TODO: placeholder for testing the views
   def salary_cap
@@ -60,6 +58,7 @@ class Contest < ActiveRecord::Base
 
   def live?
     # is current contest live right now?
+    return true # BUGBUG: This crashed w/ no contest_start / end attribute!
     contest_start < DateTime.now && contest_end > DateTime.now
   end
 
@@ -84,6 +83,19 @@ class Contest < ActiveRecord::Base
     entries.create(lineup: lineup)
   end
 
+  #def pretty_contest_name
+  #  "#{number_to_currency(self.prize, unit: '$')} #{self.sport} #{selfcontest_type}"
+  #end
+
+
+  def as_json(options = { })
+    # add computed parameters for json serialization (for sending to browser)
+    h = super(options)
+    #h[:pretty_contest_name]   = self.pretty_contest_name
+    h
+  end
+
+
   class << self
 
     def live
@@ -94,7 +106,7 @@ class Contest < ActiveRecord::Base
      where "contest_start < ?", DateTime.now
     end
 
-    def upcoming(user=nil, date=Time.now.in_time_zone("US/Eastern").to_date)
+    def upcoming(user=nil, date=Time.now.in_time_zone("US/Pacific").to_date)
 
       where("contestdate >= ?", date).order(
               contestdate: :asc, contest_type: :asc, entry_fee: :asc).select do |c|
@@ -112,17 +124,6 @@ class Contest < ActiveRecord::Base
 
     def sport_names
       group(:sport).pluck(:sport)
-    end
-
-    def pretty_contest_name
-      "#{number_to_currency(self.prize, unit: '$')} #{self.sport} #{selfcontest_type}"
-    end
-
-    def as_json(options = { })
-      # add computed parameters for json serialization (for sending to browser)
-      h = super(options)
-      h[:pretty_contest_name]   = self.pretty_contest_name
-      h
     end
 
 
