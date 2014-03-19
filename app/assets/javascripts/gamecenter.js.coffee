@@ -67,12 +67,12 @@ class window.GameCenterCls
                 context.update_dom_for_contest(contest)
         )
 
-    constructor: ->
+    constructor: (pusherkey) ->
         that = @
 
         console.log "GameCenter Constructor"
 
-        this.pusher = new Pusher('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>')
+        this.pusher = new Pusher(pusherkey)
         this.my_entry_id = ($('.gamecenter').data('entry_id'))
         this.my_contest_id = ($('.gamecenter').data('contest_id'))
         this.gamesview = new Main.Views.GamesView({el: $('#gamesview_el'), games_coll: games_coll})
@@ -274,10 +274,3 @@ class window.GameCenterCls
 #        context.entries[data.entry.id]['players'] = data.lineup_spots.map( (x) -> return x.player.id )
 #
 #        this.refreshMyLineup(data)
-
-
-
-$(document).on('page:load ready', ->
-    if $('.gamecenter').length > 0
-        window.gamecenter = new GameCenterCls
-)
