@@ -57,8 +57,8 @@ describe RealTimeDataService do
       @entry = create(:entry, contest: @contest, lineup: @lineup)
       @entry = create(:entry, contest: @contest, lineup: @lineup2)
 
-      # will get a players update, and an entry update message (games are only sent on a change)
-      pusher_mock.should_receive(:trigger).exactly(2).times do |event, msg|
+      # will get a games update, players update, and an entry update message
+      pusher_mock.should_receive(:trigger).exactly(3).times do |event, msg|
          event.should == 'stats'
          @games = msg['games'] unless !msg['games']
          @message = msg['players'] unless !msg['players']
@@ -88,8 +88,11 @@ describe RealTimeDataService do
     before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      # expect a player message and an entries message.
-      mock_channel.should_receive(:trigger).exactly(2).times
+      # expect a games msg, player message and an entries message.
+      mock_channel.should_receive(:trigger).exactly(5).times do | event, msg |
+        puts "received #{msg}"
+
+      end
  
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
@@ -105,12 +108,12 @@ describe RealTimeDataService do
     before do
       mock_channel = double('channel')
       Pusher.stub(:[]).with('gamecenter').and_return(mock_channel)
-      # receive push msg 2x (players, entries) during initial call to refresh_schedule/game,
-      # then 2x for second refresh.
-      mock_channel.should_receive(:trigger).exactly(2).times.ordered do |event, msg|
+      # receive push msg 3x (games, players, entries) during initial call to refresh_schedule/game,
+      # then 3x for second refresh.
+      mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
         puts "received #{msg}"
       end
-      mock_channel.should_receive(:trigger).exactly(2).times.ordered do |event, msg|
+      mock_channel.should_receive(:trigger).exactly(3).times.ordered do |event, msg|
         puts "second block, received #{msg}"
          @message = msg['players'] unless !msg['players']
       end
@@ -140,6 +143,8 @@ describe RealTimeDataService do
       # with 30 changes, 3 stats per msg, plus fantasy point stat, there are 120 messages to send.
       # That means 3 Pusher messages, plus 1 for the entries message.
       mock_channel.should_receive(:trigger).exactly(4).times do |event, msg|
+        puts "GOT"
+        puts msg['players']
         msg['players'].count.should <= 50 unless !msg['players']
       end
       game_src1 = game_details.clone

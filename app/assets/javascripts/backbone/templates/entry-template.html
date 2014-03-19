@@ -33,7 +33,8 @@
                         </p>
                         <p class="player-record-row">
                                   <span class="player-record">
-                                    <!--99 P, 0 R, 0 A, 0 S, 0 B, 0 T--> blank 0 P, 0R, ...
+                                      <%= player.get('rtstats') %>
+                                    <!--99 P, 0 R, 0 A, 0 S, 0 B, 0 T -->
                                   </span>
                         </p>
                     </td>
@@ -44,7 +45,7 @@
                     <td>27.5% <br>
                         OWNED
                     </td>
-                    <td><h1 class="score">57.2</h1></td>
+                    <td><h1 class="score"><%= player.get('currfps') %></h1></td>
                 </tr>
                 <% }); %>
                 </tbody>

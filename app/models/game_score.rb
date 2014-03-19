@@ -84,12 +84,15 @@ class GameScore < ActiveRecord::Base
   # and other sports!
   def minutes_remaining
     # NBA has 4 12-minute periods
-    if self.in_future?
+    if self.closed?
+        0
+    elsif self.in_future?
       48
     elsif self.period && self.period > 4
       0
     elsif self.period && self.period > 0
-      48 - (12 * (self.period - 1) + self.clock)
+      # self.clock represents minutes until game is over...
+      48 - (12 * (self.period - 1)) + self.clock
     else
       48
     end
@@ -112,13 +115,13 @@ class GameScore < ActiveRecord::Base
 
 
   end
-  # record game status for this game from sportsdata API (sportsdata 'game-summary' data)
+  # record game status for this game from sportsdata API (sportsdata 'game-summary' data). returns true if game changed
   def record_sportsdata (game_src)
     # get realtime stats on any game that is in progress and hasn't been resolved in our DB yet.
     # games are only resolved in our DB once they are "closed" from the external API, or if
     # some other exception (like 'postponed', 'unnecessary', 'cancelled') happens.
-    return if game_src['status'] == 'scheduled'  # game hasn't started yet - nothing to update.
-    return if closed?  # we're done with this game, no changes made.
+    return false if game_src['status'] == 'scheduled'  # game hasn't started yet - nothing to update.
+    return false if closed?  # we're done with this game, no changes made.
     if !exception_ending?
       # good status
       self.period=game_src['quarter'].to_i  # NBA, a period is a quarter
@@ -128,13 +131,15 @@ class GameScore < ActiveRecord::Base
     end
     # record status at end of update so we still capture one 'closed' state.
     self.status = game_src['status']
+    change = self.changed?
     save!
+    return change
   end
 
   def as_json(options = { })
     # add computed parameters for json serialization (for sending to browser)
     h = super(options)
-    h[:pretty_play_state]   = self.pretty_play_state
+    h[:pretty_play_state] = self.pretty_play_state
     h[:minutes_remaining] = self.minutes_remaining
     h
   end
@@ -143,7 +148,7 @@ class GameScore < ActiveRecord::Base
 
     def recent_and_upcoming
       # games from up to 24 hours ago, plus future games.
-      where "playdate > ?", Time.now.in_time_zone("US/Eastern").to_date - 1
+      where "playdate >= ?", Time.now.in_time_zone("US/Pacific").to_date - 1
     end
 
     def in_future
