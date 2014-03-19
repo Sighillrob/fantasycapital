@@ -120,5 +120,12 @@
       playerscores_coll.reset (<%= @playerscores.to_json.html_safe %>);
       var contest = new Backbone.Model (<%= @contest.to_json.html_safe %>);
 
+      $(document).on('page:load ready', function () {
+            if ($('.gamecenter').length > 0) {
+                window.gamecenter = new GameCenterCls
+                    ('<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>');
+            }
+      });
+
   </script>
 </div>
