@@ -16,8 +16,6 @@ class window.GameCenterCls
     players: {}
     entries: {}
     contest: {}
-    games: {}
-    teams: {}
     my: {}
 
     pusher: null
@@ -54,40 +52,20 @@ class window.GameCenterCls
                     context.update_dom_for_player(context.players[player.id])
             )
 
-#        # recalculate entry's minutes remaining from the players' minutes remaining
-#        if context.entries
-#            $.each(context.entries, (entry_id, entry) ->
-#                entry_min_left = 0
-#                if entry.players
-#                    $.each(entry.players, (index, playerid) ->
-#                        teamid = context.players[playerid]['team_id']
-#                        gameid = context.teams[teamid]['game']
-#                        if gameid of context.games
-#                            min_left = context.games[gameid]['min_remaining']
-#                        else
-#                            console.log "Couldn't find game id " + gameid
-#                            min_left = 0
-#                        context.players[playerid]['min_left'] = min_left
-#                        entry_min_left += min_left
-#                    )
-#                    context.entries[entry_id]['min_left'] = entry_min_left
-#            )
 
-        # update entry's model values from incoming data (fp scores) then update the DOM.
-        if data.entries
-            $.each(data.entries, (index, entry) ->
-                context.entries[entry.id]['fps'] = entry['fps']
-                context.update_dom_for_entry(entry.id, context.entries[entry.id])
-            )
+        # update entry values (fp scores).
+        $(data.entries).each( (index, entry) ->
+            context.entries[entry.id] = entry
+            context.update_dom_for_entry(context.entries[entry.id])
+        )
 
         # update contest states
-        if data.contests
-            $.each(data.contests, (index, contest) ->
-                # ignore non-matching contests (this is a broadcast channel to multiple recipients)
-                if contest.id == context.my_contest_id
-                    context.contest = contest
-                    context.update_dom_for_contest(contest)
-            )
+        $(data.contests).each ((index, contest) ->
+            # ignore non-matching contests (this is a broadcast channel to multiple recipients)
+            if contest.id == context.my_contest_id
+                context.contest = contest
+                context.update_dom_for_contest(contest)
+        )
 
     constructor: ->
         that = @
@@ -105,7 +83,11 @@ class window.GameCenterCls
         channel = this.pusher.subscribe('gamecenter')
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
-        $("table.freeroll tr").click (e) ->
+        this.attach_contestant_handler()
+        this.attach_sort_handler()
+
+    attach_contestant_handler: ->
+        $("table.freeroll tbody tr").click (e) ->
             # user clicked on one of the contestants in top row. Get its entry id, populate that same entry ID
             # in the competitive scorecard, and then get the data for the scorecard from server.
             entryid = $(e.currentTarget).data("entry-id")
@@ -229,6 +211,32 @@ class window.GameCenterCls
 #
 #        )
 #        $(scorecard_to_update).show()
+
+    attach_sort_handler: ->
+        $table  = $(".js-gamecenter");
+        $button = $(".js-gamecenter .js-sort-score");
+        if !$table.length || !$button.length
+            return null;
+        $button.click (e) ->
+            $rows = $table.find("tbody tr")
+            direction = $(this).attr("data-direction")
+            if $rows.length < 2
+                return null
+            else
+
+                if direction == "desc"
+                    opposite = "asc"
+                    character = "&#x25B2;"
+                else
+                    opposite = "desc"
+                    character = "&#x25BC;"
+                $rows.tsort(".fantasypoints", {
+                    order: opposite
+                })
+                $(this).removeClass("asc desc").addClass(opposite)
+                $(this).find(".direction").html(character)
+                $(this).attr("data-direction", opposite)
+                return true
 
     getData: ->
         # ajax call to get my entry's static information.

@@ -59,6 +59,8 @@ class Lineup
       @entries.push(new Entry($(el)))
   getNumberOfEntries: ->
     @entries.length
+  getAllEntries: ->
+    @entries
   clearEntries: ->
     @entries = []
   getAllSalaries: ->
@@ -88,6 +90,26 @@ class Lineup
     (@consumedSalary()/@spotsTaken()) || 0
   averageRemainingPlayerSalary: ->
     @amountLeft()/@spotsLeft()
+  sortBy: (field, order) ->
+    if @getNumberOfEntries() > 0
+      if order == "desc"
+        order = -1
+      else
+        order = 1
+      @entries = @entries.sort (a, b) ->
+        if a.player[field] < b.player[field] 
+          return (-1 * order);
+        if a.player[field] > b.player[field] 
+          return (1 * order);
+        return 0;
+      return @entries
+    else
+      return []
+  sortBySalary: (order) ->
+    @sortBy("salary", order)
+
+  sortByName: (order) ->
+    @sortBy("name", order)
   clear: ->
     @entries.map (entry) ->
       entry.player = ''
