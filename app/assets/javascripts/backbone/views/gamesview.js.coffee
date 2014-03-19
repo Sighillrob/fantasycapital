@@ -5,6 +5,7 @@ class Main.Views.GamesView extends Backbone.View
     @games_coll = args.games_coll
 #    @listenTo(@games_coll, 'add', @addGame)
 #    @listenTo(@games_coll, 'reset', @resetGames)
+    @listenTo(@games_coll, 'change', @changeGames)
     @render()
 
   render: () ->
@@ -12,6 +13,8 @@ class Main.Views.GamesView extends Backbone.View
     $(@el).html(_.template(@template, {games: gamestoday}))
     return this
 
+  changeGames: () ->
+    @render()
 #  resetGames: () ->
 #    console.log "RESET GAMES"
 #

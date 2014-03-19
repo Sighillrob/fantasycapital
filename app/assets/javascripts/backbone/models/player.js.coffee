@@ -37,13 +37,6 @@ class Main.Models.Player extends Backbone.Model
       return null
     return games[0]
 
-  score: () ->
-    # look up the player-real-time-score with this player's ID. We should have separate entries for
-    # blocks, steals, etc.
-    foo = playerscores_coll.where(@get("id"))
-    puts foo
-
-
   scorestring: () ->
     mygame = @currgame()
     return "None" if !mygame

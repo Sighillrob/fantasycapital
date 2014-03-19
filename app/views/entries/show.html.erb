@@ -112,8 +112,9 @@
       teams_coll.reset(<%= @teams.to_json.html_safe %>);
       var players_coll = new Main.Collections.PlayersCollection;
       players_coll.reset(<%= @players.to_json.html_safe %>);
-      var entrysummarys_coll = new Main.Collections.EntrySummarysCollection;
-      entrysummarys_coll.reset(<%= @entrysummarys.to_json.html_safe %>);
+      var entries_coll = new Main.Collections.EntriesCollection;
+      entries_coll.reset(<%= @entries.to_json.html_safe %>);
+
       var sportpositions_coll = new Backbone.Collection;
       sportpositions_coll.reset (<%= @sportpositions.to_json.html_safe %>);
       var playerscores_coll = new Main.Collections.PlayerScoresCollection;

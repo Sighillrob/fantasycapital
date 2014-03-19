@@ -5,14 +5,14 @@ class Main.Views.EntrySummarysView extends Backbone.View
 
   initialize: (args) ->
     @template = $("#entry-summary-template").html()
-    @entrysummarys_coll = args.entrysummarys_coll
-    @listenTo(@entrysummarys_coll, 'reset', @changeentry)
+    @entries_coll = args.entries_coll
+    @listenTo(@entries_coll, 'reset', @changeentry)
     @render()
 
   render: () ->
     rendered = ""
-    @entrysummarys_coll.each( (entrysummary) ->
-        rendered += _.template(this.template, {entrysummary: entrysummary, user_img: window.user_img_placeholder})
+    @entries_coll.each( (entry) ->
+        rendered += _.template(this.template, {entry: entry, user_img: window.user_img_placeholder})
       , this )
     $(@el).html(rendered)
     return this

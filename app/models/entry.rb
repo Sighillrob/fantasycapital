@@ -26,10 +26,20 @@ class Entry < ActiveRecord::Base
     lineup.players.map { |player| player.realtime_fantasy_points }.sum
   end
 
+  def as_json(options = { })
+    # add computed parameters for json serialization (for sending to browser)
+    h = super(options)
+    h[:username]   = self.lineup.user.username
+    h[:fps] = self.current_fantasypoints
+    h[:player_ids] = self.lineup.lineup_spots.pluck('player_id')
+    h
+  end
+
   class << self
 
     def live
-      joins(:contest).where "contests.contest_start <= ? AND contests.contest_end >= ?", DateTime.now, DateTime.now
+      # live, more loosely defined, means entries that are happening today.
+      joins(:contest).where "contests.contestdate = ?", Time.now.in_time_zone("US/Pacific").to_date
     end
 
     def completed
@@ -47,5 +57,7 @@ class Entry < ActiveRecord::Base
     def for_sport(sport)
       joins(:contest).where "contests.contests.sport = ?", sport
     end
+
+
   end
 end
