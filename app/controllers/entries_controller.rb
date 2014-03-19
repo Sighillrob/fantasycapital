@@ -33,7 +33,7 @@ class EntriesController < ApplicationController
 
 
     # get all the player scores for today's games
-    @todaysgames = GameScore.where({playdate: @contest.contestdate-1})  # BUGBUG: Remove -1 !!!
+    @todaysgames = GameScore.where({playdate: @contest.contestdate})  # BUGBUG: Remove -1 !!!
     todaygameids = @todaysgames.pluck('id')
     @playerscores = PlayerRealTimeScore.where(game_score_id: todaygameids)
 

@@ -1,11 +1,15 @@
 class Main.Models.Player extends Backbone.Model
   paramRoot: 'entry'
-
+  debug: false
   defaults:
     foo: []
   initialize: () ->
-    console.log "HI"
+    if @debug
+      console.log("initializing a player")
+      @name()
   name: () ->
+    if @debug
+      console.log("invoking name -> name: " + @get("first_name") + " " + @get("last_name"));
     @get("first_name") + " " + @get("last_name")
 
   sportposition: () ->
@@ -13,14 +17,18 @@ class Main.Models.Player extends Backbone.Model
     sportposition.get('name')
 
   team: () ->
+    if @debug
+      console.log("invoking team -> team_id: " + @get("team_id"));
     teams_coll.get(@get('team_id'))
 
   currgame: () ->
     # out of the games on this JS page, return the one he's playing in.
     team = @team()
     gamedate = contest.get('contestdate')
-    games = games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
-            games_coll.where({home_team_id: team.id, playdate:gamedate}))
+    games = []
+    if team
+      games = games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
+              games_coll.where({home_team_id: team.id, playdate:gamedate}))
     if games.length > 1
       console.log("Player in multiple games?")
       console.log(games)
