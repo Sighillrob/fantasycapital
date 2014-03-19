@@ -12,7 +12,7 @@ describe Contest do
   end
   let!(:games) do
     [
-        # create games that are in the future so the contests get created.
+        # create games that are far in the future so that contests get created for each date.
         create(:game_score, playdate: "2018-01-16"),
         create(:game_score, playdate: "2018-01-16"),
         create(:game_score, playdate: "2018-01-16"),
@@ -30,9 +30,9 @@ describe Contest do
 
   describe "when 7 games are scheduled over 3 days" do
 
-    it {
+    it "there should be 54 contests" do
       should have(54).items   # 27 contests for each game day, 2 game days with >= 3 contests
-    }
+    end
     it {
       subject.first.contest_start.should == games[0].scheduledstart
     }

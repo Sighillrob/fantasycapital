@@ -71,7 +71,7 @@ class RealTimeDataService
                                           "pretty_playstate" => game.pretty_play_state,
                                           "minutes_remaining" => game.minutes_remaining,
                                           "home_team_score" => game.home_team_score,
-                                          "away_team_score" => game.away_team_score
+                                          "away_team_score" => game.away_team_score,
                                          } ]
       }
       Pusher['gamecenter'].trigger('stats', game_score_to_push)
@@ -134,7 +134,7 @@ class RealTimeDataService
     if changed_players
       # Recalculate all live entries' fantasy points and send as a message.
       @entries = Entry.live.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
-      if @entries
+      if !@entries.empty?
         Pusher['gamecenter'].trigger('stats', { "entries" => @entries })
       end
 
