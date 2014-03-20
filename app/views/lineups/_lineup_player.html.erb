@@ -1,5 +1,5 @@
 <%= content_tag :tr, id: dom_id(player), class: 'contest-player', data: {player_id: player.id, player_name: player.name, player_salary: player.salary, player_opp: 'Ind@SDD', player_fppg: 24.5, player_position: player.sport_position.name} do %>
-    <td>
+    <td class="position">
       <span>
         <strong> <%= player.sport_position.name %> </strong>
       </span>

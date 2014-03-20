@@ -150,7 +150,7 @@
             <% spot = spot_form.object %>
             <% position = spot.sport_position %>
             <%= content_tag :tr, id: dom_id(spot), class: 'lineup-spot', data: {sport_position_name: position.name, player_id: spot.player_id, spot: spot.spot} do %>
-              <td>
+              <td class="position">
                 <strong><span><%= position.name %> </span></strong>
                 <%= spot_form.hidden_field :sport_position_id %>
                 <%= spot_form.hidden_field :spot %>
