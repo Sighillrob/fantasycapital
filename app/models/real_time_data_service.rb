@@ -68,7 +68,7 @@ class RealTimeDataService
       game = game_score
       # NOTE: I'm sure this can now be simplified -- all the keys and values match
       game_score_to_push = {:games =>  [{"id" => game.id,
-                                          "pretty_playstate" => game.pretty_play_state,
+                                          "pretty_play_state" => game.pretty_play_state,
                                           "minutes_remaining" => game.minutes_remaining,
                                           "home_team_score" => game.home_team_score,
                                           "away_team_score" => game.away_team_score,
