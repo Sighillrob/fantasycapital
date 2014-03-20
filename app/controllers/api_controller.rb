@@ -15,7 +15,7 @@ class ApiController < ApplicationController
       liveContest['id'] = contest.id
       liveContest['sport'] = contest.sport
       liveContest['start_at'] = contest.contest_start.utc.strftime('%Y-%m-%d %H:%M:%S')
-      liveContest['end_at'] = contest.contest_end.utc
+#      liveContest['end_at'] = contest.contest_end.utc
       liveContest['entry_fee'] = contest.entry_fee
       liveContest['prize'] = contest.prize
       liveContest['place'] = 814
@@ -48,7 +48,7 @@ class ApiController < ApplicationController
       contest = Contest.find_by_id(entry.contest_id)
       completedContest['id'] = contest.id
       completedContest['sport'] = contest.sport
-      completedContest['complete'] = contest.contest_end.utc.strftime('%Y-%m-%d %H:%M:%S')
+      # completedContest['complete'] = contest.contest_end.utc.strftime('%Y-%m-%d %H:%M:%S')
       completedContest['entry_fee'] = "$" + contest.entry_fee.to_s
       completedContest['prize'] = "$" + contest.prize.to_s
       completedContest['place'] = 814
