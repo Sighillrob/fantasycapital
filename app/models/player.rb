@@ -31,8 +31,8 @@ class Player < ActiveRecord::Base
   end
 
   def realtime_fantasy_points(gameid)
-    # return current real-time-score for a particular game ID, or array of gameid's.
-    fps = player_real_time_scores.where(game_score_id: gameid).first
+    # return current real-time-fantasy score for a particular game ID, or array of gameid's.
+    fps = player_real_time_scores.where(game_score_id: gameid, name: 'fp').first
     fps.try(:value) || 0
   end
 
@@ -51,11 +51,12 @@ class Player < ActiveRecord::Base
     stats.to_a.each do |rtstat|
       idx = NBA_STATS_ORDER.index(rtstat['name'])
       unless idx.nil?
-        rtstats[idx] = rtstat['value'].to_i.to_s + " " + rtstat['name'][0]
+        rtstats[idx] = rtstat['value'].to_i.to_s + rtstat['name'][0]
       end
 
     end
-    rtstats.join(" ").upcase
+    # use 'compact' to remove nil entries (in case we only have partial data)
+    rtstats.compact.join(" ").upcase
   end
 
   class << self

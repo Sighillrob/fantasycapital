@@ -74,9 +74,16 @@ describe RealTimeDataService do
     it "will contain update for 2 players" do
       @playermsg.should have(2).items
     end
-    it "should includes fantasypoints for both players" do
-      expect(@playermsg[0][:currfps]).to eq(9)
-      expect(@playermsg[1][:currfps]).to eq(18)
+    it "has the right realtime stats for both players" do
+      expect(@playermsg[0][:rtstats]).to eq("3R 1A 2S")
+      expect(@playermsg[1][:rtstats]).to eq("6R 2A 4S")
+    end
+    it "have correct fantasypoints calculated for both players" do
+      #NBA	Fantasy pts
+      #Point	 1.00     Rebound	 1.25     Assist	 1.50
+      #Steal	 2.00     Block	 2.00       Turnover	 (1.00)
+      expect(@playermsg[0][:currfps]).to eq(3*1.25+1*1.5+2*2)
+      expect(@playermsg[1][:currfps]).to eq(6*1.25+2*1.5+4*2)
     end
     it "will have an entry" do
       expect(@entries).to be_true

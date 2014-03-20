@@ -118,7 +118,7 @@ class RealTimeDataService
     playerstats = changed_players.map {|player|
       pl_json = {id: player.id}
       pl_json[:rtstats] = player.rtstats(game_score.id)
-      pl_json[:currfps] = player.realtime_fantasy_points(game_score.id).to_i
+      pl_json[:currfps] = player.realtime_fantasy_points(game_score.id).to_f
       pl_json
     }
 
