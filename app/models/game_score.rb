@@ -92,7 +92,7 @@ class GameScore < ActiveRecord::Base
       0
     elsif self.period && self.period > 0
       # self.clock represents minutes until game is over...
-      48 - (12 * (self.period - 1)) + self.clock
+      48 - (12 * self.period) + self.clock
     else
       48
     end
