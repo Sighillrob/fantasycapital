@@ -140,10 +140,10 @@ describe RealTimeDataService do
       expect(@msgs[2]).to have_key(:players)
     end
     it "message should include fantasy points" do
-      expect(@msgs[2][:players][0][:currfps]).to eq(169)
+      expect(@msgs[2][:players][0][:currfps]).to eq(169.25)
     end
     it "message should include realtime stats update with 82 steals" do
-      expect(@msgs[2][:players][0][:rtstats]).to match(/82 S/)
+      expect(@msgs[2][:players][0][:rtstats]).to match(/82S/)
     end
   end
 
