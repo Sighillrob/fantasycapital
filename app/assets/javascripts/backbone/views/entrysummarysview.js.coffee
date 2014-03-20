@@ -8,6 +8,8 @@ class Main.Views.EntrySummarysView extends Backbone.View
     @template = $("#entry-summary-template").html()
     @entries_coll = args.entries_coll
     @listenTo(@entries_coll, 'reset', @render)
+    @listenTo(@entries_coll, 'change', @changeentry)
+
     @render()
   render: (offset) ->
     offset = offset || 0
