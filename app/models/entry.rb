@@ -33,7 +33,9 @@ class Entry < ActiveRecord::Base
     h = super(options)
     h[:username]   = self.lineup.user.username
     h[:fps] = self.current_fantasypoints
-    h[:player_ids] = self.lineup.lineup_spots.pluck('player_id')
+    # get player_ids sorted by their sport position's display priority
+    h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
+                      order('sport_positions.display_priority').pluck('player_id')
     h
   end
 

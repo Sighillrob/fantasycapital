@@ -18,10 +18,10 @@
 
 FactoryGirl.define do
   factory :player do
-    sequence(:first_name, 1) { |n| "Bruce#{n}" }
+    sequence(:first_name) { |n| "Bruce#{n}" }
     last_name "Acy"
-    team
+    association :team
     dob { Date.today - 15.year }
-    sport_position
+    association :sport_position
   end
 end

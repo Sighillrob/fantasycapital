@@ -15,8 +15,11 @@
 
 FactoryGirl.define do
   factory :sport_position do
-    name "SF"
+    # only create 6 sports positions.
+    sequence (:id) { |n| n % 6 }
     sport "NBA"
-    display_priority 0
+    # use actual position names and priorities from NBA; mix them up to make sure we sort properly
+    sequence (:name) { |n| ["SG", "SF", "C", "PG", "UTIL", "PF"].at(n % 6)}
+    sequence (:display_priority) { |n| [2, 3, 5, 1, 0, 4].at(n % 6)}
   end
 end
