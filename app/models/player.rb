@@ -30,8 +30,9 @@ class Player < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
-  def realtime_fantasy_points
-    fps = player_real_time_scores.find_by_name("fp")
+  def realtime_fantasy_points(gameid)
+    # return current real-time-score for a particular game ID, or array of gameid's.
+    fps = player_real_time_scores.where(game_score_id: gameid).first
     fps.try(:value) || 0
   end
 

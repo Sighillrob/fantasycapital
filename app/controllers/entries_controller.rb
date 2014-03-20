@@ -33,19 +33,18 @@ class EntriesController < ApplicationController
 
     # get all the player scores for today's games
     @todaysgames = GameScore.where({playdate: @contest.contestdate})
-    todaygameids = @todaysgames.pluck('id')
-    #@today_player_scores = PlayerRealTimeScore.where(game_score_id: todaygameids)
 
     @teams = Team.all
-    # BUGBUG: change this to players that are in this contest...
 
     # add today's scores to the players in a consumable format.
     todaygameids = @todaysgames.pluck('id')
+
+    # BUGBUG: change this to players that are in this contest...
     @rawplayers = Player.all.to_a
     @players = @rawplayers.map { |player|
       pl_json = player.as_json()
       pl_json['rtstats'] = player.rtstats(todaygameids)
-      pl_json['currfps'] = player.realtime_fantasy_points
+      pl_json['currfps'] = player.realtime_fantasy_points(todaygameids)
       pl_json
     }
     @sportpositions = SportPosition.all

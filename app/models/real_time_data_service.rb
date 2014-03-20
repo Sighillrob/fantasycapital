@@ -60,6 +60,7 @@ class RealTimeDataService
 
   def refresh_game(game_src)
     game_score = GameScore.where(ext_game_id: game_src['id']).first
+
     unless game_score
       Rails.logger.warn("GameScore not found for #{game_src['id']}")
       return
@@ -113,26 +114,23 @@ class RealTimeDataService
 
     end # of all player loop
 
-    # Recompute each Entry's current fantasypoints for sending to front end.
-    # Multiple messages sent to stay within Pusher limits.
+    # update each player's fantasy points.
     playerstats = changed_players.map {|player|
       pl_json = {id: player.id}
       pl_json[:rtstats] = player.rtstats(game_score.id)
-      pl_json[:currfps] = player.realtime_fantasy_points.to_i
+      pl_json[:currfps] = player.realtime_fantasy_points(game_score.id).to_i
       pl_json
     }
 
-      #msg = changed_scores.map {|score| { "id" => score.player_id, "stat_name" => score.name,
-      #                                    "stat_value" => score.value.to_f }}
-      ##Limit the size of each message (pusher's limit is 10240)
-      playerstats.each_slice(50).each do |msg_chunk|
-        Pusher['gamecenter'].trigger('stats', { :players => msg_chunk })
-      end
 
-      # send player stats update as a string
+    ##Limit the size of each message (pusher's limit is 10240)
+    playerstats.each_slice(50).each do |msg_chunk|
+      Pusher['gamecenter'].trigger('stats', { :players => msg_chunk })
+    end
 
     if changed_players
-      # Recalculate all live entries' fantasy points and send as a message.
+      # Recalculate all live entries' fantasy points and send as a message. Need a list of all game IDs
+      # today since the entry will span multiple games.
       @entries = Entry.live.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
       if !@entries.empty?
         Pusher['gamecenter'].trigger('stats', { :entries => @entries })
