@@ -1,3 +1,5 @@
+$font: "oswald-regular";
+
 header .balanceBlock {
   border-top: solid 2px #0FEA6C;
   top: -2px;
@@ -9,6 +11,8 @@ header .balanceBlock {
   margin: 0 0 20px 0;
   padding: 22px 25px;
   width: 300px;
+  font-family: $font;
+  font-size: 1.15em;
   strong {
     color: #fff;
     text-transform: uppercase;
@@ -24,6 +28,7 @@ header .balanceBlock {
     font-size: 40%;
     vertical-align: super;
     top: -0.3em;
+    font-family: $font;
   }
 }
 
@@ -34,6 +39,7 @@ header .balanceBlock h1 {
   margin-top: 10px;
   margin-bottom: 0;
   text-align: center;
+  font-family: $font;
 }
 
 @media (max-width: 768px) {
