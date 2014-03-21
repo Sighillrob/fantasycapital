@@ -35,9 +35,9 @@ class Entry < ActiveRecord::Base
     h[:fps] = self.current_fantasypoints
     # get player_ids sorted by spot in the lineup.
 
-    h[:player_ids] = self.lineup.lineup_spots.order('spot').pluck('player_id')
-    #h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
-    #                  order('sport_positions.display_priority ASC').pluck('player_id')
+    #h[:player_ids] = self.lineup.lineup_spots.order('spot').pluck('player_id')
+    h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
+                      order('sport_positions.display_priority ASC').pluck('player_id')
     h
   end
 
