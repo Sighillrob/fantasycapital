@@ -4,7 +4,8 @@ describe PlayersController do
 
   describe "GET 'stats'" do
     let(:user) { create(:user) }
-    let(:player) { create(:player) }
+    let(:sport_pos) { create(:sport_position) }
+    let(:player) { create(:player, sport_position: sport_pos) }
 
     before do
       @request.env["devise.mapping"] = Devise.mappings[:user]

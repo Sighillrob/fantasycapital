@@ -6,7 +6,7 @@ describe LineupsController do
   let(:sport_pos) { create(:sport_position) }
 
   before :each do
-    @player = create(:player)
+    @player = create(:player, sport_position: sport_pos)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in :user, user
   end

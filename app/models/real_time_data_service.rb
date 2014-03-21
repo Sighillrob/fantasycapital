@@ -69,7 +69,11 @@ class RealTimeDataService
     changed_players = [].to_set
     # iterate through each of the players in both teams of the game, updating their realtime stats.
     teams_src.map {|t| t['players']['player'] }.flatten.each do |player_src|
-      player = Player.where(ext_player_id: player_src['id']).first_or_create
+      player = Player.where(ext_player_id: player_src['id']).first
+      if !player
+        puts "Can't find player with ID #{player_src['id']}... skipping"
+        next
+      end
 
       changed = false
 

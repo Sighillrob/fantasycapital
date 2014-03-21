@@ -12,6 +12,9 @@
 #
 
 class PlayerRealTimeScore < ActiveRecord::Base
+  validates :player_id, presence: true
+  validates :game_score, presence: true
+
   belongs_to :player
   belongs_to :game_score
 end
