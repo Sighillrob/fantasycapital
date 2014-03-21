@@ -37,7 +37,6 @@ describe Entry do
     (0..8).each { |i|
       expect(disp_priorities[i]).to be <= disp_priorities[i+1]
     }
-    puts "HI"
   end
 
 end
