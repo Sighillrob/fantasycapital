@@ -1,4 +1,6 @@
-$(window).on("load", function () {
+
+
+$(window).on("load page:load", function () {
 
     // this code is used to fix the scroll issue inside the lineups page
     // table layout doesn't allow separete thead and tbody
@@ -22,7 +24,19 @@ $(window).on("load", function () {
         }, 10);
     }
 
+    function setWidth() {
+        window.setTimeout(function () {
+            $draftReceiver.find(".tab-pane.active thead").removeClass("hide");
+            $draftReceiver.find(".tab-pane.active th").each(function (index) {    
+               var width = $(this).width();
+               $draftEmitter.find("th").eq(index).width(width);
+            });
+            $draftReceiver.find(".tab-pane.active thead").addClass("hide");
+        }, 10);
+    }
+
     getArrow();
+    setWidth();
     
     $draftEmitter.find("table").addClass("sortable");
 
@@ -39,6 +53,7 @@ $(window).on("load", function () {
         // other click event handler is attached, it needs to be 
         // completed first before this code jumps in
         getArrow();
+        setWidth();
 
     });
 
