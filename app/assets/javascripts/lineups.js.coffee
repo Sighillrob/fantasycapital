@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$ ->
+$(document).on "ready page:load": ->
 	$('.createnewlineups').click -> 
     	$('.new-lineup-popup').toggle()
     	$('.new-lineup-popup .choices li a').removeClass('selected')

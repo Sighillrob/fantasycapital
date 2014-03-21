@@ -19,7 +19,7 @@ class Player
     $(".player-stats").on 'click', ->
       new window.AjaxModal4Container($(@).data('stats-url')).load()
 
-$ ->
+$(document).on "ready page:load": ->
   window.Player = Player
   (new Player()).bindAll()
 

@@ -174,7 +174,7 @@ class Entry
     dom.find('td.salary span').html @player.salary || "&nbsp;"
     dom.find('td.fppg span').html @player.fppg || "&nbsp;"
 
-$ ->
+$(document).on "ready page:load": ->
   window.Lineup = Lineup
   window.Entry = Entry
   new Lineup

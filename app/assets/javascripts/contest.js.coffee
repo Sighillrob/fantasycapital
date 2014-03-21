@@ -10,5 +10,5 @@ class Contest
       if filter != 'all'
         $(".filter-result").find("tr.contest:not('."+filter+"')").hide()
 
-$ ->
+$(document).on "ready page:load": ->
   new Contest
