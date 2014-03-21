@@ -2,15 +2,10 @@ class Main.Models.Game extends Backbone.Model
   paramRoot: 'game'
 
   defaults:
-    name: 'Foo'
     id: 0
 
   initialize: () ->
-    console.log "HI"
-
-  min_left: () ->
-    console.log "UNIMPLEMENTED MIN.LEFT IN BackBone Game model"
-    return 2
+    0
 
   home_team_alias: () ->
     teams_coll.get(@get('home_team_id')).get('teamalias')
