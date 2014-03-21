@@ -62,7 +62,7 @@ class AjaxModal4Container
 
     $('#ajax-modal')
 
-jQuery ->
+$(document).on "ready page:load": ->
   window.AjaxModal = AjaxModal
   window.AjaxModal4Container = AjaxModal4Container
 

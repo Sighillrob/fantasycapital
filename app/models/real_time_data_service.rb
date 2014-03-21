@@ -35,23 +35,6 @@ class RealTimeDataService
       game.away_team = away_team
       game.save!
 
-      # send this game's updated score to the browser if anything has changed. Do this first
-      # since in the browser, player computation depends on the game scores.
-      # Note we send a single-entry araray of "games" to be consistent with the API for entries and
-      # players. That way we can change the implementation here to send multiple scores at once if
-      # we want to.
-      if game.changed?
-        # NOTE: I'm sure this can now be simplified -- all the keys and values match
-        game_score_to_push = {:games =>  [{"id" => game.id,
-                                            "pretty_playstate" => game.pretty_play_state,
-                                            "minutes_remaining" => game.minutes_remaining,
-                                            "home_team_score" => game.home_team_score,
-                                            "away_team_score" => game.away_team_score
-                                            } ]
-        }
-        Pusher['gamecenter'].trigger('stats', game_score_to_push)
-      end
-
       # skip the game if the game hasn't started or is over. we're in a select, so a TRUE means return this
       #  schedule item.
       !game.in_future? && !game.closed?
