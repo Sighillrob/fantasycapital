@@ -33,6 +33,7 @@ namespace :stats do
     today = Time.now.in_time_zone("EST").to_date
     # create games and contests for multiple days in future so that we can always have contests to
     # enter.
+    ActiveRecord::Base.logger.level = 2   # disable logging all SQL calls to console.
     (today.. today+4).each do |date|
       games_scheduled = SportsdataClient::Sports::NBA.games_scheduled(date).result
       RealTimeDataService.new.refresh_schedule games_scheduled
