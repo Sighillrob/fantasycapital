@@ -10,9 +10,14 @@ class Main.Models.Entry extends Backbone.Model
   initialize: () ->
     0
 
+  player_pos: () ->
+    # return player model instances and the position they are playing in for this Entry
+    _.map( @get('player_ids'),  (playerid_posid) -> [players_coll.get(playerid_posid[0]), playerid_posid[1]] )
+
   players: () ->
-    # return player model instances for this Entry
-    _.map( @get('player_ids'),  (playerid) -> players_coll.get(playerid) )
+    # return player model instances  for this Entry
+    _.map( @get('player_ids'),  (playerid_posid) -> players_coll.get(playerid_posid[0]) )
+
 
   min_left: () ->
     entry_min_left = 0

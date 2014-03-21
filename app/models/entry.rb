@@ -37,9 +37,9 @@ class Entry < ActiveRecord::Base
 
     # the commented-out line using order('spot') should work, and would be simpler. but we'll have
     # to tweak a test to use it.
-    #h[:player_ids] = self.lineup.lineup_spots.order('spot').pluck('player_id')
-    h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
-                      order('sport_positions.display_priority ASC').pluck('player_id')
+    h[:player_ids] = self.lineup.lineup_spots.order('spot').pluck('player_id', 'sport_position_id')
+    #h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
+    #                  order('sport_positions.display_priority ASC').pluck('player_id')
     h
   end
 

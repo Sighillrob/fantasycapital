@@ -12,10 +12,6 @@ class Main.Models.Player extends Backbone.Model
       console.log("invoking name -> name: " + @get("first_name") + " " + @get("last_name"));
     @get("first_name") + " " + @get("last_name")
 
-  sportposition: () ->
-    sportposition = sportpositions_coll.get(@get("sport_position_id"))
-    sportposition.get('name')
-
   team: () ->
     if @debug
       console.log("invoking team -> team_id: " + @get("team_id"));

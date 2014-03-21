@@ -22,30 +22,30 @@
         <div class="scorecard2">
             <table class="scorecardTable" cellpadding="10" cellspacing="10">
                 <tbody>
-                <% $.each(players, function (idx, player) { %>
+                <% $.each(player_and_pos, function (idx, player_pos) { %>
                 <tr class="">
-                    <td><h1 class="role"><%= player.sportposition() %></h1></td>
-                    <td><strong class="player-name"> <%= player.name() %> </strong>
+                    <td><h1 class="role"><%= sportpositions_coll.get(player_pos[1]).get('name') %></h1></td>
+                    <td><strong class="player-name"> <%= player_pos[0].name() %> </strong>
 
                         <p class="player-score">
-                            <%= player.scorestring() %>
+                            <%= player_pos[0].scorestring() %>
                             <!--<strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL-->
                         </p>
                         <p class="player-record-row">
                                   <span class="player-record">
-                                      <%= player.get('rtstats') %>
+                                      <%= player_pos[0].get('rtstats') %>
                                     <!--99 P, 0 R, 0 A, 0 S, 0 B, 0 T -->
                                   </span>
                         </p>
                     </td>
                     <td>
-                        $<span class="salary"><%= player.get('salary') %></span> <br>
+                        $<span class="salary"><%= player_pos[0].get('salary') %></span> <br>
                         SALARY
                     </td>
                     <td>27.5% <br>
                         OWNED
                     </td>
-                    <td><h1 class="score"><%= player.get('currfps') %></h1></td>
+                    <td><h1 class="score"><%= player_pos[0].get('currfps') %></h1></td>
                 </tr>
                 <% }); %>
                 </tbody>
