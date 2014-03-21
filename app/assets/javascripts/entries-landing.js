@@ -121,20 +121,24 @@
 
         var self = this;
 
-        $(".js-time-count").countdown({
-            date: $(this).attr("data-time"),
-            render: function (date) {
-                var min, sec, days;
-                min = self.padding(date.min);
-                sec = self.padding(date.sec);
+        $(".js-time-count").each(function () {
+            var $self = $(this);
+            $self.countdown({
+                date: $self.attr("data-time"),
+                render: function (date) {
 
-                days = date.days;
-                $(this).html(date.days * 24 + date.hours + ":" + min + ":" + sec);
+                    var min, sec, hours;
+                    min = self.padding(date.min);
+                    sec = self.padding(date.sec);
+                    hours = date.days * 24 + date.hours;
 
-            },
-            onEnd: function () {
-                self.handle();
-            }
+                    $self.html(hours + ":" + min + ":" + sec);
+
+                },
+                onEnd: function () {
+                    self.handle();
+                }
+            });
         });
 
     };
