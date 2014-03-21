@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe RealTimeDataService do
-  before { Player.create(ext_player_id: "a") }
   let(:user) { create(:user) }
   let(:user2) { create(:user) }
+  let!(:positions) { create_list(:sport_position, 6)}
+  let(:pgpos) { SportPosition.find_by_name('PG')}
+  let!(:players) {  create_list(:player, 3, sport_position: pgpos) }
+
   let(:game_schedule) do
     [{ 'id' => "aaa-id-of-game-1",
         'home' => {},
@@ -29,7 +32,7 @@ describe RealTimeDataService do
       'clock' => "4:25",
       'team' => [{'points' => "54",
                   'players' => { 'player'=> [
-                      { "id" => "a",
+                      { "id" => players[2].ext_player_id,
                         "statistics" => {"assists" => "1.0", "steals" => "2", "rebounds" => "3" }
                       }
                   ]
@@ -37,7 +40,7 @@ describe RealTimeDataService do
                  },
                  {'points' => "22",
                   'players' => { 'player'=> [
-                      { "id" => "4",
+                      { "id" => players[0].ext_player_id,
                         "statistics" => {"assists" => "2.0", "steals" => "4", "rebounds" => "6" }
                       }
                   ]
@@ -50,6 +53,8 @@ describe RealTimeDataService do
     before do
       pusher_mock = double('channel') # rspec object that stands in for another object
       Pusher.stub(:[]).with('gamecenter').and_return(pusher_mock)
+
+      # create a contest, 2 users, and 2 lineups.
       @contest = FactoryGirl.create(:contest, contest_start: Time.now - 60,
                                     contestdate: Time.now.to_date)
 
@@ -70,7 +75,9 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_details)
     end
     # we'll be getting 4 player stats per player, so 8 stats total
-    it { PlayerRealTimeScore.all.should have(8).items }
+    it {
+      PlayerRealTimeScore.all.should have(8).items
+    }
     it "will contain update for 2 players" do
       @playermsg.should have(2).items
     end
@@ -148,6 +155,7 @@ describe RealTimeDataService do
   end
 
   context "when there are 80 player changes" do
+    let!(:players) {  create_list(:player, 80, sport_position: pgpos) }
 
     before do
       mock_channel = double('channel')
@@ -161,9 +169,11 @@ describe RealTimeDataService do
       game_src1 = game_details.clone
       game_src1['team'][0]['players']['player'] = []  # clear out old value.
       game_src1['team'][1]['players']['player'] = []  # clear out old value.
-      80.times do |idx|
+      @player_extids = Player.all.pluck('ext_player_id')
+      expect(@player_extids.count >= 80)
+      @player_extids.each_with_index do |extid, idx|
         game_src1['team'][0]['players']['player'] <<
-            { "id" => "a#{idx}",
+            { "id" => extid,  # this is the ID defined in players' factory
               "statistics" => {"assists" => (15+idx).to_s, "steals" => (15+idx*2).to_s,
                                "rebounds" => (15+idx*3).to_s }
             }
@@ -173,6 +183,7 @@ describe RealTimeDataService do
 
     end
     it "will send one msg with 50, and one with 30" do
+      expect(@playermsgs.count).to be(2)
       expect(@playermsgs[0].count).to be(50)
       expect(@playermsgs[1].count).to be(30)
     end

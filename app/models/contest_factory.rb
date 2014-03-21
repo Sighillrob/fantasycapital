@@ -57,16 +57,25 @@ class ContestFactory
                           max_entries: row[3], sport: "NBA", contestdate:gamedate).first_or_initialize
           c.contest_start = contest_time
           c.save! if c.changed?
-          puts "Creating PlayerContests..."
           # Create a playercontest entry per player and contest. So it's ~6K entries per day.
           # this keeps the logic general (we could make some players not eligible for a given day).
           # we might want to optimize what's stored in a playercontest (e.g. remove the statistics)
           # or find a way to do a batch update. This is expensive in the DB at the moment, at least
           # in dev machine.
           players.each do |p|
-            PlayerContest.where(contest: c, player: p).first_or_create
+            # we've seen bad sport position data get in, which means a nil sport-position. In that
+            # case, remove the player contest
+            # if it exists so we don't have weird invalid playercontest entries.
+            # TODO: we can remove this check later, b/c there's now a validation check on player
+            #  that sports position can't be nil. but don't remove it until we're sure there
+            #  is no bad data in DB.
+            if p.sport_position_id.nil?
+              PlayerContest.where(player: p).destroy_all  # destroy for old contests too.. he will screw us up.
+            else
+              PlayerContest.where(contest: c, player: p).first_or_create
+            end
           end
-          puts "Created #{players.count} PlayerContests"
+          puts "Created PlayerContests for #{players.count} players for contest #{c.id}"
         end
       end
     end
