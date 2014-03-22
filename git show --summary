@@ -1,0 +1,38 @@
+commit b6120c5a283f63cc42b9cf625f45949fdcc9632c
+Author: emilos <emil@ajdyna.com>
+Date:   Sat Mar 22 13:03:28 2014 +0100
+
+    changing color for the home page description
+
+diff --git a/app/assets/stylesheets/style.css.scss b/app/assets/stylesheets/style.css.scss
+index 84be583..5f60ade 100644
+--- a/app/assets/stylesheets/style.css.scss
++++ b/app/assets/stylesheets/style.css.scss
+@@ -563,7 +563,7 @@ a.join-link:hover {
+ 
+ .contest-help {
+   font-style: italic;
+-  color: $theme-light-grey1;
++  color: $theme-dark-grey1;
+   span {
+     margin-right: 20px;
+   }
+diff --git a/app/views/contests/browse.html.erb b/app/views/contests/browse.html.erb
+index 03b30c9..01f345d 100644
+--- a/app/views/contests/browse.html.erb
++++ b/app/views/contests/browse.html.erb
+@@ -28,11 +28,11 @@
+ </div>
+ 
+ <div class="contest-help">
+-  <span>50/50: Finish in the top half and win the prize</span>
+-  <span>
++  <p>50/50: Finish in the top half and win the prize</span>
++  <p>
+     H2H: Randomly matched one-on-one contests.
+     *If there is an odd number of entrants the last player sits out.
+-  </span>
++  </p>
+ </div>
+ 
+ <table class='contestHead main-grid table sortable filter-result'>
