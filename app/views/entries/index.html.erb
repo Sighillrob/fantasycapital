@@ -87,8 +87,8 @@
           <td><%%= contest.sport %></td>
           <td data-start-at="<%%= contest.start_at %>"><%%= contest.render.start_at %></td>
           <td data-time="<%%= contest.end_at %>" class="js-time-count"><%%= contest.render.end_at %></td>
-          <td><%%= contest.entry_fee %></td>
-          <td><%%= contest.prize %></td>
+          <td><%%= contest.render.entry_fee %></td>
+          <td><%%= contest.render.prize %></td>
           <td><%%= contest.place %></td>
           <td><a class="button" href="<%%= contest.results_path %>">RESULTS</a></td>
         </tr>
@@ -121,8 +121,8 @@
           <td><%%= contest.id %></td>
           <td><%%= contest.sport %></td>
           <td data-time="<%%= contest.start_at %>"  class="js-time-count"><%%= contest.render.start_at %></td>
-          <td><%%= contest.entry_fee %></td>
-          <td><%%= contest.prize %></td>
+          <td><%%= contest.render.entry_fee %></td>
+          <td><%%= contest.render.prize %></td>
           <td><%%= contest.entry_size %></td>
           <td><a class="button" href="<%%= contest.edit_path %>">EDIT</a></td>
           <td><a class="button" href="<%%= contest.view_path %>">VIEW</a></td>
@@ -156,10 +156,10 @@
           <td><%%= contest.id %></td>
           <td><%%= contest.sport %></td>
           <td><%%= contest.complete %></td>
-          <td><%%= contest.entry_fee %></td>
-          <td><%%= contest.prize %></td>
+          <td><%%= contest.render.entry_fee %></td>
+          <td><%%= contest.render.prize %></td>
           <td><%%= contest.place %></td>
-          <td><%%= contest.won %></td>
+          <td><%%= contest.render.won %></td>
           <td><a class="button" href="<%%= contest.results_path %>">RESULTS</a></td>
         </tr>
         <%% }); %>
