@@ -11,14 +11,15 @@ class Main.Views.EntryView extends Backbone.View
     # Look up the players for this entry
     console.log("render entry")
 
-    players = @entry.players()
-    $.each(players,  (idx, player) ->
-      if player.get('rtstats')
-        console.log player.get('rtstats')
+    player_and_pos = @entry.player_pos()
+    $.each(player_and_pos,  (idx, pl_pos) ->
+      if pl_pos[0].get('rtstats')
+        console.log pl_pos[0].get('rtstats')
+
     )
 
 
-    $(@el).html(_.template(this.template, {entry: @entry, players: players, user_img: window.user_img_placeholder}))
+    $(@el).html(_.template(this.template, {entry: @entry, player_and_pos: player_and_pos, user_img: window.user_img_placeholder}))
     $(@el).show()
     return this
 

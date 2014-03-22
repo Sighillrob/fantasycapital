@@ -51,7 +51,8 @@ class window.GameCenterCls
         @my_contest_id = ($('.gamecenter').data('contest_id'))
         @gamesview = new Main.Views.GamesView({el: $('#gamesview_el'), games_coll: games_coll})
 
-        @entrysummarys_view = new Main.Views.EntrySummarysView({el: $('#entry-summarys-view-el'), entries_coll: entries_coll})
+        @entrysummarys_view = new Main.Views.EntrySummarysView(
+          {el: $('#entry-summarys-view-el'), entries_coll: entries_coll, players_coll: players_coll})
 
         channel = this.pusher.subscribe('gamecenter')
         @myentry = entries_coll.get(@my_entry_id)

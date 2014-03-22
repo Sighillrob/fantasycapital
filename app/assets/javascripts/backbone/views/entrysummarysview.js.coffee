@@ -7,8 +7,12 @@ class Main.Views.EntrySummarysView extends Backbone.View
   initialize: (args) ->
     @template = $("#entry-summary-template").html()
     @entries_coll = args.entries_coll
+    @players_coll = args.players_coll
     @listenTo(@entries_coll, 'reset', @render)
     @listenTo(@entries_coll, 'change', @changeentry)
+
+    # this is a big hammer -- any player change will cause entry summary redraw. But maybe it's ok?
+    @listenTo(@players_coll, 'change', @changeentry)
 
     @render()
   render: (offset) ->
