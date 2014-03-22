@@ -22,9 +22,6 @@ class Main.Views.EntrySummarysView extends Backbone.View
     # this is just here so we have a place we can easily breakpoint for debugging
     @render()
 
-  test: () ->
-    console.log("Hello world")
-
   render: (offset) ->
     offset = offset || 0
     rendered = ""
