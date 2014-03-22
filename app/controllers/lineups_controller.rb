@@ -32,7 +32,7 @@ class LineupsController < ApplicationController
 
     respond_to do |format|
       if @lineup.save
-        format.html { redirect_to lineups_path, notice: 'Lineup was successfully created.' }
+        format.html { redirect_to entries_path, notice: 'Lineup was successfully created.' }
         format.json { render action: 'show', status: :created, location: @lineup }
       else
         @positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
