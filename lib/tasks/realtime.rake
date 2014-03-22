@@ -41,10 +41,18 @@ namespace :realtime do
       `cd db && tar xzvf gamefeeds.tgz`
     end
 
-    Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..7]}.uniq.sort.each do |ts|
+    # map captured games to real games in play, by ext_game_id
+    games_captured = Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[13..48]}.uniq
+    games_in_play = GameScore.where(scheduledstart: Time.now..Time.now+1.day).map {|x| x.ext_game_id}
+    num_games = [games_captured.size, games_in_play.size].min
+    id_map = Hash[games_captured[0,num_games].zip(games_in_play[0,num_games])]
+
+    Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..10]}.uniq.sort.each do |ts|
       Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
         puts "Sending file #{feed}"
-        RealTimeDataService.new.refresh_game JSON.parse(File.open(feed).read)['game']
+        game_json = JSON.parse(File.open(feed).read)['game']
+        game_json['id'] = id_map[game_json['id']]
+        RealTimeDataService.new.refresh_game game_json
       end
       sleep 1
     end
