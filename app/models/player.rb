@@ -22,7 +22,6 @@ class Player < ActiveRecord::Base
 
   belongs_to :team
   belongs_to :sport_position
-  belongs_to :game_score
   has_many :player_stats, inverse_of: :player
   has_many :player_real_time_scores
   validates :sport_position_id, presence: true    # don't allow nil sport-position
@@ -93,11 +92,6 @@ class Player < ActiveRecord::Base
         yield player
       end
       player
-    end
-
-    def add_playerscore(game_id)
-      # add player score to player object for sending to browser.
-
     end
 
   end

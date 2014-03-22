@@ -24,7 +24,6 @@ class EntriesController < ApplicationController
     # this is the real-time "gamecenter" action. It shows a contest from a particular
     # day.
     @entry_id = params[:id]
-    @entry = Entry.find(params[:id])  # BUGBUG: remove this? we have @entries below.
     @contest = @entry.contest
     @entries = @entry.contest.entries
 
