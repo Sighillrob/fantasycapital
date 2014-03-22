@@ -21,6 +21,7 @@
 //= require backbone
 //= require backbone/main
 //= require jquery.countdown
+//= require accounting.min
 //= require ajax_modal
 //= require turbolinks
 //= require social-share-button
