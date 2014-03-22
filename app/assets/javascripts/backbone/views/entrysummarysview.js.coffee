@@ -9,10 +9,10 @@ class Main.Views.EntrySummarysView extends Backbone.View
     @entries_coll = args.entries_coll
     @players_coll = args.players_coll
     @listenTo(@entries_coll, 'reset', @render)
-    @listenTo(@entries_coll, 'reset', @test)
     @listenTo(@entries_coll, 'change', @changeEntrySummary)
 
     # this is a big hammer -- any player change will cause entry summary redraw. But maybe it's ok?
+    # it'll be ok if the players won't change too often
     @listenTo(@players_coll, 'change', @changeEntrySummary)
 
     @render()
