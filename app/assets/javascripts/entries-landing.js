@@ -71,14 +71,26 @@
         // clone it
         data = $.extend(true, {}, data);
 
+        console.log(data);
+
         _(data.liveContests).each(function (contest) {
             contest.render = {};
             contest.render.start_at = moment(contest.start_at).format("hh:mm a");
-            //contest.render.end_at = moment(contest.end_at).subtract(moment()).format("hh:mm:ss");
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
         });
         _(data.upcomingContests).each(function (contest) {
             contest.render = {};
-            contest.render.start_at = moment(contest.start_at).format("hh:mm a");
+            contest.render.start_at  = moment(contest.start_at).format("hh:mm a");
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
+        });
+
+        _(data.completedContests).each(function (contest) {
+            contest.render = {};
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
+            contest.render.won       = accounting.formatMoney(contest.won);
         });
 
 

@@ -122,6 +122,11 @@
     }
 
     // Initialise on DOM ready
-    $($.bootstrapSortable);
+    //$($.bootstrapSortable);
+    
+    // Initialise on DOM ready and ROR Turbolinks page:load event
+    $(document).on("ready page:load", function () {
+        $.bootstrapSortable();
+    });
 
 }(jQuery));

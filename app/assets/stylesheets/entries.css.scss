@@ -302,3 +302,8 @@ a#clear-lineups{
     display: block;
     width: 100%;
 }
+
+.entries_index table, 
+.entries_index table th {
+    text-align: right;
+}
