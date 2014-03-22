@@ -1,12 +1,12 @@
 class Main.Models.Player extends Backbone.Model
-  paramRoot: 'entry'
   debug: false
   defaults:
-    foo: []
+    0
   initialize: () ->
     if @debug
       console.log("initializing a player")
       @name()
+
   name: () ->
     if @debug
       console.log("invoking name -> name: " + @get("first_name") + " " + @get("last_name"));
