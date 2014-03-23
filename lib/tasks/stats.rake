@@ -26,6 +26,7 @@ namespace :stats do
     safe_rake_tasks "stats:fetch_players"
     safe_rake_tasks "stats:create_contests"
     safe_rake_tasks "stats:player_stats"
+    safe_rake_tasks "stats:schedule_realtime_push"
   end
 
   desc "Create games and contests from stats api"
@@ -58,18 +59,10 @@ namespace :stats do
     end
   end
 
-  task dummy_stats: [:environment ] do
-    PlayerStat.delete_all
-    Player.all.each do |player|
-      ["summary", "matchup"].each do |dim|
-        ["MPG", "RPG", "APG", "BLKPG", "STLPG", "PFPG", "TOPG", "PPG", "FPPG"].each do |stat|
-          priority=0
-          ["12/1", "11/24", "11/17", "Home Games", "Away Games", "2013 Season"].each do |span|
-            PlayerStat.create(dimension: dim, time_span: span, stat_name: stat, stat_value: "10.0", player: player, display_priority: priority+=1)
-          end
-        end
-      end
+  desc "Schedule RealtimeDataService for games of the day"
+  task schedule_realtime_push:  [:environment] do
+    GameScore.scheduled_on.each do |game|
+      RealtimeStatsWorker.perform_at(game.scheduledstart - 30.minutes, game.ext_game_id)
     end
   end
-
 end
