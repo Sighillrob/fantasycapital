@@ -13,7 +13,6 @@ class RealTimeDataService
     # during overnight tasks, and regularly (every 15 seconds) during gametimes.
 
     # return the list of games that are currently live.
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
 
     schedule_summary.select do |game_summary|
       # one game received from the external API. Check if we need to update our local Game data, and
@@ -116,9 +115,10 @@ class RealTimeDataService
     end
 
     if changed_players
-      # Recalculate all live entries' fantasy points and send as a message. Need a list of all game IDs
-      # today since the entry will span multiple games.
-      @entries = Entry.live.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
+      # Recalculate all live entries' fantasy points and send as a message.
+
+      todaysentries = Entry.in_range(game_score.playdate, game_score.playdate)
+      @entries = todaysentries.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
       if !@entries.empty?
         Pusher['gamecenter'].trigger('stats', { :entries => @entries })
       end

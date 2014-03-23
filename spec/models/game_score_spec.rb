@@ -20,5 +20,22 @@
 require 'spec_helper'
 
 describe GameScore do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let!(:games) {[create(:game_score, playdate:"2014-03-12", scheduledstart: "2014-03-12 5:00"),
+                 create(:game_score, playdate:"2014-03-12", scheduledstart: "2014-03-12 9:00"),
+                 create(:game_score, playdate:"2014-03-11", scheduledstart: "2014-03-11 4:00"),
+                 ]}
+  context "When three games are scheduled" do
+    it "Earliest start time is correct" do
+      # note this fields are all converted to TimeWithZone, in UTC time.
+      expect(GameScore.earliest_start("2014-03-12")).to eq("2014-03-12 5:00")
+      expect(GameScore.earliest_start("2014-03-11")).to eq("2014-03-11 4:00")
+    end
+    it "Earliest start time of a day without games is nil" do
+      expect(GameScore.earliest_start("2014-03-10")).to be(nil)
+
+    end
+
+
+  end
+
 end

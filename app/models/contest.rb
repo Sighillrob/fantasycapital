@@ -26,41 +26,66 @@ class Contest < ActiveRecord::Base
   has_many :lineups, through: :entries
   has_many :users, through: :lineups
 
-  #def start!
-  #  # mark contest as started right now.
-  #  self.contest_start = Time.now
-  #  self.contest_end = Time.now + 60*60*2
-  #  update({contest_start: self.contest_start, contest_end: self.contest_end})
-  #  # send as an array of one contest update.
-  #  Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: true}] })
-  #end
-
-  #def end!
-  #  # mark contest as finished right now.
-  #  self.contest_end = Time.now
-  #  update({contest_end: self.contest_end})
-  #  Pusher['gamecenter'].trigger('stats', { "contests" => [{id: self.id, live: false}] })
-  #
-  #end
-
   #TODO: placeholder for testing the views
   def salary_cap
     65000
   end
 
   def start_at
-    self.class.for_day(self.contest_start).for_sport(self.sport).order('contest_start ASC').first.contest_start
+    # return start of contest. this is simply the start time fo the earliest game of the contest date.
+    GameScore.earliest_start(self.contestdate)
   end
 
-  def complete?
-    start_at < DateTime.now
+
+  def accurate_state
+    # return this contest's state, accurately. This is inexpensive for contests in past or future,
+    # but expensive for ones where we have to dig through the entries. There are only three
+    # states here -- :closed, :in_future, or :live
+
+    games = GameScore.where(playdate: self.contestdate)
+    # shortcut -- if all games from the contest are closed, then the contest is closed.
+    return :closed if games.not_closed.count == 0
+
+    # shortcut -- if all games from the contest are in future, then the contest is in future.
+    #   multiple levels of negatives here b/c of the way we identify status in games.
+    return :in_future if games.not_in_future.count == 0
+
+    # don't know. gotta find it by digging through entries (so we can mark 'closed' the moment
+    # all entries in a contest finish
+    states = self.entries.map { |entry| entry.accurate_state }
+    return :live if states.include?(:live)
+    return :closed if !states.include?(:in_future)
+    return :in_future
   end
 
-  def live?
-    # is current contest live right now?
-    return true # BUGBUG: This crashed w/ no contest_start / end attribute!
-    contest_start < DateTime.now && contest_end > DateTime.now
-  end
+  #def closed?
+  #  # is the contest done? We try to be accurate here, so we get "done" indication immediately
+  #  # when all relevant games are over, not just when all games for a day are over.
+  #
+  #  # shortcut -- if all games from the date are closed, then the contest is closed.
+  #  return true if GameScore.where(playdate: self.contestdate).not_closed.count == 0
+  #
+  #  # shortcut -- if all games from the date are in future, then the contest is NOT closed.
+  #  #   multiple levels of negatives here b/c of the way we identify status in games.
+  #  return false if GameScore.where(playdate: self.contestdate).not_in_future.count == 0
+  #
+  #  # damn, neither shortcut worked. Do the expensive thing and look at each entry.
+  #  self.entries.all? do |entry|
+  #    entry.complete?
+  #  end
+  #end
+
+  #def live?
+  #  # is current contest live right now?
+  #
+  #  # shortcut for any contests where no games on the date are live. Single DB query.
+  #  return false if GameScore.where(playdate: self.contestdate).live.count == 0
+  #
+  #  # oh well, shortcut didn't work. Do the expensive thing...
+  #  self.entries.all? do |entry|
+  #    entry.live?
+  #  end
+  #end
 
 
   def filled?
@@ -68,11 +93,14 @@ class Contest < ActiveRecord::Base
   end
 
   def eligible_for?(user)
+    # make sure user didn't enter contest more than the MAX # of times. They can enter a tournament
+    #  5 times; other contest types only once.
     if user.nil?
       true
     else
       max_entries_per_user = (contest_type.downcase == "tournament") ? 5 : 1
-      user.entries.select {|e| e.contest == self}.count < max_entries_per_user
+      f = user.entries.select {|e| e.contest == self}.count < max_entries_per_user
+      f
     end
   end
 
@@ -95,27 +123,19 @@ class Contest < ActiveRecord::Base
     h
   end
 
-
   class << self
 
-    def live
-      where "contest_start BETWEEN ? AND ?", DateTime.now - 3.hour, DateTime.now + 3.hour
+    def in_range(user=nil, start_date, end_date)
+      # show contests for dates (array or single). This might show some that are already live.
+      where("contestdate between (?) and (?)", start_date, end_date).order(
+              contestdate: :asc, contest_type: :asc, entry_fee: :asc)
     end
 
-    def completed
-     where "contest_start < ?", DateTime.now
-    end
-
-    def upcoming(user=nil, date=Time.now.in_time_zone("US/Pacific").to_date)
-
-      where("contestdate >= ?", date).order(
-              contestdate: :asc, contest_type: :asc, entry_fee: :asc).select do |c|
-        (! c.filled?) && c.eligible_for?(user)
+    def eligible(user=nil, start_time)
+      # return if a user is eligible for a set of contests that comes in as a query.
+      select do |c|
+        (! c.filled?) && c.eligible_for?(user) && (c.start_at > start_time)
       end
-    end
-
-    def for_day(day)
-      where "contest_start BETWEEN ? AND ?", day.beginning_of_day, day.end_of_day
     end
 
     def for_sport(sport)
