@@ -17,34 +17,44 @@
 #
 
 require 'spec_helper'
-
+require 'time'
 describe Contest do
 
-  let(:contest) { create(:contest) }
+  let(:now) { Time.parse("2014-03-20 17:51:27 -0700")}
+  let(:todaydate) { now.to_date }
+
   let(:user) { create(:user) }
   let(:lineup) { create(:lineup, user: user) }
+  let!(:game) {create(:game_score, playdate:"2014-03-21", scheduledstart: now + 18.hours)}
+  let(:contest) { create(:contest, contestdate: game.playdate) }
 
-
-  describe "Eligible contests for a user" do
+  describe "User has entered one contest" do
     subject {
-      Contest.upcoming(user)
+      Contest.in_range(user, now.to_date, now.to_date+1).eligible(user, now)
     }
 
+    # created one entry, thus
     before { create(:entry, contest: contest, lineup: lineup) }
 
     context "Another contest exists" do
-      before { @unfilled_contest = create(:contest) }
+      before {
+        @unfilled_contest = create(:contest, contestdate: game.playdate)
+      }
 
-      it { should == [@unfilled_contest] }
+      it "User should be eligible to enter the unfilled one" do
+        should == [@unfilled_contest]
+      end
     end
 
     context "No other contest exists" do
-      it {should be_empty}
+      it "User is eligible for nothing" do
+        should be_empty
+      end
     end
 
     context "contest expired" do
       before do
-        c = create(:contest, contest_start: (Time.now - 1.day))
+        c = create(:contest)
         create(:entry, contest: c, lineup: lineup)
       end
 
@@ -52,34 +62,41 @@ describe Contest do
     end
 
     context "Tournament contests" do
-      before { @tournament = create(:contest, contest_type: "Tournament") }
+      before { @tournament = create(:contest, contest_type: "Tournament", contestdate: game.playdate) }
 
-      it {
+      it "User should be eligible to enter it" do
         should == [@tournament]
-      }
+      end
 
       context "Entered 5 times" do
         before do
           5.times { create(:entry, contest: @tournament, lineup: lineup) }
         end
-        it { should be_empty }
+        it "is ineligible for entry a 6th time" do
+          should be_empty
+        end
       end
     end
 
   end
 
-  describe "Contest get filled" do
-    let(:another_contest) { create(:contest, max_entries: 1) }
-    subject { Contest.upcoming(user) }
+  describe "Contest that only allows one entry, and has one entry" do
+    let(:another_contest) { create(:contest, max_entries: 1, contestdate: game.playdate) }
+
+    subject {
+      Contest.in_range(user, todaydate, todaydate+1).eligible(user, now)
+    }
 
     before do
       l = create(:lineup, user: create(:user))
       create(:entry, contest: another_contest, lineup: l)
     end
 
-    it { should be_empty }
+    it "won't be available for entry" do
+      should == []
+    end
     
-    it "should fail when entered too many times" do
+    it "will fail when entered again" do
       l = create(:lineup, user: create(:user))
       expect {create(:entry, contest: another_contest, lineup: l)}.to raise_error
     end
@@ -119,9 +136,11 @@ describe Contest do
 
         it "should succeed and clone a new contest" do
           contest.enter(another_lineup).should be_present
-          Contest.upcoming(user).count.should == 1
-          (Contest.upcoming(user)[0].contest_start - contest.contest_start).should < 1
-          Contest.upcoming(user)[0].max_entries.should == contest.max_entries
+          upcoming_cont = Contest.in_range(user, todaydate, todaydate+1).eligible(user, now)
+          upcoming_cont.count.should == 1
+
+          (upcoming_cont[0].contest_start - contest.contest_start).should < 1
+          upcoming_cont[0].max_entries.should == contest.max_entries
         end
       end
 

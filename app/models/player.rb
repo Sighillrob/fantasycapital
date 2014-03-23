@@ -25,6 +25,7 @@ class Player < ActiveRecord::Base
   has_many :player_stats, inverse_of: :player
   has_many :player_real_time_scores
   validates :sport_position_id, presence: true    # don't allow nil sport-position
+  has_many :lineup_spots
 
   def name
     "#{first_name} #{last_name}"

@@ -33,33 +33,55 @@ class Entry < ActiveRecord::Base
     h = super(options)
     h[:username]   = self.lineup.user.username
     h[:fps] = self.current_fantasypoints
-    # get player_ids sorted by spot in the lineup.
+    # get player_ids sorted by spot in the lineup, so they display in proper order in browser.
 
-    # the commented-out line using order('spot') should work, and would be simpler. but we'll have
-    # to tweak a test to use it.
     h[:player_ids] = self.lineup.lineup_spots.order('spot').pluck('player_id', 'sport_position_id')
-    #h[:player_ids] = self.lineup.lineup_spots.joins(:sport_position).
-    #                  order('sport_positions.display_priority ASC').pluck('player_id')
     h
   end
 
+  def games
+    # games that this entry is participating in, based on the players, date, and games that day.
+    # NOTE: this is expensive to compute; anywhere we can get away with a contest<-->day lookup
+    #  instead we should. That won't be totally accurate -- some entries may not use players from
+    #  some games.
+    team_ids = self.lineup.players.map do |player|
+      player.team_id
+    end
+    games = GameScore.where(playdate:self.contest.contestdate).where('home_team_id IN (?) OR away_team_id IN (?)', team_ids, team_ids)
+    games
+  end
+
+  def accurate_state
+    # return :closed, :in_future, or :live for this entry.
+    games = self.games
+    statuses = games.map { |game| game.accurate_state }
+    return :live if statuses.include?(:live)
+    return :closed if !statuses.include?(:in_future)
+    return :in_future
+  end
+
+  # NILS: BUGBUG: Remove this, relying just on accurate_state?
+  def complete?
+    # is entry done and over? True if all games are closed. When possible, you should use contest.complete? instead b/c it's cheaper.
+
+    # we will still want this function during game-time, to
+
+    self.games.all? do | game |
+      game.closed?
+    end
+  end
+
+  #def live?
+  #  # expensive to compute, b/c list of games is expensive.
+  #  self.games.all? do | game |
+  #    game.live?
+  #  end
+  #end
+
   class << self
 
-    def live
-      # live, more loosely defined, means entries that are happening today.
-      joins(:contest).where "contests.contestdate = ?", Time.now.in_time_zone("US/Pacific").to_date
-    end
-
-    def completed
-      joins(:contest).where "contests.contest_end < ?", DateTime.now
-    end
-
-    def upcoming
-      joins(:contest).where "contests.contest_start > ?", DateTime.now
-    end
-
-    def for_day(day)
-      joins(:contest).where "contests.contest_start BETWEEN ? AND ?", day.beginning_of_day, day.end_of_day
+    def in_range(start_date, end_date)
+      joins(:contest).where "contests.contestdate between ? and ?", start_date, end_date
     end
 
     def for_sport(sport)

@@ -9,7 +9,12 @@ class ContestsController < ApplicationController
 
   # This is our homepage (/)
   def browse
-    @contests = Contest.upcoming(current_user)
+    todaydate = Time.now.in_time_zone("US/Pacific").to_date
+    now = Time.now
+
+    # grab upcoming contests that user can enter.
+    @contests = Contest.in_range(current_user, todaydate, todaydate+1).eligible(current_user, now)
+
   end
 
   # GET /contests/1
