@@ -13,7 +13,6 @@ class RealTimeDataService
     # during overnight tasks, and regularly (every 15 seconds) during gametimes.
 
     # return the list of games that are currently live.
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
 
     schedule_summary.select do |game_summary|
       # one game received from the external API. Check if we need to update our local Game data, and
