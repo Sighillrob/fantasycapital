@@ -52,6 +52,8 @@ gem 'newrelic-rake'
 gem 'pusher'
 gem 'resque', require: "resque/server"
 gem 'resque-web', require: 'resque_web'
+gem 'sidekiq'
+gem 'sinatra', '>= 1.3.0', :require => nil
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 1.2'

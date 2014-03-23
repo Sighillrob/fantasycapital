@@ -46,7 +46,7 @@ class RealTimeDataService
 
     unless game_score
       Rails.logger.warn("GameScore not found for #{game_src['id']}")
-      return
+      return nil
     end
     if game_score.record_sportsdata(game_src)
       game = game_score
@@ -122,8 +122,8 @@ class RealTimeDataService
       if !@entries.empty?
         Pusher['gamecenter'].trigger('stats', { :entries => @entries })
       end
-
     end
+    game_score
   end
 end
 

@@ -155,6 +155,10 @@ class GameScore < ActiveRecord::Base
       where "status = scheduled"
     end
 
+    def scheduled_on(date=Time.now)
+      where(scheduledstart: date.in_time_zone("EST").beginning_of_day..date.in_time_zone("EST").end_of_day)
+    end
+
   end
 
 
