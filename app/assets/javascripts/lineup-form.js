@@ -82,7 +82,9 @@
             // table's now populated. enable sort.
 
             // create player stats modal popup handler. Binds to appropriate rows.
-            new PlayerStats();
+            $(".player-stats").on('click', function () {
+                new window.AjaxModal4Container($(this).data('stats-url')).load();
+            });
 
             // create lineup object, (handles '+' for adding player to a lineup)
             new Lineup();

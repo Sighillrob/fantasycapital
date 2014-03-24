@@ -13,18 +13,14 @@ class PlayerStats
   position: ''
 
   constructor: (dom) ->
-    if dom? # BUGBUG: this looks old?
+    if dom?
       @id       = dom.data('player-id') || ""
       @name     = dom.data('player-name') || ""
       @salary   = dom.data('player-salary') || ""
       @opp      = dom.data('player-opp') || ""
       @fppg     = dom.data('player-fppg') || ""
       @position = dom.data('player-position') || ""
-    @bindAll()
 
-  bindAll: ->
-    $(".player-stats").on 'click', ->
-      new window.AjaxModal4Container($(@).data('stats-url')).load()
 
 window.PlayerStats = PlayerStats
 
