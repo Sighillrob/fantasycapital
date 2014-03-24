@@ -35,16 +35,25 @@ class Main.Models.Player extends Backbone.Model
     if games.length == 0
       return null
     return games[0]
-
+  getTeamID: () ->
+    return @team().id || null
+  getTeam: () ->
+    mygame = @currgame()
+    return "None" if !mygame
+    return mygame.get_team_alias(@getTeamID())
   scorestring: () ->
     mygame = @currgame()
     return "None" if !mygame
     return mygame.score_string()
-
+  boldstring: (team) ->
+    if team == @getTeam()
+      return '<strong class="home-team">' + team + '</strong>'
+    else
+      return team
   teamsstring: () ->
     mygame = @currgame()
     return "None" if !mygame
-    return mygame.teams_string()
+    return @boldstring(mygame.home_team_alias()) + "@" + @boldstring(mygame.away_team_alias())
 
   salarystring: () ->
     accounting.formatMoney(@get('salary'), {precision: 0});

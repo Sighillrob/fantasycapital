@@ -4,7 +4,7 @@
     data: {player_id: player.id, player_name: player.name, player_salary: player.salary, player_opp: 'Ind@SDD',
            player_fppg: 24.5, player_position: player.sport_position.name} do > -->
     <% players.forEach(function (player) { %>
-
+      <% console.log(player.getTeam()) %>
         <!-- data-player attributes on tr are used by PlayerStats, when adding player to lineup -->
         <tr class="contest-player" data-player-id="<%= player.get('id') %>"
               data-player-name="<%= player.name() %>"
