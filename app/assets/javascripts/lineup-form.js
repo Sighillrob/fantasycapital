@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-
+    var lineup_players_view;
 
 
     function draftHandler () {
@@ -60,12 +60,42 @@
 
     }
 
-    $(document).on("ready page:load", function () {
+    function populateDraftRows(players_coll) {
+        // populate the rows in the draft table
+        lineup_players_view = new Main.Views.LineupPlayerView(
+            {el: $('#lineup-eligible-players-el'), players_coll: players_coll}
+        )
 
-        // this code is used to fix the scroll issue inside the lineups page
-        // table layout doesn't allow separete thead and tbody
-        draftHandler();
-       
+    }
+
+    $(document).on("ready page:load", function () {
+        if ($("body#lineups_new").length) {
+            //we are on new-lineup page.
+
+            // call function defined in the backend template. This populates the backbone collections
+            ///  into the element specified here.
+            var mybody = $("body")[0]
+            init_colls(mybody);
+
+            populateDraftRows(mybody.players_coll);
+
+            // table's now populated. enable sort.
+
+            // create player stats modal popup handler. Binds to appropriate rows.
+            new PlayerStats();
+
+            // create lineup object, (handles '+' for adding player to a lineup)
+            new Lineup();
+
+            $.bootstrapSortable();
+
+            // this code is used to fix the scroll issue inside the lineups page
+            // table layout doesn't allow separete thead and tbody
+            draftHandler();
+
+
+        }
+
 
     });
 

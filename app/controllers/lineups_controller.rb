@@ -9,6 +9,13 @@ class LineupsController < ApplicationController
 
     #for testing...
     #@eligible_players = Player.all 
+
+    @games = GameScore.where({playdate: @contest.contestdate})
+    @teams = Team.all
+    @players = @contest.eligible_players
+    @sportpositions = SportPosition.all
+
+
   end
 
   def edit

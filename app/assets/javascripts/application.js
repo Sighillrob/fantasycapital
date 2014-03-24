@@ -29,7 +29,7 @@
 //= require plugins/time_remaining
 //= require bootstrap_run
 //= require jquery.currency
-//= require player
+//= require playerstats.js.coffee
 //= require entries
 //= require contest
 //= require balanced

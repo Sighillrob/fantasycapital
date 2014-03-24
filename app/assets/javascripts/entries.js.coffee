@@ -17,14 +17,17 @@ class Lineup
         that.clear()
 
     $('a.add-to-lineup').on 'click', ->
-      player = new window.Player($(@).closest('tr.contest-player'))
+      # add player to lineup if eligible, and remove from DOM. 'that' is the constructed lineup.
+      player = new window.PlayerStats($(@).closest('tr.contest-player'))
       if that.canAddPlayer(player)
         eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
         if eligible_spots.length is 0
           alert "Please remove player from position "+player.position
         else
           eligible_spots[0].player = player
-          $('tr#player_'+player.id).hide()
+          # this is really a backbone view, but for now we just mess with it in HTML. Ultimately
+          # we should transition this Lineup logic into backbone.
+          $('tr[data-player-id="'+player.id+'"]').hide()
         that.updateView()
       else
         alert "You can't add this player. Salary limit reached!"
@@ -33,7 +36,7 @@ class Lineup
       spot_seq = $(@).data('lineup-spot')
       spots = (spot for spot in that.entries when spot.spot is spot_seq and not not spot.player)
       for spot in spots
-        $('tr#player_'+spot.player.id).show()
+        $('tr[data-player-id="'+spot.player.id+'"]').show()
         spot.player = ''
       that.updateView()
     @updateView()
@@ -148,13 +151,15 @@ class Entry
 
     if player_id?
       player_dom = $('tr.contest-player#player_'+player_id)
+      # BUGBUG: this isn't currently exercised... add the following selector below. But is this still needed?
+      # $('tr[data-player-id="'+player.id+'"]')
       if player_dom.length
-        @player = new window.Player(player_dom)
+        @player = new window.PlayerStats(player_dom)
         player_dom.hide()
     @spot = dom.data('spot')
 
   addPlayer: (player) ->
-    if player instanceof Player
+    if player instanceof PlayerStats
       @.player = player
     else
       return null
@@ -177,4 +182,3 @@ class Entry
 $(document).on "ready page:load": ->
   window.Lineup = Lineup
   window.Entry = Entry
-  new Lineup
