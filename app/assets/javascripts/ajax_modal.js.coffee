@@ -1,3 +1,4 @@
+
 class AjaxModal
   url: ''
   modal: ''

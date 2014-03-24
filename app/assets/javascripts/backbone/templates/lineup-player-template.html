@@ -1,0 +1,44 @@
+<script type="text/template" id="lineup-player-template">
+
+    <!--< content_tag :tr, id: dom_id(player), class: 'contest-player',
+    data: {player_id: player.id, player_name: player.name, player_salary: player.salary, player_opp: 'Ind@SDD',
+           player_fppg: 24.5, player_position: player.sport_position.name} do > -->
+    <% players.forEach(function (player) { %>
+
+        <!-- data-player attributes on tr are used by PlayerStats, when adding player to lineup -->
+        <tr class="contest-player" data-player-id="<%= player.get('id') %>"
+              data-player-name="<%= player.name() %>"
+            data-player-salary="<%= player.get('salary') %>" data-player-opp="<%= player.teamsstring() %>"
+            data-player-fppg="24.5" data-player-position="<%= player.sportposition().get('name') %>">
+            <td class="position">
+          <span>
+            <strong> <%= player.sportposition().get('name') %></strong>
+          </span>
+            </td>
+            <td class='player player-stats' data-stats-url="/players/<%= player.get('id') %>/stats">
+                <span class='player-link'><%= player.name() %></span>
+            </td>
+            <!-- Need the above to look like this:
+            <td class="player player-stats" data-stats-url="/players/2331/stats" data-value="
+             A.J. Price
+           ">
+             <span class="player-link">A.J. Price </span>
+           </td> -->
+            <td class='opp'>
+                <!--<span>Ind@<strong class='home-team'>SDD</strong></span>-->
+                <%= player.teamsstring() %>
+            </td>
+            <td class='salary currency' data-value="<%= player.get('salary') %>">
+                <span><%= player.salarystring() %>
+                <!--< number_to_currency player.salary, precision: 0 >--></span>
+            </td>
+            <td class='fppg'>
+                <span>24.5</span>
+            </td>
+
+            <!-- Plus button to add player -->
+            <td class="action-icon" data-value="+ "><a class="add-to-lineup" href="#_">+</a></td>
+        </tr>
+    <% }); %>
+
+</script>

@@ -72,6 +72,8 @@
     </table>
   </div>
 
+  <!-- render drafting table body with all players -->
+
   <div class="tab-content same-height js-draft-receiver">
     <div class='tab-pane active' id="ALL">
       <table class='tab lineup table sortable striped-grid'>
@@ -85,12 +87,15 @@
           <th class="add">&nbsp;</th>
         </tr>
         </thead>
-        <tbody>
-          <%= render partial: 'lineups/lineup_player', collection: @contest.eligible_players, as: :player %>
+        <tbody id="lineup-eligible-players-el">
+          <!-- filled in via bootstrap -->
+          <!-- < render partial: 'lineups/lineup_player', collection: @contest.eligible_players, as: :player %> -->
         </tbody>
       </table>
     </div>
 
+    <!-- what is this part used for? It becomes invisible after page load. Maybe it's used to
+         populate the lineup on the right side of page so far? -->
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
           <table class='tab lineup table sortable striped-grid'>
@@ -113,6 +118,7 @@
   </div>
   <p class='green'>Export to CSV »</p>
 </div>
+<!-- right half of screen - chosen lineup -->
 <%= form_for @lineup do |f| %>
     <div class='col-md2'>
       <h2>LINEUP</h2>
@@ -134,6 +140,8 @@
         </h4>
       </div>
       <div class="lineups-push-block"></div>
+      <!-- render chosen lineup -->
+
       <table class='tab same-height striped-grid'>
         <thead>
         <tr>
