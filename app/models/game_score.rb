@@ -44,22 +44,29 @@ class GameScore < ActiveRecord::Base
   #clinching the series early.
 
   # status indications that aren't an exception:
-  GOOD_STATUSES = ['scheduled', 'time-tbd', 'created', 'inprogress', 'halftime', 'complete', 'closed',
-                   'delayed']
+  GOOD_STATUSES = ['scheduled', 'time-tbd', 'created', 'inprogress', 'halftime', 'complete',
+                   'closed', 'delayed']
+
+  UNCLOSED_STATUSES = GOOD_STATUSES.clone
+  UNCLOSED_STATUSES.delete('closed')
+
   IN_PROGRESS_STATUSES = ['created', 'inprogress', 'halftime', 'delayed']
 
   IN_FUTURE_STATUSES = ['scheduled', 'time-tbd']
-  ## game is no longer playing live.
-  #def ended?
-  #  actualend != nil || exception_ending
-  #end
+
+  def accurate_state
+    # primary way to learn state of game. Same method exists on contests, games, and entries
+    # with a simple return -- :closed, :in_future, or :live based on current game state.
+    return :in_future if IN_FUTURE_STATUSES.include?(status)
+    return :live if UNCLOSED_STATUSES.include?(status)
+    return :closed
+  end
 
   def in_future?
     IN_FUTURE_STATUSES.include?(status)
   end
 
-
-  def in_prog?
+  def live?
     IN_PROGRESS_STATUSES.include?(status)
   end
 
@@ -69,7 +76,7 @@ class GameScore < ActiveRecord::Base
   end
   # game is over and done, including final scores if it completed successfully
   def closed?
-    (self.status=='closed') || exception_ending?
+    !UNCLOSED_STATUSES.include?(status)
   end
   # scores are valid (ie game finished successfully and we've got final data)
   def scores_valid?
@@ -101,20 +108,26 @@ class GameScore < ActiveRecord::Base
 
   # pretty-printed play state for user, ie "5 min left" or "FINAL" or "scheduled" (if scheduled)
   def pretty_play_state
-    if scores_valid?
-      "FINAL"
-    elsif exception_ending?
-      "CANCELLED"
-    elsif in_prog?
-      "#{minutes_remaining} MIN LEFT"
-    elsif pending_final?
-      "PENDING..."
-    else
-      "SCHEDULED"   # remaining states should all map to scheduled... if not, we'll learn :)
+
+    case self.accurate_state
+      when :in_future
+        "SCHEDULED"
+      when :live
+        if self.pending_final?
+          "PENDING..."
+        else
+          "#{minutes_remaining} MIN LEFT"
+        end
+      when :closed
+        if self.exception_ending?
+          "CANCELLED"
+        else
+          "FINAL"
+        end
     end
-
-
   end
+
+
   # record game status for this game from sportsdata API (sportsdata 'game-summary' data). returns true if game changed
   def record_sportsdata (game_src)
     # get realtime stats on any game that is in progress and hasn't been resolved in our DB yet.
@@ -151,8 +164,34 @@ class GameScore < ActiveRecord::Base
       where "playdate >= ?", Time.now.in_time_zone("US/Pacific").to_date - 1
     end
 
+    def earliest_start(day)
+      # Return the earliest time of a game on a given day. returns nil if no games are scheduled
+      # that day.
+      where("playdate = ?", day).order(:scheduledstart).pluck(:scheduledstart)[0]
+    end
+
+    def closed
+      where "status NOT in (?)", UNCLOSED_STATUSES
+    end
+
+    def not_closed
+      where "status in (?)", UNCLOSED_STATUSES
+    end
+
+    def live
+      where "status IN (?)", IN_PROGRESS_STATUSES
+    end
+
+    def not_in_future
+      where "status NOT IN (?)", IN_FUTURE_STATUSES
+    end
+
     def in_future
-      where "status = scheduled"
+      where "status IN (?)", IN_FUTURE_STATUSES
+    end
+
+    def scheduled_on(date=Time.now)
+      where(scheduledstart: date.in_time_zone("EST").beginning_of_day..date.in_time_zone("EST").end_of_day)
     end
 
   end

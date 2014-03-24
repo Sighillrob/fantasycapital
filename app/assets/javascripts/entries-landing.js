@@ -71,14 +71,26 @@
         // clone it
         data = $.extend(true, {}, data);
 
+        console.log(data);
+
         _(data.liveContests).each(function (contest) {
             contest.render = {};
-            contest.render.start_at = moment(contest.start_at).format("hh:mm a");
-            //contest.render.end_at = moment(contest.end_at).subtract(moment()).format("hh:mm:ss");
+            contest.render.start_at = moment(contest.contest_start).format("hh:mm a");
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
         });
         _(data.upcomingContests).each(function (contest) {
             contest.render = {};
-            contest.render.start_at = moment(contest.start_at).format("hh:mm a");
+            contest.render.start_at  = moment(contest.contest_start).format("hh:mm a");
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
+        });
+
+        _(data.completedContests).each(function (contest) {
+            contest.render = {};
+            contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
+            contest.render.prize     = accounting.formatMoney(contest.prize);
+            contest.render.won       = accounting.formatMoney(contest.won);
         });
 
 
@@ -136,7 +148,15 @@
 
                 },
                 onEnd: function () {
-                    self.handle();
+                    // self.handle(); // NILS: I commented this out for now. There's an issue
+                    //   in timezone conversion I think (I started sending times in UTC).
+                    //   This function causes browser to hang in an infinite loop -- I think the
+                    //   countdown expires immediately, we do another ajax fetch, and expire
+                    //   again immediately. You probably want to guard against that.
+                    //   I suppose you're refetching to move from "upcoming" to "live", right?
+                    //   But can you do this a more robust way (maybe turn it into backbone and render the view on the client?)
+                    //   Otherwise if we ever have an issue or corner-case where
+                    //   time until start is less than 0, you'll hang the browser window.
                 }
             });
         });

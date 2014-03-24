@@ -24,7 +24,7 @@ class EntriesController < ApplicationController
     # this is the real-time "gamecenter" action. It shows a contest from a particular
     # day.
     @entry_id = params[:id]
-    @entry = Entry.find(params[:id])  # BUGBUG: remove this? we have @entries below.
+    @entry = Entry.find(params[:id])
     @contest = @entry.contest
     @entries = @entry.contest.entries
 
@@ -51,7 +51,7 @@ class EntriesController < ApplicationController
   end
 
   def index
-    @entries = current_user.entries
+    #@entries = current_user.entries    # BUGBUG: I think this is unused due to API call?
   end
 
   # POST /entries

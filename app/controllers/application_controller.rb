@@ -8,6 +8,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :require_login!
 
+  # suppress SQL logging
+  ActiveRecord::Base.logger = Logger.new('/dev/null')
+
   protected
 
     def render_json_errors(model)

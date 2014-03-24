@@ -1,65 +1,34 @@
 class ApiController < ApplicationController
 	respond_to :json
 
-	def searchEntries
-    entries = current_user.entries
-    liveEntries = entries.live
-    upcomingEntries = entries.upcoming
-    completedEntries = entries.completed
+  def searchEntries
+    # API called on /entries page. We might want to remove this, and just rely on backbone models
+    # seeded from server.
+    todaydate = Time.now.in_time_zone("US/Pacific").to_date
 
     liveContests = []
-    liveEntries.each do |entry|
-      liveContest = {}
-
-      contest = Contest.find_by_id(entry.contest_id)
-      liveContest['id'] = contest.id
-      liveContest['sport'] = contest.sport
-      liveContest['start_at'] = contest.contest_start.utc.strftime('%Y-%m-%d %H:%M:%S')
-#      liveContest['end_at'] = contest.contest_end.utc
-      liveContest['entry_fee'] = contest.entry_fee
-      liveContest['prize'] = contest.prize
-      liveContest['place'] = 814
-      liveContest['results_path'] = entry_path(entry)
- 
-      liveContests.push(liveContest)
-    end
-
     upcomingContests = []
-    upcomingEntries.each do |entry|
-      upcomingContest = {}
+    completedContests = []
 
-      contest = Contest.find_by_id(entry.contest_id)
-      upcomingContest['id'] = contest.id
-      upcomingContest['sport'] = contest.sport
-      upcomingContest['start_at'] = contest.contest_start.utc
-      upcomingContest['entry_fee'] = contest.entry_fee
-      upcomingContest['prize'] = contest.prize
-      upcomingContest['entry_size'] = contest.entries.size
-      upcomingContest['edit_path'] = edit_lineup_path(Lineup.find_by_id(entry.lineup_id))
-      upcomingContest['view_path'] = entry_path(entry)
+    entries_in_play = current_user.entries.in_range(todaydate-7, todaydate+7)
 
-      upcomingContests.push(upcomingContest)
+    entries_in_play.each do |entry|
+      # the API has a funky format, close to a contest but not quite. Build up an element for it.
+      contest = entry.contest.attributes
+      contest['results_path'] = entry_path(entry)
+      contest['view_path'] = entry_path(entry)
+      contest['edit_path'] = edit_lineup_path(entry.lineup)
+
+      # determine which list the entry goes on.
+      state = entry.contest.accurate_state
+      completedContests << contest if state == :complete
+      liveContests << contest if state == :live
+      upcomingContests << contest if state == :in_future
     end
 
-    completedContests = []    
-    completedEntries.each do |entry|
-      completedContest = {}
+    render json: {liveContests: liveContests, upcomingContests: upcomingContests,
+                  completedContests: completedContests}
 
-      contest = Contest.find_by_id(entry.contest_id)
-      completedContest['id'] = contest.id
-      completedContest['sport'] = contest.sport
-      # completedContest['complete'] = contest.contest_end.utc.strftime('%Y-%m-%d %H:%M:%S')
-      completedContest['entry_fee'] = "$" + contest.entry_fee.to_s
-      completedContest['prize'] = "$" + contest.prize.to_s
-      completedContest['place'] = 814
-      completedContest['won'] = "$0"
-      completedContest['results_path'] = entry_path(entry)
-      
-      completedContests.push(completedContest)
-    end
-
-    render json: {liveContests: liveContests, upcomingContests: upcomingContests, completedContests: completedContests}
-    
   end
 
 

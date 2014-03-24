@@ -11,20 +11,20 @@ describe("Tests for a Player", function () {
         node.setAttribute("data-player-opp", cfg.opp);
         node.setAttribute("data-player-fppg", cfg.fppg);
         node.setAttribute("data-player-position", cfg.position);
-        return new Player($(node));
+        return new PlayerStats($(node));
     }
 
     it("Player should be a function", function () {
-        expect(typeof Player).toBe("function");
+        expect(typeof PlayerStats).toBe("function");
     });
 
     it("Player should have salary set to 0 by default, and id, name, opp, fppg, position have to be empty", function () {
-        expect(Player.prototype.id).toBe("");
-        expect(Player.prototype.name).toBe("");
-        expect(Player.prototype.salary).toBe(0);
-        expect(Player.prototype.opp).toBe("");
-        expect(Player.prototype.fppg).toBe("");
-        expect(Player.prototype.position).toBe("");
+        expect(PlayerStats.prototype.id).toBe("");
+        expect(PlayerStats.prototype.name).toBe("");
+        expect(PlayerStats.prototype.salary).toBe(0);
+        expect(PlayerStats.prototype.opp).toBe("");
+        expect(PlayerStats.prototype.fppg).toBe("");
+        expect(PlayerStats.prototype.position).toBe("");
     });
 
 

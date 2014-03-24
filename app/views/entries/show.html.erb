@@ -7,7 +7,7 @@
             class="capitalcontent gamecenter">
 <!--Login Section-->
 <%= form_tag({controller:"entries", action:"admin"}, remote: true, id: "admin_buttons_form") do %>
-    <% if ! @contest.live? %>
+    <% if @contest.accurate_state != :live %>
         <%= submit_tag(value="Make Live", :name => "command") %>
     <% end %>
 <% end %>
@@ -19,7 +19,7 @@
   </li>
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
   <li><span><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
-  <li><a id="is_contest_live_text" href="#"><%=  @contest.live? ?  'LIVE IN PLAY' :  'not live' %></a></li>
+  <li><a id="is_contest_live_text" href="#"><%=  @contest.accurate_state == :live  ?  'LIVE IN PLAY' :  'not live' %></a></li>
   <li><span>Started <%= @contest.contestdate %></span></li>
   <!--<li><span>Started 7:00pm ET 12/18</span></li>-->
 </ul>
@@ -35,7 +35,7 @@
     </li>
     <li>
 
-      <h4>&nbsp;&nbsp;<strong>Entry:</strong><%= number_to_currency(@contest.entry_fee, unit: '$') %></h4>
+      <h4>&nbsp;&nbsp;<strong>Entry:</strong> <%= number_to_currency(@contest.entry_fee, unit: '$') %></h4>
     </li>
     <li>&nbsp;&nbsp;<a href="#"><span class="green">
          <%= number_to_currency(@contest.prize, unit: '$') %> Prize Pool</span></a>
@@ -107,20 +107,28 @@
       // temporary hack until we handle user images.
       var user_img_placeholder = "<%= image_path("user.png") %>";
 
-      var games_coll = new Main.Collections.GamesCollection;
-      games_coll.reset(<%= @games.to_json.html_safe %>);
       var teams_coll = new Backbone.Collection;
       teams_coll.reset(<%= @teams.to_json.html_safe %>);
-      var players_coll = new Main.Collections.PlayersCollection;
-      players_coll.reset(<%= @players.to_json.html_safe %>);
-      var entries_coll = new Main.Collections.EntriesCollection;
-      entries_coll.reset(<%= @entries.to_json.html_safe %>);
+
+      var contest = new Backbone.Model (<%= @contest.to_json.html_safe %>);
 
       var sportpositions_coll = new Backbone.Collection;
       sportpositions_coll.reset (<%= @sportpositions.to_json.html_safe %>);
+
+      var games_coll = new Main.Collections.GamesCollection([],
+              {teams_coll: teams_coll});
+      games_coll.reset(<%= @games.to_json.html_safe %>);
+
+      var players_coll = new Main.Collections.PlayersCollection([],
+              {teams_coll: teams_coll, games_coll: games_coll,
+                  contest: contest, sportpositions_coll: sportpositions_coll});
+      players_coll.reset(<%= @players.to_json.html_safe %>);
+
+      var entries_coll = new Main.Collections.EntriesCollection;
+      entries_coll.reset(<%= @entries.to_json.html_safe %>);
+
       var playerscores_coll = new Main.Collections.PlayerScoresCollection;
       playerscores_coll.reset (<%= @playerscores.to_json.html_safe %>);
-      var contest = new Backbone.Model (<%= @contest.to_json.html_safe %>);
 
       $(document).on('page:load ready', function () {
             if ($('.gamecenter').length > 0) {

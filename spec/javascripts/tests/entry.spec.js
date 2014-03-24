@@ -17,7 +17,7 @@ function createEntry (position, spot, id) {
     node.setAttribute("data-player-opp", cfg.opp);
     node.setAttribute("data-player-fppg", cfg.fppg);
     node.setAttribute("data-player-position", cfg.position);
-    return new Player($(node));
+    return new PlayerStats($(node));
 }
 
 describe("Tests for an Entry", function () {

@@ -21,6 +21,7 @@
 //= require backbone
 //= require backbone/main
 //= require jquery.countdown
+//= require accounting.min
 //= require ajax_modal
 //= require turbolinks
 //= require social-share-button
@@ -28,7 +29,7 @@
 //= require plugins/time_remaining
 //= require bootstrap_run
 //= require jquery.currency
-//= require player
+//= require playerstats.js.coffee
 //= require entries
 //= require contest
 //= require balanced

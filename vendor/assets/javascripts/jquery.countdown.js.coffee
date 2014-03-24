@@ -26,8 +26,9 @@ and GPL-3.0 (http://opensource.org/licenses/GPL-3.0) licenses.
       @
 
     getDateData = (endDate) =>
-      endDate = Date.parse if $.isPlainObject @options.date then @options.date else new Date @options.date
-      diff = (endDate - Date.parse(new Date)) / 1000
+      #previous mechanism was broken
+      endDate = moment.utc(@options.date)
+      diff = parseInt((endDate - moment.utc()) / 1000, 10)
 
       if diff <= 0
         diff = 0

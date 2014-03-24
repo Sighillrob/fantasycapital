@@ -85,6 +85,10 @@ Main::Application.routes.draw do
     #get "/gc_data2/:entry_id" => "api#gc_data2"
   end
 
+  # sidekiq web UI
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
