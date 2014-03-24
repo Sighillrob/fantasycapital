@@ -194,6 +194,14 @@ class GameScore < ActiveRecord::Base
       where(scheduledstart: date.in_time_zone("EST").beginning_of_day..date.in_time_zone("EST").end_of_day)
     end
 
+    def in_range(start_date, end_date)
+      # show games for dates. This might show some that are already live.
+      where("playdate between (?) and (?)", start_date, end_date).order(
+          playdate: :asc)
+    end
+
+
+
   end
 
 
