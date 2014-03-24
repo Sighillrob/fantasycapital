@@ -80,7 +80,8 @@
   </div>
 
   <script>
-    $(document).ready(function(){
+    // BUGBUG: This is broken (need page:load signal for turbolinks). Also, what does it do??
+      $(document).ready(function(){
       $('.draftPlayer').click(function(){
         $('#player_<%= @player.id %> .add-to-lineup').first().click();
       });
