@@ -27,6 +27,8 @@ class RealTimeDataService
       end
 
       game = GameScore.where(ext_game_id: game_summary['id']).first_or_initialize
+      # use old state of "closed" game so we go through the service one more time, finalizing scores.
+      oldclosed = game.closed?
       game.status = game_summary['status']
       game.playdate = game_summary['scheduled'].in_time_zone('EST')
       game.scheduledstart = game_summary['scheduled']
@@ -36,7 +38,7 @@ class RealTimeDataService
 
       # skip the game if the game hasn't started or is over. we're in a select, so a TRUE means return this
       #  schedule item.
-      !game.in_future? && !game.closed?
+      !game.in_future? && !oldclosed
     end
   end
 
