@@ -92,14 +92,18 @@ class Contest < ActiveRecord::Base
     max_entries.nil? ? false : entries.count >= max_entries.to_i
   end
 
-  def eligible_for?(user)
+  def eligible_for?(user, user_entries = nil)
     # make sure user didn't enter contest more than the MAX # of times. They can enter a tournament
     #  5 times; other contest types only once.
     if user.nil?
       true
     else
+
+      # prefetched entries list fixes n^2 sql calls
+      user_entries = user.entries unless user_entries
+
       max_entries_per_user = (contest_type.downcase == "tournament") ? 5 : 1
-      f = user.entries.select {|e| e.contest == self}.count < max_entries_per_user
+      f = user_entries.select {|e| e.contest == self}.count < max_entries_per_user
       f
     end
   end
@@ -133,8 +137,9 @@ class Contest < ActiveRecord::Base
 
     def eligible(user=nil, start_time)
       # return if a user is eligible for a set of contests that comes in as a query.
+      user_entries = user ? user.entries.includes(:contest) : nil
       select do |c|
-        (! c.filled?) && c.eligible_for?(user) && (c.start_at > start_time)
+        (! c.filled?) && c.eligible_for?(user, user_entries) && (c.start_at > start_time)
       end
     end
 
