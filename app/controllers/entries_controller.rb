@@ -51,7 +51,6 @@ class EntriesController < ApplicationController
   end
 
   def index
-    #@entries = current_user.entries    # BUGBUG: I think this is unused due to API call?
   end
 
   # POST /entries
