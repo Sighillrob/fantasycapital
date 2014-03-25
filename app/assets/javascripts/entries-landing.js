@@ -75,12 +75,14 @@
 
         _(data.liveContests).each(function (contest) {
             contest.render = {};
-            contest.render.start_at = moment(contest.contest_start).format("hh:mm a");
+            contest.render.start_at = moment.utc(contest.contest_start).local().format("hh:mm a");
             contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
             contest.render.prize     = accounting.formatMoney(contest.prize);
         });
         _(data.upcomingContests).each(function (contest) {
             contest.render = {};
+            // NOTE: keep start_at here as UTC b/c it's rendered as a countdown anyway.
+            //   we should clean it up so it is more consistent.
             contest.render.start_at  = moment(contest.contest_start).format("hh:mm a");
             contest.render.entry_fee = accounting.formatMoney(contest.entry_fee);
             contest.render.prize     = accounting.formatMoney(contest.prize);
