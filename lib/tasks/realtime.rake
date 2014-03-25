@@ -4,9 +4,10 @@ namespace :realtime do
 
     while true do
       begin
-        ongoing_games = RealTimeDataService.new.refresh_schedule SportsdataClient::Sports::NBA.games_scheduled.result
-        ongoing_games.each do |game|
-          RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game['id']).result['game']
+        puts "Realtime task: fetching games"
+        ongoing_ext_games = RealTimeDataService.new.refresh_schedule SportsdataClient::Sports::NBA.games_scheduled.result
+        ongoing_ext_games.each do |ext_game|
+          RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(ext_game['id']).result['game']
         end
         sleep 15
       rescue => e

@@ -72,7 +72,7 @@
         if ($("body#lineups_new").length) {
             //we are on new-lineup page.
 
-            // call function defined in the backend template. This populates the backbone collections
+            // call function defined in the Rails template. This populates the backbone collections
             ///  into the element specified here.
             var mybody = $("body")[0]
             init_colls(mybody);
@@ -82,12 +82,15 @@
             // table's now populated. enable sort.
 
             // create player stats modal popup handler. Binds to appropriate rows.
-            new PlayerStats();
+            $(".player-stats").on('click', function () {
+                new window.AjaxModal4Container($(this).data('stats-url')).load();
+            });
 
             // create lineup object, (handles '+' for adding player to a lineup)
             new Lineup();
 
-            $.bootstrapSortable();
+            // run bootstrap sortable. note 'reversed' used to make arrows show up the right way.
+            $.bootstrapSortable(false);
 
             // this code is used to fix the scroll issue inside the lineups page
             // table layout doesn't allow separete thead and tbody

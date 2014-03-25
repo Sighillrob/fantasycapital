@@ -12,7 +12,7 @@ class RealTimeDataService
     # update the GameScore models with game schedules and state. This happens for several days ahead
     # during overnight tasks, and regularly (every 15 seconds) during gametimes.
 
-    # return the list of games that are currently live.
+    # return the list of ext_games that are currently live.
 
     schedule_summary.select do |game_summary|
       # one game received from the external API. Check if we need to update our local Game data, and
@@ -27,6 +27,8 @@ class RealTimeDataService
       end
 
       game = GameScore.where(ext_game_id: game_summary['id']).first_or_initialize
+      # use old state of "closed" game so we go through the service one more time, finalizing scores.
+      oldclosed = game.closed?
       game.status = game_summary['status']
       game.playdate = game_summary['scheduled'].in_time_zone('EST')
       game.scheduledstart = game_summary['scheduled']
@@ -36,7 +38,7 @@ class RealTimeDataService
 
       # skip the game if the game hasn't started or is over. we're in a select, so a TRUE means return this
       #  schedule item.
-      !game.in_future? && !game.closed?
+      !game.in_future? && !oldclosed
     end
   end
 
@@ -71,6 +73,7 @@ class RealTimeDataService
       player = Player.where(ext_player_id: player_src['id']).first
       if !player
         puts "Can't find player with ID #{player_src['id']}... skipping"
+        puts "Details: #{player_src}"
         next
       end
 

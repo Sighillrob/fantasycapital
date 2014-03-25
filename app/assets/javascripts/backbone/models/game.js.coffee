@@ -7,12 +7,12 @@ class Main.Models.Game extends Backbone.Model
   initialize: () ->
     0
 
+  get_team_alias: (id) ->
+    @collection.teams_coll.get(id).get('teamalias')
   home_team_alias: () ->
-    @collection.teams_coll.get(@get('home_team_id')).get('teamalias')
-
+    @get_team_alias(@get('home_team_id'))
   away_team_alias: () ->
-    @collection.teams_coll.get(@get('away_team_id')).get('teamalias')
-
+    @get_team_alias(@get('away_team_id'))
   score_string: () ->
     if @get('status') == 'scheduled'
       return @away_team_alias() + " @ " + @home_team_alias()

@@ -4,8 +4,8 @@
 
 $(document).on "ready page:load": ->
 	$('.createnewlineups').click -> 
-    	$('.new-lineup-popup').toggle()
-    	$('.new-lineup-popup .choices li a').removeClass('selected')
+    $('.new-lineup-popup').toggle()
+    $('.new-lineup-popup .choices li a').removeClass('selected')
 
     $('.new-lineup-popup .btnClose').click ->
     	$('.new-lineup-popup').hide()

@@ -26,6 +26,8 @@ Main::Application.routes.draw do
     end
   end
 
+  resources :admin
+
   resources :lineups do
     member do
       get :export

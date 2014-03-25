@@ -61,7 +61,9 @@ namespace :stats do
 
   desc "Schedule RealtimeDataService for games of the day"
   task schedule_realtime_push:  [:environment] do
+    puts "Rake task: stats:schedule_realtime_push running"
     GameScore.scheduled_on.each do |game|
+      puts "Scheduled sidekiq task for game id #{game.id} to start at #{game.scheduledstart - 30.minutes}"
       RealtimeStatsWorker.perform_at(game.scheduledstart - 30.minutes, game.ext_game_id)
     end
   end
