@@ -74,7 +74,7 @@ class window.GameCenterCls
             self.entrysummarys_view.nextPage()
 
     attach_contestant_handler: ->
-        $("table.freeroll tbody tr").click (e) ->
+        $(".gamecenter").on("click", "table.js-gamecenter tbody tr", (e) ->
             # user clicked on one of the contestants in top row. Get its entry id, populate that same entry ID
             # in the competitive scorecard, and then get the data for the scorecard from server.
             entryid = $(e.currentTarget).data("entry-id")
@@ -82,7 +82,7 @@ class window.GameCenterCls
 
             @competitorentry = entries_coll.get(entryid)
             @competitor_entry_view = new Main.Views.EntryView({el: $('#competitor-scorecard'), entry: @competitorentry})
-
+        );
     attach_sort_handler: ->
         $table  = $(".js-gamecenter");
         $button = $(".js-gamecenter .js-sort-score");

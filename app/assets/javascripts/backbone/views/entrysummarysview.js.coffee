@@ -12,6 +12,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
     @listenTo(@entries_coll, 'change', @changeEntrySummary)
 
     # this is a big hammer -- any player change will cause entry summary redraw. But maybe it's ok?
+    # it'll be ok if the players won't change too often
     @listenTo(@players_coll, 'change', @changeEntrySummary)
 
     @render()
@@ -24,9 +25,22 @@ class Main.Views.EntrySummarysView extends Backbone.View
   render: (offset) ->
     offset = offset || 0
     rendered = ""
+    position = 1;
     @entries_coll.each( (entry, index) ->
+
         if offset <= index && offset + 10 > index
-          rendered += _.template(this.template, {entry: entry, user_img: window.user_img_placeholder})
+          rendered += _.template(this.template, {entry: entry, user_img: window.user_img_placeholder, position: position})
+        #current and next entry
+        curr = entry
+        next = @entries_coll.at(index + 1)
+        # if this and next element are defined, 
+        # curr should have more fantasy points than next,
+        # increment position if they're not equal
+        # next should never have more fps than first
+        # if it does, then the endpoint gave the data in wrong order
+        # which should never happen
+        if curr && next && curr.get("fps") > next.get("fps")
+          position += 1;
       , this )
     $(@el).html(rendered)
     return this
