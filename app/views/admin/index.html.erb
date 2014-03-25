@@ -1,47 +1,10 @@
 <div>
 
-  <h2>ADMIN</h2>
-  <div class="clear">&nbsp;</div>
+<h3>Ops Dashboards</h3>
+<ul>
+  <li><%= link_to 'Sidekiq', sidekiq_web_path %></li>
+  <li><%= link_to 'Resque', resque_web_path %></li>
 
-  <div class="filter_row">
-    <div class="row">
-      <div class="col-md-4">
-        <h4>Games</h4>
-      </div>
-      <div class="col-md-8">
-        <span class="green"><a href="#">Join More Contest »</a></span>
-        <span class="green"><%= link_to 'View my Lineups', lineups_path %></span>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="live-contests-dest">
-    <table class="contestHead table sortable">
-      <thead>
-      <tr>
-        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
-        <th data-defaultsort="asc" class="srt-sport">Game date</th>
-        <th data-defaultsort="asc" class="srt-live-in">Start</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Home</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Away</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Status</th>
-      </tr>
-      </thead>
-
-      <tbody>
-      <% @games.each do |game| %>
-          <tr>
-            <td><%= game.id %></td>
-            <td><%= game.playdate %></td>
-            <td><%= game.scheduledstart %></td>
-            <td><%= game.home_team.name %></td>
-            <td><%= game.away_team.name %></td>
-            <td><%= game.status %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
+</ul>
 
 </div>
