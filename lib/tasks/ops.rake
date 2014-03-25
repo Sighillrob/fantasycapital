@@ -17,6 +17,8 @@ namespace :ops do
   end
 
   task resolve_games: [:environment] do
+    puts "Rake task: ops:resolve_games running"
+
     # if our realtime process stops for some reason, games may remain unresolved in the DB
     # (e.g. GameScore's "status" field may not have latest data). This tasks goes through any
     # unclosed games and tries to get an update from the SportsData API for them, to clean them up.
