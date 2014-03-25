@@ -94,8 +94,8 @@
       </table>
     </div>
 
-    <!-- what is this part used for? It becomes invisible after page load. Maybe it's used to
-         populate the lineup on the right side of page so far? -->
+    <!-- render tables of players for each sport position (e.g. PG, SG, etc). User can select
+         one of these tables as a tab. -->
     <% @positions.each.each do |position| %>
         <div class='tab-pane' id="<%= position.name %>">
           <table class='tab lineup table sortable striped-grid'>
@@ -104,7 +104,7 @@
               <th class="position">POS</th>
               <th data-defaultsort="asc" class="player">PLAYER</th>
               <th class="opp">OPP</th>
-              <th class="salary">SALARY</th>
+              <th class="salary" data-defaultsort="desc">SALARY</th>
               <th class="ffpg">FPPG</th>
               <th class="add">&nbsp;</th>
             </tr>
