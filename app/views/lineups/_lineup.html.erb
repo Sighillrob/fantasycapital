@@ -1,12 +1,16 @@
 <div class="lineup-wrapper col-md-4">
-  <div class="gridbox <%= lineup.completed? ? "complete" : "upcoming" %>">
+  <!-- line below had lineup.completed? in place of 'false' -->
+
+  <div class="gridbox <%= false ? "complete" : "upcoming" %>">
     <!---Box Header-->
     <header>
       <div class="pull-left">
         <%= image_tag "sports/#{lineup.sport.downcase}.png" %>
         <strong><%= lineup.sport %></strong></div>
       <div class="pull-right">
-        <% if lineup.completed?  %>
+        <!-- line below had lineup.completed? in place of 'false' -->
+
+        <% if false  %>
             <strong>COMPLETE</strong>
         <% elsif lineup.entries.empty? %>
             <strong>NEW</strong>
@@ -44,14 +48,17 @@
           </tr>
       <% end %>
       <tr>
-        <td colspan="4" style="color: white; text-align: center;"><%= (lineup.completed? ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
+        <!-- line below had lineup.completed? in place of 'false' -->
+        <td colspan="4" style="color: white; text-align: center;"><%= (false ? "<strong>FANTASY POINTS</strong>: 126.7" : "&nbsp;").html_safe %></td>
       </tr>
       </tbody>
     </table>
     <p class="last-edit small"><strong>Last Edit:</strong> <%= lineup.updated_at.strftime "%b %d %Y %I:%M %p %Z" %></p>
     <footer>
       <ul>
-        <% unless lineup.completed? %>
+        <!-- line below had lineup.completed? in place of 'false' -->
+
+        <% unless false %>
           <li><span class="green"><%= link_to "Edit »", edit_lineup_path(lineup) %></span></li>
           <li><span class="green"><a data-stats-url="/lineups/<%= lineup.id %>/export" href="javascript:void(0);" class="lineup-export">Export »</a></span></li>
         <% end %>
