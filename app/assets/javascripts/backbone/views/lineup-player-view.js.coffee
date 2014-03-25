@@ -8,9 +8,6 @@ class Main.Views.LineupPlayerView extends Backbone.View
 
   render: () ->
     console.log @players_coll.first().scorestring()
-#    @players_coll.forEach( (player) ->
-#      console.log(player.name())
-#    )
 
     $(@el).html(_.template(@template, {players: @players_coll}))
     return this

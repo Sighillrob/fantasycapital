@@ -72,7 +72,7 @@
         if ($("body#lineups_new").length) {
             //we are on new-lineup page.
 
-            // call function defined in the backend template. This populates the backbone collections
+            // call function defined in the Rails template. This populates the backbone collections
             ///  into the element specified here.
             var mybody = $("body")[0]
             init_colls(mybody);
@@ -89,7 +89,8 @@
             // create lineup object, (handles '+' for adding player to a lineup)
             new Lineup();
 
-            $.bootstrapSortable();
+            // run bootstrap sortable. note 'reversed' used to make arrows show up the right way.
+            $.bootstrapSortable(false);
 
             // this code is used to fix the scroll issue inside the lineups page
             // table layout doesn't allow separete thead and tbody
