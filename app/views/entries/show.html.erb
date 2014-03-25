@@ -6,21 +6,31 @@
 <div data-entry_id="<%= @entry_id %>" data-contest_id="<%= @entry.contest.id %>"
             class="capitalcontent gamecenter">
 <!--Login Section-->
+<!--
 <%= form_tag({controller:"entries", action:"admin"}, remote: true, id: "admin_buttons_form") do %>
     <% if @contest.accurate_state != :live %>
         <%= submit_tag(value="Make Live", :name => "command") %>
     <% end %>
 <% end %>
+-->
 
 <ul class="list-inline title">
-  <li>
-    <!--<h2>DAILY NBA FREEROLL </h2>-->
+<!--  <li>
+    <h2>DAILY NBA FREEROLL </h2>
     <h2><%= @contest.title || "No contest title" %></h2>
   </li>
+  -->
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
-  <li><span><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></span></li>
-  <li><a id="is_contest_live_text" href="#"><%=  @contest.accurate_state == :live  ?  'LIVE IN PLAY' :  'not live' %></a></li>
-  <li><span>Started <%= @contest.contestdate %></span></li>
+  <li><h2><span style="font-size:0.8em;"><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %> <%= @contest.contestdate %></span></h2></li>
+  <% if @contest.accurate_state == :live %>
+      <li><a id="is_contest_live_text" href="#">LIVE IN PLAY</a></li>
+      <!-- BUGBUG: should change this to be client-rendered time so we have timezone right -->
+      <li><span>Started <%= @contest.start_at.in_time_zone("America/New_York").strftime("%l:%M %p") %></span></li>
+  <% else %>
+      <li><a id="is_contest_live_text" href="#">not live</a></li>
+      <li></li>
+  <% end %>
+
   <!--<li><span>Started 7:00pm ET 12/18</span></li>-->
 </ul>
 <div class="clearfix"></div>
