@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.color.min
 //= require bootstrap
 //= require moment.min
 //= require bootstrap-sortable

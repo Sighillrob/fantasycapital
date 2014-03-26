@@ -1,5 +1,5 @@
 <script type="text/template" id="entry-summary-template">
-    <tr data-entry-id="<%= entry.get('id') %>">
+    <tr data-entry-id="<%= entry.get('id') %>" data-game-ids="<%= entry.get_game_ids() %>">
         <td class="position"><%= position %></td>
         <td><img alt="User" class="user" src="<%= user_img %>"></td>
         <td><span class="green"><%= entry.get('username') %></span></td>

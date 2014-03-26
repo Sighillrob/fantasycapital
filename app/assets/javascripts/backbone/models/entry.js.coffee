@@ -18,7 +18,16 @@ class Main.Models.Entry extends Backbone.Model
     # return player model instances  for this Entry
     _.map( @get('player_ids'),  (playerid_posid) -> players_coll.get(playerid_posid[0]) )
 
-
+  get_game_ids: () ->
+    ids = []
+    players = @players()
+    if players
+      $.each(players, (index, player) ->
+        game = player.currgame()
+        if game
+          ids.push(game.get("id"))
+      )
+    return _(ids).uniq()
   min_left: () ->
     entry_min_left = 0
     players = @players()
