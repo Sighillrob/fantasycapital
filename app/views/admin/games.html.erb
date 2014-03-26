@@ -18,12 +18,12 @@
     <table class="contestHead table sortable">
       <thead>
       <tr>
-        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
-        <th data-defaultsort="asc" class="srt-sport">Game date</th>
-        <th data-defaultsort="asc" class="srt-live-in">Start</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Home</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Away</th>
-        <th data-defaultsort="asc" class="srt-entry-fee">Status</th>
+        <th>ID</th>
+        <th data-defaultsort="desc">Game date</th>
+        <th class="srt-live-in">Start / Ext ID</th>
+        <th>Home</th>
+        <th>Away</th>
+        <th>Status</th>
       </tr>
       </thead>
 
@@ -32,9 +32,9 @@
           <tr>
             <td><%= game.id %></td>
             <td><%= game.playdate %></td>
-            <td><%= game.scheduledstart %></td>
-            <td><%= game.home_team.name %></td>
-            <td><%= game.away_team.name %></td>
+            <td><%= game.scheduledstart %><br><%= game.ext_game_id %></td>
+            <td><%= game.home_team.teamalias %></td>
+            <td><%= game.away_team.teamalias %></td>
             <td><%= game.status %></td>
           </tr>
       <% end %>
