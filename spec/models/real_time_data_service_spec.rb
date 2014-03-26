@@ -178,4 +178,28 @@ describe RealTimeDataService do
       pending "need to add this"
     end
   end
+
+  context "when a corrupted payload is returned" do
+    let (:game_details) do
+      { 
+        'status' => 'inprogress',
+        'period' => "2",
+        'clock' => "4:25",
+        'team' => [{'points' => "54", 'players' => { 'player'=> [
+                      { 
+                        "statistics" => {"assists" => "1.0", "steals" => "2", "rebounds" => "3" }
+                      }]}
+                 },
+                 {'points' => "22",  'players' => { 'player'=> [
+                      { 
+                        "statistics" => {"assists" => "2.0", "steals" => "4", "rebounds" => "6" }
+                      }]
+                  }}],
+      }
+    end
+
+    it "should not raise exception" do
+     expect { RealTimeDataService.new.refresh_game(game_details) }.not_to raise_error
+    end
+  end
 end

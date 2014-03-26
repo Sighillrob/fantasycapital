@@ -43,6 +43,7 @@ class RealTimeDataService
   end
 
   def refresh_game(game_src)
+    return unless game_src && game_src['id']
     game_score = GameScore.where(ext_game_id: game_src['id']).first
 
     unless game_score
