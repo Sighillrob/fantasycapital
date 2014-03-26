@@ -1,6 +1,20 @@
 class RealtimeStatsWorker
   include Sidekiq::Worker
+
+  # workers are currently a little unreliable. Let them restart pretty often and pretty quickly
+  # because if a worker exhausts its retries, we are no longer processing a game's realtime updates.
+  sidekiq_options :retry => 200
+  sidekiq_retry_in do |count|
+    30 + (count * 5)
+  end
+
+  sidekiq_retries_exhausted do |msg|
+    Sidekiq.logger.warn "Failed #{msg['class']} with #{msg['args']}: #{msg['error_message']}"
+  end
+
+
   def perform(game_id)
+
     puts "Sidekiq worker for game id #{game_id} starting"
 
     while true do
