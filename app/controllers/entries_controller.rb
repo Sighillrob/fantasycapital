@@ -27,10 +27,6 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id])
     @contest = @entry.contest
     @entries = @entry.contest.entries
-    # sort entries by fantasy point scores, descending. This is a condition for the JS sort to work
-    # properly.
-    @entries = @entries.as_json.sort { |a,b| b[:fps] <=> a[:fps] }
-
 
     @games = GameScore.recent_and_upcoming  # BUGBUG: do we need this? or just today's games?
 

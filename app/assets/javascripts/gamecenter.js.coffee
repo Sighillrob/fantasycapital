@@ -40,6 +40,9 @@ class window.GameCenterCls
               lcl_entry.set(entry)
         )
 
+        # re-sort entries collectio so that highest fantasy points is first.
+        entries_coll.sort()
+
 
     constructor: (pusherkey) ->
         that = @
@@ -56,12 +59,16 @@ class window.GameCenterCls
 
         channel = this.pusher.subscribe('gamecenter')
         @myentry = entries_coll.get(@my_entry_id)
+        # trigger initial sort to make sure display is updated properly.
+        entries_coll.sort()
+
         @myentryview = new Main.Views.EntryView({el: $('#my-scorecard'), entry: @myentry})
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
         this.attach_contestant_handler()
         this.attach_sort_handler()
         this.attach_pagination_handlers()
+
 
     # this piece of code should be moved to a parent view, however the "parent view" is rendered via server side atm
     # this can be rebuilded if needed, it's just a little maintenance issue
