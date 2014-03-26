@@ -28,7 +28,11 @@
                     <td><strong class="player-name"> <%= player_pos[0].name() %> </strong>
 
                         <p class="player-score">
-                            <%= player_pos[0].scorestring() %>
+                            <% if (player_pos[0].getTeam() === player_pos[0].getHomeTeam()) { %>
+                                <strong><%= player_pos[0].getHomeTeam() %></strong>@<%= player_pos[0].getAwayTeam() %>
+                            <% } else { %>
+                                <%= player_pos[0].getHomeTeam() %>@<strong><%= player_pos[0].getAwayTeam() %></strong>
+                            <% } %>
                             <!--<strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL-->
                         </p>
                         <p class="player-record-row">
