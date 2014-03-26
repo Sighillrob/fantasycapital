@@ -10,6 +10,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
     @players_coll = args.players_coll
     @listenTo(@entries_coll, 'reset', @render)
     @listenTo(@entries_coll, 'change', @changeEntrySummary)
+    @listenTo(@entries_coll, 'sort', @handleSort)   # collection was just re-sorted.
 
     # this is a big hammer -- any player change will cause entry summary redraw. But maybe it's ok?
     # it'll be ok if the players won't change too often
@@ -17,6 +18,9 @@ class Main.Views.EntrySummarysView extends Backbone.View
 
     @render()
 
+  # receive a sort message. it passes a collection, which we have to ditch for rendering.
+  handleSort: (coll) ->
+    @render()
 
   changeEntrySummary: () ->
     # this is just here so we have a place we can easily breakpoint for debugging
@@ -44,6 +48,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
       , this )
     $(@el).html(rendered)
     return this
+
   # maxPage will specify how far can the pagination go
   # it's a number from 0 to N
   maxPage: () ->
@@ -59,6 +64,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
       @render(num * 10, 10)
       return true
     return false
+
   # DRY for nextPage and prevPage
   changePage: (direction) ->
     if direction == "next"

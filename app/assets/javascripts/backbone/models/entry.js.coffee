@@ -33,3 +33,8 @@ class Main.Models.Entry extends Backbone.Model
 class Main.Collections.EntriesCollection extends Backbone.Collection
   model: Main.Models.Entry
   url: '/entries'
+
+  # provide comparator so that sort returns fantasy points in descending order
+  comparator: (model) ->
+    return 0.0-parseFloat(model.get('fps'))
+
