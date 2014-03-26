@@ -39,7 +39,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
         # next should never have more fps than first
         # if it does, then the endpoint gave the data in wrong order
         # which should never happen
-        if curr && next && curr.get("fps") > next.get("fps")
+        if curr && next && parseFloat(curr.get("fps")) > parseFloat(next.get("fps"))
           position += 1;
       , this )
     $(@el).html(rendered)
