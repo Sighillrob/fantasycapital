@@ -40,7 +40,7 @@
         setWidth();
         
         $draftEmitter.find("table").addClass("sortable");
-
+        
         $draftEmitter.unbind().on("click", "thead th", function (e) {
 
             var $activeTable = $draftReceiver.find(".active table");
@@ -50,14 +50,31 @@
 
         });
 
-        $sportFilter.children("li").on("click", function () {
+        $("#filterSport").children("li").unbind().on("click", function (e) {
+            e.preventDefault();
             // other click event handler is attached, it needs to be 
             // completed first before this code jumps in
-            getArrow();
+            $(this).addClass("active").siblings("li").removeClass("active");
+
+            var type = $.trim($(this).text());
+
+            if (type === "ALL") {
+                $("#lineup-eligible-players-el tr").removeClass("hide");
+            } else {
+                $("#lineup-eligible-players-el tr").each(function () {
+                    var position = $.trim($(this).find(".position").text());
+                    if (position !== type) {
+                        $(this).addClass("hide");
+                    } else {
+                        $(this).removeClass("hide");
+                    }
+                });
+            }
+
             setWidth();
 
         });
-
+        
     }
 
     function populateDraftRows(players_coll) {
