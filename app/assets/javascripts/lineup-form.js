@@ -1,5 +1,6 @@
 (function () {
     "use strict";
+    /*globals $, console */
     var lineup_players_view;
 
 
@@ -7,9 +8,10 @@
 
         var $draftEmitter  = $(".js-draft-emitter");
         var $draftReceiver = $(".js-draft-receiver");
+        var $draftSearch   = $("#js-draft-search");
         var $sportFilter   = $("#filterSport");
 
-        if ( !$draftEmitter.length || !$draftReceiver.length || !$sportFilter.length) {
+        if ( !$draftEmitter.length || !$draftReceiver.length || !$sportFilter.length || !$draftSearch.length) {
             return null;
         }
         // bootstrap appends an arrow automatically
@@ -28,7 +30,7 @@
         function setWidth() {
             window.setTimeout(function () {
                 $draftReceiver.find(".tab-pane.active thead").removeClass("hide");
-                $draftReceiver.find(".tab-pane.active th").each(function (index) {    
+                $draftReceiver.find(".tab-pane.active th").each(function (index) {
                    var width = $(this).width();
                    $draftEmitter.find("th").eq(index).width(width);
                 });
@@ -38,8 +40,24 @@
         
         getArrow();
         setWidth();
+
+        $("#js-draft-search").unbind().on("keyup", function (e) {
+            e.preventDefault();
+            var term = $.trim(this.value).toUpperCase();
+            console.log(term);
+            $("#lineup-eligible-players-el tr").each(function () {
+                var name = $.trim($(this).find(".player").text()).toUpperCase();
+                if (name.match(term)) {
+                    $(this).removeClass("hide");
+                } else {
+                    $(this).addClass("hide");
+                }
+            });
+        });
         
         $draftEmitter.find("table").addClass("sortable");
+
+
 
         $draftEmitter.unbind().on("click", "thead th", function (e) {
 
