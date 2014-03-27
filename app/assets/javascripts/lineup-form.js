@@ -44,7 +44,6 @@
         $("#js-draft-search").unbind().on("keyup", function (e) {
             e.preventDefault();
             var term = $.trim(this.value).toUpperCase();
-            console.log(term);
             $("#lineup-eligible-players-el tr").each(function () {
                 var name = $.trim($(this).find(".player").text()).toUpperCase();
                 if (name.match(term)) {
