@@ -48,6 +48,9 @@
                     </td>
                     <td><!-- 27.5% <br>
                         OWNED -->
+                        <% if (percentage.hasOwnProperty(player_pos[0].get("id"))) { %>
+                            <%= percentage[player_pos[0].get("id")] %>%<br> OWNED
+                        <% } %>
                     </td>
                     <td><h1 class="score"><%= player_pos[0].get('currfps') %></h1></td>
                 </tr>

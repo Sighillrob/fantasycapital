@@ -18,6 +18,8 @@ class Main.Models.Entry extends Backbone.Model
     # return player model instances  for this Entry
     _.map( @get('player_ids'),  (playerid_posid) -> players_coll.get(playerid_posid[0]) )
 
+  get_player_ids: () ->
+    _.map( @get("player_ids"), (player) -> player[0] )
   get_game_ids: () ->
     ids = []
     players = @players()
