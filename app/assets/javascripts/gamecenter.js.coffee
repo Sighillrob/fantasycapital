@@ -2,7 +2,7 @@
 
 class window.GameCenterCls
     my_entry_id: 0
-
+    window.flashEntry = false   # temporary hack flag
     pusher: null
 
 #    stat_names: ['points', 'assists', 'steals', 'rebounds', 'blocks', 'turnovers']
@@ -19,6 +19,8 @@ class window.GameCenterCls
         # client-side player model with the data.
         context = @
         console.log (data)
+
+
 
         # update game states (do this first, b/c player states depend on it).
         $(data.games).each( (index, game) ->
@@ -37,11 +39,42 @@ class window.GameCenterCls
         $(data.entries).each( (index, entry) ->
             lcl_entry = entries_coll.get(entry.id)
             if lcl_entry
-              lcl_entry.set(entry)
+              if entry.fps != lcl_entry.get("fps")
+                lcl_entry.set(entry)
         )
 
-        # re-sort entries collectio so that highest fantasy points is first.
+        # re-sort entries collection so that highest fantasy points is first.
+        # please note the every time the sort method is fired the view gets rendered once again
+        # this happens even if the player is updated, we should avoid that
         entries_coll.sort()
+
+        # this works
+
+        $(data.entries).each( (index, entry) ->
+          #find entry
+          el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
+          if el.length > 0 && window.flashEntry
+            #animate
+            $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+        )
+
+        # I've been unable to test this part of code b/c no games object was passed from the rake realtime:games_playback files
+        $(data.games).each( (index, game) ->
+            # check all tds
+            $("#entry-summarys-view-el tr").each( () ->
+                self = this
+                #get all game ids which are used for the minutes_left() functionality
+                games_attr = $(self).attr("data-games-id");
+                if games_attr
+                  ids = games_attr.split(",")
+                  # could be changed to normal loop
+                  ids.forEach( () ->
+                      #if this id is the game.id which was updated then it means that we need to flash green in this row
+                      if this == game.id && window.flashEntry
+                          self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                  )
+            )
+        )
 
 
     constructor: (pusherkey) ->
