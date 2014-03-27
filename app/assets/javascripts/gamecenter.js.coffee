@@ -2,7 +2,7 @@
 
 class window.GameCenterCls
     my_entry_id: 0
-
+    window.flashEntry = false   # temporary hack flag
     pusher: null
 
 #    stat_names: ['points', 'assists', 'steals', 'rebounds', 'blocks', 'turnovers']
@@ -53,7 +53,7 @@ class window.GameCenterCls
         $(data.entries).each( (index, entry) ->
           #find entry
           el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
-          if el.length > 0
+          if el.length > 0 && window.flashEntry
             #animate
             $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
         )
@@ -64,13 +64,15 @@ class window.GameCenterCls
             $("#entry-summarys-view-el tr").each( () ->
                 self = this
                 #get all game ids which are used for the minutes_left() functionality
-                ids = $(self).attr("data-games-id").split(",")
-                # could be changed to normal loop
-                ids.forEach( () ->
-                    #if this id is the game.id which was updated then it means that we need to flash green in this row
-                    if this == game.id
-                        self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
-                )
+                games_attr = $(self).attr("data-games-id");
+                if games_attr
+                  ids = games_attr.split(",")
+                  # could be changed to normal loop
+                  ids.forEach( () ->
+                      #if this id is the game.id which was updated then it means that we need to flash green in this row
+                      if this == game.id && window.flashEntry
+                          self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                  )
             )
         )
 
