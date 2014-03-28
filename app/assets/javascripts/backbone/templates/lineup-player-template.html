@@ -26,9 +26,9 @@
             <td class='opp'>
                 <!--<span>Ind@<strong class='home-team'>SDD</strong></span>-->
                 <% if (player.getTeam() === player.getHomeTeam()) { %>
-                  <strong class="home-team"><%= player.getHomeTeam() %></strong>@<%= player.getAwayTeam() %>
+                  <strong class="home-team"><%= player.getHomeTeam() %></strong>@<span class="opponent-team"><%= player.getAwayTeam() %></span>
                 <% } else { %>
-                  <%= player.getHomeTeam() %>@<strong class="home-team"><%= player.getAwayTeam() %></strong>
+                  <span class="opponent-team"><%= player.getHomeTeam() %></span>@<strong class="home-team"><%= player.getAwayTeam() %></strong>
                 <% } %>
             </td>
             <td class='salary currency' data-value="<%= player.get('salary') %>">
