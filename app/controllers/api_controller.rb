@@ -22,7 +22,7 @@ class ApiController < ApplicationController
 
       # determine which list the entry goes on.
       state = entry.contest.accurate_state
-      completedContests << contest if state == :complete
+      completedContests << contest if state == :closed
       liveContests << contest if state == :live
       upcomingContests << contest if state == :in_future
     end
