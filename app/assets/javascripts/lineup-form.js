@@ -37,22 +37,29 @@
                 $draftReceiver.find(".tab-pane.active thead").addClass("hide");
             }, 10);
         }
-        
+  
+        function searchPlayers() {
+            // get term from input
+            var term = $.trim(this.value).toUpperCase();
+            // in each row
+            $("#lineup-eligible-players-el tr").each(function () {
+                // get player name in each row
+                var name = $.trim($(this).find(".player").text()).toUpperCase();
+                // if term matches the name
+                if (name.match(term)) {
+                    // class hidden needed so it won't interfere with type filtering
+                    $(this).removeClass("hidden");
+                } else {
+                    // hide
+                    $(this).addClass("hidden");
+                }
+            });
+        }
+
         getArrow();
         setWidth();
 
-        $("#js-draft-search").unbind().on("keyup", function (e) {
-            e.preventDefault();
-            var term = $.trim(this.value).toUpperCase();
-            $("#lineup-eligible-players-el tr").each(function () {
-                var name = $.trim($(this).find(".player").text()).toUpperCase();
-                if (name.match(term)) {
-                    $(this).removeClass("hide");
-                } else {
-                    $(this).addClass("hide");
-                }
-            });
-        });
+        $draftSearch.on("keyup", searchPlayers);
         
         $draftEmitter.find("table").addClass("sortable");
 
@@ -65,7 +72,7 @@
 
         });
 
-        $("#filterSport").children("li").unbind().on("click", function (e) {
+        $sportFilter.children("li").on("click", function (e) {
             e.preventDefault();
             // other click event handler is attached, it needs to be 
             // completed first before this code jumps in
@@ -79,13 +86,15 @@
                 $("#lineup-eligible-players-el tr").each(function () {
                     var position = $.trim($(this).find(".position").text());
                     if (position !== type) {
+                        // class hide should be here
                         $(this).addClass("hide");
                     } else {
                         $(this).removeClass("hide");
                     }
                 });
             }
-
+            // call the search player function with the input node as ~this~
+            searchPlayers.call($("#js-draft-search")[0]);
             setWidth();
 
         });
