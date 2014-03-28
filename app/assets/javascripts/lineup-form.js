@@ -18,9 +18,9 @@
             // other click event is set up on different element, we need to wait till it's done
             window.setTimeout(function () {
                 var $activeTable = $draftReceiver.find(".active table");
-                var tabClass = $activeTable.find("span.arrow").parent().attr("class");
-                var clone = $activeTable.find("span.arrow").clone();
-                $draftEmitter.find("span.arrow").remove();
+                var tabClass = $activeTable.find("span.sign").parent().attr("class");
+                var clone = $activeTable.find("span.sign").clone();
+                $draftEmitter.find("span.sign").remove();
                 $draftEmitter.find("." + tabClass).append(clone);
             }, 10);
         }
@@ -107,7 +107,7 @@
             new Lineup();
 
             // run bootstrap sortable. note 'reversed' used to make arrows show up the right way.
-            $.bootstrapSortable(false);
+            $.bootstrapSortable(false, "reversed");
 
             // this code is used to fix the scroll issue inside the lineups page
             // table layout doesn't allow separete thead and tbody
