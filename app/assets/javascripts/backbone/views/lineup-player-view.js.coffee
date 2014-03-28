@@ -7,7 +7,6 @@ class Main.Views.LineupPlayerView extends Backbone.View
     @render()
 
   render: () ->
-    console.log @players_coll.first().scorestring()
 
     $(@el).html(_.template(@template, {players: @players_coll}))
     return this
