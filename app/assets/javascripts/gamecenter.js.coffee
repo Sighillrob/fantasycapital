@@ -31,6 +31,7 @@ class window.GameCenterCls
         # update player stats.
         $(data.players).each( (index, player) ->
               # skip players we don't have in this contest.
+
               lcl_player = players_coll.get(player.id)
               if lcl_player
                 lcl_player.set(player)
@@ -48,32 +49,41 @@ class window.GameCenterCls
         # this happens even if the player is updated, we should avoid that
         entries_coll.sort()
 
-        # this works
-
-        $(data.entries).each( (index, entry) ->
-          #find entry
-          el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
-          if el.length > 0 && window.flashEntry
-            #animate
-            $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
-        )
-
-        # I've been unable to test this part of code b/c no games object was passed from the rake realtime:games_playback files
-        $(data.games).each( (index, game) ->
-            # check all tds
-            $("#entry-summarys-view-el tr").each( () ->
-                self = this
-                #get all game ids which are used for the minutes_left() functionality
-                games_attr = $(self).attr("data-games-id");
-                if games_attr
-                  ids = games_attr.split(",")
-                  # could be changed to normal loop
-                  ids.forEach( () ->
-                      #if this id is the game.id which was updated then it means that we need to flash green in this row
-                      if this == game.id && window.flashEntry
-                          self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
-                  )
+        # checking condition first to avoid unnecessary loops
+        if window.flashEntry
+            $(data.entries).each( (index, entry) ->
+              #find entry
+              el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
+              if el.length > 0
+                #animate
+                $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
             )
+
+            # I've been unable to test this part of code b/c no games object was passed from the rake realtime:games_playback files
+            $(data.games).each( (index, game) ->
+                # check all tds
+                $("#entry-summarys-view-el tr").each( () ->
+                    self = this
+                    #get all game ids which are used for the minutes_left() functionality
+                    games_attr = $(self).attr("data-games-id");
+                    if games_attr
+                      ids = games_attr.split(",")
+                      # could be changed to normal loop
+                      ids.forEach( () ->
+                          #if this id is the game.id which was updated then it means that we need to flash green in this row
+                          if this == game.id
+                              self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                      )
+                )
+            )
+
+        $(data.players).each( (index, player) ->
+            console.log(player)
+            el = $(".scorecardTable").find("tr[data-player-id=\"" + player.id + "\"]")
+            console.log(el.length)
+            if el.length > 0
+                el.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+
         )
 
 
