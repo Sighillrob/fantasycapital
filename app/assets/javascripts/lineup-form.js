@@ -1,5 +1,6 @@
 (function () {
     "use strict";
+    /*globals $, console */
     var lineup_players_view;
 
 
@@ -7,9 +8,10 @@
 
         var $draftEmitter  = $(".js-draft-emitter");
         var $draftReceiver = $(".js-draft-receiver");
+        var $draftSearch   = $("#js-draft-search");
         var $sportFilter   = $("#filterSport");
 
-        if ( !$draftEmitter.length || !$draftReceiver.length || !$sportFilter.length) {
+        if ( !$draftEmitter.length || !$draftReceiver.length || !$sportFilter.length || !$draftSearch.length) {
             return null;
         }
         // bootstrap appends an arrow automatically
@@ -28,19 +30,39 @@
         function setWidth() {
             window.setTimeout(function () {
                 $draftReceiver.find(".tab-pane.active thead").removeClass("hide");
-                $draftReceiver.find(".tab-pane.active th").each(function (index) {    
+                $draftReceiver.find(".tab-pane.active th").each(function (index) {
                    var width = $(this).width();
                    $draftEmitter.find("th").eq(index).width(width);
                 });
                 $draftReceiver.find(".tab-pane.active thead").addClass("hide");
             }, 10);
         }
-        
+  
+        function searchPlayers() {
+            // get term from input
+            var term = $.trim(this.value).toUpperCase();
+            // in each row
+            $("#lineup-eligible-players-el tr").each(function () {
+                // get player name in each row
+                var name = $.trim($(this).find(".player").text()).toUpperCase();
+                // if term matches the name
+                if (name.match(term)) {
+                    // class hidden needed so it won't interfere with type filtering
+                    $(this).removeClass("hidden");
+                } else {
+                    // hide
+                    $(this).addClass("hidden");
+                }
+            });
+        }
+
         getArrow();
         setWidth();
+
+        $draftSearch.on("keyup", searchPlayers);
         
         $draftEmitter.find("table").addClass("sortable");
-        
+
         $draftEmitter.unbind().on("click", "thead th", function (e) {
 
             var $activeTable = $draftReceiver.find(".active table");
@@ -50,7 +72,7 @@
 
         });
 
-        $("#filterSport").children("li").unbind().on("click", function (e) {
+        $sportFilter.children("li").on("click", function (e) {
             e.preventDefault();
             // other click event handler is attached, it needs to be 
             // completed first before this code jumps in
@@ -64,13 +86,15 @@
                 $("#lineup-eligible-players-el tr").each(function () {
                     var position = $.trim($(this).find(".position").text());
                     if (position !== type) {
+                        // class hide should be here
                         $(this).addClass("hide");
                     } else {
                         $(this).removeClass("hide");
                     }
                 });
             }
-
+            // call the search player function with the input node as ~this~
+            searchPlayers.call($("#js-draft-search")[0]);
             setWidth();
 
         });
