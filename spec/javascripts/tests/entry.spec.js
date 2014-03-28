@@ -112,9 +112,11 @@ describe("Tests for an Entry", function () {
             id: "XAB1",
             name: "Micheal Jordan",
             salary: 20000,
-            opp: "XAB2",
+            opp: "TEAM1@TEAM2",
             fppg: "XAB3",
-            position: "SF"
+            position: "SF",
+            homeTeam: "TEAM1",
+            opponentTeam: "TEAM2"
         });
         entry.addPlayer(player);
         // it would be best to have rails endpoint which will provide
@@ -146,8 +148,6 @@ describe("Tests for an Entry", function () {
         expect( $("#mockup td.player input").val() ).toBe("XAB1");
         expect( $("#mockup td.player span").html() ).toBe("Micheal Jordan");
         expect( $("#mockup td.salary span").html() ).toBe("20000");
-        expect( $("#mockup td.opp span").html() ).toBe("XAB2");
-        expect( $("#mockup td.fppg span").html() ).toBe("XAB3");
         $("#mockup").remove();
         
     });

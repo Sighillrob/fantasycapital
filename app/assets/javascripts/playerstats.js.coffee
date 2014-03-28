@@ -14,12 +14,14 @@ class PlayerStats
 
   constructor: (dom) ->
     if dom?
-      @id       = dom.data('player-id') || ""
-      @name     = dom.data('player-name') || ""
-      @salary   = dom.data('player-salary') || ""
-      @opp      = dom.data('player-opp') || ""
-      @fppg     = dom.data('player-fppg') || ""
-      @position = dom.data('player-position') || ""
+      @id           = dom.data('player-id') || ""
+      @name         = dom.data('player-name') || ""
+      @salary       = dom.data('player-salary') || ""
+      @opp          = dom.data('player-opp') || ""
+      @fppg         = dom.data('player-fppg') || ""
+      @position     = dom.data('player-position') || ""
+      @homeTeam     = dom.find(".home-team").text() || ""
+      @opponentTeam = dom.find(".opponent-team").text() || ""
 
 
 window.PlayerStats = PlayerStats

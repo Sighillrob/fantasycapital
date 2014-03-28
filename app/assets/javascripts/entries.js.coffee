@@ -169,13 +169,24 @@ class Entry
     @.player = ""
   playerExists: ->
     @.player != ""
+  playerTeams: ->
+    # no templates are used in this case yet, maybe this piece of functionality should be refactored a little?
+    if !@player || !@player.opp
+      return ""
+    a = @player.opp.split("@")
+    if a.length > 0
+      if a[0] == @player.homeTeam
+        return "<strong class=\"home-team\">" + @player.homeTeam + "</strong>" + "@" + @player.opponentTeam
+      else
+        return @player.opponentTeam + "@" + "<strong class=\"home-team\">" + @player.homeTeam + "</strong>"
+    return ""
   render: ->
     that = @
 
     dom = $("tr.lineup-spot[data-spot="+ @spot+"]")
     dom.find('td.player input').attr("value", that.player.id) 
     dom.find('td.player span').html @player.name || "&nbsp;"
-    dom.find('td.opp span').html @player.opp || "&nbsp;"
+    dom.find('td.opp span').html @playerTeams() || "&nbsp;"
     dom.find('td.salary span').html @player.salary || "&nbsp;"
     dom.find('td.fppg span').html @player.fppg || "&nbsp;"
 
