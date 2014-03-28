@@ -23,7 +23,7 @@
             <table class="scorecardTable" cellpadding="10" cellspacing="10">
                 <tbody>
                 <% $.each(player_and_pos, function (idx, player_pos) { %>
-                <tr class="">
+                <tr class="" data-player-id="<%= player_pos[0].get('id') %>">
                     <td><h1 class="role"><%= sportpositions_coll.get(player_pos[1]).get('name') %></h1></td>
                     <td><strong class="player-name"> <%= player_pos[0].name() %> </strong>
 
@@ -48,6 +48,9 @@
                     </td>
                     <td><!-- 27.5% <br>
                         OWNED -->
+                        <% if (percentage.hasOwnProperty(player_pos[0].get("id"))) { %>
+                            <%= percentage[player_pos[0].get("id")] %>%<br> OWNED
+                        <% } %>
                     </td>
                     <td><h1 class="score"><%= player_pos[0].get('currfps') %></h1></td>
                 </tr>
