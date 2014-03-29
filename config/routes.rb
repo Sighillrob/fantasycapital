@@ -85,11 +85,11 @@ Main::Application.routes.draw do
 #     end
 #   end
 
-  scope :api do
-    get "/searchEntries" => "api#searchEntries"
+  #scope :api do
+    #get "/searchEntries" => "api#searchEntries"
     #get "/gc_data/:entry_id" => "api#gc_data"
     #get "/gc_data2/:entry_id" => "api#gc_data2"
-  end
+  #end
 
   # sidekiq web UI
   require 'sidekiq/web'
