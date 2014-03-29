@@ -73,17 +73,17 @@ Main::Application.routes.draw do
     end
   end
 
-#   resources :projections, only: :index do
-#     collection do
-#       get :with_stats
-#       get :stats_by_game
-#     end
-#     resources :projection_by_stats do
-#       resources :projection_by_stat_and_games do
-#         resources :projection_breakdowns
-#       end
-#     end
-#   end
+   resources :projections, only: :index do
+     collection do
+       get :with_stats
+       get :stats_by_game
+     end
+     resources :projection_by_stats do
+       resources :projection_by_stat_and_games do
+         resources :projection_breakdowns
+       end
+     end
+   end
 
   scope :api do
     get "/searchEntries" => "api#searchEntries"

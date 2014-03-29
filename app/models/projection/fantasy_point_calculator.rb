@@ -9,10 +9,10 @@ module Projection
         "blocks" => 2,
         "turnovers" => -1 }
       @games_weights = {
-        "player.last_1_game" => lambda {|x| x * 0.15 },
+        "player.last_1_game" => lambda {|x| x * 0.10 },
         "player.last_3_games" => lambda {|x| x * 0.15 },
-        "player.last_10_games" => lambda {|x| x * 0.20 },
-        "opponent_team.defense_allowed_in_last_10_games" => lambda {|x| x * 0.50 }
+        "player.last_10_games" => lambda {|x| x * 0.25 },
+        "player.all_games" => lambda {|x| x * 0.50 }
       }
       # load weights and other parameters from rule file
       self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
