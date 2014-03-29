@@ -15,28 +15,33 @@ class Main.Models.Player extends Backbone.Model
   team: () ->
     if @debug
       console.log("invoking team -> team_id: " + @get("team_id"));
-    @collection.teams_coll.get(@get('team_id'))
-
+    if @collection
+      return @collection.teams_coll.get(@get('team_id'))
+    return null
   sportposition: () ->
     @collection.sportpositions_coll.get(@get('sport_position_id'))
 
   currgame: () ->
     # out of the games on this JS page, return the one he's playing in.
     team = @team()
-    gamedate = @collection.contest.get('contestdate')
-    games = []
-    if team
-      games = @collection.games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
-              @collection.games_coll.where({home_team_id: team.id, playdate:gamedate}))
-    if games.length > 1
-      console.log("Player in multiple games?")
-      console.log(games)
-      return null
-    if games.length == 0
-      return null
-    return games[0]
+    if @collection
+      gamedate = @collection.contest.get('contestdate')
+      games = []
+      if team
+        games = @collection.games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
+                @collection.games_coll.where({home_team_id: team.id, playdate:gamedate}))
+      if games.length > 1
+        console.log("Player in multiple games?")
+        console.log(games)
+        return null
+      if games.length == 0
+        return null
+      return games[0]
   getTeamID: () ->
-    return @team().id || null
+    # this method points at the team in collection to ensure it's available
+    if @team()
+      return @team().id;
+    return null
   getTeam: () ->
     mygame = @currgame()
     return "None" if !mygame
