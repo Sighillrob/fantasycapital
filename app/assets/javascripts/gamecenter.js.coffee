@@ -49,6 +49,8 @@ class window.GameCenterCls
         # this happens even if the player is updated, we should avoid that
         entries_coll.sort()
 
+        # animation speed
+        speed = 1000
         # checking condition first to avoid unnecessary loops
         if window.flashEntry
             $(data.entries).each( (index, entry) ->
@@ -56,7 +58,7 @@ class window.GameCenterCls
               el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
               if el.length > 0
                 #animate
-                $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
             )
 
             # I've been unable to test this part of code b/c no games object was passed from the rake realtime:games_playback files
@@ -72,7 +74,7 @@ class window.GameCenterCls
                       ids.forEach( () ->
                           #if this id is the game.id which was updated then it means that we need to flash green in this row
                           if this == game.id
-                              self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                              self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
                       )
                 )
             )
@@ -82,7 +84,7 @@ class window.GameCenterCls
             el = $(".scorecardTable").find("tr[data-player-id=\"" + player.id + "\"]")
             console.log(el.length)
             if el.length > 0
-                el.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, 500)
+                el.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
 
         )
 
