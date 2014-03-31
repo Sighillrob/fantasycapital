@@ -14,17 +14,19 @@
 <div class="container fantasytabs">
   <!-- Nav tabs -->
   <ul class="nav nav-tabs">
-    <li class=""><a href="#alltransactions" data-toggle="tab">ALL TRANSACTIONS</a></li>
+    <li class="active"><a href="#alltransactions" data-toggle="tab">ALL TRANSACTIONS</a></li>
+
+    
     <li class=""><a href="#winnings" data-toggle="tab">WINNINGS</a></li>
     <li class=""><a href="#entryfees" data-toggle="tab">ENTRY FEES</a></li>
     <li class=""><a href="#withdrawals" data-toggle="tab">WITHDRAWALS</a></li>
     <li class=""><a href="#cashdeposits" data-toggle="tab">CASH DEPOSITS</a></li>
-    <li class="active"><a href="#bonusawards" data-toggle="tab">BONUS AWARDS</a></li>
+    <li class=""><a href="#bonusawards" data-toggle="tab">BONUS AWARDS</a></li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div class="tab-pane" id="alltransactions">
+    <div class="tab-pane active" id="alltransactions">
       <table class="table-responsive refer">
         <tbody>
         <tr>
@@ -35,9 +37,19 @@
           <th>DESCRIPTION</th>
           <th>STATUS</th>
         </tr>
+        <% @transactions.each do |ttt| %>
+        <tr>
+          <th><%= ttt.created_at %></th>
+          <th><%= ttt.get_type_name %></th>
+          <th><%= Float(ttt.amount_in_cents)/100.0 %></th>
+          <th><%= ttt.id %></th>
+          <th>--</th>
+          <th>--</th>
+        </tr>
+        <% end %>
         </tbody>
       </table>
-      <p>You do not have any transactions in the selected time period.</p>
+      <p>You have <%= @transactions.length %> transactions.</p>
     </div>
     <div class="tab-pane" id="winnings">
       <table class="table-responsive refer">
@@ -99,7 +111,7 @@
       </table>
       <p>You do not have any transactions in the selected time period.</p>
     </div>
-    <div class="tab-pane active" id="bonusawards">
+    <div class="tab-pane" id="bonusawards">
       <table class="table-responsive refer">
         <tbody>
         <tr>
