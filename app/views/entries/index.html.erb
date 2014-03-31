@@ -64,6 +64,10 @@
 
 </div>
 
+<script>
+  var fantasyEntriesData = <%= @data.to_json.html_safe %>;
+</script>
+
 <script type="text/template" id="live-contests-template">
   <%% if (liveContests.length > 0) { %>
     <table class='contestHead table sortable'>

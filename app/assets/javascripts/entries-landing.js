@@ -1,5 +1,5 @@
 "use strict";
-/* globals jQuery, _, fantasyEntries, moment */
+/* globals jQuery, _, fantasyEntries, moment, fantasyEntriesData, accounting */
 
 (function ($) {
 
@@ -24,7 +24,7 @@
         delete ns.dest;
         delete ns.tpl;
     };
-
+    // this api endpoint will be deprecated
     ns.url = "api/searchEntries";
 
     ns.cache = null;
@@ -45,9 +45,14 @@
 
         var self = this;
 
+        // check if bootstrapped data is available
+        if (!cached && typeof fantasyEntriesData === "object") {
+            cached = fantasyEntriesData;
+        }
+
         if (typeof cached === "object") {
             ns.cache = cached;
-            callback(self.parse(cached));
+            callback.call(self, self.parse(cached));
         } else {
 
             $.ajax({
@@ -60,6 +65,9 @@
                         // fire off a callback with a cloned, parsed version
                         callback.call(self, self.parse(data));
                     }
+                },
+                error: function () {
+                    // error handler should be defined
                 }
             });
 
