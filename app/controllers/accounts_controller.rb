@@ -20,7 +20,23 @@ class AccountsController < ApplicationController
   end
 
   def history
+    @transactions = Transaction.where(user_id: current_user.id)
 
+    # Temporary code - REMOVE when we have real code to add transactions
+    if @transactions.length == 0
+      # Create random number of transactions for current user
+      n_to_create = rand(10..30)
+      (0..n_to_create).each do
+        rx = Transaction.random_transaction(current_user)
+        if rx != nil
+          rx.save
+        end
+      end
+      @transactions = Transaction.where(user_id: current_user.id)
+    end
+    # END Temporary code to create random transactions
+
+    @transactions = @transactions.order(created_at: :asc)
   end
 
   def profile

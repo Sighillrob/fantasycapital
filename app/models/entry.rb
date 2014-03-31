@@ -13,6 +13,8 @@ class Entry < ActiveRecord::Base
   belongs_to :lineup, inverse_of: :entries
   belongs_to :contest, inverse_of: :entries, counter_cache: true
 
+  has_one :transaction, inverse_of: :entry
+
   validates :lineup, :contest, presence: true
 
   validate :number_of_entries

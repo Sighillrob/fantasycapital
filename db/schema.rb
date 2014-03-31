@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140316230729) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20140331022743) do
 
   create_table "accounts", force: true do |t|
     t.integer  "user_id"
@@ -313,6 +310,19 @@ ActiveRecord::Schema.define(version: 20140316230729) do
     t.string   "ext_team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "transactions", force: true do |t|
+    t.integer  "amount_in_cents"
+    t.integer  "transaction_type"
+    t.integer  "user_id"
+    t.integer  "parent_transaction_id"
+    t.integer  "payment_engine_type"
+    t.string   "payment_engine_id"
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "entry_id"
   end
 
   create_table "users", force: true do |t|

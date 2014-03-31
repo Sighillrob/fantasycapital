@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
   has_many :bank_accounts
   has_many :entries, through: :lineups
   has_many :contests, through: :entries
+  has_many :transactions, inverse_of: :user
 
   validates :first_name, :last_name, :country, :state, presence: true
   validates_presence_of :username
