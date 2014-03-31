@@ -74,6 +74,12 @@ class EntriesController < ApplicationController
       upcomingContests << contest if state == :in_future
     end
 
+    # the completed contests array does not hold any information
+    # about the final ranking of the contestant
+    # could you please provide a final_ranking key
+    # to each object in the completed contests array?
+    # the template is already prepared for this key
+
     @data = {
       liveContests: liveContests, 
       upcomingContests: upcomingContests,
