@@ -127,7 +127,7 @@
           <td data-time="<%%= contest.contest_start %>"  class="js-time-count"><%%= contest.render.start_at %></td>
           <td><%%= contest.render.entry_fee %></td>
           <td><%%= contest.render.prize %></td>
-          <td><%%= contest.entry_size %></td>
+          <td><%%= contest.entries_count %>/<%%= contest.max_entries %></td>
           <td><a class="button" href="<%%= contest.edit_path %>">EDIT</a></td>
           <td><a class="button" href="<%%= contest.view_path %>">VIEW</a></td>
         </tr>
