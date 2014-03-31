@@ -8,7 +8,9 @@ class Main.Models.Game extends Backbone.Model
     0
 
   get_team_alias: (id) ->
-    @collection.teams_coll.get(id).get('teamalias')
+    if @collection && @collection.teams_coll
+      return @collection.teams_coll.get(id).get('teamalias')
+    return null
   home_team_alias: () ->
     @get_team_alias(@get('home_team_id'))
   away_team_alias: () ->
@@ -20,7 +22,9 @@ class Main.Models.Game extends Backbone.Model
     @home_team_alias() + " " + @get('home_team_score') + " " #+ @get('playstate')
 
   teams_string: () ->
-    @away_team_alias() + "@" + @home_team_alias()
+    if @collection && @collection.teams_coll
+      return @away_team_alias() + "@" + @home_team_alias()
+    return ""
 
 
 class Main.Collections.GamesCollection extends Backbone.Collection
