@@ -144,7 +144,7 @@
 </div>
 
 <script type="text/javascript">
-  $(function() {
+  $(document).on("ready page:load", function () {
       window.initializeStripeForm();
 
       $('input[name="payment_type"]').change(function(){

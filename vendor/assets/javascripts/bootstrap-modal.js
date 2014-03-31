@@ -360,7 +360,7 @@
 	/* MODAL DATA-API
 	* ============== */
 
-	$(function () {
+	$(document).on("ready page:load", function () {
 		$(document).off('click.modal').on('click.modal.data-api', '[data-toggle="modal"]', function ( e ) {
 			var $this = $(this),
 				href = $this.attr('href'),
