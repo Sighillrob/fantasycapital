@@ -9,6 +9,11 @@
           <span class='icon-bar'></span>
         </button>
       </div>-->
+      <% if current_user.try(:admin?)%>
+      <div class="" style="position:absolute; top:10px; left:10px; z-index:9999">
+        <%= link_to 'Admin', admin_path %>
+      </div>
+      <% end %>
       <div class=''>
         <ul class='nav navbar-nav navbar-nav-centered'>
           <li>

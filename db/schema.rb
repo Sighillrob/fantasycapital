@@ -345,6 +345,7 @@ ActiveRecord::Schema.define(version: 20140331022743) do
     t.string   "username"
     t.string   "country"
     t.string   "state"
+    t.boolean  "admin",                  default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
