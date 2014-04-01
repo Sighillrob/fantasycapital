@@ -37,22 +37,26 @@
 //= require account
 //= require gamecenter
 //= require_tree .
+"use strict";
+/*globals jQuery, $ */
 
-$(document).ready(function(){
-	$('.require-signin').click(function(e){
+jQuery(document).on("ready page:load", function(){
+	$(".require-signin").on("click", function (e){
 		e.preventDefault();
-		var target_url = $(this).attr('href');
+		var target_url = $(this).attr("href");
 		window.target_url = target_url;
-		new window.AjaxModal('/users/signin_popup').load();
+		new window.AjaxModal("/users/signin_popup").load();
 	});
 
-	$('.welcome-text > a').click(function(e){
+	$(".welcome-text > a").on("click", function (e){
 		e.preventDefault();
-		$('.usermenu').toggle();
+		$(".usermenu").toggle();
 	});
 });
 
-
+// it's a bad habit to dump a function into the global scope (window)
+// is it used anywhere? 
+// the comment at top states that this will be at the bottom of the compiled file
 function isEmailAddress(str) {
 	var emailRegxp =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	if(!emailRegxp.test(str)) {
