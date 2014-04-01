@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :restrict_to_splash_page, unless: :devise_controller?
 
-  before_filter :require_login!
+  before_action :require_login!
 
   # suppress SQL logging
   ActiveRecord::Base.logger = Logger.new('/dev/null')
