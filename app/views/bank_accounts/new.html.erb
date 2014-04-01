@@ -64,7 +64,7 @@
 
 <% content_for :after_js do %>
   <script type="text/javascript">
-    $(function() {
+    $(document).on("ready page:load", function () {
         window.initializeStripeForm();
     });
   </script>

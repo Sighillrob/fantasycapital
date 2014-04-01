@@ -57,7 +57,7 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     return this
   }
 
-  $(function () {
+  $(document).on("ready page:load", function () {
     $.support.transition = transitionEnd()
   })
 

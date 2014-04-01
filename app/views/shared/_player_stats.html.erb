@@ -81,8 +81,14 @@
 
   <script>
     // BUGBUG: This is broken (need page:load signal for turbolinks). Also, what does it do??
-      $(document).ready(function(){
-      $('.draftPlayer').click(function(){
+
+    // a click does another click, it's a workaround
+    // call should be used instead with a node as this parameter
+    // somefunction.call($(".something")[0])
+    // this should be investigated and reworked if possible as 
+    // inline scripts cause maintenance issues in js
+    $(document).on("ready page:load", function (){
+      $('.draftPlayer').on("click", function () {
         $('#player_<%= @player.id %> .add-to-lineup').first().click();
       });
       

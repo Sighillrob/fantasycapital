@@ -70,152 +70,181 @@
 
 </div>
 
+
 <script>
 
-$(function() {
-  $('select#user_country').change(function(e) {
+// this script shouldn't be put inline
+
+"use strict";
+/*globals $, console */
+
+$(document).on("ready page:load", function () {
+  $("select#user_country").change(function () {
     var country_code, select_wrapper, url;
-    select_wrapper = $('#user_state_wrapper');
-    $('select', select_wrapper).attr('disabled', true);
+    select_wrapper = $("#user_state_wrapper");
+    $("select", select_wrapper).attr("disabled", true);
     country_code = $(this).val();
     url = "/users/subregion_options?parent_region=" + country_code;
     select_wrapper.load(url);
   });
 });
 
-$(document).ready(function(){
+$(document).on("ready page:load", function () {
 
   //switching the screen login<->register
-  $('input[name="login_or_register"]').change(function(e){
-    if( $(this).val() == 'login' ){
-      $('.for-register').hide();
-      $('.for-login').show();
+  $("input[name=\"login_or_register\"]").change(function (){
+    if( $(this).val() == "login" ){
+      $(".for-register").hide();
+      $(".for-login").show();
     }else{
-      $('.for-login').hide();
-      $('.for-register').show();
+      $(".for-login").hide();
+      $(".for-register").show();
     }
-  })
+  });
 
 
-  $('.btn-login').click(function(e){
-    var url = "/users/sign_in"
+  $(".btn-login").on("click", function () {
+    var url = "/users/sign_in";
     $.ajax({
       type: "POST",
       url: url,
-      data: $('#user_form').serialize(),
+      data: $("#user_form").serialize(),
       beforeSend: function(){
-        var errorContent = '';
-        if($('#user_username').val() == ''){
-          errorContent += '<div>Please enter username!</div>';
+        var errorContent = "";
+        if($("#user_username").val() === ""){
+          errorContent += "<div>Please enter username!</div>";
         }
 
-        if($('#user_password').val() == ''){
-          errorContent += '<div>Please enter password!</div>';
+        if($("#user_password").val() === ""){
+          errorContent += "<div>Please enter password!</div>";
         }
 
-        $('.errors').html(errorContent);
-        if(errorContent != ''){
+        $(".errors").html(errorContent);
+        if (errorContent !== ""){
           return false;
         }
         
       },
       success: function(data){
-        console.log('login success');
+        console.log("login success");
         console.log(data);
         window.location.href = window.target_url;
       },
       statusCode: {
         404: function() {
-          console.log( "page not found" );
+          console.log("page not found" );
         },
         401: function(data){
-          console.log(data)
-          $('.errors').html('Invalid username or password!');
+          console.log(data);
+          $(".errors").html("Invalid username or password!");
         }
       },
       dataType: "json"
     });
   });
 
-  $('.btn-register').click(function(e){
-    var url = "/users"
+  $(".btn-register").click(function (){
+    var url = "/users";
     $.ajax({
       type: "POST",
       url: url,
-      data: $('#user_form').serialize(),
+      data: $("#user_form").serialize(),
       beforeSend: function(){
-        var errorContent = '';
 
-        var statesNot2Play = ['AZ', 'IA', 'MT', 'LA', 'WA'];
-        if($('#user_username').val() == ''){
-          errorContent += '<div>Please enter username!</div>';
+        var errorContent = "";
+        var statesNot2Play = ["AZ", "IA", "MT", "LA", "WA"];
+
+        function wrap(str) {
+          return "<div>" + str + "</div>";
         }
 
-        if($('#user_first_name').val() == ''){
-          errorContent += '<div>Please enter first name!</div>';
+        function assert(condition, msg) {
+          if (condition) {
+            errorContent += wrap(msg);
+          }
         }
 
-        if($('#user_last_name').val() == ''){
-          errorContent += '<div>Please enter last name!</div>';
-        }
+        var validate = {
+          password: function (pw) {
+            if (!pw || !pw.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,15})$/)) {
+              return false;
+            }
+            return true;
+          }
+        };
 
-        if(isEmailAddress($('#user_email').val()) == false){
-          errorContent += '<div>Please enter valid email!</div>';
-        }
+        assert(
+          !$("#user_username").val(),
+          "Please enter username!"
+        );
+        assert(
+          !$("#user_first_name").val(),
+          "Please enter first name!"
+        );
+        assert(
+          !$("#user_last_name").val(),
+           "Please enter last name!"
+        );
+        // isEmailAddress function is global
+        // it could be moved into the validate object
+        assert(
+          !isEmailAddress($("#user_email").val()),
+          "Please enter valid email!"
+        );
+        assert(
+          !validate.password($("#user_password").val()),
+          "Please enter valid password( 6 ~ 15 chars, at least one number )!"
+        );
+        assert(
+          !$("#user_password_confirmation").val(),
+          "Please enter password confirmation!"
+        );
+        assert(
+          $("#user_password_confirmation").val() !== $("#user_password").val(),
+          "Password confirmation does not match to password!"
+        );
+        assert(
+          !$("#user_state").val(),
+          "Please enter/select a state!"
+        );
+        assert(
+          $("#user_country").val() === "US" &&
+          $.inArray($("#user_state").val(), statesNot2Play) !== -1,
+          "Does not allow to play in this state!</div>"
+        );
+        assert(
+          !$("#agree_terms").is(":checked"),
+          "You must agree to the Terms of Use and the Privacy Policy!"
+        );
+        assert(
+          !$("#agree_age").is(":checked"),
+          "You must agree to the Age and Location Policy!"
+        );
 
-        var password = $('#user_password').val();
-        if(password == '' || !password.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,15})$/)){
-          errorContent += '<div>Please enter valid password( 6 ~ 15 chars, at least one numbr )!</div>';
-        }
+        $(".errors").html(errorContent);
 
-        if($('#user_password_confirmation').val() == ''){
-          errorContent += '<div>Please enter password confirmation!</div>';
-        }
-
-        if($('#user_password_confirmation').val() != $('#user_password').val()){
-          errorContent += '<div>Password confirmation does not match to password!</div>';
-        }
-
-        if($('#user_state').val() == ''){
-          errorContent += '<div>Please enter/select a state!</div>';
-        }
-
-        if($('#user_country').val() == 'US' && jQuery.inArray($('#user_state').val(), statesNot2Play) != -1){
-          errorContent += '<div>Does not allow to play in this state!</div>';
-        }
-
-        if($('#agree_terms').is(':checked') == false){
-          errorContent += '<div>You must agree to the Terms of Use and the Privacy Policy!</div>';
-        }
-
-        if($('#agree_age').is(':checked') == false){
-          errorContent += '<div>You must agree to the Age and Location Policy!</div>';
-        }
-
-        $('.errors').html(errorContent);
-
-        if(errorContent != ''){
+        if (errorContent.length > 0) {
           return false;
         }
         
       },
       success: function(data){
-        console.log('register success');
+        console.log("register success");
         console.log(data);
         window.location.href = window.target_url;
       },
       statusCode: {
         422: function(data){
-          var res = $.parseJSON(data.responseText)
+          var res = $.parseJSON(data.responseText);
           console.log(data);
-          var errorContent = '';
+          var errorContent = "";
           if(res && res.errors){
             
             $.each(res.errors, function(key, value){
-              errorContent += '<div>' + key + ' ' + value + '</div>';
-            })
+              errorContent += "<div>" + key + " " + value + "</div>";
+            });
           }
-          $('.errors').html(errorContent);
+          $(".errors").html(errorContent);
         },
         500: function(data){
           console.log(data);
@@ -226,6 +255,5 @@ $(document).ready(function(){
   });
 
 });
-  
 </script>
 
