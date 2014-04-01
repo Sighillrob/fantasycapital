@@ -78,7 +78,8 @@
 "use strict";
 /*globals $, console */
 
-$(document).on("ready page:load", function () {
+(function ($) {
+  
   $("select#user_country").change(function () {
     var country_code, select_wrapper, url;
     select_wrapper = $("#user_state_wrapper");
@@ -87,9 +88,6 @@ $(document).on("ready page:load", function () {
     url = "/users/subregion_options?parent_region=" + country_code;
     select_wrapper.load(url);
   });
-});
-
-$(document).on("ready page:load", function () {
 
   //switching the screen login<->register
   $("input[name=\"login_or_register\"]").change(function (){
@@ -254,6 +252,6 @@ $(document).on("ready page:load", function () {
     });
   });
 
-});
+})(jQuery);
 </script>
 
