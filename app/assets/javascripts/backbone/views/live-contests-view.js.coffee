@@ -1,9 +1,9 @@
 class Main.Views.LiveContestsView extends Backbone.View
     initialize: (contests) ->
+        @$el = $(".live-contests-dest")
         @template = $("#live-contests-template").html()
         @liveContests = contests
         @listenTo(@liveContests, "change", @render)
         @render()
     render: () ->
-        console.log(@liveContests.toJSON());
-        console.log(_.template(@template, { liveContests: @liveContests.toJSON() }));
+        @$el.html(_.template(@template, { liveContests: @liveContests.toJSON() }))

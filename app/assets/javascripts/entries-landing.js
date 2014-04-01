@@ -1,6 +1,6 @@
 "use strict";
 /* globals jQuery, _, fantasyEntries, moment, fantasyEntriesData, accounting */
-
+/*
 (function ($) {
 
 
@@ -193,3 +193,4 @@
 jQuery(document).on("page:load ready", function () {
     fantasyEntries.init();
 });
+*/

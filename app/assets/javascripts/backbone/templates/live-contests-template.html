@@ -16,13 +16,13 @@
 
       <tbody>
         <% _(liveContests).each(function (contest) { %>
-        <tr class="completedcontest">
+        <tr class="livecontest">
           <td><%= contest.id %></td>
           <td><%= contest.sport %></td>
-          <td data-start-at="<%= contest.contest_start %>"><%= contest.render.start_at %></td>
-          <!--<td data-time="<%= contest.end_at %>" class="js-time-count"><%= contest.render.end_at %></td>-->
-          <td><%= contest.render.entry_fee %></td>
-          <td><%= contest.render.prize %></td>
+          <td data-start-at="<%= contest.contest_start %>"><%= contest.start_at %></td>
+          <!--<td data-time="<%= contest.end_at %>" class="js-time-count"><%= contest.end_at %></td>-->
+          <td><%= contest.entry_fee %></td>
+          <td><%= contest.prize %></td>
           <td><%= contest.place %></td>
           <td><a class="button" href="<%= contest.results_path %>">WATCH LIVE</a></td>
         </tr>
