@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
     #########################################################################
     # Temporary code - REMOVE when we have real code to add transactions
     # Benign assumption - zero balance means zero transactions for this user
-    if bal_in_cents == 0
+    if bal_in_cents <= 0
       # Create random number of transactions for current user
       n_to_create = rand(10..30)
       (0..n_to_create).each do
