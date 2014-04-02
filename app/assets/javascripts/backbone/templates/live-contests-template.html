@@ -1,0 +1,35 @@
+<script type="text/template" id="live-contests-template">
+  <% if (liveContests.length > 0) { %>
+    <table class='contestHead table sortable'>
+      <thead>
+      <tr>
+        <th data-defaultsort="asc" class="srt-contest-name">ID</th>
+        <th data-defaultsort="asc" class="srt-sport">GAME</th>
+        <th data-defaultsort="asc" class="srt-live-in">STARTED AT</th>
+        <!--<th data-defaultsort="asc" class="srt-end-in">ENDS IN</th>-->
+        <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
+        <th data-defaultsort="asc">PRIZE POOL</th>
+        <th data-defaultsort="asc">PLACE</th>
+        <th data-defaultsort="disabled"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <% _(liveContests).each(function (contest) { %>
+        <tr class="completedcontest">
+          <td><%= contest.id %></td>
+          <td><%= contest.sport %></td>
+          <td data-start-at="<%= contest.contest_start %>"><%= contest.render.start_at %></td>
+          <!--<td data-time="<%= contest.end_at %>" class="js-time-count"><%= contest.render.end_at %></td>-->
+          <td><%= contest.render.entry_fee %></td>
+          <td><%= contest.render.prize %></td>
+          <td><%= contest.place %></td>
+          <td><a class="button" href="<%= contest.results_path %>">WATCH LIVE</a></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="message">YOU HAVE NO LIVE CONTEST RIGHT NOW. LIVE CONTEST WILL APPEAR HERE ONCE THE GAMES START.</p>
+  <% } %>
+</script>

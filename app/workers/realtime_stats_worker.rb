@@ -19,12 +19,12 @@ class RealtimeStatsWorker
 
     while true do
       game = RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game_id).result['game']
-      # prevent stray worker (for whatever reason) by exiting after 8 hours
-      break if game.closed? or Time.now > (game.scheduledstart + 8.hours)
+      # prevent stray worker (for whatever reason) by exiting after 16 hours
+      break if !game or game.closed? or Time.now > (game.scheduledstart + 16.hours)
       sleep 15
     end
     puts "Sidekiq worker for game id #{game_id} ending"
-    puts "Game is closed" if game.closed? else "Game NOT closed"
+    puts "Game is closed" if game and game.closed? else "Game NOT closed"
 
   end
 end
