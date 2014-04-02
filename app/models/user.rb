@@ -63,12 +63,12 @@ class User < ActiveRecord::Base
   end
 
   def account_balance
-    transaction_list = Transaction.where(user_id: self.id)
-
+    bal_in_cents = self.transactions.sum(:amount_in_cents)
 
     #########################################################################
     # Temporary code - REMOVE when we have real code to add transactions
-    if transaction_list.length == 0
+    # Benign assumption - zero balance means zero transactions for this user
+    if bal_in_cents == 0
       # Create random number of transactions for current user
       n_to_create = rand(10..30)
       (0..n_to_create).each do
@@ -89,16 +89,11 @@ class User < ActiveRecord::Base
         rx.save
         retry
       end
-      transaction_list = Transaction.where(user_id: self.id)
+      bal_in_cents = self.transactions.sum(:amount_in_cents)
     end
     # END Temporary code to create random transactions
     ###########################################################################
 
-
-    bal_in_cents = 0
-    transaction_list.each do |ttt|
-      bal_in_cents += ttt.amount_in_cents
-    end
     raise 'Users cannot have a negative balance' unless bal_in_cents >= 0
     return bal_in_cents / 100.0
   end
