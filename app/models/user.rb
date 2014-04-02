@@ -63,8 +63,39 @@ class User < ActiveRecord::Base
   end
 
   def account_balance
-    return 0 unless self.account
-    self.account.current_balance
+    bal_in_cents = self.transactions.sum(:amount_in_cents)
+
+    #########################################################################
+    # Temporary code - REMOVE when we have real code to add transactions
+    # Benign assumption - zero balance means zero transactions for this user
+    if bal_in_cents == 0
+      # Create random number of transactions for current user
+      n_to_create = rand(10..30)
+      (0..n_to_create).each do
+        rx = Transaction.random_transaction(self)
+        if rx != nil
+          rx.save
+        end
+      end
+
+      # Negative balance?
+      begin
+        # DANGER - recursion!!  But it's only temp code...
+        bal = self.account_balance
+      rescue
+        # Create a couple of positive transaction types
+        rx = Transaction.random_transaction(self, 
+                                            force_transaction_type = 1)
+        rx.save
+        retry
+      end
+      bal_in_cents = self.transactions.sum(:amount_in_cents)
+    end
+    # END Temporary code to create random transactions
+    ###########################################################################
+
+    raise 'Users cannot have a negative balance' unless bal_in_cents >= 0
+    return bal_in_cents / 100.0
   end
 
   def default_card
