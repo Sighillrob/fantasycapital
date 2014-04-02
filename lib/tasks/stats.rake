@@ -26,7 +26,7 @@ namespace :stats do
     safe_rake_tasks "stats:fetch_players"
     safe_rake_tasks "stats:create_contests"
     safe_rake_tasks "stats:player_stats"
-    safe_rake_tasks "stats:schedule_realtime_push"
+    #safe_rake_tasks "stats:schedule_realtime_push"
   end
 
   desc "Create games and contests from stats api"
@@ -59,12 +59,14 @@ namespace :stats do
     end
   end
 
-  desc "Schedule RealtimeDataService for games of the day"
-  task schedule_realtime_push:  [:environment] do
-    puts "Rake task: stats:schedule_realtime_push running"
-    GameScore.scheduled_on.each do |game|
-      puts "Scheduled sidekiq task for game id #{game.id} to start at #{game.scheduledstart - 30.minutes}"
-      RealtimeStatsWorker.perform_at(game.scheduledstart - 30.minutes, game.ext_game_id)
-    end
-  end
+  ## Nils: Deprecated, using rake realtime:games instead.
+  #desc "Schedule RealtimeDataService for games of the day on Sidekiq"
+  #task schedule_realtime_push:  [:environment] do
+  #  puts "Rake task: stats:schedule_realtime_push running"
+  #  GameScore.scheduled_on.each do |game|
+  #    puts "Scheduled sidekiq task for game id #{game.id} to start at #{game.scheduledstart - 30.minutes}"
+  #    RealtimeStatsWorker.perform_at(game.scheduledstart - 30.minutes, game.ext_game_id)
+  #  end
+  #end
+
 end
