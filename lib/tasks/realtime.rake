@@ -5,10 +5,10 @@ namespace :realtime do
   desc "Get realtime game stats for all games for one day. This task should be launched daily. "
   task games: :environment do
     # Monitor all live games from one process and thread to economize on DB connections.
-    today = Time.now.in_time_zone("EST").to_date
+    today = Time.now.in_time_zone("US/Pacific").to_date
 
     # manage a list of games for today that aren't complete yet.
-    games = GameScore.in_range(today, today)
+    games = GameScore.in_range(today, today).to_a
     puts "Running realtime game status for #{games.length} games for #{today}"
 
     # update all games that are in progress every 20 seconds, while any games are in progress.
