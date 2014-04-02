@@ -107,6 +107,7 @@ class window.GameCenterCls
         # trigger initial sort to make sure display is updated properly.
         entries_coll.sort()
 
+
         @myentryview = new Main.Views.EntryView({el: $('#my-scorecard'), entry: @myentry})
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
@@ -126,14 +127,18 @@ class window.GameCenterCls
             self.entrysummarys_view.nextPage()
 
     attach_contestant_handler: ->
+        self = @
         $(".gamecenter").on("click", "table.js-gamecenter tbody tr", (e) ->
             # user clicked on one of the contestants in top row. Get its entry id, populate that same entry ID
             # in the competitive scorecard, and then get the data for the scorecard from server.
             entryid = $(e.currentTarget).data("entry-id")
             $("#competitor-scorecard").attr("data-entry-id", entryid).hide()
 
-            @competitorentry = entries_coll.get(entryid)
-            @competitor_entry_view = new Main.Views.EntryView({el: $('#competitor-scorecard'), entry: @competitorentry})
+            self.competitorentry = entries_coll.get(entryid)
+            if self.competitor_entry_view
+                self.competitor_entry_view.unbind()
+                self.competitor_entry_view.clear()
+            self.competitor_entry_view = new Main.Views.EntryView({el: $('#competitor-scorecard'), entry: self.competitorentry})
         );
     attach_sort_handler: ->
         $table  = $(".js-gamecenter");

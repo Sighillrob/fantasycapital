@@ -1,13 +1,14 @@
 class Main.Views.EntryView extends Backbone.View
 
   initialize: (args) ->
+    @exists = true
     @template = $("#entry-template").html()
     @entry = args.entry
+    @stopListening("change")
     @listenTo(@entry, 'change', @changeentry)
+    @stopListening(window.players_coll, "change");
     @listenTo(window.players_coll, 'change', @changeentry)
     @render()
-
-
   get_players_count: () ->
     stats = {}
     entries_coll.each( (entry, index) ->
@@ -27,22 +28,25 @@ class Main.Views.EntryView extends Backbone.View
     return players_count
   render: () ->
     # Look up the players for this entry
-    console.log("render entry")
+    if @exists
+      console.log("render entry")
+      player_and_pos = @entry.player_pos()
+      $.each(player_and_pos,  (idx, pl_pos) ->
+        if pl_pos[0].get('rtstats')
+          console.log pl_pos[0].get('rtstats')
+      )
 
-    player_and_pos = @entry.player_pos()
-    $.each(player_and_pos,  (idx, pl_pos) ->
-      if pl_pos[0].get('rtstats')
-        console.log pl_pos[0].get('rtstats')
-    )
-
-    $(@el).html(_.template(this.template, {
-      entry: @entry, 
-      player_and_pos: player_and_pos, 
-      user_img: window.user_img_placeholder,
-      percentage: @percent_owned()
-    }))
-    $(@el).show()
-    return this
+      $(@el).empty().html(_.template(this.template, {
+        entry: @entry, 
+        player_and_pos: player_and_pos, 
+        user_img: window.user_img_placeholder,
+        percentage: @percent_owned()
+      }))
+      $(@el).show()
+      return this
 
   changeentry: () ->
+    console.log(@entry.get("id"))
     @render()
+  clear: () ->
+    @exists = false
