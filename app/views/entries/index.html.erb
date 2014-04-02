@@ -65,21 +65,18 @@
 </div>
 
 <script>
-  var fantasyEntriesData = <%= @data.to_json.html_safe %>;
 
-  $(document).on("ready page:load", function () {
+  jQuery(document).on("ready page:load", function ($) {
 
-    var liveContestsCollection     = new Main.Collections.LiveContestsCollection(fantasyEntriesData.liveContests)
-    var upcomingContestsCollection = new Main.Collections.UpcomingContestsCollection(fantasyEntriesData.upcomingContests);
-    var completedContestsCollection = new Main.Collections.CompletedContestsCollection(fantasyEntriesData.completedContests);
+    var data = <%= @data.to_json.html_safe %>;
 
-    console.log(liveContestsCollection);
-    console.log(upcomingContestsCollection);
-    console.log(completedContestsCollection);
+    var liveColl = new Main.Collections.LiveContestsCollection(data.liveContests)
+    var upcoColl = new Main.Collections.UpcomingContestsCollection(data.upcomingContests);
+    var compColl = new Main.Collections.CompletedContestsCollection(data.completedContests);
 
-    var liveContestView       = new Main.Views.LiveContestsView(liveContestsCollection);
-    var upcomingContestsView  = new Main.Views.UpcomingContestsView(upcomingContestsCollection);
-    var completedContestsView = new Main.Views.CompletedContestsView(completedContestsCollection);
+    var liveView = new Main.Views.LiveContestsView(liveColl);
+    var upcoView = new Main.Views.UpcomingContestsView(upcoColl);
+    var compView = new Main.Views.CompletedContestsView(compColl);
 
   });
 

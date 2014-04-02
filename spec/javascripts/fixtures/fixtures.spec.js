@@ -20,9 +20,12 @@ FIXTURES.contests = {
       "complete": "2014-03-16 04:00:00",
       "entry_fee": "$1.0",
       "end_at": "2004-03-17T20:44:04.984Z",
+      "contest_start": "2015-03-17T20:44:04.984Z",
       "prize": "$9.5",
       "place": 814,
       "entry_size": 100,
+      "entries_count": 3,
+      "max_entries": 10,
       "results_path": "/entries/1",
       "edit_path": "/entries/1/edit",
       "view_path": "/entries/1/view"

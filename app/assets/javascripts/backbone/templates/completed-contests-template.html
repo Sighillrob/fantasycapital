@@ -19,11 +19,11 @@
         <tr class="completedcontest">
           <td><%= contest.id %></td>
           <td><%= contest.sport %></td>
-          <td><%= contest.contestdate %></td>
-          <td><%= contest.entry_fee %></td>
-          <td><%= contest.prize %></td>
+          <td><%= moment.utc(contest.complete).local().format("hh:mm a") %></td>
+          <td><%= accounting.formatMoney(contest.entry_fee) %></td>
+          <td><%= accounting.formatMoney(contest.prize) %></td>
           <td><%= contest.final_ranking %></td>
-          <td><%= contest.won %></td>
+          <td><%= accounting.formatMoney(contest.won) %></td>
           <td><a class="button" href="<%= contest.results_path %>">RESULTS</a></td>
         </tr>
         <% }); %>
