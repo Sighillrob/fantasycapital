@@ -15,7 +15,26 @@ class LineupsController < ApplicationController
     @players = @contest.eligible_players
     @sportpositions = SportPosition.all
 
+    # my most complex query ever:
+    # we need the associated PlayerStat FPPG score marked 'summary' for each player, the one with
+    # the highest display-priority.
+    # 1. Use a LEFT JOIN so we get players with no stats. (we've seen a few of those)
+    # 2. Put conditions in the JOIN (instead of in a where), again so we keep players
+    #    without stats.
+    # 3. Use a nested query to select only the Player+PlayerStat entry with highest display-priority
+    joinclause = "LEFT JOIN player_stats ON player_stats.player_id = players.id " +
+                 "AND player_stats.stat_name = 'FPPG' AND player_stats.dimension = 'summary'"
 
+    innerquery = "(SELECT MAX (player_stats.display_priority) from player_stats " +
+                 "WHERE player_stats.player_id = players.id)"
+
+    @players = @players.joins(joinclause).
+        where('player_stats IS null OR player_stats.display_priority= ' + innerquery)
+
+
+    # select fields we want to display, making sure FPPG field is added.
+    @players = @players.select('players.id', 'sport_position_id', 'salary', 'first_name',
+                               'last_name', 'stat_value AS fppg', 'ext_player_id', 'team_id')
   end
 
   def edit
