@@ -7,10 +7,14 @@ class Transaction < ActiveRecord::Base
 
 
   # Create a random transaction
-  def self.random_transaction(current_user)
+  def self.random_transaction(current_user, force_transaction_type=nil)
     ttype = rand(1..self.TYPE_ENUM.length)
+    if force_transaction_type != nil
+      ttype = force_transaction_type
+    end
     amt = rand(0..10000)
     rx = Transaction.new
+
     case ttype
     when 1..2
       rx.payment_engine_type = self.PAYMENT_ENGINE_TYPE_ENUM[:stripe]
