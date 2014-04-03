@@ -52,3 +52,29 @@
   <%= render partial: 'contest', collection: @contests %>
   </tbody>
 </table>
+
+<div class="ajax-loader" style="display:none;">
+  <img src="/assets/ajax-loader.gif">
+</div>
+
+<style>
+  .ajax-loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    opacity: 0.5;
+    background-color: #fff;
+
+  }
+  .ajax-loader img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -16px; /* half of the height */
+    margin-left: 16px; /* half of the width */
+    display: block;
+  }
+</style>
