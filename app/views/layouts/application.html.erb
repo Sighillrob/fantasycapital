@@ -24,6 +24,11 @@
       <%= yield %>
     </div>
     <%= render 'shared/footer' %>
+    <noscript>
+      <div class="no-js-banner">
+        <img src="/assets/js-disabled-banner.gif">
+      </div>
+    </noscript>
   </body>
 
   <%= yield :after_js %>
