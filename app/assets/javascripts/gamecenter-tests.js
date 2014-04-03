@@ -1,5 +1,5 @@
 var GameCenterTests = _.extend({}, Backbone.Events);
-GameCenterTests.on("push-players", function () {
+GameCenterTests.on("players", function () {
   // change the ids of the players to fire it
   gamecenter.handlePushedStats({
     "players": [
@@ -22,5 +22,27 @@ GameCenterTests.on("push-players", function () {
   })
 
 });
+
+GameCenterTests.on("entries", function () {
+
+  console.log("X");
+
+  function pushEntry(id) {
+    gamecenter.handlePushedStats({
+      "entries": [
+        {
+          "id": id,
+          "fps": Math.floor((Math.random() * 100))
+        }
+      ]
+    });
+  }
+
+  for (var i = 0, ilen = 100; i < ilen; i += 1) {
+    pushEntry(i + 1);
+  }
+
+});
 // fire off in console to see the flash
-// GameCenterTests.trigger("push-players");
+// GameCenterTests.trigger("players");
+// GameCenterTests.trigger("entries");
