@@ -27,7 +27,8 @@ class Entry < ActiveRecord::Base
     # returns total fantasy points of the entry at the moment
     playdate = self.contest.contestdate
     gameids = GameScore.where({playdate: playdate}).pluck('id')
-    lineup.players.map { |player| player.realtime_fantasy_points(gameids) }.sum
+    lineup_players = lineup.players.includes(:player_real_time_scores).where("player_real_time_scores.game_score_id IN (?)", gameids).references(:player_real_time_scores)
+    lineup_players.map { |player| player.realtime_fantasy_points(gameids) }.sum
   end
 
   def as_json(options = { })

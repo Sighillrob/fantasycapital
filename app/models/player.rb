@@ -33,7 +33,15 @@ class Player < ActiveRecord::Base
 
   def realtime_fantasy_points(gameid)
     # return current real-time-fantasy score for a particular game ID, or array of gameid's.
-    fps = player_real_time_scores.where(game_score_id: gameid, name: 'fp').first
+
+    # if this player has an eager-loaded set of realtime scores, use those to save queries.
+    # those should already be pre-scoped to the game-ids we care about.
+    if self.player_real_time_scores
+      fps = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }[0]
+    else
+      fps = player_real_time_scores.where(game_score_id: gameid, name: 'fp').first
+    end
+
     fps.try(:value) || 0
   end
 
@@ -47,7 +55,15 @@ class Player < ActiveRecord::Base
 
     # return the score-string (ie "0 P 0 R 0 S ...") for this player in a particular game.
     # can pass an array of gameids. Make sure we assemble in right order.
-    stats = player_real_time_scores.where(game_score_id: gameid)
+
+    # if this player has an eager-loaded set of realtime scores, use those to save queries.
+    # those should already be pre-scoped to the game-ids we care about.
+    if self.player_real_time_scores
+      stats = self.player_real_time_scores.to_a
+    else
+      stats = player_real_time_scores.where(game_score_id: gameid)
+    end
+
     rtstats = []
     stats.to_a.each do |rtstat|
       idx = NBA_STATS_ORDER.index(rtstat['name'])

@@ -37,10 +37,9 @@ class EntriesController < ApplicationController
 
     # add today's scores to the players in a consumable format.
     todaygameids = @todaysgames.pluck('id')
-
-    # BUGBUG: change this to players that are in this contest...
-    @rawplayers = Player.all.to_a
-    @players = @rawplayers.map { |player|
+    rawplayers = Player.includes(:player_real_time_scores).where(
+                                    player_real_time_scores: {game_score_id: todaygameids})
+    @players = rawplayers.map { |player|
       pl_json = player.as_json()
       pl_json['rtstats'] = player.rtstats(todaygameids)
       pl_json['currfps'] = player.realtime_fantasy_points(todaygameids)
