@@ -69,7 +69,7 @@ describe("Tests for an Entry", function () {
             name: "Micheal Jordan",
             salary: 20000,
             opp: "XAB2",
-            fppg: "XAB3",
+            fppg: "200",
             position: "SF"
         });
 
@@ -88,7 +88,7 @@ describe("Tests for an Entry", function () {
             name: "Micheal Jordan",
             salary: 20000,
             opp: "XAB2",
-            fppg: "XAB3",
+            fppg: "200",
             position: "SF"
         });
 
@@ -113,7 +113,7 @@ describe("Tests for an Entry", function () {
             name: "Micheal Jordan",
             salary: 20000,
             opp: "TEAM1@TEAM2",
-            fppg: "XAB3",
+            fppg: "200",
             position: "SF",
             homeTeam: "TEAM1",
             opponentTeam: "TEAM2"

@@ -8,11 +8,11 @@
       <input type="text" id="user_username" name="user[username]" class="form-control">
     </div>
     <div class="form-group">
-      <input type="radio" id="is_login" name="login_or_register" checked="checked" value="login" class="login-or-register">
+      <input type="radio" id="is_login" name="login_or_register" checked="checked" value="login" class="login-or-register" tabindex="-1">
       <label for="is_login">Yes, I already have a new password</label>
     </div>
     <div class="form-group">
-      <input type="radio" id="is_register" name="login_or_register" value="register" class="login-or-register">
+      <input type="radio" id="is_register" name="login_or_register" value="register" class="login-or-register"  tabindex="-1">
       <label for="is_register">No, I am a new customer</label>
     </div>
 
@@ -70,7 +70,6 @@
 
 </div>
 
-
 <script>
 
 // this script shouldn't be put inline
@@ -101,6 +100,10 @@
   });
 
 
+  function toggleSpinner() {
+    $(".ajax-loader").stop(true, true).fadeToggle("slow");
+  }
+
   $(".btn-login").on("click", function () {
     var url = "/users/sign_in";
     $.ajax({
@@ -108,6 +111,7 @@
       url: url,
       data: $("#user_form").serialize(),
       beforeSend: function(){
+
         var errorContent = "";
         if($("#user_username").val() === ""){
           errorContent += "<div>Please enter username!</div>";
@@ -120,10 +124,16 @@
         $(".errors").html(errorContent);
         if (errorContent !== ""){
           return false;
+        } else {
+          toggleSpinner();
         }
         
       },
-      success: function(data){
+      error: function () {
+        toggleSpinner();
+      },
+      success: function(data) {
+        // do not toggle the spinner on success
         console.log("login success");
         console.log(data);
         window.location.href = window.target_url;
@@ -223,10 +233,15 @@
 
         if (errorContent.length > 0) {
           return false;
+        } else {
+          toggleSpinner();
         }
-        
+      },
+      error: function () {
+        toggleSpinner();
       },
       success: function(data){
+        // do not toggle the spinner on success
         console.log("register success");
         console.log(data);
         window.location.href = window.target_url;

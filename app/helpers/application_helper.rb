@@ -28,6 +28,8 @@ module ApplicationHelper
                 { 'account' => 'active'}
               elsif controller_name.eql? 'users'
                 { 'leaderboard' => 'active' }
+              elsif controller_name.eql? 'pages'
+                { 'rules' => 'active' }
               else  
                 { controller_name => 'active'}
               end

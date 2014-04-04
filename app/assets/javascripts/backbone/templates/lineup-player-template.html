@@ -36,7 +36,13 @@
                 <!--< number_to_currency player.salary, precision: 0 >--></span>
             </td>
             <td class='fppg'>
-                <span><%= parseFloat(player.get('fppg')).toFixed(2) %></span>
+                <span>
+                  <% if (player.get('fppg')) { %>
+                    <%= parseFloat(player.get('fppg')).toFixed(1) %>
+                  <% } else { %>
+                    0
+                  <% } %>
+                </span>
             </td>
 
             <!-- Plus button to add player -->

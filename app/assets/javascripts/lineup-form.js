@@ -124,7 +124,13 @@
 
             // create player stats modal popup handler. Binds to appropriate rows.
             $(".player-stats").on('click', function () {
-                new window.AjaxModal4Container($(this).data('stats-url')).load();
+
+                var stats = $(this).attr("data-stats-url"),
+                    player = $.trim($(this).text());
+                if (player && stats) {
+                   new window.AjaxModal4Container(stats).load(); 
+                }
+                
             });
 
             // create lineup object, (handles '+' for adding player to a lineup)
