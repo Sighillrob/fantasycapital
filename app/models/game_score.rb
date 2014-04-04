@@ -50,9 +50,9 @@ class GameScore < ActiveRecord::Base
   UNCLOSED_STATUSES = GOOD_STATUSES.clone
   UNCLOSED_STATUSES.delete('closed')
 
-  IN_PROGRESS_STATUSES = ['created', 'inprogress', 'halftime', 'delayed']
+  IN_PROGRESS_STATUSES = ['inprogress', 'halftime', 'delayed']
 
-  IN_FUTURE_STATUSES = ['scheduled', 'time-tbd']
+  IN_FUTURE_STATUSES = ['scheduled', 'time-tbd', 'created']
 
   def accurate_state
     # primary way to learn state of game. Same method exists on contests, games, and entries
