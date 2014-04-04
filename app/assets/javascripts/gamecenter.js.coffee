@@ -50,7 +50,7 @@ class window.GameCenterCls
         entries_coll.sort()
 
         # animation speed
-        speed = 1000
+        speed = 2000
         # checking condition first to avoid unnecessary loops
         if window.flashEntry
             $(data.entries).each( (index, entry) ->
