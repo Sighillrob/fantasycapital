@@ -13,7 +13,5 @@
 
 FactoryGirl.define do
   factory :player_contest do
-    references ""
-    references ""
   end
 end

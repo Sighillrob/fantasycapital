@@ -46,11 +46,24 @@ class ContestFactory
         # contests start at the earliest gametime of that day.
         contest_time = games_of_day.pluck(:scheduledstart).sort()[0].to_time
 
+        # create array of all teams playing today.
         p_teams = games_of_day.map {|g| [g.home_team, g.away_team]}.flatten
 
         players = p_teams.reduce([]) {|p, t| p + Player.where(
                                     ext_player_id: t.players.map {|pp| pp.ext_player_id})}
 
+        # Seed the 'fp' (fantasypoint) score of each player playing today. This makes our
+        # queries in GameCenter work (we need at least one PlayerRealTimeScore for us to get
+        # list of players)
+        games_of_day.each { |game|
+          players_in_game = game.home_team.players.to_a.concat game.away_team.players.to_a
+          players_in_game.each { |pl|
+            PlayerRealTimeScore.where(player: pl, name: "fp", value: 0.0,
+                                              game_score:game).first_or_create
+
+          }
+        }
+        
         # Create contests for this day, and mark eligible players, if they don't already exist.
         NBA_CONTESTS.each do |row|
           c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2],

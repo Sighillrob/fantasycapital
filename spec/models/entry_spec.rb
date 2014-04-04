@@ -30,7 +30,8 @@ describe Entry do
   # another day's entry and contest (with no game)
   let!(:contest_day2) { create(:contest, contestdate:"2014-03-22")}
   let!(:entry_day2) { create(:entry, contest:contest_day2, lineup:lineup) }
-  #let!(:game_day2) {create(:game_score, playdate:"2014-03-22", home_team: teams[0], away_team: teams[1])}
+  let!(:rtscores) { [create(:player_real_time_score, player:players[5], game_score:game, name: "fp", value:55),
+                     create(:player_real_time_score, player:players[6], game_score:game, name: "fp", value:33)]}
 
   it { should belong_to(:lineup) }
 
@@ -44,6 +45,11 @@ describe Entry do
       expect(lineupspots[9-idx].sport_position.id).to be(sport_pos_id)
       puts "#{playerid}  #{sport_pos_id}"
     }
+  end
+
+  it "reports fantasy point scores properly" do
+    entry_parsed = JSON.parse(entry.to_json)
+    expect(entry_parsed['fps']).to eq("88.0")
   end
 
   it "reports what games it belongs to" do
