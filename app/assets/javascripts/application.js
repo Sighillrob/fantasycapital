@@ -40,6 +40,13 @@
 "use strict";
 /*globals jQuery, $ */
 
+jQuery(document).on("page:before-change", function () { 
+    $(".ajax-loader").fadeIn();
+});
+jQuery(document).on("page:load", function () {
+    $(".ajax-loader").show().fadeOut();
+});
+
 jQuery(document).on("ready page:load", function(){
 	$(".require-signin").on("click", function (e){
 		e.preventDefault();
