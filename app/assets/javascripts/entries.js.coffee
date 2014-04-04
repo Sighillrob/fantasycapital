@@ -192,10 +192,15 @@ class Entry
 
     dom = $("tr.lineup-spot[data-spot="+ @spot+"]")
     dom.find('td.player input').attr("value", that.player.id) 
-    dom.find('td.player span').html @player.name || "&nbsp;"
+    dom.find('td.player span').html @player.name || ""
     dom.find('td.opp span').html @playerTeams() || "&nbsp;"
     dom.find('td.salary span').html @player.salary || "&nbsp;"
     dom.find('td.fppg span').html @formatFPPG()
+    if @player.id
+      dom.find('td.player-stats').attr('data-stats-url', '/players/' + that.player.id + '/stats')
+      dom.find('td.player-stats').addClass("pointer")
+    else
+      dom.find('td.player-stats').removeClass("pointer")
 
 $(document).on "ready page:load": ->
   window.Lineup = Lineup
