@@ -14,6 +14,7 @@
 #  max_entries   :integer
 #  contest_end   :datetime
 #  entries_count :integer          default(0)
+#  contestdate   :date
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

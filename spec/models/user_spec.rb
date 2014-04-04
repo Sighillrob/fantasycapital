@@ -22,6 +22,7 @@
 #  username               :string(255)
 #  country                :string(255)
 #  state                  :string(255)
+#  admin                  :boolean          default(FALSE)
 #
 
 require 'spec_helper'
