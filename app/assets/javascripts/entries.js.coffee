@@ -183,7 +183,7 @@ class Entry
   formatFPPG: ->
     if typeof @player.fppg == "undefined"
       return "&nbsp";
-    if @player.fppg
+    if @player.fppg && (typeof @player.fppg == "string" || typeof @player.fppg == "number") && !isNaN(@player.fppg)
       return @player.fppg.toFixed(1)
     else
       return "0"
