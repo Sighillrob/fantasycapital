@@ -180,6 +180,13 @@ class Entry
       else
         return @player.opponentTeam + "@" + "<strong class=\"home-team\">" + @player.homeTeam + "</strong>"
     return ""
+  formatFPPG: ->
+    if typeof @player.fppg == "undefined"
+      return "&nbsp";
+    if @player.fppg
+      return @player.fppg.toFixed(1)
+    else
+      return "0"
   render: ->
     that = @
 
@@ -188,7 +195,7 @@ class Entry
     dom.find('td.player span').html @player.name || "&nbsp;"
     dom.find('td.opp span').html @playerTeams() || "&nbsp;"
     dom.find('td.salary span').html @player.salary || "&nbsp;"
-    dom.find('td.fppg span').html @player.fppg || "&nbsp;"
+    dom.find('td.fppg span').html @formatFPPG()
 
 $(document).on "ready page:load": ->
   window.Lineup = Lineup
