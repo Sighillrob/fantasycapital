@@ -50,7 +50,7 @@
             <%= link_to 'Leaderboard', users_leadboard_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
-          <li>
+          <li class='<%= menu_classes 'rules' %>'>
             <%= link_to 'Rules/Faq', rules_faq_pages_path, :class => ("require-signin" unless user_signed_in?) %>
             <div class="line"></div>
           </li>
