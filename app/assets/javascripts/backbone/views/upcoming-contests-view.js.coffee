@@ -6,8 +6,9 @@ class Main.Views.UpcomingContestsView extends Backbone.View
         @listenTo(@upcomingContests, "change", @render)
         @render()
     render: () ->
-        @$el.html(_.template(@template, { upcomingContests: @upcomingContests.toJSON() }))
-        @countdown()
+        if @el && @template
+            @$el.html(_.template(@template, { upcomingContests: @upcomingContests.toJSON() }))
+            @countdown()
     countdown: () ->
         padding = (value) ->
             if value < 10 && value >= 0

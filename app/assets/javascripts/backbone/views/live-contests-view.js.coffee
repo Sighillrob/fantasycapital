@@ -6,4 +6,5 @@ class Main.Views.LiveContestsView extends Backbone.View
         @listenTo(@liveContests, "change", @render)
         @render()
     render: () ->
-        @$el.html(_.template(@template, { liveContests: @liveContests.toJSON() }))
+        if @el && @template
+            @$el.html(_.template(@template, { liveContests: @liveContests.toJSON() }))
