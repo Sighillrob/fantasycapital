@@ -6,4 +6,5 @@ class Main.Views.CompletedContestsView extends Backbone.View
         @listenTo(@completedContests, "change", @render)
         @render()
     render: () ->
-        @$el.html(_.template(@template, { completedContests: @completedContests.toJSON() }))
+        if @el && @template
+            @$el.html(_.template(@template, { completedContests: @completedContests.toJSON() }))
