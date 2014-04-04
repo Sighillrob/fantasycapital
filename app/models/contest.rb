@@ -14,6 +14,7 @@
 #  max_entries   :integer
 #  contest_end   :datetime
 #  entries_count :integer          default(0)
+#  contestdate   :date
 #
 
 class Contest < ActiveRecord::Base

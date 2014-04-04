@@ -22,6 +22,7 @@
 #  username               :string(255)
 #  country                :string(255)
 #  state                  :string(255)
+#  admin                  :boolean          default(FALSE)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

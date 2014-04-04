@@ -119,7 +119,8 @@ class RealTimeDataService
     end
 
     if changed_players
-      # Recalculate all live entries' fantasy points and send as a message.
+      # Recalculate all live entries' fantasy points and send as a message. BUGBUG: do this ONCE for each 20-second live poll, not once per game
+      # being iterated over.
 
       todaysentries = Entry.in_range(game_score.playdate, game_score.playdate)
       @entries = todaysentries.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
