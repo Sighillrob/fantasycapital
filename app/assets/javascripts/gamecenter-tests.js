@@ -1,3 +1,6 @@
+"use strict";
+/*globals _, Backbone, gamecenter */
+
 var GameCenterTests = _.extend({}, Backbone.Events);
 GameCenterTests.on("players", function () {
   // change the ids of the players to fire it
@@ -19,13 +22,11 @@ GameCenterTests.on("players", function () {
         "currfps": Math.floor((Math.random() * 100))
       }
     ]
-  })
+  });
 
 });
 
 GameCenterTests.on("entries", function () {
-
-  console.log("X");
 
   function pushEntry(id) {
     gamecenter.handlePushedStats({
@@ -43,6 +44,36 @@ GameCenterTests.on("entries", function () {
   }
 
 });
+
+GameCenterTests.on("games", function () {
+
+
+
+    var timeleft = Math.floor((Math.random() * 100));
+
+    var games = [];
+
+    // change games with id from 100 to 150, you might need to adjust
+    // it manually, the game id will get bigger and bigger
+    // check the data-games-id on tr tag to find out what
+    // game ids do you have on current page
+    for (var i = 100, ilen = 150; i < ilen; i += 1) {
+      games.push({
+        "id": i,
+        "pretty_play_state": timeleft + " MIN LEFT",
+        "minutes_remaining": timeleft,
+        "home_team_score": Math.floor((Math.random() * 100)),
+        "away_team_score": Math.floor((Math.random() * 100))
+      });
+    }
+
+    gamecenter.handlePushedStats({
+      "games": games
+    });
+
+    return true;
+});
 // fire off in console to see the flash
 // GameCenterTests.trigger("players");
 // GameCenterTests.trigger("entries");
+// GameCenterTests.trigger("games");

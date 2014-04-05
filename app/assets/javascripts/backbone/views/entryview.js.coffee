@@ -8,6 +8,7 @@ class Main.Views.EntryView extends Backbone.View
     @listenTo(@entry, 'change', @changeentry)
     @stopListening(window.players_coll, "change");
     @listenTo(window.players_coll, 'change', @changeentry)
+    @listenTo(window.games_coll, 'change', @changeentry)
     @render()
   get_players_count: () ->
     stats = {}
@@ -29,12 +30,12 @@ class Main.Views.EntryView extends Backbone.View
   render: () ->
     # Look up the players for this entry
     if @exists
-      console.log("render entry")
       player_and_pos = @entry.player_pos()
-      $.each(player_and_pos,  (idx, pl_pos) ->
-        if pl_pos[0].get('rtstats')
-          console.log pl_pos[0].get('rtstats')
-      )
+      # this part of code doesn't seem to be useful
+      #$.each(player_and_pos,  (idx, pl_pos) ->
+      #  if pl_pos[0].get('rtstats')
+      #    console.log pl_pos[0].get('rtstats')
+      #)
 
       $(@el).empty().html(_.template(this.template, {
         entry: @entry, 
@@ -46,7 +47,6 @@ class Main.Views.EntryView extends Backbone.View
       return this
 
   changeentry: () ->
-    console.log(@entry.get("id"))
     @render()
   clear: () ->
     @exists = false
