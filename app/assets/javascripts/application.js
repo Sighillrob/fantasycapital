@@ -40,25 +40,31 @@
 "use strict";
 /*globals jQuery, $ */
 
-jQuery(document).on("page:before-change", function () { 
-    $(".ajax-loader").fadeIn();
-});
-jQuery(document).on("page:load", function () {
-    $(".ajax-loader").show().fadeOut();
-});
 
-jQuery(document).on("ready page:load", function(){
-	$(".require-signin").on("click", function (e){
-		e.preventDefault();
-		var target_url = $(this).attr("href");
-		window.target_url = target_url;
-		new window.AjaxModal("/users/signin_popup").load();
-	});
+jQuery(document).on({
+	"page:before-change": function () {
+		$(".ajax-loader").fadeIn();
+		$("html, body").animate({ scrollTop: 0 }, "fast");
+	},
+	"page:load": function () {
+		$(".ajax-loader").show().fadeOut();
+	},
+	"page:restore": function () {
+		$(".ajax-loader").hide();
+	},
+	"ready page:load": function (e) {
+		$(".require-signin").on("click", function (e){
+			e.preventDefault();
+			var target_url = $(this).attr("href");
+			window.target_url = target_url;
+			new window.AjaxModal("/users/signin_popup").load();
+		});
 
-	$(".welcome-text > a").on("click", function (e){
-		e.preventDefault();
-		$(".usermenu").toggle();
-	});
+		$(".welcome-text > a").on("click", function (e){
+			e.preventDefault();
+			$(".usermenu").toggle();
+		});
+	}
 });
 
 // it's a bad habit to dump a function into the global scope (window)
