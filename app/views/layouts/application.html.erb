@@ -25,11 +25,11 @@
     </div>
     <%= render 'shared/footer' %>
     <div class="ajax-loader" style="display:none;">
-      <img src="/assets/ajax-loader.gif">
+      <img src="<%= image_path("ajax-loader.gif") %>">
     </div>
     <noscript>
       <div class="no-js-banner">
-        <img src="/assets/js-disabled-banner.gif">
+        <img src="<%= image_path("js-disabled-banner.gif") %>">
       </div>
     </noscript>
   </body>
