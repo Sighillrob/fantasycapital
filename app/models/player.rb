@@ -31,12 +31,14 @@ class Player < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
-  def realtime_fantasy_points(gameid)
+  def realtime_fantasy_points(gameid=nil)
     # return current real-time-fantasy score for a particular game ID, or array of gameid's.
+    # to use an eager-loaded association that's been pre-filtered to only include the relevant game(s),
+    # make sure gameid is nil.
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
-    if self.player_real_time_scores
+    if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       fps = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }[0]
     else
       fps = player_real_time_scores.where(game_score_id: gameid, name: 'fp').first
@@ -51,14 +53,16 @@ class Player < ActiveRecord::Base
 
 
 
-  def rtstats(gameid)
+  def rtstats(gameid=nil)
 
     # return the score-string (ie "0 P 0 R 0 S ...") for this player in a particular game.
     # can pass an array of gameids. Make sure we assemble in right order.
+    # to use an eager-loaded association that's been pre-filtered to only include the relevant game(s),
+    # make sure gameid is nil.
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
-    if self.player_real_time_scores
+    if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       stats = self.player_real_time_scores.to_a
     else
       stats = player_real_time_scores.where(game_score_id: gameid)

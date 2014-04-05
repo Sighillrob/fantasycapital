@@ -41,8 +41,8 @@ class EntriesController < ApplicationController
                                     player_real_time_scores: {game_score_id: todaygameids})
     @players = rawplayers.map { |player|
       pl_json = player.as_json()
-      pl_json['rtstats'] = player.rtstats(todaygameids)
-      pl_json['currfps'] = player.realtime_fantasy_points(todaygameids)
+      pl_json['rtstats'] = player.rtstats
+      pl_json['currfps'] = player.realtime_fantasy_points
       pl_json
     }
     @sportpositions = SportPosition.all
