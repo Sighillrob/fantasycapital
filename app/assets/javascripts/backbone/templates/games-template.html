@@ -1,6 +1,6 @@
 <script type="text/template" id="games-template">
     <% _.each(games, function (game) { %>
-    <li class="game-status-template game-status">
+    <li class="game-status-template game-status" data-game-id="<%= game.get('id') %>">
         <table class="status ">
             <tbody>
             <tr class="white">

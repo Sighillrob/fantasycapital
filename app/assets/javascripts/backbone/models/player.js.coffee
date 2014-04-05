@@ -65,16 +65,20 @@ class Main.Models.Player extends Backbone.Model
   getHomeTeamScore: () ->
     mygame = @currgame()
     return "None" if !mygame
-    return mygame.get('home_team_score') || "0"
+    return mygame.get("home_team_score") || "0"
   getAwayTeamScore: () ->
     mygame = @currgame()
     return "None" if !mygame
-    return mygame.get('away_team_score') || "0"
+    return mygame.get("away_team_score") || "0"
   getMinutesRemaining: () ->
     mygame = @currgame()
     return "None" if !mygame
     minutes = mygame.get("minutes_remaining")
-    return minutes + " " + (if minutes == 1 then "min" else "mins")
+    return minutes + " MIN LEFT"
+  getGameID: () ->
+    mygame = @currgame()
+    return 0 if !mygame
+    return mygame.get("id")
   salarystring: () ->
     accounting.formatMoney(@get('salary'), {precision: 0});
 
