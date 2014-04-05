@@ -19,7 +19,7 @@ class window.GameCenterCls
 
             if el.length > 0
                 console.log("ANIMATE")
-                el.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
+                el.css({"background-color": "#0eea6c"}).stop(true).animate({ "background-color": "#fff"}, speed)
     handlePushedStats: (data) ->
         # handle stats received from Pusher(). We only receive stats that have changed. Update the
         # client-side player model with the data.

@@ -7,7 +7,7 @@ class Main.Views.EntryView extends Backbone.View
     @stopListening("change")
     @listenTo(@entry, 'change', @changeentry)
     @stopListening(window.players_coll, "change");
-    @listenTo(window.players_coll, 'change', @changeentry)
+    @listenTo(window.players_coll, 'change', @updateScoreAndStats)
     @listenTo(window.games_coll, 'change', @changeentry)
     @render()
   get_players_count: () ->
@@ -48,5 +48,14 @@ class Main.Views.EntryView extends Backbone.View
 
   changeentry: () ->
     @render()
+  updateScoreAndStats: (player) ->
+    node = $("tr[data-player-id=\"" + player.get("id") + "\"]")
+    if node.length > 0
+      score = node.find(".score")
+      if score.length > 0
+        score.html(player.get("currfps"))
+      stats = node.find(".player-record")
+      if stats.length > 0
+        stats.html(player.get("rtstats"))
   clear: () ->
     @exists = false
