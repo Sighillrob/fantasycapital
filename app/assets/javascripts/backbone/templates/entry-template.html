@@ -29,9 +29,9 @@
 
                         <p class="player-score">
                             <% if (player_pos[0].getTeam() === player_pos[0].getHomeTeam()) { %>
-                                <strong><%= player_pos[0].getHomeTeam() %></strong>@<%= player_pos[0].getAwayTeam() %>
+                                <strong><%= player_pos[0].getHomeTeam() %></strong> <%= player_pos[0].getHomeTeamScore() %> @ <%= player_pos[0].getAwayTeam() %> <%= player_pos[0].getAwayTeamScore() %> <%= player_pos[0].getMinutesRemaining() %>
                             <% } else { %>
-                                <%= player_pos[0].getHomeTeam() %>@<strong><%= player_pos[0].getAwayTeam() %></strong>
+                                <%= player_pos[0].getHomeTeam() %> <%= player_pos[0].getHomeTeamScore() %> @ <strong><%= player_pos[0].getAwayTeam() %></strong> <%= player_pos[0].getAwayTeamScore() %> <%= player_pos[0].getMinutesRemaining() %>
                             <% } %>
                             <!--<strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL-->
                         </p>
