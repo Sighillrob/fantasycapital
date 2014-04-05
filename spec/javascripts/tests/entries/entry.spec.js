@@ -147,7 +147,7 @@ describe("Tests for an Entry", function () {
         expect( $("#mockup .lineup-spot").attr("data-spot") ).toBe("SF");
         expect( $("#mockup td.player input").val() ).toBe("XAB1");
         expect( $("#mockup td.player span").html() ).toBe("Micheal Jordan");
-        expect( $("#mockup td.salary span").html() ).toBe("20000");
+        expect( $("#mockup td.salary span").html() ).toBe("$20,000");
         $("#mockup").remove();
         
     });

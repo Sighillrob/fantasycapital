@@ -19,7 +19,7 @@ class Lineup
     $('a.add-to-lineup').on 'click', ->
       # add player to lineup if eligible, and remove from DOM. 'that' is the constructed lineup.
       player = new window.PlayerStats($(@).closest('tr.contest-player'))
-      # if that.canAddPlayer(player)
+      
       eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
       if eligible_spots.length is 0
         alert "Please remove player from position "+player.position
@@ -33,6 +33,7 @@ class Lineup
       #   alert "You can't add this player. Salary limit reached!"
 
     $('a.remove-from-lineup').on 'click', ->
+      
       spot_seq = $(@).data('lineup-spot')
       spots = (spot for spot in that.entries when spot.spot is spot_seq and not not spot.player)
       for spot in spots
@@ -50,7 +51,11 @@ class Lineup
         alert "You can't submit the lineup with negative balance."
         return false
       return true
-      
+  handleRedColor: () ->
+    if @amountLeft() > 0
+      $("#avg-rem-salary, #contest-salary-cap").parent().children().removeClass("red")
+    else
+      $("#avg-rem-salary, #contest-salary-cap").parent().children().addClass("red")
   setSalaryCap: (value) ->
     if typeof value == "number"
       if value > 0
@@ -122,6 +127,7 @@ class Lineup
       entry.player = ''
     @updateView()
   updateView: ->
+    @handleRedColor()
     $('tr.entry-item').find('td.val span').html '&nbsp;'
 
     accounting.settings.currency.format = {
