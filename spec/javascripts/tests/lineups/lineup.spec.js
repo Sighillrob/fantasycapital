@@ -411,7 +411,7 @@
             lineup.addEntry(entry3);
 
             expect(lineup.averagePlayerSalary()).toBe(7000);
-            expect(lineup.averageRemainingPlayerSalary()).toBe(Infinity);
+            expect(lineup.averageRemainingPlayerSalary()).toBe(0);
 
         });
 

@@ -92,7 +92,11 @@ class Lineup
   averagePlayerSalary: ->
     (@consumedSalary()/@spotsTaken()) || 0
   averageRemainingPlayerSalary: ->
-    @amountLeft()/@spotsLeft()
+    remaining = @amountLeft() / @spotsLeft()
+    if remaining == Infinity 
+      return 0
+    return remaining
+    
   sortBy: (field, order) ->
     if @getNumberOfEntries() > 0
       if order == "desc"
