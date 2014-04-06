@@ -11,6 +11,7 @@ class StripeCustomerService
   def ensure!
       if @user.account
         customer = Stripe::Customer.retrieve(@user.account.stripe_customer_id)
+        customer.cards.create(:card => @stripe_token)
       else
         customer = Stripe::Customer.create(
           email: @user.email,

@@ -24,7 +24,6 @@ window.initializeStripeForm = ->
         .show()
         .append('<span class="error">' + res.responseJSON.error + '</span>')
 
-
 # Generic form for handling credit cards, bank accounts, etc
 class StripeForm
 
@@ -109,7 +108,10 @@ initCallback = (action, response) ->
     window.location.reload()
 
   promise.error (res) ->
-    error = res.responseJSON.error || 'An unknown error occurred.'
+    error = 'An unknown error occurred.'
+    try
+        error = res.responseJSON.error || 'An unknown error occurred.'
+    catch e 
     $('.error-container')
       .show()
       .append('<span class="error">' + error + '</span>')
