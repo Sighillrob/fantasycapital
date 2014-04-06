@@ -66,9 +66,12 @@ class EntriesController < ApplicationController
       contest['view_path'] = entry_path(entry)
       contest['edit_path'] = edit_lineup_path(entry.lineup)
 
-      # determine which list the entry goes on.
+      # determine which list the entry goes on by its contest's state.
       state = entry.contest.accurate_state
-      completedContests << contest if state == :closed
+      if state == :closed
+        contest['final_pos'] = entry[:final_pos]
+        completedContests << contest
+      end
       liveContests << contest if state == :live
       upcomingContests << contest if state == :in_future
     end

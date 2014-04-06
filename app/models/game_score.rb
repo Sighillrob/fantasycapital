@@ -24,6 +24,7 @@ class GameScore < ActiveRecord::Base
   #  Alternatively, we could make games without a start time become ineligible for contests,
   #  and make sure contests aren't created on days with fewer than 3 SCHEDULED games.
   validates :scheduledstart, presence: true
+  validates :status, presence: true
 
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'

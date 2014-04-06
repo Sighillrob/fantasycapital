@@ -37,6 +37,20 @@ class Contest < ActiveRecord::Base
     GameScore.earliest_start(self.contestdate)
   end
 
+  def record_final_outcome!
+    # record contest outcome, meaning entry positions. return nil if any entries aren't final yet.
+    return nil if self.entries.missing_final_score.count > 0
+    entries_ordered = self.entries.order(final_score: :desc)
+    lastscore = -9999
+    currpos = -99
+    entries_ordered.each_with_index { |entry, idx |
+      # record scores, making tied values have the same position
+      currpos=idx unless entry.final_score == lastscore
+      lastscore = entry.final_score
+      entry.update(final_pos: currpos+1)
+    }
+    return entries_ordered
+  end
 
   def accurate_state
     # return this contest's state, accurately. This is inexpensive for contests in past or future,
@@ -58,36 +72,6 @@ class Contest < ActiveRecord::Base
     return :closed if !states.include?(:in_future)
     return :in_future
   end
-
-  #def closed?
-  #  # is the contest done? We try to be accurate here, so we get "done" indication immediately
-  #  # when all relevant games are over, not just when all games for a day are over.
-  #
-  #  # shortcut -- if all games from the date are closed, then the contest is closed.
-  #  return true if GameScore.where(playdate: self.contestdate).not_closed.count == 0
-  #
-  #  # shortcut -- if all games from the date are in future, then the contest is NOT closed.
-  #  #   multiple levels of negatives here b/c of the way we identify status in games.
-  #  return false if GameScore.where(playdate: self.contestdate).not_in_future.count == 0
-  #
-  #  # damn, neither shortcut worked. Do the expensive thing and look at each entry.
-  #  self.entries.all? do |entry|
-  #    entry.complete?
-  #  end
-  #end
-
-  #def live?
-  #  # is current contest live right now?
-  #
-  #  # shortcut for any contests where no games on the date are live. Single DB query.
-  #  return false if GameScore.where(playdate: self.contestdate).live.count == 0
-  #
-  #  # oh well, shortcut didn't work. Do the expensive thing...
-  #  self.entries.all? do |entry|
-  #    entry.live?
-  #  end
-  #end
-
 
   def filled?
     max_entries.nil? ? false : entries.count >= max_entries.to_i

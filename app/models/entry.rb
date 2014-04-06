@@ -2,11 +2,13 @@
 #
 # Table name: entries
 #
-#  id         :integer          not null, primary key
-#  lineup_id  :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  contest_id :integer
+#  id          :integer          not null, primary key
+#  lineup_id   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  contest_id  :integer
+#  final_score :decimal(, )
+#  final_pos   :integer
 #
 
 class Entry < ActiveRecord::Base
@@ -23,8 +25,18 @@ class Entry < ActiveRecord::Base
     errors.add(:contest, "Number of entries can't exceed maximum.") if contest.entries.count >= contest.max_entries 
   end
 
+  def record_final_score!
+    # entry's games have ended, so record the final score and save the entry. we don't check contest ends here -- that's done
+    # by caller.
+    return unless self.final_score.nil?
+    self.update(final_score: self.current_fantasypoints)
+  end
+
   def current_fantasypoints
     # returns total fantasy points of the entry at the moment
+
+    return self.final_score unless self.final_score.nil?
+
     playdate = self.contest.contestdate
     gameids = GameScore.where({playdate: playdate}).pluck('id')
     lineup_players = lineup.players.includes(:player_real_time_scores).where("player_real_time_scores.game_score_id IN (?)", gameids).references(:player_real_time_scores)
@@ -55,7 +67,10 @@ class Entry < ActiveRecord::Base
   end
 
   def accurate_state
-    # return :closed, :in_future, or :live for this entry.
+    # return :closed, :in_future, or :live for this entry. Expensive to compute.
+
+    return :closed unless self.final_score.nil?
+
     games = self.games
     statuses = games.map { |game| game.accurate_state }
     return :live if statuses.include?(:live)
@@ -91,6 +106,9 @@ class Entry < ActiveRecord::Base
       joins(:contest).where "contests.contests.sport = ?", sport
     end
 
+    def missing_final_score
+      where final_score: nil
+    end
 
   end
 end
