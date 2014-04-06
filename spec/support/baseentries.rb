@@ -8,7 +8,7 @@ shared_context 'baseentries' do
   let(:user) { create(:user) }
   let!(:lineup) { create(:lineup, user:user)}
   let!(:teams) { create_list(:team, 4)}
-  let!(:players) { (0..9).map { |i| create(:player, sport_position: positions[i % 6], team: teams[i%2]) } }
+  let!(:players) { (0..9).map { |i| create(:player, sport_position: positions[i % 6], team: teams[i%4]) } }
   let!(:lineupspots) { (0..9).map { |i| create(:lineup_spot, player: players[9-i], spot:9-i,
                                                sport_position:players[9-i].sport_position,
                                                lineup:lineup) } }
@@ -22,6 +22,7 @@ shared_context 'baseentries' do
 
   # another day's entry and contest (with no game)
   let!(:contest_day2) { create(:contest, contestdate:todaydate+1)}
+  let!(:game_day2) {create(:game_score, playdate:todaydate+1, home_team: teams[1], away_team: teams[3])}
   let!(:entry_day2) { create(:entry, contest:contest_day2, lineup:lineup) }
   let!(:rtscores) { [create(:player_real_time_score, player:players[5], game_score:game, name: "fp", value:55),
                      create(:player_real_time_score, player:players[6], game_score:game, name: "fp", value:33)]}

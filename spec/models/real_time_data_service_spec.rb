@@ -60,19 +60,22 @@ describe RealTimeDataService do
   context "closing contests" do
     #
     it "closes entry whose games are done" do
-
+      game.update(status: 'closed')
+      game2.update(status:'closed')
       RealTimeDataService.new.try_closing_contests todaydate
-      p "HI"
+      entry0 = Entry.find(entries[0].id)
+      entry1 = Entry.find(entries[1].id)
+      expect([entry0[:final_score], entry0[:final_pos]]).to eq([88, 1])
+      expect([entry1[:final_score], entry1[:final_pos]]).to eq([88, 1])
     end
-    it "won't close an entry whose games are still in progress" do
 
-    end
-
-    it "closes a contest where all entries have final scores" do
-
-    end
-    it "won't close a contest where an entry doesn't have a score yet" do
-
+    it "won't close an entry when a game is still in progress" do
+      game.update(status:'closed')  # only one of the two games is closed...
+      RealTimeDataService.new.try_closing_contests todaydate
+      entry0 = Entry.find(entries[0].id)
+      entry1 = Entry.find(entries[1].id)
+      expect([entry0[:final_score], entry0[:final_pos]]).to eq([nil, nil])
+      expect([entry1[:final_score], entry1[:final_pos]]).to eq([nil, nil])
     end
   end
 

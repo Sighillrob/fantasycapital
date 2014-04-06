@@ -46,11 +46,11 @@ namespace :realtime do
 
         # if one of the games just closed, see if we can close out any contests
 
-        # if game_closed_with_score
-        #   puts "A game just closed... trying to close contests"
-        #   RealTimeDataService.new.try_closing_contests today
-        #   puts "Done closing contests"
-        # end
+        if game_closed_with_score
+          puts "A game just closed... trying to close contests"
+          RealTimeDataService.new.try_closing_contests today
+          puts "Done closing contests"
+        end
 
         timerthread.join
 

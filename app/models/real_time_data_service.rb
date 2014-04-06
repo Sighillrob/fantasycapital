@@ -132,20 +132,20 @@ class RealTimeDataService
 
   def try_closing_contests playdate
 #     # close out entries that have all games finished.
-#     todaysentries = Entry.in_range(playdate, playdate).missing_final_score.readonly(false)
-# 
-#     todaysentries.each_with_index do |entry, idx|
-#       gamesnotdone = entry.games.reject do | game | game.score_valid? end
-#       if gamesnotdone.length == 0
-#         todaysentries[idx].record_final_score
-#       end
-#       entry
-#     end
-# 
-#     # close out contests that havce all games finished
-#     Contest.in_range(playdate, playdate).each do |contest|
-#       contest.record_final_outcome
-#     end
+    todaysentries = Entry.in_range(playdate, playdate).missing_final_score.readonly(false)
+
+    todaysentries.each_with_index do |entry, idx|
+      gamesnotdone = entry.games.reject do | game | game.scores_valid? end
+      if gamesnotdone.length == 0
+        todaysentries[idx].record_final_score!
+      end
+      entry
+    end
+
+    # close out contests that havce all games finished
+    Contest.in_range(playdate, playdate).each do |contest|
+      contest.record_final_outcome!
+    end
 
   end
 end

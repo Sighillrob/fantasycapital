@@ -43,14 +43,13 @@ describe Entry do
   it "reports what games it belongs to" do
     entry = entries[0]
     entry_games = entry.games
-    expect(entry_games.count).to be(1)
+    expect(entry_games.count).to be(2)
     expect(entry_games.first).to eq(game)
   end
 
-  it "reports no games if it's empty" do
-    entry = entries[0]
+  it "reports one game when there's only one" do
     entry_games = entry_day2.games
-    expect(entry_games.count).to be(0)
+    expect(entry_games.count).to be(1)
   end
 
 end
