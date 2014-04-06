@@ -2,41 +2,25 @@
 #
 # Table name: entries
 #
-#  id         :integer          not null, primary key
-#  lineup_id  :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  contest_id :integer
+#  id          :integer          not null, primary key
+#  lineup_id   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  contest_id  :integer
+#  final_score :decimal(, )
+#  final_pos   :integer
 #
 
 require 'spec_helper'
 
 describe Entry do
-  let!(:positions) { create_list(:sport_position, 6)}
-  let(:user) { create(:user) }
-  let!(:lineup) { create(:lineup, user:user)}
-  let!(:teams) { create_list(:team, 4)}
-  let!(:players) { (0..9).map { |i| create(:player, sport_position: positions[i % 6], team: teams[i%2]) } }
-  let!(:lineupspots) { (0..9).map { |i| create(:lineup_spot, player: players[9-i], spot:9-i,
-                                               sport_position:players[9-i].sport_position,
-                                               lineup:lineup) } }
-
-  # one day's entry and contest, with 2 games. No player from this entry is in game2
-  let!(:contest) { create(:contest, contestdate:"2014-03-21")}
-  let!(:entry) { create(:entry, contest:contest, lineup:lineup) }
-  let!(:game) {create(:game_score, playdate:"2014-03-21", home_team: teams[0], away_team: teams[1])}
-  let!(:game2) {create(:game_score, playdate:"2014-03-21", home_team: teams[2], away_team: teams[3])}
-
-  # another day's entry and contest (with no game)
-  let!(:contest_day2) { create(:contest, contestdate:"2014-03-22")}
-  let!(:entry_day2) { create(:entry, contest:contest_day2, lineup:lineup) }
-  let!(:rtscores) { [create(:player_real_time_score, player:players[5], game_score:game, name: "fp", value:55),
-                     create(:player_real_time_score, player:players[6], game_score:game, name: "fp", value:33)]}
+  include_context 'baseentries'
 
   it { should belong_to(:lineup) }
 
   it "reports players according to their positional order when JSONified" do
     # this is what's sent to browser during gametime. need to ensure sort order.
+    entry = entries[0]
     entry_parsed = JSON.parse(entry.to_json)
 
     # make sure players are reported in order of their 'spot' index, so that spots go from 0-9.
@@ -47,18 +31,24 @@ describe Entry do
     }
   end
 
+  it "records final score" do
+
+  end
   it "reports fantasy point scores properly" do
+    entry = entries[0]
     entry_parsed = JSON.parse(entry.to_json)
     expect(entry_parsed['fps']).to eq("88.0")
   end
 
   it "reports what games it belongs to" do
+    entry = entries[0]
     entry_games = entry.games
     expect(entry_games.count).to be(1)
     expect(entry_games.first).to eq(game)
   end
 
   it "reports no games if it's empty" do
+    entry = entries[0]
     entry_games = entry_day2.games
     expect(entry_games.count).to be(0)
   end
