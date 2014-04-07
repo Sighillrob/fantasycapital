@@ -12,7 +12,6 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  max_entries   :integer
-#  contest_end   :datetime
 #  entries_count :integer          default(0)
 #  contestdate   :date
 #

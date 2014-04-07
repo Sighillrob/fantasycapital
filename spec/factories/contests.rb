@@ -12,7 +12,6 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  max_entries   :integer
-#  contest_end   :datetime
 #  entries_count :integer          default(0)
 #  contestdate   :date
 #
@@ -27,7 +26,6 @@ FactoryGirl.define do
     prize 1.9
     contestdate Time.now.to_date + 1    # default is contests start tomorrow.
     contest_start  Time.now + 60*60*12  # 12 hours from now
-    contest_end Time.now + 60*60*14     # 14 hours from now
     max_entries 10
   end
 end
