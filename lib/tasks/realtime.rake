@@ -102,6 +102,8 @@ namespace :realtime do
       end
       sleep 1
     end
+    # reset all fake games status back to scheduled so that next time they will run again
+    GameScore.where("ext_game_id like ?", "FAKE-%").update_all(status: "scheduled")
   end
 
 end
