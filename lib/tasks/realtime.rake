@@ -117,6 +117,7 @@ namespace :realtime do
         game_json['id'] = "FAKE-" + game_json['id']
         RealTimeDataService.new.refresh_game game_json
       end
+      RealTimeDataService.new.refresh_entries "2050-12-31"
       sleep 1
     end
     # reset all fake games status back to scheduled so that next time they will run again
