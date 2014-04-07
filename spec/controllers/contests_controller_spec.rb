@@ -28,4 +28,13 @@ describe ContestsController do
     end
   end
 
-end
+  describe "GET browse" do
+    it "responds with success" do
+      get :browse
+      expect(response.status).to be(200)
+    end
+
+  end
+
+
+  end
