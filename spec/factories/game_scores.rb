@@ -24,6 +24,7 @@ FactoryGirl.define do
     playdate "2014-03-12"
     home_team_score 1
     away_team_score 1
+    status "scheduled"
     association :home_team, factory: :team
     association :away_team, factory: :team
     scheduledstart "2014-03-12 5:00"

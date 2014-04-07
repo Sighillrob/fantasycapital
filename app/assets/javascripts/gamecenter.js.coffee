@@ -13,11 +13,17 @@ class window.GameCenterCls
 #        rebounds: 1.25
 #        blocks: 2
 #        turnovers: -1
+    animate: (selector, speed) ->
+        if typeof selector == "string"
+            el = $(".scorecardTable").find(selector)
 
+            if el.length > 0
+                console.log("ANIMATE")
+                el.css({"background-color": "#0eea6c"}).stop(true).animate({ "background-color": "#fff"}, speed)
     handlePushedStats: (data) ->
         # handle stats received from Pusher(). We only receive stats that have changed. Update the
         # client-side player model with the data.
-        context = @
+        self = @
         console.log (data)
 
 
@@ -51,42 +57,18 @@ class window.GameCenterCls
 
         # animation speed
         speed = 2000
-        # checking condition first to avoid unnecessary loops
-        if window.flashEntry
-            $(data.entries).each( (index, entry) ->
-              #find entry
-              el = $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]")
-              if el.length > 0
-                #animate
-                $("#entry-summarys-view-el").find("tr[data-entry-id=\"" + entry.id + "\"]").css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
-            )
-
-            # I've been unable to test this part of code b/c no games object was passed from the rake realtime:games_playback files
-            $(data.games).each( (index, game) ->
-                # check all tds
-                $("#entry-summarys-view-el tr").each( () ->
-                    self = this
-                    #get all game ids which are used for the minutes_left() functionality
-                    games_attr = $(self).attr("data-games-id");
-                    if games_attr
-                      ids = games_attr.split(",")
-                      # could be changed to normal loop
-                      ids.forEach( () ->
-                          #if this id is the game.id which was updated then it means that we need to flash green in this row
-                          if this == game.id
-                              self.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
-                      )
-                )
-            )
 
         $(data.players).each( (index, player) ->
-            console.log(player)
-            el = $(".scorecardTable").find("tr[data-player-id=\"" + player.id + "\"]")
-            console.log(el.length)
-            if el.length > 0
-                el.css({"background-color": "#0eea6c"}).animate({ "background-color": "#fff"}, speed)
-
+            self.animate("tr[data-player-id=\"" + player.id + "\"]", speed)
         )
+        # set the flagEntry flag to true to allow green flash when entries or games are updated
+        if window.flashEntry
+            $(data.entries).each( (index, entry) ->
+                self.animate("tr[data-player-id=\"" + entry.id + "\"]", speed)
+            )
+            $(data.games).each( (index, game) ->
+                self.animate("tr[data-game-id=\"" + game.id + "\"]", speed)
+            )
 
 
     constructor: (pusherkey) ->

@@ -12,7 +12,6 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  max_entries   :integer
-#  contest_end   :datetime
 #  entries_count :integer          default(0)
 #  contestdate   :date
 #
@@ -28,6 +27,48 @@ describe Contest do
   let(:lineup) { create(:lineup, user: user) }
   let!(:game) {create(:game_score, playdate:"2014-03-21", scheduledstart: now + 18.hours)}
   let(:contest) { create(:contest, contestdate: game.playdate) }
+
+  describe "Recording contest outcome" do
+    let!(:entries) { [
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup)
+    ]
+    }
+
+    it "returns nil if one or more entries aren't complete" do
+      expect(contest.record_final_outcome!).to be(nil)
+    end
+    it "records entry's final positions properly" do
+      entries[0].update(final_score:45)
+      entries[1].update(final_score:50)
+      entries[2].update(final_score:30)
+      recorded_entries = contest.record_final_outcome!
+      expect(recorded_entries.length).to be(3)
+      expect(recorded_entries[0].final_score).to eq(50)
+      expect(recorded_entries[1].final_score).to eq(45)
+      expect(recorded_entries[2].final_score).to eq(30)
+      expect(recorded_entries[0].final_pos).to be(1)
+      expect(recorded_entries[1].final_pos).to be(2)
+      expect(recorded_entries[2].final_pos).to be(3)
+
+      # make sure entry's position actually got written to DB, not just returned.
+      lastentry = Entry.find(entries[1].id)
+      expect(lastentry.final_pos).to be(1)
+
+    end
+
+    it "gives same position to two tied scores" do
+      entries[0].update(final_score:45)
+      entries[1].update(final_score:50)
+      entries[2].update(final_score:50)
+      recorded_entries = contest.record_final_outcome!
+      expect(recorded_entries[0].final_pos).to be(1)
+      expect(recorded_entries[1].final_pos).to be(1)
+      expect(recorded_entries[2].final_pos).to be(3)
+    end
+  end
+
 
   describe "User has entered one contest" do
     subject {

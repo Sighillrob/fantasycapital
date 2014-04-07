@@ -14,6 +14,13 @@ class AdminController < ApplicationController
     @games = GameScore.in_range(todaydate-3, todaydate+10)
   end
 
+  def entries
+    todaydate = Time.now.in_time_zone("US/Pacific").to_date
+
+    @entries = Entry.in_range(todaydate-3, todaydate+10)
+  end
+
+
   def users
     @users = User.all
   end

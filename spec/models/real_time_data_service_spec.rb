@@ -1,22 +1,10 @@
 require 'spec_helper'
 
 describe RealTimeDataService do
-  let(:now) { Time.parse("2014-03-18 17:51:27 -0000")}
-  let(:todaydate) { now.to_date }
-  let(:user) { create(:user) }
-  let(:user2) { create(:user) }
-  let!(:positions) { create_list(:sport_position, 6)}
-  let(:pgpos) { SportPosition.find_by_name('PG')}
-  let!(:players) {  create_list(:player, 3, sport_position: pgpos) }
+
+  include_context 'baseentries'
   let(:pusher_mock) { double('channel') }
 
-  let(:lineups) { [create(:lineup, user: user), create(:lineup, user: user2)] }
-  let(:contest) { create(:contest,
-                         contestdate: todaydate) }
-  let!(:entries) { [create(:entry, contest: contest, lineup: lineups[0]),
-                    create(:entry, contest: contest, lineup: lineups[1])]}
-
-  let!(:game) { create(:game_score, ext_game_id: "aaa-id-of-game-1")}
   let(:game_schedule) do
     [{ 'id' => game.ext_game_id,
         'home' => {}, 'away' => {},
@@ -44,7 +32,7 @@ describe RealTimeDataService do
                   }}],
     }
   end
-  let(:game_exp) { {:games=>[{"id"=>game.id, "pretty_play_state"=>"48 MIN LEFT",
+  let(:game_expect) { {:games=>[{"id"=>game.id, "pretty_play_state"=>"48 MIN LEFT",
                               "minutes_remaining"=>48,
                               "home_team_score"=>54, "away_team_score"=>22}]}
   }
@@ -53,38 +41,68 @@ describe RealTimeDataService do
   # pl2 FPS: 3*1.25+1*1.5+2*2 = 9.25 id1;; pl0 FPS: 6*1.25+2*1.5+4*2 = 18.5
   # entries' fantasypoint scores are all 0 b/c we didn't set up lineups with real players.
 
-  let(:player_exp) {
+  let(:player_expect) {
     {:players=>[{:id=>players[2].id, :rtstats=>"3R 1A 2S", :currfps=>9.25},
                 {:id=>players[0].id, :rtstats=>"6R 2A 4S", :currfps=>18.5}]}
   }
 
-  let(:entries_exp) {
-    {:entries=>[{"id"=>entries[0].id, "fps"=>0}, {"id"=>entries[1].id, "fps"=>0}]}
+  # fantasy point expectation:
+  #   55 + 33 (from shared context file) + 9.25 + 18.5 (from game_details message)
+  #  = 115.75
+  let(:entries_expect) {
+    {:entries=>[{"id"=>entries[0].id, "fps"=>115.75}, {"id"=>entries[1].id, "fps"=>115.75}]}
   }
 
   before do
     Pusher.stub(:[]).with('gamecenter').and_return(pusher_mock)
   end
 
+  context "closing contests" do
+    #
+    it "closes entry whose games are done" do
+      game.update(status: 'closed')
+      game2.update(status:'closed')
+      RealTimeDataService.new.try_closing_contests todaydate
+      entry0 = Entry.find(entries[0].id)
+      entry1 = Entry.find(entries[1].id)
+      expect([entry0[:final_score], entry0[:final_pos]]).to eq([88, 1])
+      expect([entry1[:final_score], entry1[:final_pos]]).to eq([88, 1])
+    end
+
+    it "won't close an entry when a game is still in progress" do
+      game.update(status:'closed')  # only one of the two games is closed...
+      RealTimeDataService.new.try_closing_contests todaydate
+      entry0 = Entry.find(entries[0].id)
+      entry1 = Entry.find(entries[1].id)
+      expect([entry0[:final_score], entry0[:final_pos]]).to eq([nil, nil])
+      expect([entry1[:final_score], entry1[:final_pos]]).to eq([nil, nil])
+    end
+  end
+
   context "the first time it's called" do
     # we'll be getting 4 player stats per player, so 8 stats total
     it "delivers 8 scores" do
       RealTimeDataService.new.refresh_schedule(game_schedule)
-      expect(pusher_mock).to receive(:trigger).with("stats", game_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", player_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp)
+      expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", player_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
       RealTimeDataService.new.refresh_game(game_details)
-      expect(PlayerRealTimeScore.all.count).to be(8)
+      RealTimeDataService.new.refresh_entries todaydate
+
+      # 10 entries in playerrealtimescore -- 2 players * 4 stats, + 2 fantasypoint values seeded
+      #  from the baseentries file.
+      expect(PlayerRealTimeScore.all.count).to be(10)
     end
     it "receives correct game update, player update, and entry update" do
       RealTimeDataService.new.refresh_schedule(game_schedule)
 
 
-      expect(pusher_mock).to receive(:trigger).with("stats", game_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", player_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp)
+      expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", player_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
 
       RealTimeDataService.new.refresh_game(game_details)
+      RealTimeDataService.new.refresh_entries todaydate
     end
   end
 
@@ -93,15 +111,14 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_schedule(game_schedule)
       @gameid = GameScore.find_by_ext_game_id("aaa-id-of-game-1").id
 
-      expect(pusher_mock).to receive(:trigger).with("stats", game_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", player_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp) # why 2 times?
+      expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", player_expect)
+      expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
 
       RealTimeDataService.new.refresh_game(game_details)
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
-      PlayerRealTimeScore.all.should have(8).items
+      RealTimeDataService.new.refresh_entries todaydate
 
     end
   end
@@ -111,26 +128,33 @@ describe RealTimeDataService do
     it "will result in game, player, and player update messages with correct stats and fantasy points" do
       # receive push msg 3x (games, players, entries) during initial call to refresh_schedule/game,
       # then 3x for second refresh.
-      expect(pusher_mock).to receive(:trigger).with("stats", game_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", player_exp)
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp)
+      expect(pusher_mock).to receive(:trigger).once.with("stats", game_expect)
+      expect(pusher_mock).to receive(:trigger).once.with("stats", player_expect)
+      expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect)
+
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_details)
+      RealTimeDataService.new.refresh_entries todaydate
       # change a player's steals
       game_src1 = game_details.clone
       game_src1['team'][0]['players']['player'][0]['statistics']['steals'] = 82
 
       # create expected results for player
-      player_exp2 = player_exp.clone
+      player_exp2 = player_expect.clone
       player_exp2[:players][0][:rtstats] = "3R 1A 82S"
       player_exp2[:players][0][:currfps] = 169.25
       player_exp2[:players].delete_at(1) # player 1 didn't change, so no update for him.
-      expect(pusher_mock).to receive(:trigger).with("stats", player_exp2)
+      expect(pusher_mock).to receive(:trigger).once.with("stats", player_exp2)
+
       # entries update when any player updates.
-      expect(pusher_mock).to receive(:trigger).with("stats", entries_exp)
+      entries_expect2 = entries_expect.clone
+      entries_expect2[:entries][0]["fps"] = 275.75
+      entries_expect2[:entries][1]["fps"] = 275.75
+      expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect2)
 
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_src1)
+      RealTimeDataService.new.refresh_entries todaydate
     end
   end
 
@@ -141,7 +165,7 @@ describe RealTimeDataService do
 
   end
   context "when there are 80 player changes" do
-    let!(:players) {  create_list(:player, 80, sport_position: pgpos) }
+    let!(:players) {  create_list(:player, 80, sport_position: positions[0]) }
 
     it "will send one msg with 50, and one with 30" do
       game_src1 = game_details.clone
@@ -156,7 +180,7 @@ describe RealTimeDataService do
       end
       # with 80 changes, there are 80 messages to send.
       # That means 2 Pusher messages, plus 1 for the games message.
-      expect(pusher_mock).to receive(:trigger).once.with("stats", game_exp)
+      expect(pusher_mock).to receive(:trigger).once.with("stats", game_expect)
       expect(pusher_mock).to receive(:trigger).once do |event, msg|
         expect(event).to eq("stats")
         expect(msg[:players].count).to be(50)
@@ -165,10 +189,13 @@ describe RealTimeDataService do
         expect(event).to eq("stats")
         expect(msg[:players].count).to be(30)
       end
-      expect(pusher_mock).to receive(:trigger).once.with("stats", entries_exp)
+      entries_expect[:entries][0]["fps"] = 1076 # high fantasy point score from all the stats.
+      entries_expect[:entries][1]["fps"] = 1076
+      expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect)
 
       RealTimeDataService.new.refresh_schedule(game_schedule)
       RealTimeDataService.new.refresh_game(game_src1)
+      RealTimeDataService.new.refresh_entries todaydate
 
     end
   end

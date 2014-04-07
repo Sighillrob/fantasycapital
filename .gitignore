@@ -16,6 +16,7 @@ pickle-email-*.html
 config/secrets.yml
 config/database.yml
 config/initializers/setup_mail.rb
+.DS_Store
 
 #compiled assets
 /public/assets

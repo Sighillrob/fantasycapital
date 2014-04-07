@@ -61,7 +61,6 @@ class RealTimeDataService
                                          } ]
       }
       Pusher['gamecenter'].trigger('stats', game_score_to_push)
-
     end
 
     cal = Projection::FantasyPointCalculator.new
@@ -104,7 +103,7 @@ class RealTimeDataService
 
     end # of all player loop
 
-    # update each player's fantasy points.
+    # send updated player stats to browser.
     playerstats = changed_players.map {|player|
       pl_json = {id: player.id}
       pl_json[:rtstats] = player.rtstats(game_score.id)
@@ -112,23 +111,42 @@ class RealTimeDataService
       pl_json
     }
 
-
     ##Limit the size of each message (pusher's limit is 10240)
     playerstats.each_slice(50).each do |msg_chunk|
       Pusher['gamecenter'].trigger('stats', { :players => msg_chunk })
     end
 
-    if changed_players
-      # Recalculate all live entries' fantasy points and send as a message. BUGBUG: do this ONCE for each 20-second live poll, not once per game
-      # being iterated over.
+    return game_score, !changed_players.empty?
+  end
 
-      todaysentries = Entry.in_range(game_score.playdate, game_score.playdate)
-      @entries = todaysentries.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
-      if !@entries.empty?
-        Pusher['gamecenter'].trigger('stats', { :entries => @entries })
-      end
+  def refresh_entries playdate
+    # Recalculate all live entries' fantasy points and send as a message. BUGBUG: should
+    #   do this separately per sport.
+    todaysentries = Entry.in_range(playdate, playdate)
+    @entries = todaysentries.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
+    if !@entries.empty?
+      Pusher['gamecenter'].trigger('stats', { :entries => @entries })
     end
-    game_score
+
+  end
+
+  def try_closing_contests playdate
+#     # close out entries that have all games finished.
+    todaysentries = Entry.in_range(playdate, playdate).missing_final_score.readonly(false)
+
+    todaysentries.each_with_index do |entry, idx|
+      gamesnotdone = entry.games.reject do | game | game.scores_valid? end
+      if gamesnotdone.length == 0
+        todaysentries[idx].record_final_score!
+      end
+      entry
+    end
+
+    # close out contests that havce all games finished
+    Contest.in_range(playdate, playdate).each do |contest|
+      contest.record_final_outcome!
+    end
+
   end
 end
 

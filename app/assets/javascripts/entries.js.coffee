@@ -19,20 +19,21 @@ class Lineup
     $('a.add-to-lineup').on 'click', ->
       # add player to lineup if eligible, and remove from DOM. 'that' is the constructed lineup.
       player = new window.PlayerStats($(@).closest('tr.contest-player'))
-      if that.canAddPlayer(player)
-        eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
-        if eligible_spots.length is 0
-          alert "Please remove player from position "+player.position
-        else
-          eligible_spots[0].player = player
-          # this is really a backbone view, but for now we just mess with it in HTML. Ultimately
-          # we should transition this Lineup logic into backbone.
-          $('tr[data-player-id="'+player.id+'"]').hide()
-        that.updateView()
+      
+      eligible_spots = (spot for spot in that.entries when (spot.position is player.position or spot.position is 'UTIL') and not spot.player)
+      if eligible_spots.length is 0
+        alert "Please remove player from position "+player.position
       else
-        alert "You can't add this player. Salary limit reached!"
+        eligible_spots[0].player = player
+        # this is really a backbone view, but for now we just mess with it in HTML. Ultimately
+        # we should transition this Lineup logic into backbone.
+        $('tr[data-player-id="'+player.id+'"]').hide()
+      that.updateView()
+      # else
+      #   alert "You can't add this player. Salary limit reached!"
 
     $('a.remove-from-lineup').on 'click', ->
+      
       spot_seq = $(@).data('lineup-spot')
       spots = (spot for spot in that.entries when spot.spot is spot_seq and not not spot.player)
       for spot in spots
@@ -43,10 +44,18 @@ class Lineup
 
     $('#new_lineup').submit (event) ->
       spots = (spot for spot in that.entries when not spot.player)
-      if spots.length is 0
-        return true
-      alert "Team needs to be completely filled before it can be submitted."
-      return false
+      if spots.length is not 0
+        alert "Team needs to be completely filled before it can be submitted."
+        return false
+      if that.amountLeft() < 0
+        alert "You can't submit the lineup with negative balance."
+        return false
+      return true
+  handleRedColor: () ->
+    if @amountLeft() > 0
+      $("#avg-rem-salary, #contest-salary-cap").parent().children().removeClass("red")
+    else
+      $("#avg-rem-salary, #contest-salary-cap").parent().children().addClass("red")
   setSalaryCap: (value) ->
     if typeof value == "number"
       if value > 0
@@ -92,7 +101,11 @@ class Lineup
   averagePlayerSalary: ->
     (@consumedSalary()/@spotsTaken()) || 0
   averageRemainingPlayerSalary: ->
-    @amountLeft()/@spotsLeft()
+    remaining = @amountLeft() / @spotsLeft()
+    if remaining == Infinity 
+      return 0
+    return remaining
+    
   sortBy: (field, order) ->
     if @getNumberOfEntries() > 0
       if order == "desc"
@@ -118,19 +131,29 @@ class Lineup
       entry.player = ''
     @updateView()
   updateView: ->
+    @handleRedColor()
     $('tr.entry-item').find('td.val span').html '&nbsp;'
-    $('#contest-salary-cap').html (@amountLeft())
-    $('#avg-rem-salary').html (@averageRemainingPlayerSalary()).toFixed(2)
+
+    accounting.settings.currency.format = {
+      pos : "%s%v"
+      neg : "-%s%v"
+      zero: "%s%v"
+    }
+
+    settings = {
+      symbol: "$"
+      precision: 0
+      thousand: ","
+      decimal: "."
+    }
+
+    amountLeft = accounting.formatMoney(@amountLeft(), settings)
+    $('#contest-salary-cap').html (amountLeft)
+    averageRemaining = accounting.formatMoney(@averageRemainingPlayerSalary(), settings)
+    $('#avg-rem-salary').html(averageRemaining)
 
     $.each @entries, (i, entry) ->
       entry.render()
-
-    $('.currency').currency
-      region: 'USD'
-      thousands: ','
-      decimal: '.'
-      decimals: 0
-      hidePrefix: false
 
   fixHeight: ->
     minHeight = $('div.capitalcontent').find('.same-height:first').height()
@@ -190,11 +213,22 @@ class Entry
   render: ->
     that = @
 
+    settings = {
+      symbol: "$"
+      precision: 0
+      thousand: ","
+      decimal: "."
+    }
+
     dom = $("tr.lineup-spot[data-spot="+ @spot+"]")
     dom.find('td.player input').attr("value", that.player.id) 
     dom.find('td.player span').html @player.name || ""
     dom.find('td.opp span').html @playerTeams() || "&nbsp;"
-    dom.find('td.salary span').html @player.salary || "&nbsp;"
+    if @player.salary
+      salary = accounting.formatMoney(@player.salary, settings)
+    else
+      salary = "&nbsp;"
+    dom.find('td.salary span').html salary 
     dom.find('td.fppg span').html @formatFPPG()
     if @player.id
       dom.find('td.player-stats').attr('data-stats-url', '/players/' + that.player.id + '/stats')

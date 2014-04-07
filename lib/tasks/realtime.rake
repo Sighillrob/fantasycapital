@@ -29,10 +29,27 @@ namespace :realtime do
 
         # iterate through games. Delete games from the list if they've closed. Update them with new
         # API data if they are in progress.
+        game_closed_with_score = false
+        players_somewhere_changed = false
         games.each do |game|
           next if game.scheduledstart - 15.minutes > now
           puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
-          retgame = RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result['game']
+          game, a_player_changed = RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result['game']
+          game_closed_with_score = true if game.closed? and !game.exception_ending?
+          players_somewhere_changed = true if a_player_changed
+        end
+
+        # send entries to browser
+        if players_somewhere_changed
+          RealTimeDataService.new.refresh_entries today
+        end
+
+        # if one of the games just closed, see if we can close out any contests
+
+        if game_closed_with_score
+          puts "A game just closed... trying to close contests"
+          RealTimeDataService.new.try_closing_contests today
+          puts "Done closing contests"
         end
 
         timerthread.join
