@@ -56,7 +56,10 @@ class EntriesController < ApplicationController
     upcomingContests = []
     completedContests = []
 
-    entries_in_play = current_user.entries.in_range(todaydate-7, todaydate+7).
+    entries_in_play = current_user.entries.in_range(
+                            todaydate-7,
+                            # show fake contests to admins only
+                            current_user.admin ? Time.new(2060,1,1) : todaydate+7).
                         includes(:contest).includes(:lineup)
 
     entries_in_play.each do |entry|
