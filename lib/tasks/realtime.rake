@@ -35,7 +35,7 @@ namespace :realtime do
           next if game.scheduledstart - 15.minutes > now
           puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
           game, a_player_changed = RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result['game']
-          game_closed_with_score = true if game.closed? and !game.exception_ending
+          game_closed_with_score = true if game.closed? and !game.exception_ending?
           players_somewhere_changed = true if a_player_changed
         end
 
