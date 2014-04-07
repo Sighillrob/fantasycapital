@@ -75,7 +75,7 @@
 // this script shouldn't be put inline
 
 "use strict";
-/*globals $, console */
+/*globals jQuery, util */
 
 (function ($) {
   
@@ -103,6 +103,37 @@
   function toggleSpinner() {
     $(".ajax-loader").stop(true, true).fadeToggle("slow");
   }
+  function wrap(str) {
+    return "<div>" + str + "</div>";
+  }
+
+
+  var $node = {
+    username:     $("#user_username"),
+    firstName:    $("#user_first_name"),
+    lastName:     $("#user_last_name"),
+    email:        $("#user_email"),
+    password:     $("#user_password"),
+    confirmation: $("#user_password_confirmation"),
+    state:        $("#user_state"),
+    country:      $("#user_country"),
+    terms:        $("#agree_terms"),
+    age:          $("#agree_age")
+  };
+
+  var text = {
+    username:       "Please enter username!",
+    firstName:      "Please enter first name!",
+    lastName:       "Please enter last name!",
+    email:          "Please enter valid email!",
+    password:       "Please enter valid password( 6 ~ 15 chars, at least one number )!",
+    confirmation:   "Please enter password confirmation!",
+    passwordMatch:  "Password confirmation does not match to password!",
+    state:          "Please enter/select a state!",
+    stateForbidden: "Does not allow to play in this state!",
+    terms:          "You must agree to the Terms of Use and the Privacy Policy!",
+    age:            "You must agree to the Age and Location Policy!"
+  };
 
   $(".btn-login").on("click", function () {
     var url = "/users/sign_in";
@@ -112,17 +143,17 @@
       data: $("#user_form").serialize(),
       beforeSend: function(){
 
-        var errorContent = "";
-        if($("#user_username").val() === ""){
-          errorContent += "<div>Please enter username!</div>";
+        var msg = "";
+        if( !$node.username.val() ) {
+          msg += wrap(text.username);
         }
 
-        if($("#user_password").val() === ""){
-          errorContent += "<div>Please enter password!</div>";
+        if( !$node.password.val() ) {
+          msg += wrap(text.password);
         }
 
-        $(".errors").html(errorContent);
-        if (errorContent !== ""){
+        $(".errors").html(msg);
+        if (msg){
           return false;
         } else {
           toggleSpinner();
@@ -132,18 +163,18 @@
       error: function () {
         toggleSpinner();
       },
-      success: function(data) {
+      success: function () {
         // do not toggle the spinner on success
-        console.log("login success");
-        console.log(data);
+        // console.log("login success");
+        // console.log(data);
         window.location.href = window.target_url;
       },
       statusCode: {
         404: function() {
-          console.log("page not found" );
+          // console.log("page not found" );
         },
-        401: function(data){
-          console.log(data);
+        401: function (){
+          // console.log(data);
           $(".errors").html("Invalid username or password!");
         }
       },
@@ -159,79 +190,37 @@
       data: $("#user_form").serialize(),
       beforeSend: function(){
 
-        var errorContent = "";
-        var statesNot2Play = ["AZ", "IA", "MT", "LA", "WA"];
-
-        function wrap(str) {
-          return "<div>" + str + "</div>";
-        }
-
-        function assert(condition, msg) {
+        function assert(condition, text) {
           if (condition) {
-            errorContent += wrap(msg);
+            msg += wrap(text);
           }
         }
 
-        var validate = {
-          password: function (pw) {
-            if (!pw || !pw.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{6,15})$/)) {
-              return false;
-            }
-            return true;
-          }
-        };
+        var msg = "";
+        var forbiddenStates = ["AZ", "IA", "MT", "LA", "WA"];
 
+        assert(!$node.username.val(), text.username);
+        assert(!$node.firstName.val(), text.firstName);
+        assert(!$node.lastName.val(), text.lastName);
+        assert(!$node.email.val(), text.email);
+        assert(!util.validate.password($node.password.val()), text.password);
+        assert(!$node.confirmation.val(), text.confirmation);
         assert(
-          !$("#user_username").val(),
-          "Please enter username!"
+          $node.confirmation.val() !== $node.password.val(),
+          text.passwordMatch
         );
+        assert(!$node.state.val(), text.state);
         assert(
-          !$("#user_first_name").val(),
-          "Please enter first name!"
+          $node.country.val() === "US" &&
+          $.inArray($node.state.val(), forbiddenStates) !== -1,
+          text.stateForbidden
         );
-        assert(
-          !$("#user_last_name").val(),
-           "Please enter last name!"
-        );
-        // isEmailAddress function is global
-        // it could be moved into the validate object
-        assert(
-          !isEmailAddress($("#user_email").val()),
-          "Please enter valid email!"
-        );
-        assert(
-          !validate.password($("#user_password").val()),
-          "Please enter valid password( 6 ~ 15 chars, at least one number )!"
-        );
-        assert(
-          !$("#user_password_confirmation").val(),
-          "Please enter password confirmation!"
-        );
-        assert(
-          $("#user_password_confirmation").val() !== $("#user_password").val(),
-          "Password confirmation does not match to password!"
-        );
-        assert(
-          !$("#user_state").val(),
-          "Please enter/select a state!"
-        );
-        assert(
-          $("#user_country").val() === "US" &&
-          $.inArray($("#user_state").val(), statesNot2Play) !== -1,
-          "Does not allow to play in this state!</div>"
-        );
-        assert(
-          !$("#agree_terms").is(":checked"),
-          "You must agree to the Terms of Use and the Privacy Policy!"
-        );
-        assert(
-          !$("#agree_age").is(":checked"),
-          "You must agree to the Age and Location Policy!"
-        );
+        assert(!$node.terms.is(":checked"), text.terms);
+        assert(!$node.age.is(":checked"), text.age);
 
-        $(".errors").html(errorContent);
+        $(".errors").html(msg);
 
-        if (errorContent.length > 0) {
+        if (msg.length > 0) {
           return false;
         } else {
           toggleSpinner();
@@ -240,27 +229,27 @@
       error: function () {
         toggleSpinner();
       },
-      success: function(data){
+      success: function (){
         // do not toggle the spinner on success
-        console.log("register success");
-        console.log(data);
+        // console.log("register success");
+        // console.log(data);
         window.location.href = window.target_url;
       },
       statusCode: {
         422: function(data){
           var res = $.parseJSON(data.responseText);
-          console.log(data);
-          var errorContent = "";
+          // console.log(data);
+          var msg = "";
           if(res && res.errors){
             
-            $.each(res.errors, function(key, value){
-              errorContent += "<div>" + key + " " + value + "</div>";
+            $.each(res.errors, function (key, value){
+              msg += wrap(key + " " + value);
             });
           }
-          $(".errors").html(errorContent);
+          $(".errors").html(msg);
         },
-        500: function(data){
-          console.log(data);
+        500: function (){
+          // console.log(data);
         }
       },
       dataType: "json"
@@ -268,5 +257,6 @@
   });
 
 })(jQuery);
+
 </script>
 

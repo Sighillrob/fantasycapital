@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.color.min
+//= require util
 //= require bootstrap
 //= require moment.min
 //= require bootstrap-sortable
@@ -40,7 +41,6 @@
 "use strict";
 /*globals jQuery, $ */
 
-
 jQuery(document).on({
 	"page:before-change": function () {
 		$(".ajax-loader").fadeIn();
@@ -66,14 +66,3 @@ jQuery(document).on({
 		});
 	}
 });
-
-// it's a bad habit to dump a function into the global scope (window)
-// is it used anywhere? 
-// the comment at top states that this will be at the bottom of the compiled file
-function isEmailAddress(str) {
-	var emailRegxp =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-	if(!emailRegxp.test(str)) {
-		return false;
-	}
-	return true;
-}
