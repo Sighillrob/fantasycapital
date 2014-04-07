@@ -11,4 +11,5 @@ worker: bundle exec sidekiq -c 10 -v
 # realtime:games_parallel task too
 rtdata: bundle exec rake realtime:games
 
+simdata: bundle exec rake realtime:games_playback
 
