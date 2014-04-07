@@ -28,6 +28,7 @@ Main::Application.routes.draw do
 
   scope(:path => 'admin', :as => 'admin') do
     get 'games', to: 'admin#games'
+    get 'entries', to: 'admin#entries'
     get 'users', to: 'admin#users'
     get "/", to: "admin#index"
   end
