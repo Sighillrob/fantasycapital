@@ -99,13 +99,14 @@ end
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'annotate'
   gem "factory_girl_rails", "~> 4.0"
   gem "rspec-rails"
   gem 'meta_request'
-  gem 'debugger' unless ENV["RM_INFO"]  # don't use debugger if IDE is RubyMine
+  gem 'byebug' unless ENV["RM_INFO"]  # don't use debugger if IDE is RubyMine
   gem 'ruby-prof'
   gem 'rails-perftest'
   gem 'simplecov', '~> 0.7.1'

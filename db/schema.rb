@@ -16,6 +16,9 @@ ActiveRecord::Schema.define(version: 20140407000358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "accounts", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -276,7 +279,7 @@ ActiveRecord::Schema.define(version: 20140407000358) do
   end
 
   add_index "projection_stats", ["game_id"], name: "index_projection_stats_on_game_id", using: :btree
-  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", using: :btree
+  add_index "projection_stats", ["player_id", "game_id", "stat_name"], name: "index_projection_stats_on_player_id_and_game_id_and_stat_name", unique: true, using: :btree
   add_index "projection_stats", ["player_id"], name: "index_projection_stats_on_player_id", using: :btree
 
   create_table "projection_teams", force: true do |t|
