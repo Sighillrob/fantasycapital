@@ -16,7 +16,7 @@ class ContestsController < ApplicationController
     @contests = Contest.in_range(current_user, todaydate, todaydate+1).eligible(current_user, now)
     
     # for realtime push testing: show fake contests only when user is admin
-    if current_user.admin
+    if current_user.try(:admin)
       @contests += Contest.where("contest_start > ?", Date.strptime("2030","%Y"))
     end
 
