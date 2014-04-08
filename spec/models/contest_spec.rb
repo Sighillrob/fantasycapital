@@ -32,19 +32,143 @@ describe Contest do
     let!(:entries) { [
         create(:entry, contest: contest, lineup: lineup),
         create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
+        create(:entry, contest: contest, lineup: lineup),
         create(:entry, contest: contest, lineup: lineup)
     ]
     }
+
+    context "calculating winnings on a finished contest" do
+      before do
+        entries[0].update!(final_score:45)
+        entries[1].update!(final_score:50)
+        entries[2].update!(final_score:30)
+        (3..9).each { |i| entries[i].update(final_score:5) }
+
+      end
+      it "calculates H2H winnings" do
+        pending("No H2H Logic Yet!")
+
+      end
+      it "calculates H2H winnings correctly with a tie" do
+        # No rake on an H2H tie!
+        pending("No H2H Logic Yet!")
+
+      end
+      it "returns empty results for an unfilled contest" do
+
+        pending("We don't check for unfilled contests right now!")
+
+        recorded_entries = contest.record_final_outcome!
+        entries[9].destroy
+        expect(contest.winnings).to eq([])
+
+      end
+      it "returns empty result for an unfinished contest" do
+        expect(contest.winnings).to eq([])
+      end
+
+      it "calculates tournament winnings" do
+        contest.update!(contest_type: 'Tournament')
+        recorded_entries = contest.record_final_outcome!
+
+        winnings = contest.winnings
+        expect(winnings).to include([entries[1], 1.0])
+        expect(winnings.length).to be(1)
+      end
+
+      it "calculates tournament winnings correctly with a 3-way tie" do
+        contest.update!(contest_type: 'Tournament')
+        entries[7].update!(final_score:50)
+        entries[8].update!(final_score:50)
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(3)
+        [1,7,8].map do |i|
+          expect(winnings).to include([entries[i], 1.0/3.0])
+        end
+      end
+
+      it "calculates 50/50 winnings" do
+        contest.update!(contest_type: '50/50')
+        entries[7].update!(final_score:25)
+        entries[8].update!(final_score:25)
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(5)
+        [0,1,2,7,8].map do |i|
+          expect(winnings).to include([entries[i], 0.2])
+        end
+
+      end
+      it "calculates 50/50 winnings correctly with a 4-way tie starting from 3rd place" do
+        # if there's a 4-way tie in 3rd,4th,5th,6th,7th place, then the distribution is
+        # 1st,2nd: 20% each.  3rd/4th/5th/6th: 60%/5 = 12% each.
+        entries[6].update!(final_score:30)
+        entries[7].update!(final_score:30)
+        entries[8].update!(final_score:30)
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(6)
+        [0,1].map do |i|
+          expect(winnings).to include([entries[i], 0.2])
+        end
+        [2,6,7,8].map do |i|
+          expect(winnings).to include([entries[i], 0.15])
+        end
+      end
+
+      it "calculates 50/50 winnings correctly with a 3-way tie in 5th place" do
+        entries[7].update!(final_score:25)
+        entries[8].update!(final_score:20)
+        entries[9].update!(final_score:20)
+        entries[6].update!(final_score:20)
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(7)
+        [0,1,2,7].map do |i|
+          expect(winnings).to include([entries[i], 0.2])
+        end
+        [6,8,9].map do |i|
+          expect(winnings).to include([entries[i], (0.2/3.0).round(4)])
+        end
+
+      end
+      it "calculates 50/50 winnings correctly with a 4-way tie in 4th place" do
+        entries[7].update!(final_score:20)
+        entries[8].update!(final_score:20)
+        entries[9].update!(final_score:20)
+        entries[6].update!(final_score:20)
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(7)
+        [0,1,2].map do |i|
+          expect(winnings).to include([entries[i], 0.2])
+        end
+        [6,7,8,9].map do |i|
+          expect(winnings).to include([entries[i], 0.1])
+        end
+
+      end
+
+
+    end
 
     it "returns nil if one or more entries aren't complete" do
       expect(contest.record_final_outcome!).to be(nil)
     end
     it "records entry's final positions properly" do
-      entries[0].update(final_score:45)
-      entries[1].update(final_score:50)
-      entries[2].update(final_score:30)
+      entries[0].update!(final_score:45)
+      entries[1].update!(final_score:50)
+      entries[2].update!(final_score:30)
+      (3..9).each { |i| entries[i].update(final_score:5) }
       recorded_entries = contest.record_final_outcome!
-      expect(recorded_entries.length).to be(3)
+      expect(recorded_entries.length).to be(10)
       expect(recorded_entries[0].final_score).to eq(50)
       expect(recorded_entries[1].final_score).to eq(45)
       expect(recorded_entries[2].final_score).to eq(30)
@@ -59,9 +183,11 @@ describe Contest do
     end
 
     it "gives same position to two tied scores" do
-      entries[0].update(final_score:45)
-      entries[1].update(final_score:50)
-      entries[2].update(final_score:50)
+      entries[0].update!(final_score:45)
+      entries[1].update!(final_score:50)
+      entries[2].update!(final_score:50)
+      (3..9).each { |i| entries[i].update(final_score:5) }
+
       recorded_entries = contest.record_final_outcome!
       expect(recorded_entries[0].final_pos).to be(1)
       expect(recorded_entries[1].final_pos).to be(1)
@@ -191,7 +317,6 @@ describe Contest do
       end
 
     end
-
   end
 
 end

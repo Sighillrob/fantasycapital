@@ -107,8 +107,14 @@ class Entry < ActiveRecord::Base
       joins(:contest).where "contests.contests.sport = ?", sport
     end
 
+    def missing_final_score_or_pos
+      # missing a final score OR a final position
+      where 'final_score IS NULL OR final_pos IS NULL'
+    end
+
     def missing_final_score
-      where final_score: nil
+      # things which don't have a score recorded yet.
+      where 'final_score IS NULL'
     end
 
   end
