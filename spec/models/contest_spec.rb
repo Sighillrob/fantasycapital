@@ -124,24 +124,28 @@ describe Contest do
 
   describe "Contest that only allows one entry, and has one entry" do
     let(:another_contest) { create(:contest, max_entries: 1, contestdate: game.playdate) }
+    let(:lineup) { create(:lineup, user: create(:user)) }
+    let!(:entry) { create(:entry, contest: another_contest, lineup: lineup) }
 
     subject {
       Contest.in_range(user, todaydate, todaydate+1).eligible(user, now)
     }
-
-    before do
-      l = create(:lineup, user: create(:user))
-      create(:entry, contest: another_contest, lineup: l)
-    end
 
     it "won't be available for entry" do
       should == []
     end
     
     it "will fail when entered again" do
-      l = create(:lineup, user: create(:user))
-      expect {create(:entry, contest: another_contest, lineup: l)}.to raise_error
+      expect {create(:entry, contest: another_contest, lineup: lineup)}.to raise_error
     end
+
+    it "allows editing an existing entry" do
+      # this previously caused a validation error, caught by the too-many-entries validation logic.
+      # expect save will be successful now.
+      expect(entry.update(final_score:99)).to be(true)
+    end
+
+
   end
 
   describe "Entering with lineup" do
