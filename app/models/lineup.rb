@@ -22,6 +22,18 @@ class Lineup < ActiveRecord::Base
   #virtual attribute: enter a contest immediately after creation
   attr_accessor :contest_id_to_enter
 
+  validate :salary_cap_validate
+  validate :sport_positions_validate
+
+  def salary_cap_validate
+    #errors.add(:sport, "bogus error")
+  end
+
+  def sport_positions_validate
+    #errors.add(:sport, "bogus error2")
+
+  end
+
   # NILS: BUGBUG: Remove this?
   def completed?
     entries[0].present? && entries[0].contest.complete?
@@ -29,6 +41,7 @@ class Lineup < ActiveRecord::Base
 
   class << self
     def build_for_contest(contest, lineup = nil)
+      # create empty LineupSpots and a Lineup object for a new lineup.
       lineup = Lineup.find_by_id(lineup) || Lineup.new
       lineup.sport = contest.sport
       lineup.contest_id_to_enter = contest.id

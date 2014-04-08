@@ -17,7 +17,7 @@ describe "Smoke Tests" do
       post_via_redirect user_session_path, 'user[username]' => user.username, 'user[password]' => user.password
     end
     URIS.each do |uri|
-      it "loads" do
+      it "#{uri} loads" do
         get uri
         response.should be_success
       end

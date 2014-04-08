@@ -15,4 +15,13 @@ describe Lineup do
   it { should belong_to(:user) }
   it { should have_many(:players).through(:lineup_spots) }
 
+  context "When selected lineup players exceed salary cap" do
+
+    it "is invalid" do
+
+
+    end
+  end
+
+
 end
