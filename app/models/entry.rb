@@ -22,7 +22,8 @@ class Entry < ActiveRecord::Base
   validate :number_of_entries
  
   def number_of_entries
-    errors.add(:contest, "Number of entries can't exceed maximum.") if contest.entries.count >= contest.max_entries 
+    errors.add(:contest, "Number of entries can't exceed maximum.") if
+        contest.entries.count >= contest.max_entries and self.contest_id_changed?
   end
 
   def record_final_score!
