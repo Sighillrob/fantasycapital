@@ -105,6 +105,27 @@ class Player < ActiveRecord::Base
       end
     end
 
+    def with_summary_fppg
+      # return players with their summary FPPG stats as a 'joins'. Caller can then 'select' out
+      # the fields they want to display, including the joined FPPG summary stat.
+
+      # my most complex query ever:
+      # we need the associated PlayerStat FPPG score marked 'summary' for each player, the one with
+      # the highest display-priority.
+      # 1. Use a LEFT JOIN so we get players with no stats. (we've seen a few of those)
+      # 2. Put conditions in the JOIN (instead of in a where), again so we keep players
+      #    without stats.
+      # 3. Use a nested query to select only the Player+PlayerStat entry with highest display-priority
+      joinclause = "LEFT JOIN player_stats ON player_stats.player_id = players.id " +
+          "AND player_stats.stat_name = 'FPPG' AND player_stats.dimension = 'summary'"
+
+      innerquery = "(SELECT MAX (player_stats.display_priority) from player_stats " +
+          "WHERE player_stats.player_id = players.id)"
+
+      joins(joinclause).where('player_stats IS null OR player_stats.display_priority= ' + innerquery)
+
+    end
+
     def player_of_ext_id(ext_id)
       player = find_by_ext_player_id ext_id
       if player.nil?
