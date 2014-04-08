@@ -5,44 +5,18 @@ class LineupsController < ApplicationController
   def new
     @contest = Contest.includes(:eligible_players).find(params[:contest_id])
     @lineup  = Lineup.build_for_contest @contest
-    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc)
-
-    #for testing...
-    #@eligible_players = Player.all 
-
-    @games = GameScore.where({playdate: @contest.contestdate})
-    @teams = Team.all
-    @players = @contest.eligible_players
-    @sportpositions = SportPosition.all
-
-    @players = @players.with_summary_fppg
-
-    # select fields we want to display, making sure FPPG field is added.
-    @players = @players.select('players.id', 'sport_position_id', 'salary', 'first_name',
-                               'last_name', 'stat_value AS fppg', 'ext_player_id', 'team_id')
+    populate_lineup_variables @lineup.sport
   end
 
   def edit
     @contest = @lineup.entries[0].contest
-    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc) 
+    @positions = SportPosition.where(sport: @lineup.sport, visible: true).order(display_priority: :asc)
+    populate_lineup_variables @lineup.sport
+    render action: 'new'
+
   end
 
   def result
-
-  end
-
-  def populate_lineup_variables contest_id, sport
-    # fill out all the fields the lineup page (new / create / edit needs)
-    @contest = Contest.includes(:eligible_players).find(contest_id)
-    @positions = SportPosition.where(sport: sport, visible: true).order(display_priority: :asc)
-    # BUGBUG: definitely duplication here between positions and sportpositions
-    @sportpositions = SportPosition.all
-    @teams = Team.all
-    @players = @contest.eligible_players.with_summary_fppg
-    # select fields we want to display, making sure FPPG field is added.
-    @players = @players.select('players.id', 'sport_position_id', 'salary', 'first_name',
-                               'last_name', 'stat_value AS fppg', 'ext_player_id', 'team_id')
-    @games = GameScore.where({playdate: @contest.contestdate})  # BUGBUG: is this used?
 
   end
 
@@ -63,7 +37,8 @@ class LineupsController < ApplicationController
 
     if @entry.nil? or !@lineup.valid?
       # error path
-      self.populate_lineup_variables(contest_id, sport)
+      @contest = Contest.includes(:eligible_players).find(contest_id)
+      self.populate_lineup_variables sport
       flash.now[:alert] = @lineup.errors.full_messages.join ", "
       render action: 'new'
       return
@@ -110,4 +85,20 @@ class LineupsController < ApplicationController
   def lineup_parameters
     params.require(:lineup).permit(:contest_id_to_enter, :sport, lineup_spots_attributes: [:player_id, :id, :sport_position_id, :spot])
   end
+
+  def populate_lineup_variables sport
+    # fill out all the fields the lineup page (new / create / edit needs)
+    @positions = SportPosition.where(sport: sport, visible: true).order(display_priority: :asc)
+    # BUGBUG: definitely duplication here between positions and sportpositions
+    @sportpositions = SportPosition.all
+    @teams = Team.all
+    @players = @contest.eligible_players.with_summary_fppg
+    # select fields we want to display, making sure FPPG field is added.
+    @players = @players.select('players.id', 'sport_position_id', 'salary', 'first_name',
+                               'last_name', 'stat_value AS fppg', 'ext_player_id', 'team_id')
+    @games = GameScore.where({playdate: @contest.contestdate})  # BUGBUG: is this used?
+
+  end
+
+
 end
