@@ -36,9 +36,17 @@ class Contest < ActiveRecord::Base
     GameScore.earliest_start(self.contestdate)
   end
 
+  def has_final_score_and_pos?
+    self.entries.count > 0 and self.entries.missing_final_score_or_pos.count == 0
+  end
+
+  def has_final_score?
+    self.entries.count > 0 and self.entries.missing_final_score.count == 0
+  end
+
   def record_final_outcome!
     # record contest outcome, meaning entry positions. return nil if any entries aren't final yet.
-    return nil if self.entries.missing_final_score.count > 0
+    return nil if !has_final_score?
     entries_ordered = self.entries.order(final_score: :desc)
     lastscore = -9999
     currpos = -99
@@ -99,10 +107,9 @@ class Contest < ActiveRecord::Base
     entries.create(lineup: lineup)
   end
 
-  #def pretty_contest_name
-  #  "#{number_to_currency(self.prize, unit: '$')} #{self.sport} #{selfcontest_type}"
-  #end
-
+  def winnings
+    return Winnings.new(self).compute
+  end
 
   def as_json(options = { })
     # add computed parameters for json serialization (for sending to browser)

@@ -20,6 +20,10 @@ class AdminController < ApplicationController
     @entries = Entry.in_range(todaydate-3, todaydate+10)
   end
 
+  def contests
+    todaydate = Time.now.in_time_zone("US/Pacific").to_date
+    @contests = Contest.in_range(todaydate-3, todaydate+10)
+  end
 
   def users
     @users = User.all
