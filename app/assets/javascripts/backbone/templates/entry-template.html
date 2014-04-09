@@ -21,40 +21,8 @@
     <div class="mylineup-spots">
         <div class="scorecard2">
             <table class="scorecardTable" cellpadding="10" cellspacing="10">
-                <tbody>
-                <% $.each(player_and_pos, function (idx, player_pos) { %>
-                <tr class="" data-player-id="<%= player_pos[0].get('id') %>" data-game-id="<%= player_pos[0].getGameID() %>">
-                    <td><h1 class="role"><%= sportpositions_coll.get(player_pos[1]).get('name') %></h1></td>
-                    <td><strong class="player-name"> <%= player_pos[0].name() %> </strong>
+                <tbody id="player-dest">
 
-                        <p class="player-score">
-                            <% if (player_pos[0].getTeam() === player_pos[0].getHomeTeam()) { %>
-                                <strong><%= player_pos[0].getHomeTeam() %></strong> <%= player_pos[0].getHomeTeamScore() %> @ <%= player_pos[0].getAwayTeam() %> <%= player_pos[0].getAwayTeamScore() %><br><%= player_pos[0].getMinutesRemaining() %>
-                            <% } else { %>
-                                <%= player_pos[0].getHomeTeam() %> <%= player_pos[0].getHomeTeamScore() %> @ <strong><%= player_pos[0].getAwayTeam() %></strong> <%= player_pos[0].getAwayTeamScore() %><br><%= player_pos[0].getMinutesRemaining() %>
-                            <% } %>
-                            <!--<strong>POR</strong> 109 @ <strong>MIN</strong> 120 FINAL-->
-                        </p>
-                        <p class="player-record-row">
-                                  <span class="player-record">
-                                      <%= player_pos[0].get('rtstats') %>&nbsp;
-                                    <!--99 P, 0 R, 0 A, 0 S, 0 B, 0 T -->
-                                  </span>
-                        </p>
-                    </td>
-                    <td>
-                        $<span class="salary"><%= player_pos[0].get('salary') %></span> <br>
-                        SALARY
-                    </td>
-                    <td><!-- 27.5% <br>
-                        OWNED -->
-                        <% if (percentage.hasOwnProperty(player_pos[0].get("id"))) { %>
-                            <%= percentage[player_pos[0].get("id")] %>%<br> OWNED
-                        <% } %>
-                    </td>
-                    <td><h1 class="score"><%= player_pos[0].get('currfps') %></h1></td>
-                </tr>
-                <% }); %>
                 </tbody>
             </table>
         </div>

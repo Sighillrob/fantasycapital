@@ -7,7 +7,7 @@ class Main.Views.EntryView extends Backbone.View
     @stopListening("change")
     @listenTo(@entry, 'change', @changeentry)
     @stopListening(window.players_coll, "change");
-    @listenTo(window.players_coll, 'change', @updateScoreAndStats)
+    #@listenTo(window.players_coll, 'change', @updateScoreAndStats)
     @listenTo(window.games_coll, 'change', @changeentry)
     @render()
   get_players_count: () ->
@@ -44,6 +44,11 @@ class Main.Views.EntryView extends Backbone.View
         percentage: @percent_owned()
       }))
       $(@el).show()
+      @playersView = new Main.Views.PlayersView({
+        collection: window.players_coll,
+        entry: @entry,
+        entryView: @
+      })
       return this
 
   changeentry: () ->

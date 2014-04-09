@@ -7,17 +7,17 @@ GameCenterTests.on("players", function () {
   gamecenter.handlePushedStats({
     "players": [
       {
-        "id": 410,
+        "id": 174,
         "rtstats": "0P 1R 0A 1S 0B 0T",
         "currfps": Math.floor((Math.random() * 100))
       },
       {
-        "id": 356,
+        "id": 290,
         "rtstats": "3P 1R 1A 1S 0B 1T",
         "currfps": Math.floor((Math.random() * 100))
       },
       {
-        "id": 314,
+        "id": 273,
         "rtstats": "2P 3R 0A 0S 0B 0T",
         "currfps": Math.floor((Math.random() * 100))
       }
