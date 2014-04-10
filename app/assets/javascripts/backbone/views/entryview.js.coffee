@@ -4,11 +4,8 @@ class Main.Views.EntryView extends Backbone.View
     @exists = true
     @template = $("#entry-template").html()
     @entry = args.entry
-    @stopListening("change")
+    @entries_coll = args.entries_coll
     @listenTo(@entry, 'change', @changeentry)
-    @stopListening(window.players_coll, "change");
-    @listenTo(window.players_coll, 'change', @updateScoreAndStats)
-    @listenTo(window.games_coll, 'change', @changeentry)
     @render()
   get_players_count: () ->
     stats = {}
@@ -36,7 +33,6 @@ class Main.Views.EntryView extends Backbone.View
       #  if pl_pos[0].get('rtstats')
       #    console.log pl_pos[0].get('rtstats')
       #)
-
       $(@el).empty().html(_.template(this.template, {
         entry: @entry, 
         player_and_pos: player_and_pos, 
@@ -44,8 +40,12 @@ class Main.Views.EntryView extends Backbone.View
         percentage: @percent_owned()
       }))
       $(@el).show()
+      @playersView = new Main.Views.PlayersView({
+        collection: window.players_coll,
+        entry: @entry,
+        entryView: @
+      })
       return this
-
   changeentry: () ->
     @render()
   updateScoreAndStats: (player) ->

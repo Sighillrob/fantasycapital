@@ -31,9 +31,13 @@ class Main.Views.EntrySummarysView extends Backbone.View
     rendered = ""
     position = 1;
     @entries_coll.each( (entry, index) ->
-
+        entry.set("summary_position", position)
         if offset <= index && offset + 10 > index
-          rendered += _.template(this.template, {entry: entry, user_img: window.user_img_placeholder, position: position})
+          rendered += _.template(this.template, {
+            entry: entry, 
+            user_img: window.user_img_placeholder, 
+            position: entry.get("summary_position")
+          })
         #current and next entry
         curr = entry
         next = @entries_coll.at(index + 1)
