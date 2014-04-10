@@ -1,7 +1,7 @@
 <script type="text/template" id="entry-template">
     <div class="col-md-2 panelOne"><strong class="panelStrong">POS</strong>
 
-        <h2 class="panelHeading">1</h2>
+        <h2 class="panelHeading current-position"><%= entry.get("summary_position") %></h2>
     </div>
     <div class="col-md-8 panelTwo">
         <p class="user">  <img alt="User" class="user" src="<%= user_img %>">
@@ -21,7 +21,7 @@
     <div class="mylineup-spots">
         <div class="scorecard2">
             <table class="scorecardTable" cellpadding="10" cellspacing="10">
-                <tbody id="player-dest">
+                <tbody class="scorecardBody">
 
                 </tbody>
             </table>

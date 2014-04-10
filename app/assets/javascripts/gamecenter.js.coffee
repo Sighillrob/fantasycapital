@@ -13,13 +13,6 @@ class window.GameCenterCls
 #        rebounds: 1.25
 #        blocks: 2
 #        turnovers: -1
-    animate: (selector, speed) ->
-        if typeof selector == "string"
-            el = $(".scorecardTable").find(selector)
-
-            if el.length > 0
-                console.log("ANIMATE")
-                el.css({"background-color": "#0eea6c"}).stop(true).animate({ "background-color": "#fff"}, speed)
     handlePushedStats: (data) ->
         # handle stats received from Pusher(). We only receive stats that have changed. Update the
         # client-side player model with the data.
@@ -40,7 +33,9 @@ class window.GameCenterCls
 
               lcl_player = players_coll.get(player.id)
               if lcl_player
+                #lcl_player.trigger("animation")
                 lcl_player.set(player)
+
         )
         # update entry values
         $(data.entries).each( (index, entry) ->
@@ -55,25 +50,9 @@ class window.GameCenterCls
         # this happens even if the player is updated, we should avoid that
         entries_coll.sort()
 
-        # animation speed
-        speed = 2000
-
-        $(data.players).each( (index, player) ->
-            self.animate("tr[data-player-id=\"" + player.id + "\"]", speed)
-        )
-        # set the flagEntry flag to true to allow green flash when entries or games are updated
-        if window.flashEntry
-            $(data.entries).each( (index, entry) ->
-                self.animate("tr[data-player-id=\"" + entry.id + "\"]", speed)
-            )
-            $(data.games).each( (index, game) ->
-                self.animate("tr[data-game-id=\"" + game.id + "\"]", speed)
-            )
-
 
     constructor: (pusherkey) ->
         that = @
-
         console.log "GameCenter Constructor"
 
         @pusher = new Pusher(pusherkey)
@@ -89,8 +68,7 @@ class window.GameCenterCls
         # trigger initial sort to make sure display is updated properly.
         entries_coll.sort()
 
-
-        @myentryview = new Main.Views.EntryView({el: $('#my-scorecard'), entry: @myentry})
+        @myentryview = new Main.Views.EntryView({el: $('#my-scorecard'), entry: @myentry, entries_coll: entries_coll})
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
         this.attach_contestant_handler()
