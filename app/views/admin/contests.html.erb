@@ -37,7 +37,12 @@
             <td><%= contest.entry_fee %></td>
             <td><%= contest.prize %></td>
             <td><%= contest.entries_count %></td>
-            <td><%= contest.winnings %></td>
+            <td>
+            <% contest.winnings.each do |win| %>
+
+                <%= win[0].lineup.user.username %>, <%= win[1] %><br>
+            <% end %>
+            </td>
           </tr>
       <% end %>
       </tbody>
