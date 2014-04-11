@@ -30,5 +30,8 @@ class Main.Models.Game extends Backbone.Model
 class Main.Collections.GamesCollection extends Backbone.Collection
   model: Main.Models.Game
   url: '/games'
+  comparator: (model) ->
+    # ensure that the order is correct
+    moment(model.get("scheduledstart")).unix()
   initialize: (models, args) ->
     @teams_coll = args.teams_coll

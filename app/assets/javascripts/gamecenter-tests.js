@@ -57,7 +57,7 @@ GameCenterTests.on("games", function () {
     // it manually, the game id will get bigger and bigger
     // check the data-games-id on tr tag to find out what
     // game ids do you have on current page
-    for (var i = 100, ilen = 150; i < ilen; i += 1) {
+    for (var i = 158, ilen = 200; i < ilen; i += 1) {
       games.push({
         "id": i,
         "pretty_play_state": timeleft + " MIN LEFT",
