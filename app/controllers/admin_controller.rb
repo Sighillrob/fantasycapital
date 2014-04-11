@@ -22,7 +22,7 @@ class AdminController < ApplicationController
 
   def contests
     todaydate = Time.now.in_time_zone("US/Pacific").to_date
-    @contests = Contest.in_range(todaydate-3, todaydate+10)
+    @contests = Contest.in_range(todaydate-3, todaydate+10).where("entries_count > ?", 0)
   end
 
   def users
