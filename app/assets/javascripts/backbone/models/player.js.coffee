@@ -31,9 +31,7 @@ class Main.Models.Player extends Backbone.Model
         games = @collection.games_coll.where({away_team_id: team.id, playdate:gamedate}).concat(
                 @collection.games_coll.where({home_team_id: team.id, playdate:gamedate}))
       if games.length > 1
-        console.log("Player in multiple games?")
-        console.log(games)
-        return null
+        return games[0]
       if games.length == 0
         return null
       return games[0]
