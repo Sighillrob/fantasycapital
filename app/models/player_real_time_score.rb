@@ -15,6 +15,9 @@ class PlayerRealTimeScore < ActiveRecord::Base
   validates :player_id, presence: true
   validates :game_score, presence: true
 
+  # validate that [game, player, stat-name] triple is always unique
+  validates :game_score, uniqueness: {scope: [:player_id, :name]}
+
   belongs_to :player
   belongs_to :game_score
 end

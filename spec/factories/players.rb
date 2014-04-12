@@ -23,7 +23,6 @@ FactoryGirl.define do
     sequence(:ext_player_id) { |n| "ext#{n}" }
     association :team
     dob { Date.today - 15.year }
-    #association :sport_position
-    sport_position nil
+    sport_position
   end
 end
