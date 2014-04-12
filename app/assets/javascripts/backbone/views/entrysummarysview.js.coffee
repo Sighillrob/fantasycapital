@@ -30,6 +30,7 @@ class Main.Views.EntrySummarysView extends Backbone.View
     offset = offset || 0
     rendered = ""
     position = 1;
+    accumulator = 0;
     @entries_coll.each( (entry, index) ->
         entry.set("summary_position", position)
         if offset <= index && offset + 10 > index
@@ -49,6 +50,10 @@ class Main.Views.EntrySummarysView extends Backbone.View
         # which should never happen
         if curr && next && parseFloat(curr.get("fps")) > parseFloat(next.get("fps"))
           position += 1;
+          position += accumulator
+          accumulator = 0
+        else
+          accumulator += 1;
       , this )
     $(@el).html(rendered)
     return this
