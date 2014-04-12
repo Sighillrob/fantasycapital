@@ -215,6 +215,11 @@ table.tab a[class$="-lineup"] {
 $gradient-start: $theme-alternate-green;
 $gradient-stop: $theme-green;
 
+table.tab tbody tr td.scroll-dist {
+  width: 5px;
+  padding: 0;
+  margin: 0;
+}
 table.tab tbody tr td.action-icon, table.tab > tbody > tr > td.action-icon {
   /*background: none repeat scroll 0 0 #0FEA6C !important;*/
   color: #FFFFFF;
