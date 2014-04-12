@@ -21,13 +21,14 @@ p.message {
   background: #eeeeee;
   width: 160px;
   padding: 5px;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1;
   border: 1px solid #dddddd;
   border-radius: 5px;
   /*height: 34px;
   -webkit-appearance: none;*/
   color: #555555;
+  font-family: monospace;
 }
 
 .styled-select {
@@ -695,6 +696,12 @@ table.summarymatchup tbody tr:last-child {
 
 .tab-content.padding-right {
   padding-right: 3px;
+}
+
+.hide-by-game,
+.hide-by-player {
+    display: none !important;
+    visibility: hidden !important;
 }
 
 /*------------------------------------- -----------------*/
