@@ -52,7 +52,7 @@ class Lineup
         return false
       return true
   handleRedColor: () ->
-    if @amountLeft() > 0
+    if @amountLeft() >= 0
       $("#avg-rem-salary, #contest-salary-cap").parent().children().removeClass("red")
     else
       $("#avg-rem-salary, #contest-salary-cap").parent().children().addClass("red")
@@ -102,7 +102,7 @@ class Lineup
     (@consumedSalary()/@spotsTaken()) || 0
   averageRemainingPlayerSalary: ->
     remaining = @amountLeft() / @spotsLeft()
-    if remaining == Infinity 
+    if remaining == Infinity || remaining < 0
       return 0
     return remaining
     
