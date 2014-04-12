@@ -1,8 +1,7 @@
 class Main.Views.PlayerView extends Backbone.View
     initialize: (args) ->
         self = @
-        @el = $(".scorecardBody")
-        @el = $(args.entryView.el).find(".scorecardBody")
+        @el = $(args.scorecardView.el).find(".scorecardBody")
         @position = args.position
         @percent  = args.percent
         @template = $("#player-template").html()
@@ -39,8 +38,9 @@ class Main.Views.PlayersView extends Backbone.View
     initialize: (args) ->
         @playerViews = {}
         @entry = args.entry
+        @scorecardView = args.scorecardView
         @entryView = args.entryView
-        @el = $(@entryView.el).find(".scorecardBody")
+        @el = $(@scorecardView.el).find(".scorecardBody")
         @el.html("")
         @addAll()
     addAll: () ->
@@ -55,7 +55,7 @@ class Main.Views.PlayersView extends Backbone.View
             model: item[0]
             position: positions[item[1]]
             percent: @entryView.percent_owned()[item[0].get("id")]
-            entryView: @entryView
+            scorecardView: @scorecardView
         })
         @playerViews[item[0].get("id")] = playerView
         playerView.render()

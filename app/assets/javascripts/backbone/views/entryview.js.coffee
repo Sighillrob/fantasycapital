@@ -1,11 +1,13 @@
 class Main.Views.EntryView extends Backbone.View
-
   initialize: (args) ->
     @exists = true
+    self = @
+    @el = $(args.scorecardView.el).find(".scorecardHeader")
     @template = $("#entry-template").html()
     @entry = args.entry
     @entries_coll = args.entries_coll
     @listenTo(@entry, 'change', @changeentry)
+    @listenTo(window.players_coll, 'change:currfps', @changeentry)
     @render()
   get_players_count: () ->
     stats = {}
@@ -39,12 +41,7 @@ class Main.Views.EntryView extends Backbone.View
         user_img: window.user_img_placeholder,
         percentage: @percent_owned()
       }))
-      $(@el).show()
-      @playersView = new Main.Views.PlayersView({
-        collection: window.players_coll,
-        entry: @entry,
-        entryView: @
-      })
+      $(@el).closest(".scorecard").show()
       return this
   changeentry: () ->
     @render()
