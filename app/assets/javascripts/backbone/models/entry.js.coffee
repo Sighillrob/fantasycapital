@@ -20,7 +20,7 @@ class Main.Models.Entry extends Backbone.Model
   get_all_scores: () ->
     _.map(@players(), (player) -> parseFloat(player.get("currfps")))
   get_total_score: () ->
-    _.reduce(@get_all_scores(), ((memo, num) -> memo + num), 0)
+    _.reduce(@get_all_scores(), ((memo, num) -> memo + num), 0) || 0
   get_player_ids: () ->
     _.map( @get("player_ids"), (player) -> player[0] )
   get_game_ids: () ->
@@ -50,5 +50,5 @@ class Main.Collections.EntriesCollection extends Backbone.Collection
 
   # provide comparator so that sort returns fantasy points in descending order
   comparator: (model) ->
-    return 0.0-parseFloat(model.get('fps'))
+    return -parseFloat(model.get_total_score())
 
