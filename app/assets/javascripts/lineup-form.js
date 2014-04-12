@@ -1,17 +1,20 @@
 (function () {
     "use strict";
-    /*globals $, console */
+    /*globals $, Lineup, Main, init_colls */
     var lineup_players_view;
 
 
-    function draftHandler () {
+    function draftHandler (mybody) {
 
         var $draftEmitter  = $(".js-draft-emitter");
         var $draftReceiver = $(".js-draft-receiver");
         var $draftSearch   = $("#js-draft-search");
         var $sportFilter   = $("#filterSport");
+        var $gameFilter    = $("#filter_player");
 
-        if ( !$draftEmitter.length || !$draftReceiver.length || !$sportFilter.length || !$draftSearch.length) {
+        if ( !$draftEmitter.length || !$draftReceiver.length || 
+             !$sportFilter.length || !$draftSearch.length ||
+             !$gameFilter) {
             return null;
         }
         // bootstrap appends an arrow automatically
@@ -37,33 +40,55 @@
                 $draftReceiver.find(".tab-pane.active thead").addClass("hide");
             }, 10);
         }
-  
-        function searchPlayers() {
-            // get term from input
-            var term = $.trim(this.value).toUpperCase();
-            // in each row
-            $("#lineup-eligible-players-el tr").each(function () {
-                // get player name in each row
-                var name = $.trim($(this).find(".player").text()).toUpperCase();
-                // if term matches the name
-                if (name.match(term)) {
-                    // class hidden needed so it won't interfere with type filtering
-                    $(this).removeClass("hidden");
-                } else {
-                    // hide
-                    $(this).addClass("hidden");
-                }
+
+        function getGames() {
+            var frag = document.createDocumentFragment();
+            var option = document.createElement("option");
+            option.value     = "";
+            option.innerHTML = "ALL GAMES";
+            frag.appendChild(option);
+            var games = mybody.games_coll;
+            games.each(function (game) {
+                option = document.createElement("option");
+                option.value     = game.teams_string();
+                option.innerHTML = game.teams_string_and_date();
+                frag.appendChild(option);
             });
+            $("#filter_player").html(frag);
         }
+
+        function filterBy(selector, className) {
+            return function () {
+                var term = $.trim(this.value).toUpperCase();
+                // in each row
+                $("#lineup-eligible-players-el tr").each(function () {
+                    // get player name in each row
+                    var name = $.trim($(this).find(selector).text()).toUpperCase();
+                    // if term matches the name
+                    if (name.match(term)) {
+                        // class hidden needed so it won't interfere with type filtering
+                        $(this).removeClass(className);
+                    } else {
+                        // hide
+                        $(this).addClass(className);
+                    }
+                });
+            }
+        }
+  
+        var filterByPlayer = filterBy(".player", "hide-by-player");
+        var filterByGame   = filterBy(".opp", "hide-by-game");
 
         getArrow();
         setWidth();
+        getGames();
 
-        $draftSearch.on("keyup", searchPlayers);
+        $draftSearch.on("keyup", filterByPlayer);
+        $gameFilter.on("change", filterByGame);
         
         $draftEmitter.find("table").addClass("sortable");
 
-        $draftEmitter.unbind().on("click", "thead th", function (e) {
+        $draftEmitter.unbind().on("click", "thead th", function () {
 
             var $activeTable = $draftReceiver.find(".active table");
             var className = $(this).attr("class");
@@ -94,7 +119,8 @@
                 });
             }
             // call the search player function with the input node as ~this~
-            searchPlayers.call($("#js-draft-search")[0]);
+            filterByPlayer.call($draftSearch[0]);
+            filterByGame.call($gameFilter[0]);
             setWidth();
 
         });
@@ -104,8 +130,8 @@
     function populateDraftRows(players_coll) {
         // populate the rows in the draft table
         lineup_players_view = new Main.Views.LineupPlayerView(
-            {el: $('#lineup-eligible-players-el'), players_coll: players_coll}
-        )
+            {el: $("#lineup-eligible-players-el"), players_coll: players_coll}
+        );
 
     }
 
@@ -115,7 +141,7 @@
 
             // call function defined in the Rails template. This populates the backbone collections
             ///  into the element specified here.
-            var mybody = $("body")[0]
+            var mybody = $("body")[0];
             init_colls(mybody);
 
             populateDraftRows(mybody.players_coll);
@@ -123,12 +149,12 @@
             // table's now populated. enable sort.
 
             // create player stats modal popup handler. Binds to appropriate rows.
-            $(".player-stats").on('click', function () {
+            $(".player-stats").on("click", function () {
 
                 var stats = $(this).attr("data-stats-url"),
                     player = $.trim($(this).text());
                 if (player && stats) {
-                   new window.AjaxModal4Container(stats).load(); 
+                   new window.AjaxModal4Container(stats).load();
                 }
                 
             });
@@ -141,7 +167,7 @@
 
             // this code is used to fix the scroll issue inside the lineups page
             // table layout doesn't allow separete thead and tbody
-            draftHandler();
+            draftHandler(mybody);
 
 
         }

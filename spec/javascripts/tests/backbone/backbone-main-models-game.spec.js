@@ -50,7 +50,7 @@ describe("Testing Backbone model - Main.Models.Game - with games and teams colle
     });
 
     it("you should be possible to get the teams string", function () {
-        expect(game.teams_string()).toBe("WCH@TOR");
+        expect(game.teams_string()).toBe("TOR@WCH");
     });
 
     it("you should be able to get the score string", function () {
