@@ -68,7 +68,11 @@ class window.GameCenterCls
         # trigger initial sort to make sure display is updated properly.
         entries_coll.sort()
 
-        @myentryview = new Main.Views.EntryView({el: $('#my-scorecard'), entry: @myentry, entries_coll: entries_coll})
+        @myentryview = new Main.Views.ScorecardView({
+            el: $('#my-scorecard'), 
+            entry: @myentry, 
+            entries_coll: entries_coll
+        })
 
         channel.bind('stats',  (data) -> that.handlePushedStats(data) )
         this.attach_contestant_handler()
@@ -98,7 +102,11 @@ class window.GameCenterCls
             if self.competitor_entry_view
                 self.competitor_entry_view.unbind()
                 self.competitor_entry_view.clear()
-            self.competitor_entry_view = new Main.Views.EntryView({el: $('#competitor-scorecard'), entry: self.competitorentry})
+            self.competitor_entry_view = new Main.Views.ScorecardView({
+                el: $('#competitor-scorecard'), 
+                entry: self.competitorentry, 
+                entries_coll: entries_coll
+            })
         );
     attach_sort_handler: ->
         $table  = $(".js-gamecenter");
