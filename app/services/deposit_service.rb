@@ -30,7 +30,7 @@ class DepositService
       Transaction.PAYMENT_ENGINE_TYPE_ENUM[:stripe]
     new_transaction.payment_engine_id = charge.id
     new_transaction.amount_in_cents = charge.amount
-    new_transaction.save
+    new_transaction.save!
 
     # Create an op fees transaction so that FC Opp can pay for the fees
     # associated with this charge
@@ -40,8 +40,7 @@ class DepositService
 
     op_transaction = Transaction.new
     op_transaction.transaction_type = Transaction.TYPE_ENUM[:op_fee]
-    op_transaction.amount_in_cents = fees_paid * -1
-    op_transaction.save    
+    op_transaction.save!    
 
     # This op fee transaction belongs to the charge transaction
     new_transaction.child_transactions<<op_transaction
