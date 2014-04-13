@@ -1,7 +1,11 @@
 
 shared_context 'baseentries' do
+  before do
+    Time.stub(:now).and_return(now)
+  end
 
-  let(:now) { Time.parse("2014-03-21 17:51:27 -0000")}
+  let(:now) { Time.parse("2014-03-21 12:51:27 -0000")}
+
   let(:todaydate) { now.to_date }
 
   let!(:positions) { create_list(:sport_position, 6)}
@@ -15,10 +19,10 @@ shared_context 'baseentries' do
 
   # one day's entry and contest, with 2 games. No player from this entry is in game2
   let!(:contest) { create(:contest, contestdate:todaydate)}
-  let!(:entries) { [create(:entry, contest:contest, lineup:lineup),
-                    create(:entry, contest:contest, lineup:lineup)]}
   let!(:game) {create(:game_score, playdate:todaydate, home_team: teams[0], away_team: teams[1], ext_game_id: "aaa-id-of-game-1")}
   let!(:game2) {create(:game_score, playdate:todaydate, home_team: teams[2], away_team: teams[3])}
+  let!(:entries) { [create(:entry, contest:contest, lineup:lineup),
+                    create(:entry, contest:contest, lineup:lineup)]}
 
   # another day's entry and contest (with no game)
   let!(:contest_day2) { create(:contest, contestdate:todaydate+1)}

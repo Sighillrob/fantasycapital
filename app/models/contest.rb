@@ -36,6 +36,15 @@ class Contest < ActiveRecord::Base
     GameScore.earliest_start(self.contestdate)
   end
 
+  def started?
+    # return if this contest has started. It's based on scheduled start times which should be
+    # conservative. This will block new entries in a contest. Maybe we'll also have to check game
+    # statuses in case a game starts early?
+
+    self.start_at < Time.now
+  end
+
+
   def has_final_score_and_pos?
     self.entries.count > 0 and self.entries.missing_final_score_or_pos.count == 0
   end
@@ -104,7 +113,7 @@ class Contest < ActiveRecord::Base
     raise "#{lineup.user} maximized the number of entries" unless eligible_for? lineup.user
     raise "Maximum entries reached" if filled?
     dup.save! if entries.count == max_entries - 1
-    entries.create(lineup: lineup)
+    entries.create!(lineup: lineup)
   end
 
   def winnings
