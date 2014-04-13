@@ -19,16 +19,20 @@ class CreditCardsController < ApplicationController
 
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
+    rescue 
+      render json: {error: "Unable to add credit card"}, status: :unprocessable_entity
     end
   end
 
   def deposit
     begin
-      amount = (params[:amount]||'').gsub(/\D/, '').to_i
+      amount = (params[:amount]||'0').gsub(/\D/, '').to_i
       DepositService.new(current_user).deposit(amount)
       render json: {status: 201}
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
+    rescue 
+      render json: {error: "Unable to deposit funds"}, status: :unprocessable_entity
     end
   end
 
