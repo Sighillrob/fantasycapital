@@ -71,7 +71,7 @@ class Transaction < ActiveRecord::Base
     :contest_entry => 3,
     :contest_winnings => 4,
     :contest_rake => 5,
-    :op_fees => 6,
+    :op_fee => 6,
     :op_settlement => 7
   }
   def self.TYPE_ENUM

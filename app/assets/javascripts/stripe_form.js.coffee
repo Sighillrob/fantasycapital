@@ -14,13 +14,13 @@ window.initializeStripeForm = ->
 
     e.preventDefault()
     container = $('#existingCardContainer')
-    amount = container.find('input[data-value=depositAmount]').val()
+    amount = parseInt($('#depositAmount').val())
     promise = $.post '/accounts/credit_cards/deposit', amount: amount
 
     promise.success -> window.location.reload()
 
     promise.error (res) ->
-      $('#creditcard .error-container')
+      $('.error-container')
         .show()
         .append('<span class="error">' + res.responseJSON.error + '</span>')
 
@@ -88,7 +88,7 @@ initCallback = (action, response) ->
     url = 'credit_cards'
     data =
       stripe_token: response.id
-      amount: $('#depositAmount').val()
+      amount: parseInt($('#depositAmount').val())
       credit_card:
         stripe_id: response.card.id
         card_brand: response.card.type
