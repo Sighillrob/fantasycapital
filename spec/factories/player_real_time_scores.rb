@@ -17,6 +17,7 @@ FactoryGirl.define do
   factory :player_real_time_score do
     name "MyString"
     value "9.99"
-    player nil
+    game_score
+    player
   end
 end

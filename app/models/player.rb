@@ -39,9 +39,13 @@ class Player < ActiveRecord::Base
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
     if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
-      fps = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }[0]
+      fpsarray = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }
+      raise "More than one cached fantasy score for player #{self.id}" if fpsarray.length > 1
+      fps = fpsarray[0]
     else
-      fps = player_real_time_scores.where(game_score_id: gameid, name: 'fp').first
+      fpsarray = player_real_time_scores.where(game_score_id: gameid, name: 'fp')
+      raise "More than one fantasy score for player #{self.id}" if fpsarray.count > 1
+      fps = fpsarray.first
     end
 
     fps.try(:value) || 0

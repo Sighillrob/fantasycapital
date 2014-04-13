@@ -58,8 +58,11 @@ class ContestFactory
         games_of_day.each { |game|
           players_in_game = game.home_team.players.to_a.concat game.away_team.players.to_a
           players_in_game.each { |pl|
-            PlayerRealTimeScore.where(player: pl, name: "fp", value: 0.0,
-                                              game_score:game).first_or_create
+            PlayerRealTimeScore.where(player: pl, name: "fp",
+                                              game_score:game).first_or_create do |rts|
+              # initialize the value inside the block so it doesn't cause a 'create' ...
+              rts.value = 0.0
+            end
 
           }
         }
