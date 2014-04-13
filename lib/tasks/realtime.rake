@@ -1,8 +1,30 @@
 
 namespace :realtime do
-  desc "Poll games APIs every 15s when games are in progress"
 
-  desc "Get realtime game stats for all games for one day. This task should be launched daily. "
+  desc "Check if realtime-data task should be started. This task should be run from heroku scheduler ~once per hour. "
+  task check_start_realtime: :environment do
+    now = Time.now
+    today = now.in_time_zone("US/Pacific").to_date
+
+    puts "Checking whether to start realtime service for #{today}"
+    games = GameScore.in_range(today, today).not_closed.order(scheduledstart: :asc)
+    if games.count.zero?
+      puts "... no unclosed games today. Returning"
+    else
+      firststart = games.first.scheduledstart
+      puts "First game scheduled start = #{firststart}"
+      puts "Now is #{now}"
+      # if the first game starts within a few hours, turn on RTdata. Note this will fire even when RTdata is already
+      # running, but that's harmless even in corner cases.
+      if  now + 3.hours > firststart
+        puts "Starting / ensuring RTdata is running..."
+        heroku = Heroku::API.new(:api_key => ENV['HEROKU_API_KEY'])
+        heroku.post_ps_scale(Rails.configuration.app_name, 'rtdata', 1)
+      end
+    end
+  end
+
+  desc "Get realtime game stats for all games for one day. This task will be launched daily by check_start_realtime "
   task games: :environment do
     # Monitor all live games from one process and thread to economize on DB connections.
     today = Time.now.in_time_zone("US/Pacific").to_date
