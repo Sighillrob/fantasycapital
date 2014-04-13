@@ -1,6 +1,6 @@
 class EntriesController < ApplicationController
-  before_action :set_lineup, only: [:new, :create]
-
+  # before_action :set_lineup, only: [:new, :create]
+  before_action :check_authorized_entry, only: [:show, :edit]
   def new
     #@positions = @contest.sport_positions.includes(:players).order(display_priority: :asc)
     #@entry     = Entry.build_entry_for_contest @contest
@@ -24,7 +24,6 @@ class EntriesController < ApplicationController
     # this is the real-time "gamecenter" action. It shows a contest from a particular
     # day.
     @entry_id = params[:id]
-    @entry = Entry.find(params[:id])
     @contest = @entry.contest
     @entries = @entry.contest.entries
 
@@ -79,12 +78,6 @@ class EntriesController < ApplicationController
       upcomingContests << contest if state == :in_future
     end
 
-    # the completed contests array does not hold any information
-    # about the final ranking of the contestant
-    # could you please provide a final_ranking key
-    # to each object in the completed contests array?
-    # the template is already prepared for this key
-
     @data = {
       liveContests: liveContests, 
       upcomingContests: upcomingContests,
@@ -115,12 +108,20 @@ class EntriesController < ApplicationController
   end
 
   private
-  def set_lineup
-    @lineup = Lineup.find(params[:lineup_id])
-  end
+    def check_authorized_entry
+      begin
+        @entry = current_user.entries.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        redirect_to root_path
+        return
+      end
+    end
+    # def set_lineup
+    #   @lineup = Lineup.find(params[:lineup_id])
+    # end
 
-#def entry_parameters
-#  params.require(:entry).permit(:contest_id, lineups_attributes: [:sport_position_id, :player_id])
-#end
+    #def entry_parameters
+    #  params.require(:entry).permit(:contest_id, lineups_attributes: [:sport_position_id, :player_id])
+    #end
 
 end

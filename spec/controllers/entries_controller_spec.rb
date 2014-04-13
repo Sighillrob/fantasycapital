@@ -16,6 +16,17 @@ describe EntriesController do
     Time.stub!(:now).and_return(now)
   end
 
+  describe "User2" do
+    it "can't view gamecenter with an entry created by User1" do
+      sign_out :user
+      user2 = create(:user)
+      sign_in user2
+      get 'show', id: entries[0].id
+      expect(response).to redirect_to(root_url)
+    end
+
+  end
+
   describe "GET 'show' (Game Center)" do
     it "correctly assigns players and entries with fantasypoints" do
       get 'show', id: entries[0].id
