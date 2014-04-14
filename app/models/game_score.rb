@@ -29,6 +29,8 @@ class GameScore < ActiveRecord::Base
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
 
+  has_many :player_real_time_scores, dependent: :destroy
+
   # games can have one of these status's (from the external API):
   #scheduled - The game is scheduled to occur.
   #created – The game has been created and we have begun logging information.
