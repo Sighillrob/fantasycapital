@@ -74,7 +74,12 @@ class EntriesController < ApplicationController
         contest['final_pos'] = entry[:final_pos]
         completedContests << contest
       end
-      liveContests << contest if state == :live
+      # this part of code should be adjusted to pick real data
+      if state == :live
+        contest['final_pos'] = 5
+        contest['num_of_contestants'] = 10
+        liveContests << contest
+      end
       upcomingContests << contest if state == :in_future
     end
 
