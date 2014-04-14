@@ -109,12 +109,10 @@ class EntriesController < ApplicationController
 
   private
     def check_authorized_entry
-      begin
-        @entry = current_user.entries.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        redirect_to root_path
-        return
-      end
+      @entry = current_user.entries.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to root_path unless current_user.admin
+      @entry = Entry.find(params[:id])
     end
     # def set_lineup
     #   @lineup = Lineup.find(params[:lineup_id])
