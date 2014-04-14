@@ -11,9 +11,5 @@ worker: bundle exec sidekiq -c 10 -v
 # realtime:games_parallel task too
 rtdata: bundle exec rake realtime:games
 
-# check if 'rtdata' task should be started. This will be called periodically 
-# via the heroku scheduler
-check_start_realtime: bundle exec rake realtime:check_start_realtime
-
 simdata: bundle exec rake realtime:games_playback
 
