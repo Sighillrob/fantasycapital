@@ -69,7 +69,8 @@
   jQuery(document).on("ready page:load", function ($) {
 
     var data = <%= @data.to_json.html_safe %>;
-
+    
+    /*
     data = {
       "liveContests": [
         {
@@ -116,6 +117,7 @@
         }
       ]
     };
+    */
 
     var liveColl = new Main.Collections.LiveContestsCollection(data.liveContests)
     var upcoColl = new Main.Collections.UpcomingContestsCollection(data.upcomingContests);
