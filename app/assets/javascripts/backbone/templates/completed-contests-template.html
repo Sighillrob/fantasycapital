@@ -19,7 +19,7 @@
         <tr class="completedcontest">
           <td><%= contest.id %></td>
           <td><%= contest.sport %></td>
-          <td><%= moment.utc(contest.complete).format("D/MM/YY") %></td>
+          <td><%= moment.utc(contest.complete).local().format("D/MM/YY") %></td>
           <td><%= accounting.formatMoney(contest.entry_fee) %></td>
           <td><%= accounting.formatMoney(contest.prize) %></td>
           <td><%= contest.final_pos %></td>
