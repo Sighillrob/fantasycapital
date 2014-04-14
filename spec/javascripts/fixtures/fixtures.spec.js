@@ -10,7 +10,9 @@ FIXTURES.contests = {
       "entry_fee": "$1.0",
       "prize": "$9.5",
       "place": 814,
-      "results_path": "/entries/1"
+      "results_path": "/entries/1",
+      "final_pos": 5,
+      "num_of_contestants": 10
     }
   ],
   "upcomingContests": [
