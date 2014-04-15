@@ -24,7 +24,7 @@
           <td><%= accounting.formatMoney(contest.entry_fee) %></td>
           <td><%= accounting.formatMoney(contest.prize) %></td>
           <!--<td><%= contest.place %></td>-->
-          <td><%= contest.final_pos %>/<%= contest.num_of_contestants %></td>
+          <td><%= contest.final_pos %>/<%= contest.num_entries %></td>
           <td><a class="button" href="<%= contest.results_path %>">WATCH LIVE</a></td>
         </tr>
         <% }); %>

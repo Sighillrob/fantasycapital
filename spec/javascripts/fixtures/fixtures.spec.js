@@ -12,7 +12,7 @@ FIXTURES.contests = {
       "place": 814,
       "results_path": "/entries/1",
       "final_pos": 5,
-      "num_of_contestants": 10
+      "num_entries": 10
     }
   ],
   "upcomingContests": [

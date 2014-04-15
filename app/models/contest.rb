@@ -44,6 +44,17 @@ class Contest < ActiveRecord::Base
     self.entries.count > 0 and self.entries.missing_final_score.count == 0
   end
 
+  def current_pos(entry)
+    # get the current position of an entry in the contest. This is meant to be used during a live
+    # game. It's kind of expensive to compute.
+
+    myscore = entry.current_fantasypoints
+    c = self.entries.to_a.count do |e|
+      e.current_fantasypoints > myscore
+    end
+    return c + 1
+  end
+
   def record_final_outcome!
     # record contest outcome, meaning entry positions. return nil if any entries aren't final yet.
     return nil if !has_final_score?
