@@ -25,6 +25,7 @@ class GameScore < ActiveRecord::Base
   #  and make sure contests aren't created on days with fewer than 3 SCHEDULED games.
   validates :scheduledstart, presence: true
   validates :status, presence: true
+  validates :ext_game_id, uniqueness: true
 
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
