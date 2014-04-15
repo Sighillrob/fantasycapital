@@ -56,7 +56,7 @@
 
   $(document).on('page:load ready', function () {
     if ($('#home-contests').length > 0) {
-      var homeContestsView = new Main.Views.HomeContestsView({
+      window.homeContestsView = new Main.Views.HomeContestsView({
         pusherkey: '<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>'
       });
     }
