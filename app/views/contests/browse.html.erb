@@ -36,7 +36,7 @@
   </p>
 </div>
 
-<table class='contestHead main-grid table sortable filter-result'>
+<table id="home-contests" class='contestHead main-grid table sortable filter-result'>
   <thead>
   <tr>
     <th class="srt-sport" data-defaultsign="reversed">SPORT</th>
@@ -52,3 +52,14 @@
   <%= render partial: 'contest', collection: @contests %>
   </tbody>
 </table>
+<script>
+
+  $(document).on('page:load ready', function () {
+    if ($('#home-contests').length > 0) {
+      var homeContestsView = new Main.Views.HomeContestsView({
+        pusherkey: '<%= Rails.env.development? ? "86296472974842e38cce" : Pusher.key %>'
+      });
+    }
+  });
+
+</script>
