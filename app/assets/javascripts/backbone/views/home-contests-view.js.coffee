@@ -3,6 +3,7 @@ class Main.Views.HomeContestsView extends Backbone.View
         self = @
         @$el = $("#home-contests")
         @pusher = new Pusher(args.pusherkey)
+        # these two lines need to be edited
         channel = this.pusher.subscribe('gamecenter')
         channel.bind('stats',  (data) -> self.pusherHandler(data) )
     pusherHandler: (data) ->
