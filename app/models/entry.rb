@@ -18,9 +18,14 @@ class Entry < ActiveRecord::Base
   has_one :transaction, inverse_of: :entry
 
   validates :lineup, :contest, presence: true
-
   validate :number_of_entries
- 
+
+  validate :contest_not_started, on: :create
+
+  def contest_not_started
+    errors.add(:contest, "Can't enter a contest that started!") if contest.started?
+  end
+
   def number_of_entries
     errors.add(:contest, "Number of entries can't exceed maximum.") if
         contest.entries.count >= contest.max_entries and self.contest_id_changed?

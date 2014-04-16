@@ -33,5 +33,11 @@ module Main
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
+
+    # set rails timezone to UTC so that silly things like Time.now are consistent
+    # between dev environment, staging, and prod.
+    # We should explicitly map to timezones where we need it.
+    ENV['TZ'] = 'UTC'
+
   end
 end

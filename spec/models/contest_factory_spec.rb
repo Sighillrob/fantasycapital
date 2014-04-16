@@ -34,7 +34,7 @@ describe Contest do
       should have(54).items   # 27 contests for each game day, 2 game days with >= 3 contests
     end
     it {
-      subject.first.contest_start.should == games[0].scheduledstart
+      subject.order(contestdate: :asc).first.start_at.should == games[0].scheduledstart
     }
 
     it "should be idemopotent (identical results when called more than once)" do
