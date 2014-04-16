@@ -1,3 +1,8 @@
+# home contests view can be used in the home page to create a green flash animation if
+# the number of contestants has changed
+# it's currently inactive due to the fact that there's no realtime functionality
+# on home page yet
+
 class Main.Views.HomeContestsView extends Backbone.View
     initialize: (args) ->
         self = @
