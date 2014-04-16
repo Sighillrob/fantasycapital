@@ -24,11 +24,15 @@ namespace :realtime do
     end
   end
 
-  desc "Get realtime game stats for all games for one day. This task will be launched daily by check_start_realtime "
+  desc "Run realtime game stats until games are over today. This task will be launched daily by check_start_realtime "
   task games: :environment do
     # Monitor all live games from one process and thread to economize on DB connections.
     today = Time.now.in_time_zone("US/Pacific").to_date
     puts "Starting realtime game status for #{today}"
+    Signal.trap("TERM") do
+      puts "Realtime function received Sigterm... Exiting."
+      exit
+    end
 
     # manage a list of games for today that aren't complete yet.
 
@@ -125,6 +129,12 @@ namespace :realtime do
 
   desc "play back game stats from saved json files"
   task games_playback: :environment do
+    killme=false
+    Signal.trap("TERM") do
+      puts "games-playback from file got SIGTERM..."
+      killme=true
+    end
+
     if !File.directory?("#{Rails.root}/db/gamefeeds")
       `cd db && tar xzvf gamefeeds.tgz`
     end
@@ -138,9 +148,11 @@ namespace :realtime do
         # IDs of the "fake" games in DB is "FAKE-" + real_game_id
         game_json['id'] = "FAKE-" + game_json['id']
         RealTimeDataService.new.refresh_game game_json
+        break if killme
       end
       RealTimeDataService.new.refresh_entries "2050-12-31"
       sleep 1
+      break if killme
     end
     # reset all fake games status back to scheduled so that next time they will run again
     GameScore.where("ext_game_id like ?", "FAKE-%").update_all(status: "scheduled")

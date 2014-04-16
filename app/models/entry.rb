@@ -18,12 +18,23 @@ class Entry < ActiveRecord::Base
   has_one :transaction, inverse_of: :entry
 
   validates :lineup, :contest, presence: true
-
   validate :number_of_entries
- 
+
+  validate :contest_not_started, on: :create
+
+  def contest_not_started
+    errors.add(:contest, "Can't enter a contest that started!") if contest.started?
+  end
+
   def number_of_entries
     errors.add(:contest, "Number of entries can't exceed maximum.") if
         contest.entries.count >= contest.max_entries and self.contest_id_changed?
+  end
+
+  def current_pos
+  # get the current position of this entry in the contest. Meant to be called on live contests.
+  # kind of expensive to compute.
+    contest.current_pos(self)
   end
 
   def record_final_score!
@@ -41,7 +52,7 @@ class Entry < ActiveRecord::Base
     playdate = self.contest.contestdate
     gameids = GameScore.where({playdate: playdate}).pluck('id')
     lineup_players = lineup.players.includes(:player_real_time_scores).where("player_real_time_scores.game_score_id IN (?)", gameids).references(:player_real_time_scores)
-    lineup_players.map { |player| player.realtime_fantasy_points(gameids) }.sum
+    lineup_players.map { |player| player.realtime_fantasy_points }.sum
   end
 
   def as_json(options = { })
