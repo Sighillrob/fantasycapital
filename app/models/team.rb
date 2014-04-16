@@ -11,5 +11,6 @@
 #
 
 class Team < ActiveRecord::Base
+  validates :ext_team_id, uniqueness: true
   has_many :players
 end

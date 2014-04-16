@@ -27,7 +27,8 @@ class Main.Models.Game extends Backbone.Model
     return ""
   teams_string_and_date: () ->
     if @collection && @collection.teams_coll
-      return @home_team_alias() + " @ " + @away_team_alias() + " " + moment(@get("scheduledstart")).format("hh:mma")
+      start = moment.utc(@get("scheduledstart")).local().format("hh:mma Z")
+      return @home_team_alias() + "@" + @away_team_alias() + " " + start
     return ""
 
 class Main.Collections.GamesCollection extends Backbone.Collection

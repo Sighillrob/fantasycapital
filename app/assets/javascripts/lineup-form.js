@@ -136,8 +136,8 @@
     }
 
     $(document).on("ready page:load", function () {
-        if ($("body#lineups_new").length) {
-            //we are on new-lineup page.
+        if ($("body#lineups_new").length || $("body#lineups_edit").length) {
+            //we are on new-lineup page or in a lineup-edit page.
 
             // call function defined in the Rails template. This populates the backbone collections
             ///  into the element specified here.
