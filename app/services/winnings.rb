@@ -32,20 +32,28 @@ class Winnings
   def compute_tournament
     # One tournament allows 100 entrants. Multiple entries allowed. Winner gets the pot minus rake
     # Ties divide up the prize.
-    entries = @contest.entries.where(final_pos: 1)
-    prize = 1.0 / entries.count
-    entries.map do | entry |
+    winningentries = @contest.entries.where(final_pos: 1)
+    prize = 1.0 / winningentries.count
+    winningentries.map do | entry |
       [entry, prize]
     end
   end
 
   def compute_5050
-    # 50/50 contest allows 10 entrants. Top 5 (50%) double their money minus rake
+    # 50/50 contest allows an even number of entrants. Top half (50%) double their money minus rake
     retval = []
-    entries = @contest.entries.where('final_pos <= 5').order(final_pos: :asc)
+    entrycount = @contest.entries.count
+    highestwinnerpos = entrycount / 2
+    if entrycount.odd?
+      raise "Can't handle odd # of entries in contest, contestID=#{contest.id}, #{entrycount} entries"
+    end
+    # winnings per slot (e.g. with 10 entries, there are 5 winning slots, each slot gets 0.2)
+    slot_winnings = 1.0 / highestwinnerpos
 
-    # If there are more than 5 winners, that means there was a tie in the last positions.
-    # The folks who tied on the back end share the 5th place winnings... everyone else gets
+    entries = @contest.entries.where('final_pos <= ?', highestwinnerpos).order(final_pos: :asc)
+
+    # If there are more than 'highestwinnerpos' winners, that means there was a tie in the last positions.
+    # The folks who tied on the back end share the last winning place winnings... everyone else gets
     # the normal winnings.
 
     finalpos = entries[-1].final_pos
@@ -54,10 +62,10 @@ class Winnings
     not_last_entries = sep.find { |e| !e[0] }[1]
     last_entries = sep.find { |e| e[0] }[1]
 
-    slots_for_last_entries = 5 - not_last_entries.length
-    prize_for_last_entrant = (slots_for_last_entries * 0.2 / last_entries.length).round(4)
+    slots_for_last_entries = highestwinnerpos - not_last_entries.length
+    prize_for_last_entrant = (slots_for_last_entries * slot_winnings / last_entries.length).round(4)
     not_last_entries.each do |entry|
-      retval << [entry, 0.2]
+      retval << [entry, slot_winnings]
     end
 
     last_entries.each do |entry|

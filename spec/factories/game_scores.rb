@@ -20,6 +20,10 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
+  sequence :ext_game_id do |n|
+    "ABC#{n}-GAME-IJKL"
+  end
+
   factory :game_score do
     playdate "2014-03-12"
     home_team_score 1
@@ -28,5 +32,6 @@ FactoryGirl.define do
     association :home_team, factory: :team
     association :away_team, factory: :team
     scheduledstart "2014-03-12 5:00"
+    ext_game_id
   end
 end

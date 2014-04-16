@@ -11,18 +11,18 @@ class AdminController < ApplicationController
   def games
     todaydate = Time.now.in_time_zone("US/Pacific").to_date
 
-    @games = GameScore.in_range(todaydate-3, todaydate+10)
+    @games = GameScore.in_range(todaydate-3, Time.new(2060,1,1))
   end
 
   def entries
     todaydate = Time.now.in_time_zone("US/Pacific").to_date
 
-    @entries = Entry.in_range(todaydate-3, todaydate+10)
+    @entries = Entry.in_range(todaydate-3, Time.new(2060,1,1))
   end
 
   def contests
     todaydate = Time.now.in_time_zone("US/Pacific").to_date
-    @contests = Contest.in_range(todaydate-3, todaydate+10).where("entries_count > ?", 0)
+    @contests = Contest.in_range(todaydate-2, Time.new(2060,1,1))
   end
 
   def users

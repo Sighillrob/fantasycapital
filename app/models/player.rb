@@ -25,6 +25,7 @@ class Player < ActiveRecord::Base
   has_many :player_stats, inverse_of: :player
   has_many :player_real_time_scores
   validates :sport_position_id, presence: true    # don't allow nil sport-position
+  validates :ext_player_id, uniqueness: true
   has_many :lineup_spots
 
   def name
@@ -40,11 +41,15 @@ class Player < ActiveRecord::Base
     # those should already be pre-scoped to the game-ids we care about.
     if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       fpsarray = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }
-      raise "More than one cached fantasy score for player #{self.id}" if fpsarray.length > 1
+      if fpsarray.length > 1
+        ext_game_ids = fpsarray.map {|x| GameScore.find(x['game_score_id']).ext_game_id}
+        raise "More than one cached fantasy score for #{self.name}. Games=#{ext_game_ids}"
+      end
+
       fps = fpsarray[0]
     else
       fpsarray = player_real_time_scores.where(game_score_id: gameid, name: 'fp')
-      raise "More than one fantasy score for player #{self.id}" if fpsarray.count > 1
+      raise "More than one fantasy score for #{self.name}" if fpsarray.count > 1
       fps = fpsarray.first
     end
 

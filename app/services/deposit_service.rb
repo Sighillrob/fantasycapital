@@ -22,29 +22,38 @@ class DepositService
       raise ServiceError, "Error making deposit with Stripe - #{charge.failure_message}"
     end
 
-    # Create new charge transaction for user    
-    new_transaction = Transaction.new
-    new_transaction.user_id = @user.id
-    new_transaction.transaction_type = Transaction.TYPE_ENUM[:charge]
-    new_transaction.payment_engine_type = 
-      Transaction.PAYMENT_ENGINE_TYPE_ENUM[:stripe]
-    new_transaction.payment_engine_id = charge.id
-    new_transaction.amount_in_cents = charge.amount
-    new_transaction.save!
+    begin
+      ActiveRecord::Base.transaction do
+        # Create new charge transaction for user    
+        new_transaction = Transaction.new
+        new_transaction.user_id = @user.id
+        new_transaction.transaction_type = Transaction.TYPE_ENUM[:charge]
+        new_transaction.payment_engine_type = 
+          Transaction.PAYMENT_ENGINE_TYPE_ENUM[:stripe]
+        new_transaction.payment_engine_id = charge.id
+        new_transaction.amount_in_cents = charge.amount
+        new_transaction.save!
 
-    # Create an op fees transaction so that FC Opp can pay for the fees
-    # associated with this charge
-    stripe_balance_transaction_id = charge.balance_transaction
-    balance_transaction = Stripe::BalanceTransaction.retrieve(stripe_balance_transaction_id)
-    fees_paid = balance_transaction.fee
+        # Create an op fees transaction so that FC Opp can pay for the fees
+        # associated with this charge
+        stripe_balance_transaction_id = charge.balance_transaction
+        balance_transaction = Stripe::BalanceTransaction.retrieve(stripe_balance_transaction_id)
+        fees_paid = balance_transaction.fee
 
-    op_transaction = Transaction.new
-    op_transaction.transaction_type = Transaction.TYPE_ENUM[:op_fee]
-    op_transaction.save!    
+        op_transaction = Transaction.new
+        op_transaction.transaction_type = Transaction.TYPE_ENUM[:op_fee]
+        op_transaction.amount_in_cents = fees_paid * -1
+        op_transaction.save! 
 
-    # This op fee transaction belongs to the charge transaction
-    new_transaction.child_transactions<<op_transaction
-
+        # This op fee transaction belongs to the charge transaction
+        new_transaction.child_transactions << op_transaction
+      end
+    rescue
+      # Something bad happened, transaction didn't persist
+      # need to refund the charge
+      charge.refund
+      raise ServiceError, "Deposit failed!"
+    end
   end
 
   private
