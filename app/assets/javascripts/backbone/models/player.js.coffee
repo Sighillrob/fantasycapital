@@ -80,7 +80,7 @@ class Main.Models.Player extends Backbone.Model
   hasGameStarted: () ->
     mygame = @currgame()
     return false if !mygame
-    return mygame.hasStarted()
+    return mygame.has_started()
   salarystring: () ->
     accounting.formatMoney(@get('salary'), {precision: 0});
 
