@@ -30,6 +30,8 @@ class Main.Models.Game extends Backbone.Model
       start = moment.utc(@get("scheduledstart")).local().format("hh:mma Z")
       return @home_team_alias() + "@" + @away_team_alias() + " " + start
     return ""
+  has_started: () ->
+    return  moment.utc().unix() >= moment.utc(@get("scheduledstart")).unix()
 
 class Main.Collections.GamesCollection extends Backbone.Collection
   model: Main.Models.Game

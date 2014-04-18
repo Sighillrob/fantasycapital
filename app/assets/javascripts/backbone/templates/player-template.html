@@ -1,5 +1,5 @@
 <script type="text/template" id="player-template">
-    <tr class="" data-player-id="<%= model.get('id') %>" data-game-id="<%= model.getGameID() %>">
+    <tr class="<%= model.hasGameStarted() ? "" : "gray" %>" data-player-id="<%= model.get('id') %>" data-game-id="<%= model.getGameID() %>">
         <td><h1 class="role"><%= position %></h1></td>
         <td><strong class="player-name"> <%= model.name() %> </strong>
 

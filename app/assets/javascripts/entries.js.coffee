@@ -173,9 +173,7 @@ class Entry
     player_id = dom.data('player-id') || ""
 
     if player_id?
-      player_dom = $('tr.contest-player#player_'+player_id)
-      # BUGBUG: this isn't currently exercised... add the following selector below. But is this still needed?
-      # $('tr[data-player-id="'+player.id+'"]')
+      player_dom = $('tr.contest-player[data-player-id="' + player_id + '"]')
       if player_dom.length
         @player = new window.PlayerStats(player_dom)
         player_dom.hide()
@@ -212,7 +210,6 @@ class Entry
       return "0"
   render: ->
     that = @
-
     settings = {
       symbol: "$"
       precision: 0
