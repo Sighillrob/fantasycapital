@@ -8,18 +8,18 @@ table.main-grid > thead > tr > th {
   border-bottom: none;
 }
 
-table.striped-grid > tbody > tr > td, table.striped-grid > tbody > tr > th {
+table.striped-grid > tbody > tr, table.striped-grid > tbody > tr {
   background-color: #f1f4f5;
 }
 
-table.striped-grid > tbody > tr:nth-child(odd) > td, table.striped-grid > tbody > tr:nth-child(odd) > th {
+table.striped-grid > tbody > tr:nth-child(odd), table.striped-grid > tbody > tr:nth-child(odd) {
   background-color: #fff;
 }
 
 table.main-grid > tbody > tr > td, table.main-grid > tbody > tr > th {
   background-color: #f1f4f5;
 }
-table.main-grid > tbody > tr:nth-child(odd) > td, table.main-grid > tbody > tr:nth-child(odd) > th {
+table.main-grid > tbody > tr:nth-child(odd), table.main-grid > tbody > tr:nth-child(odd) {
   background-color: #fff;
 }
 

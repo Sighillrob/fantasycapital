@@ -13,7 +13,7 @@
   <td data-value=<%= contest.prize %>>
     <%= number_to_currency(contest.prize, precision: 0) %>
   </td>
-  <td><%= "#{contest.entries_count}/#{contest.max_entries}" %></td>
+  <td class="entries-per-contest"><%= "#{contest.entries_count}/#{contest.max_entries}" %></td>
   <td class="actions-column">
     <% classname = (user_signed_in? ? "table-btn" : "table-btn require-signin") %>
     <%= link_to new_lineup_path(contest_id: contest.id), class: classname do %>
