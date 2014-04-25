@@ -6,22 +6,23 @@ module SportsdataClient
     RETRIES = 5
 
     include HTTParty
-    #debug_output $stderr if (defined? Rails && Rails.env.development?)
-    #logger SportsdataClient.logger, :info, :apache
+    debug_output $stderr if (defined? Rails && Rails.env.development?)
+    logger SportsdataClient.logger, :info, :apache
     base_uri SportsdataClient.base_url
 
     attr_reader :action_prefix
 
     def request(action, params = {}, &block)
-      params.merge! api_key: SportsdataClient.api_key
+      params.merge! api_key: @api_key
       params.delete_if { |k, v| v.nil? || v.empty? }
       response = with_retries { self.class.get(api_url(action), query: params) }
       parse_response response, &block
     end
 
     protected
-    def initialize(action_prefix)
+    def initialize(action_prefix, api_key)
       @action_prefix = action_prefix
+      @api_key = api_key
     end
 
     def api_url(action)
@@ -31,9 +32,9 @@ module SportsdataClient
     def parse_response(response, &block)
       if response.success?
         results =  block_given? ? yield(response.parsed_response) : response.parsed_response
-        SportsdataClient::SuccessResponse.new response, results
+        results
       else
-        SportsdataClient::FailureResponse.new response, response
+        raise RuntimeError, (SportsdataClient::FailureResponse.new response, response)
       end
     end
 
