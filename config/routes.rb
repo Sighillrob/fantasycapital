@@ -76,10 +76,11 @@ Main::Application.routes.draw do
     end
   end
 
-   resources :projections, only: :index do
+   resources :projections do
      collection do
-       get :with_stats
-       get :stats_by_game
+       get "with_stats/:sport_name" => 'projections#with_stats'
+       get "stats_by_game/:sport_name" => 'projections#stats_by_game'
+       get ":sport_name" => 'projections#index' # funky, index has a parameter? does this work?
      end
      resources :projection_by_stats do
        resources :projection_by_stat_and_games do

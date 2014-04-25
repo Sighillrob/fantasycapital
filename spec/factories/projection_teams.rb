@@ -15,6 +15,7 @@
 FactoryGirl.define do
   factory :project_team, :class => 'Projection::Team' do
     name "MyString"
-    players []
+    sequence(:ext_team_id) { |n| "ext-team-#{n}" }
+
   end
 end

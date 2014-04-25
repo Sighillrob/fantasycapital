@@ -21,7 +21,9 @@ module Projection
     belongs_to :away_team, class_name: Team
     has_many :stats, inverse_of: :game
     validates :sport, presence: true
-  
+    # combo of ext_game_id and team should be unique
+    validates :ext_game_id, uniqueness: {scope: :team}
+
     def self.refresh_all(sport_name, games_src, cutoff=(Time.now-10.days))
       updated_games = []
       # "closed" status means the game has finished
@@ -39,6 +41,7 @@ module Projection
         end
 
         teams = [home_team, away_team];
+        # record each game twice, with home team and away team flipped around.
         [teams, teams.reverse].each do |(team1, team2)|
           game = Game.where(ext_game_id: game_src["id"], team: team1 ).first_or_initialize
           game.sport = sport_name
@@ -46,16 +49,24 @@ module Projection
           game.opponent_team = team2
           game.home_team = home_team
           game.away_team = away_team
-          game.save!
+          begin
+            game.save!
+          rescue ActiveRecord::RecordInvalid => invalid
+            puts invalid.record.errors.to_a
+            raise
+          end
+
           updated_games << game
         end
       end
       updated_games
     end
 
-    def refresh_stats(teams_src)
-      cal = FantasyPointCalculator.new
+    def refresh_stats(teams_src, sportname)
+      cal = FantasyPointCalculator.create_for_sport(sportname)
+      # select stats that are for this game's primary "team"
       teams_src.select {|t| t["id"] == team.ext_team_id}.each do |team_src|
+        # select all players that played in the game...
         team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each do |player_src|
 
           player = Player.find_by_ext_player_id player_src["id"]
@@ -69,8 +80,11 @@ module Projection
           GamePlayed.where(player: player, game: self).first_or_create
 
           #Refresh stats accordingly, also add calculated fp (Fantasy Point)
-          fp = cal.weighted_fp { |stat_name, weight| player_src["statistics"][stat_name].to_f }
-          Stat.refresh player, self, player_src["statistics"].merge({"fp"=>fp})
+          fp = cal.weighted_fp { |stat_name, weight|
+            player_src["statistics"][stat_name].to_f
+          }
+          statcls = Stat.class_for_sport(sportname)
+          statcls.refresh player, self, player_src["statistics"].merge({"fp"=>fp})
 
         end #of team_src['players']['player'].select {|x| x['played']  && x['played'] == 'true'}.each
       end #of teams_src.select {|t| t["id"] == team.ext_team_id}.each

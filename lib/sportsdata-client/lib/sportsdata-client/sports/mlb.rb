@@ -3,55 +3,106 @@ module SportsdataClient
       class MLB < SportsdataClient::SportsdataGateway
 
         class << self
+
           def current_season
-            season = (Time.now.month < 10) ? Time.now.year - 1 : Time.now.year
+            # MLB season runs from April thru Sept in regular season, Oct post-season.
+            season = Time.now.year
           end
 
-          def teams(season= nil)
-            client.request 'league/hierarchy.xml' do |response|
+          def teams(season=current_season)
+            client.request "teams/#{season}.xml" do |response|
               SportsdataClient::ResponseParser.new(response).parse 'team'
             end
           end
 
-          def players(team_id)
-            client.request "teams/#{team_id}/profile.xml" do |response|
-                SportsdataClient::ResponseParser.new(response).parse 'player'
+          def players(teams, season=current_season)
+            # NOTE: in MLB, 'teams' variable is unused. but in NBA we need it.
+            # return a hash of external team ids, with each entry an array of parsed players
+            players={}
+            client.request "rosters/#{season}.xml" do |response|
+              teams_parsed=SportsdataClient::ResponseParser.new(response).parse 'team'
+
+              teams_parsed.each do |team_parsed|
+                # parse out 'player' nodes from each team.
+                players_parsed = SportsdataClient::ResponseParser.new
+                players[team_parsed['id']] = players_parsed.parse('player', team_parsed)
+              end
             end
+            players
           end
 
-          def regular_season_games(season=current_season)
-            games(season, 'REG')
-          end
-
-          def post_season_games(season=current_season)
-            games(season, 'PST')
-          end 
-
-          def games(season, nba_season)
-            client.request "games/#{season}/#{nba_season}/schedule.xml" do |response|
-                SportsdataClient::ResponseParser.new(response).parse 'game'
+          def all_season_games(season=current_season)
+            events = client.request "schedule/#{season}.xml" do |response|
+              SportsdataClient::ResponseParser.new(response).parse 'event'
             end
+            process_mlb_events events
           end
 
           def full_game_stats(game_id)
-            client.request "games/#{game_id}/summary.xml"
+            #client.request "games/#{game_id}/summary.xml"
+            client.request "statistics/#{game_id}.xml"
           end
 
           def game_stats(game_id)
-            client.request "games/#{game_id}/summary.xml" do |response|
-                SportsdataClient::ResponseParser.new(response).parse 'team'
+            # Get "Game Summary" from API
+            # For Projection, this needs to return array of “team” hashes:
+            #id — team ID
+            #[players][player]
+            #    [played]
+            #    [id] (player ID)
+            #    [statistics]
+            #        [stat1]
+            #        [stat2]
+            result = client.request "statistics/#{game_id}.xml"
+            hometeamstats = result['statistics']['home']
+
+            # adjust parameters to match receiver's expectations
+            hometeamstats['hitting']['players']['player'].each do |player|
+              player['played'] = player['games']['play'].to_i > 0 ? 'true' : 'false'
+              player['statistics'] = {}
+
+              # Add "onbase" statistics -- single, double, triple, homerun, base-on-balls,
+              #   hit-by-pitch
+              ['s', 'd', 't', 'hr', 'bb', 'hbp'].each do |statname|
+                player['statistics'][statname] = player['onbase'][statname]
+              end
+              # Append other stats
+              player['statistics']['runs'] = player['runs']['total']  # total runs
+              player['statistics']['rbi'] = player['rbi']             # RBI
+              player['statistics']['ktotal'] = player['outs']['ktotal'] # strikeouts
+              player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
+
             end
+            # there is only ONE team that matters here, the home team (b/c each team and game is uniquely entered in the ScheduledGame table)
+            teamresp = [{'id' => hometeamstats['id'], 'players' => hometeamstats['hitting']['players']}]
+
+            # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
+            return teamresp
+
           end
 
           def games_scheduled(date=Time.now.in_time_zone("EST").to_date)
-            client.request "games/#{date.strftime("%Y/%m/%d")}/schedule.xml" do |response|
-              SportsdataClient::ResponseParser.new(response).parse 'game'
+            url =  "daily/schedule/%04d/%02d/%02d.xml" % [date.year, date.month, date.day]
+            events = client.request url do |response|
+              SportsdataClient::ResponseParser.new(response).parse 'event'
             end
+            process_mlb_events events
           end
           
           protected
           def action_prefix
             'mlb-t4'
+          end
+
+          def process_mlb_events(events)
+            # take events (aka games)coming from the sports-data games API for MLB,
+            # and adjust their fields so the rest of the app understands them
+            events.each do |event|
+              event['scheduled'] = event['scheduled_start']
+              event['home_team'] = event['home']
+              event['away_team'] = event['visitor']
+            end
+            return events
           end
         end
       end

@@ -32,13 +32,14 @@ class StatService
           next if player.nil?
           player.player_stats.delete_all
           p_opponent_team = team2
+          # BUGBUG: Need to pass SPORT here so we can get it right in update_stats
           update_stats(player, p_player, p_opponent_team)
         end # of player
       end # of team
     end
 
     def update_stats(player, p_player, p_opponent_team)
-      cal = Projection::FantasyPointCalculator.new
+      cal = Projection::FantasyPointCalculator.create_for_sport('NBA')
       @dimension_map.each do |subject, dim_display|
         priority=0
         @span_map.each do |span, span_display|

@@ -18,5 +18,7 @@
 FactoryGirl.define do
   factory :projection_game, :class => 'Projection::Game' do
     start_date "2014-01-07"
+    sequence(:ext_game_id) { |n| "ext-game-#{n}" }
+
   end
 end

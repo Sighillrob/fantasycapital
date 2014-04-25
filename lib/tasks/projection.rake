@@ -5,7 +5,7 @@ require 'action_view'
 include ActionView::Helpers::NumberHelper
 
 SPORTS = {NBA: {api_client: SportsdataClient::Sports::NBA},
-          #MLB: {api_client: SportsdataClient::Sports::MLB}
+          MLB: {api_client: SportsdataClient::Sports::MLB}
 }
 
 namespace :projection do
@@ -21,20 +21,24 @@ namespace :projection do
       teams.each do |team|
         team.players.update_all(is_current: false)
       end
-      Projection::Player.refresh sport[:api_client].players(teams)
+
+      teams_array = sport[:api_client].players(teams)
+      Projection::Player.refresh teams_array
 
       Rails.logger.info "Fetching and populating Games from SportsData"
       cutoff = ENV['cutoff'] || "10"
       gamelist = sport[:api_client].all_season_games
-      games = Projection::Game.refresh_all(sport_name.to_s, gamelist, Time.now - cutoff.to_i.days)
+      recent_games = Projection::Game.refresh_all(sport_name.to_s, gamelist, Time.now - cutoff.to_i.days)
+      Rails.logger.info "Populated #{recent_games.count} games"
 
-      Rails.logger.info "Fetching and populating Player stats from SportsData"
-      games.each do |game|
-        game.refresh_stats sport[:api_client].game_stats(game.ext_game_id)
+      Rails.logger.info "Fetching and populating Player stats from SportsData for #{recent_games.count} games"
+      recent_games.each do |recent_game|
+        game_stats = sport[:api_client].game_stats(recent_game.ext_game_id)
+        recent_game.refresh_stats(game_stats, sport_name)
       end
 
       Rails.logger.info "Fetching and populating scheduled games from SportsData"
-      Projection::ScheduledGame.refresh_all sport[:api_client].games_scheduled
+      Projection::ScheduledGame.refresh_all(sport_name, sport[:api_client].games_scheduled)
     end
     Rails.logger.info "Done with projection:fetch_stats task"
   end
@@ -44,7 +48,7 @@ namespace :projection do
     Rails.logger.info "Calculating FP..."
     Projection::ScheduledGame.games_on.each do |scheduled_game|
       # enqueue tasks for Resque if we're in production, otherwise run them manually.
-      if Rails.env.production?
+      if Rails.env.production? || Rails.env.staging?
         Rails.logger.info "Enqueuing FP Calculation for game #{scheduled_game.id}"
         Resque.enqueue(FPCalculationWorker, scheduled_game.id)
       else
@@ -58,20 +62,24 @@ namespace :projection do
   desc "Send notification email"
   task notif: [:environment] do
     today = Time.now.in_time_zone("EST").strftime("%Y-%m-%d")
-    yesterday = (Time.now.in_time_zone("EST") - 1.day).strftime("%Y-%m-%d")
+    body = SPORTS.map do |sport_name, sport|
+      "<h3><a href='https://stage.fantasycapital.com/projections/with_stats/#{sport_name}" +
+      "?date=#{today}'>#{sport_name} Projection #{today}</h3><p>"
+    end
+
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
       :cc => "techalerts@fantasycapital.com",
       :from => Rails.configuration.projection_notif_email, 
       :subject => "Projection #{today}",
-      :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3>")
+      :html_body => body)
   end
 
   desc "Generates report that compares projection and actual"
   task review: [:environment] do
     SPORTS.each do |sport_name, sport|
 
-      stat_names = Projection::Stat::STATS_ALLOWED.keys
+      stat_names = Projection::Stat.class_for_sport(sport_name).stats_allowed.keys
       stat_names -= ["minutes", "personal_fouls", "fp"]
 
       today = Time.now.in_time_zone("EST").beginning_of_day
