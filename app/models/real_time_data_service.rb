@@ -63,7 +63,7 @@ class RealTimeDataService
       Pusher['gamecenter'].trigger('stats', game_score_to_push)
     end
 
-    cal = Projection::FantasyPointCalculator.new
+    cal = Projection::FantasyPointCalculator.create_for_sport('NBA')
 
     teams_src = game_src['team'] || []
 

@@ -14,7 +14,8 @@ module Projection
   class Team < ActiveRecord::Base
     has_many :games, inverse_of: :team
     has_many :players, inverse_of: :team
-  
+    validates :ext_team_id, uniqueness: true
+
     class << self
       def refresh_all(teams_src)
         Team.update_all(is_current: false)

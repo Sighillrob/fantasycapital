@@ -3,7 +3,7 @@ class FPCalculationWorker
   def self.raw_perform(scheduled_game_id)
     # Projection::FantasyPointCalculator.new.update Projection::ScheduledGame.find(scheduled_game_id)
     scheduled_game = Projection::ScheduledGame.find(scheduled_game_id)
-    Projection::FantasyPointCalculator.new.update scheduled_game
+    Projection::FantasyPointCalculator.create_for_sport(scheduled_game.sport).update scheduled_game
   end
   def self.perform(scheduled_game_id)
     self.raw_perform(scheduled_game_id)
