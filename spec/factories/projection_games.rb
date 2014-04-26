@@ -11,6 +11,7 @@
 #  ext_game_id      :string(255)
 #  home_team_id     :integer
 #  away_team_id     :integer
+#  sport            :string(255)      default("NBA")
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
