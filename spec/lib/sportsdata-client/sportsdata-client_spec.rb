@@ -1,0 +1,138 @@
+require 'spec_helper'
+
+describe 'Sportsdata Client' do
+  # test sportsdata client, both NBA and MLB variations. This is called purely by rake tasks
+  # right now, in realtime and overnight.
+
+  NBA_TEAMS_RESPONSE = File.read("spec/fixtures/sportsdata_client/nba_teams.json")
+  MLB_TEAMS_RESPONSE =File.read("spec/fixtures/sportsdata_client/mlb_teams.json")
+  describe "teams" do
+    it "parses NBA teams properly" do
+      # stub out the actual call to the sportsdata API
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        block.call(JSON.parse(NBA_TEAMS_RESPONSE))
+      end
+
+      teams = SportsdataClient::Sports::NBA.teams
+      expect(teams.length).to be(13)
+      teamnames=teams.map {|team| team['name']}
+      expect(teamnames.sort).to eq(["Bobcats", "Bucks", "Bulls", "Celtics", "Grizzlies", "Kings",
+                                    "Magic", "Mavericks", "Nuggets", "Raptors", "Timberwolves",
+                                    "Warriors", "Wizards"])
+    end
+
+    it "parses MLB teams properly" do
+
+      # stub out the actual call to the sportsdata API
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        block.call(JSON.parse(MLB_TEAMS_RESPONSE))
+      end
+      teams = SportsdataClient::Sports::MLB.teams
+      expect(teams.length).to be(25)
+      teamalias=teams.map {|team| team['alias']}
+      expect(teamalias.sort).to eq(["AL", "ARI", "ATL", "BAL", "BOS", "CIN", "CLE", "COL", "CWS",
+                                    "DET", "HOU", "KC", "LAA", "MIN", "MINOR", "NL", "NOTEAM",
+                                    "PHI", "RETIRED", "SD", "SEA", "STL", "TEX", "TOR", "WSH"])
+    end
+  end
+
+  describe "players" do
+    it "parses NBA players properly" do
+      # stub out the actual call to the sportsdata API
+      players_resp = {}
+      nba_teams = ['583ec8d4-fb46-11e1-82cb-f4ce4684ea4c', '583ec97e-fb46-11e1-82cb-f4ce4684ea4c',
+                   '583ed157-fb46-11e1-82cb-f4ce4684ea4c']
+      nba_teams.each do |team_id|
+        players_resp[team_id] = File.read(
+                "spec/fixtures/sportsdata_client/nba_player_teams_#{team_id}.json")
+      end
+
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        # called multiple times, once per team in the 'teamhash'. Respond appropriately based on URL
+        teamid=url.split('/')[1]
+        block.call(JSON.parse(players_resp[teamid]))
+      end
+
+      # get a hash of 3 teams by picking a conference and division
+      teamshash = JSON.parse(NBA_TEAMS_RESPONSE)['league']['conference'][0]['division'][0]['team']
+      player_teams = SportsdataClient::Sports::NBA.players(teamshash)
+      expect(player_teams.length).to be(3)  # 3 teams
+      expect(player_teams['583ec8d4-fb46-11e1-82cb-f4ce4684ea4c'].length).to be(8)   # players in team 0
+      expect(player_teams['583ec97e-fb46-11e1-82cb-f4ce4684ea4c'].length).to be(9)   # players in team 1
+      expect(player_teams['583ed157-fb46-11e1-82cb-f4ce4684ea4c'].length).to be(7)   # players in team 2
+      lastnames=player_teams.values.flatten.map {|player| player['last_name']}
+
+      expect(lastnames.sort).to eq(["Afflalo", "Ariza", "Beal", "Biyombo", "Booker", "Gooden",
+                                    "Harkless", "Harris", "Haywood", "Hilario", "Jefferson",
+                                    "Kidd-Gilchrist", "McRoberts", "Miller", "Nelson", "OQuinn",
+                                    "Oladipo", "Price", "Taylor", "Temple", "Tolliver", "Walker",
+                                    "Wall", "White"])
+    end
+
+    it "parses MLB players properly" do
+      players_resp = File.read("spec/fixtures/sportsdata_client/mlb_player_teams.json")
+      players_resp = JSON.parse(players_resp)
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        # called multiple times, once per team in the 'teamhash'. Respond appropriately based on URL
+        block.call(players_resp)
+      end
+
+      # in MLB case, we don't care about the teams hash, so pass nil
+      player_teams = SportsdataClient::Sports::MLB.players(nil)
+      expect(player_teams.length).to be(9)  # 9 teams
+      lastnames = player_teams.values.flatten.map {|player| player['last_name']}
+      expect(lastnames).to eq(["Bonifacio", "Ramirez", "Wright", "Revere", "Papelbon", "Young",
+                               "Young", "Kubel", "Burton", "Arencibia", "Chirinos", "Andrus",
+                               "Beltre", "Robertson", "Cotts", "Darvish", "McCann", "Jeter",
+                               "Johnson", "Roberts", "Kuroda", "Leroux", "Nuno", "Leon", "Lobaton",
+                               "Werth", "Barrett", "Blevins"])
+
+
+    end
+  end
+
+  describe "all_season games" do
+    # test SportsdataClient::Sports::NBA.all_season_games
+    it "parses NBA properly" do
+      pending
+    end
+
+    it "parses MLB properly" do
+      pending
+    end
+  end
+
+  describe "game_stats" do
+    # test SportsdataClient::Sports::NBA.game_stats
+    it "parses NBA properly" do
+      pending
+    end
+
+    it "parses MLB properly" do
+      pending
+    end
+  end
+
+  describe "games_scheduled" do
+    # test SportsdataClient::Sports::NBA.games_scheduled
+    it "parses NBA properly" do
+      pending
+    end
+
+    it "parses MLB properly" do
+      pending
+    end
+  end
+
+  describe "full_game_stats" do
+    # test SportsdataClient::Sports::NBA.full_game_stats
+    it "parses NBA properly" do
+      pending
+    end
+
+    it "parses MLB properly" do
+      pending
+    end
+  end
+
+end

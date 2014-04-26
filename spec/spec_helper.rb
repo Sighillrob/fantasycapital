@@ -1,4 +1,8 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
+# Simplecov should be placed as early as possible; anything loaded before it won't show up in
+# coverage.
+require 'simplecov'
+SimpleCov.start 'rails'
+
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
@@ -6,8 +10,6 @@ require 'rspec/autorun'
 require 'capybara/rails'
 require 'capybara/rspec'
 
-require 'simplecov'
-SimpleCov.start 'rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
