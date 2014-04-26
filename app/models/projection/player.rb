@@ -16,20 +16,33 @@ module Projection
   class Player < ActiveRecord::Base
     belongs_to :team
     has_one :projection
+    validates :ext_player_id, uniqueness: true
 
     class << self
-      def refresh(players_src, team)
-        team.players.update_all(is_current: false)
-        players_src.each do |player_src|
-          player = Player.where(ext_player_id: player_src['id']).first_or_initialize
-          player.name = player_src['full_name']
-          player.is_current = true
-          player.team = team
-          player.position = player_src['primary_position']
-          player.save!
+      def refresh(teams_array)
+        # step through a hash w/ ext-team-id as key, array of players from external API as data,
+        # and update the player data.
+        teams_array.each do |ext_team_id, players_src|
+          if players_src.nil?
+            puts "Huh?"
+            next
+          end
+          players_src.each do |player_src|
+            player = Player.where(ext_player_id: player_src['id']).first_or_initialize
+            # NOTE: first_name and last_name are present in both MLB and NBA data.
+            # We were previously using 'full_name' but it doesn't exist in MLB data.
+            player.name = player_src['first_name'] + ' ' + player_src['last_name']
+            player.is_current = true
+            player.team = Team.find_by!(ext_team_id: ext_team_id)
+            player.position = player_src['primary_position']
+            player.save!
+          end
         end
+
+
       end
     end
+
 
     def method_missing(method_name, *args, &block)
       if m = /^last_(\d+)_game[s]*$/.match(method_name)
@@ -42,7 +55,9 @@ module Projection
     end
     
     def last_games(x)
-      GamePlayed.includes(:game).where(player: self).sort { |a,b| a.game.start_date <=> b.game.start_date}.last(x).map {|g| g.game} 
+      GamePlayed.includes(:game).where(player: self).sort {
+          |a,b| a.game.start_date <=> b.game.start_date
+      }.last(x).map {|g| g.game}
     end
 
     def the_game_to_last(x)

@@ -5,7 +5,7 @@
       <tr>
         <th data-defaultsort="asc" class="srt-contest-name">ID</th>
         <th data-defaultsort="asc" class="srt-sport">GAME</th>
-        <th data-defaultsort="asc" class="srt-live-in">COMPLETED</th>
+        <th data-defaultsort="asc" class="srt-live-in">DATE</th>
         <th data-defaultsort="asc" class="srt-entry-fee">ENTRY FEE</th>
         <th data-defaultsort="asc">PRIZE POOL</th>
         <th data-defaultsort="asc">PLACE</th>
@@ -19,7 +19,7 @@
         <tr class="completedcontest">
           <td><%= contest.id %></td>
           <td><%= contest.sport %></td>
-          <td><%= moment.utc(contest.complete).local().format("hh:mm a") %></td>
+          <td><%= moment.utc(contest.complete).local().format("D/MM/YY") %></td>
           <td><%= accounting.formatMoney(contest.entry_fee) %></td>
           <td><%= accounting.formatMoney(contest.prize) %></td>
           <td><%= contest.final_pos %></td>

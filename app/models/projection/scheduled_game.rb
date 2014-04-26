@@ -9,20 +9,25 @@
 #  created_at   :datetime
 #  updated_at   :datetime
 #  ext_game_id  :string(255)
+#  sport        :string(255)      default("NBA")
 #
 
 module Projection
   class ScheduledGame < ActiveRecord::Base
     belongs_to :home_team, class_name: Team
     belongs_to :away_team, class_name: Team
+    validates :ext_game_id, uniqueness: true
+    validates :sport, presence: true
 
     class << self
-      def refresh_all(games_src)
+      def refresh_all(sport_name, games_src)
+        # called by projection.rake during nightly projections to populate scheduled games.
         games_src.each do |game_src|
           game = ScheduledGame.where(ext_game_id: game_src["id"]).first_or_initialize
           game.start_date = Time.parse(game_src["scheduled"])
           home_team = Team.find_by_ext_team_id game_src["home_team"]
           away_team = Team.find_by_ext_team_id game_src["away_team"]
+          game.sport = sport_name
           unless home_team && away_team
             logger.warn "Either #{game_src["home_team"]} or #{game_src["away_team"]} is not found..."
             logger.warn "Skipping #{game_src}"

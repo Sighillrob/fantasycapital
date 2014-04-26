@@ -1,3 +1,4 @@
+
 namespace :stats do
    def log(message, error = false)
      if error
@@ -26,47 +27,44 @@ namespace :stats do
     safe_rake_tasks "stats:fetch_players"
     safe_rake_tasks "stats:create_contests"
     safe_rake_tasks "stats:player_stats"
-    #safe_rake_tasks "stats:schedule_realtime_push"
   end
 
-  desc "Create games and contests from stats api"
-  task create_contests: [:environment] do
-    today = Time.now.in_time_zone("EST").to_date
-    # create games and contests for multiple days in future so that we can always have contests to
-    # enter.
-    ActiveRecord::Base.logger.level = 2   # disable logging all SQL calls to console.
-    (today.. today+4).each do |date|
-      games_scheduled = SportsdataClient::Sports::NBA.games_scheduled(date).result
-      RealTimeDataService.new.refresh_schedule games_scheduled
-    end
-    # populate upcoming contests in main webapp
-    ContestFactory.create_nba_contests
-
-  end
-
-  desc "Populate players for NBA from SportsData api"
+  desc "Populate players for all active sports from SportsData API"
   task fetch_players: [:environment] do
-    teams = SportsdataClient::Sports::NBA.teams.result
-    teams.each do |team|
-      Player.refresh_all SportsdataClient::Sports::NBA.players(team['id']).result, team
+    SPORTS.each do |sport_name, sport|
+      Rails.logger.info "Rake stats fetch players for #{sport_name}"
+      teams = sport[:api_client].teams
+      Team.refresh_all(teams)
+      players_in_teams = sport[:api_client].players(teams)
+      players_in_teams.each do |team_id, players|
+        Player.refresh_all players, team_id, sport_name
+      end
     end
+    Rails.logger.info "Rake stats fetch players finished"
   end
 
-  desc "Populate player's historical stats"
+   desc "Create games and contests from stats api"
+   task create_contests: [:environment] do
+     today = Time.now.in_time_zone("EST").to_date
+     # create games and contests for multiple days in future so that we can always have contests to
+     # enter.
+     ActiveRecord::Base.logger.level = 2   # disable logging all SQL calls to console.
+     (today.. today+4).each do |date|
+       games_scheduled = SportsdataClient::Sports::NBA.games_scheduled(date).result
+       RealTimeDataService.new.refresh_schedule games_scheduled
+     end
+     # populate upcoming contests in main webapp
+     ContestFactory.create_nba_contests
+
+   end
+
+
+   desc "Populate player's historical stats"
   task player_stats: [:environment] do
     Projection::ScheduledGame.games_on.each do |scheduled_game|
       Resque.enqueue(PlayerStatsWorker, scheduled_game.id)
     end
   end
 
-  ## Nils: Deprecated, using rake realtime:games instead.
-  #desc "Schedule RealtimeDataService for games of the day on Sidekiq"
-  #task schedule_realtime_push:  [:environment] do
-  #  puts "Rake task: stats:schedule_realtime_push running"
-  #  GameScore.scheduled_on.each do |game|
-  #    puts "Scheduled sidekiq task for game id #{game.id} to start at #{game.scheduledstart - 30.minutes}"
-  #    RealtimeStatsWorker.perform_at(game.scheduledstart - 30.minutes, game.ext_game_id)
-  #  end
-  #end
 
 end

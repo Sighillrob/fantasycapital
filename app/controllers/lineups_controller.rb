@@ -29,7 +29,7 @@ class LineupsController < ApplicationController
     if @lineup.valid?
       begin
         @entry = Contest.find(@lineup.contest_id_to_enter).enter(@lineup) if @lineup.contest_id_to_enter.present?
-      rescue RuntimeError => e
+      rescue RuntimeError, ActiveRecord::RecordInvalid => e
         redirect_to "/", alert: e.message
         return
       end

@@ -24,8 +24,7 @@ FactoryGirl.define do
     contest_type "50/50"
     entry_fee 1.0
     prize 1.9
-    contestdate Time.now.to_date + 1    # default is contests start tomorrow.
-    contest_start  Time.now + 60*60*12  # 12 hours from now
+    contestdate "2014-03-12"
     max_entries 10
   end
 end

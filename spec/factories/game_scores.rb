@@ -31,7 +31,7 @@ FactoryGirl.define do
     status "scheduled"
     association :home_team, factory: :team
     association :away_team, factory: :team
-    scheduledstart "2014-03-12 5:00"
     ext_game_id
+    scheduledstart {"#{playdate.to_time + 14.hours}"}
   end
 end

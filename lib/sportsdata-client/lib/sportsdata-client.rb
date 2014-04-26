@@ -2,10 +2,7 @@ require 'active_support/all'
 require 'httparty'
 
 module SportsdataClient
-  # stats account secret
-  mattr_accessor :api_secret
 
-  mattr_accessor :api_key
   @@base_url = 'http://api.sportsdatallc.org/'.freeze
 
   mattr_accessor :logger
@@ -19,7 +16,12 @@ module SportsdataClient
     end
 
     def logger
-     @@logger ||= ::Logger.new('log/sportsdata-client.log')
+      begin
+        Dir.mkdir("log/")
+      rescue Errno::EEXIST => exist
+        puts "Sportsdata-client: Log directory already exists"
+      end
+      @@logger ||= ::Logger.new('log/sportsdata-client.log')
     end
   end
 end
@@ -31,3 +33,4 @@ require 'sportsdata-client/success_response'
 require 'sportsdata-client/failure_response'
 require 'sportsdata-client/sportsdata_gateway'
 require 'sportsdata-client/sports/nba'
+require 'sportsdata-client/sports/mlb'

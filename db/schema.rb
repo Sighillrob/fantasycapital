@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407000358) do
+ActiveRecord::Schema.define(version: 20140426001424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20140407000358) do
     t.integer  "period"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sport",           default: "NBA"
   end
 
   add_index "game_scores", ["away_team_id"], name: "index_game_scores_on_away_team_id", using: :btree
@@ -190,6 +191,7 @@ ActiveRecord::Schema.define(version: 20140407000358) do
     t.string   "ext_game_id"
     t.integer  "home_team_id"
     t.integer  "away_team_id"
+    t.string   "sport",            default: "NBA"
   end
 
   add_index "projection_games", ["away_team_id"], name: "index_projection_games_on_away_team_id", using: :btree
@@ -261,6 +263,7 @@ ActiveRecord::Schema.define(version: 20140407000358) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ext_game_id"
+    t.string   "sport",        default: "NBA"
   end
 
   add_index "projection_scheduled_games", ["away_team_id"], name: "index_projection_scheduled_games_on_away_team_id", using: :btree

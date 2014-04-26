@@ -20,6 +20,9 @@ require 'spec_helper'
 require 'time'
 describe Contest do
 
+  before do
+    Time.stub(:now).and_return(now)
+  end
   let(:now) { Time.parse("2014-03-20 17:51:27 -0700")}
   let(:todaydate) { now.to_date }
 
@@ -27,7 +30,6 @@ describe Contest do
   let(:lineup) { create(:lineup, user: user) }
   let!(:game) {create(:game_score, playdate:"2014-03-21", scheduledstart: now + 18.hours)}
   let(:contest) { create(:contest, contestdate: game.playdate) }
-
   describe "Recording contest outcome" do
     let!(:entries) { [
         create(:entry, contest: contest, lineup: lineup),
@@ -222,7 +224,7 @@ describe Contest do
 
     context "contest expired" do
       before do
-        c = create(:contest)
+        c = create(:contest, contestdate: game.playdate)
         create(:entry, contest: c, lineup: lineup)
       end
 
@@ -310,8 +312,10 @@ describe Contest do
           contest.enter(another_lineup).should be_present
           upcoming_cont = Contest.in_range(user, todaydate, todaydate+1).eligible(user, now)
           upcoming_cont.count.should == 1
+          expect(contest.filled?).to be(true)
+          expect(upcoming_cont[0].contestdate).to eq(contest.contestdate)
+          expect(upcoming_cont[0].id).to_not eq(contest.id)
 
-          (upcoming_cont[0].contest_start - contest.contest_start).should < 1
           upcoming_cont[0].max_entries.should == contest.max_entries
         end
       end

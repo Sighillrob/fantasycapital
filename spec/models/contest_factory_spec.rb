@@ -30,11 +30,13 @@ describe Contest do
 
   describe "when 7 games are scheduled over 3 days" do
 
-    it "there should be 54 contests" do
-      should have(54).items   # 27 contests for each game day, 2 game days with >= 3 contests
+    it "there should be 12 contests" do
+      should have(12).items   # 6 contests for each game day, 2 game days with >= 3 contests
+                              # NOTE: 6 is the reduced amount during beta; post-beta #
+                              # (based on uncommenting the contests in contest_factory) is 27.
     end
     it {
-      subject.first.contest_start.should == games[0].scheduledstart
+      subject.order(contestdate: :asc).first.start_at.should == games[0].scheduledstart
     }
 
     it "should be idemopotent (identical results when called more than once)" do

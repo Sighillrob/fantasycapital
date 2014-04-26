@@ -59,7 +59,7 @@ class EntriesController < ApplicationController
                             todaydate-7,
                             # show fake contests to admins only
                             current_user.admin ? Time.new(2060,1,1) : todaydate+7).
-                        includes(:contest).includes(:lineup)
+                        includes({contest: :entries}).includes(:lineup)
 
     entries_in_play.each do |entry|
       # the API has a funky format, close to a contest but not quite. Build up an element for it.
@@ -73,8 +73,12 @@ class EntriesController < ApplicationController
       if state == :closed
         contest['final_pos'] = entry[:final_pos]
         completedContests << contest
+      elsif state == :live
+        contest['final_pos'] = entry.current_pos
+        contest['num_entries'] = entry.contest.entries.count
+        liveContests << contest
       end
-      liveContests << contest if state == :live
+
       upcomingContests << contest if state == :in_future
     end
 

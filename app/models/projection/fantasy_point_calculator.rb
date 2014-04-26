@@ -1,21 +1,29 @@
 module Projection
   class FantasyPointCalculator
+    SPORTS = {}
+    @sport = nil  # class instance variable
+
+    class << self
+      attr_accessor :sport
+
+      def create_for_sport sportname
+        # factory method to return an instance of a FantasyPointCalculator subclass for the
+        # requested sport. Sport subclasses are defined below this class.
+        SPORTS[sportname.to_s].new
+      end
+    end
+
     def initialize
-      @stat_weights = { 
-        "points" => 1,
-        "assists" => 1.5,
-        "steals" => 2,
-        "rebounds" => 1.25,
-        "blocks" => 2,
-        "turnovers" => -1 }
+      # the stat weight fields are used by game/refresh_stats (during Projection / fetch_stats task).
+      # The keys determine the fields we expect under the 'statistics' hash from the sportsdata API.
+      #
+
       @games_weights = {
         "player.last_1_game" => lambda {|x| x * 0.10 },
         "player.last_3_games" => lambda {|x| x * 0.15 },
         "player.last_10_games" => lambda {|x| x * 0.25 },
         "player.all_games" => lambda {|x| x * 0.50 }
       }
-      # load weights and other parameters from rule file
-      self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
     end
   
     def update(scheduled_game)
@@ -48,12 +56,23 @@ module Projection
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
         if ( criteria.start_with? "opponent_team" )
-          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player.position == player.position}
+          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat|
+            stat.stat_name == stat_name && stat.player.position == player.position
+          }
           # opponent's stat should be factored by minutes played
-          avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
-          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp) * avg_mins / 48.0
+          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
+          if self.class.sport == "NBA"
+            # NOTE: Mike and Steve said this calculation isn't essential. It's used in daily
+            #   stats emails though. Since it only works for NBA, qualify it w/ NBA for now.
+
+            avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
+            p_by_s_c.weighted_fp *= avg_mins / 48.0
+          end
+
         else
-          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat| stat.stat_name == stat_name && stat.player == player}
+          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat|
+            stat.stat_name == stat_name && stat.player == player
+          }
           p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
         end
         p_by_s_c.save!
@@ -96,5 +115,70 @@ module Projection
       end
     end
 
+    protected
+    def self.register_sport sportname
+      # allow subclass to register itself here
+      SPORTS[sportname] = self
+      @sport=sportname
+
+    end
+
+
+
   end
+
+  class NBA_FPCalculator < FantasyPointCalculator
+    register_sport 'NBA'
+
+    def initialize
+
+      @stat_weights = { # class variable
+          "points" => 1,
+          "assists" => 1.5,
+          "steals" => 2,
+          "rebounds" => 1.25,
+          "blocks" => 2,
+          "turnovers" => -1 }
+      super
+    end
+
+  end
+
+  class MLB_FPCalculator < FantasyPointCalculator
+    register_sport 'MLB'
+
+    # MLB:
+    # For hitters:
+    # 1B       1.00 - [player][onbase][s]
+    # 2B       2.00 - [player][onbase][d]
+    # 3B       3.00 - [player][onbase][t]
+    # HR       4.00 - [player][onbase[hr]
+    # RBI      1.00 - [player][rbi]
+    # Run      1.00 - [player][runs][total]
+    # Base on balls    1.00 - [player][onbase][bb]
+    # Stolen base      2.00 - [player][steal][stolen]
+    # Hit by pitch     1.00 - [player][onbase][hbp]
+    # Strike out       (0.50) - [player][outs][ktotal]
+
+    def initialize
+
+      @stat_weights = { # class variable
+          's' => 1,
+          'd' => 2,
+          't' => 3,
+          'hr' => 4,
+          'rbi' => 1,
+          'run' => 1,
+          'bb' => 1,
+          'stolen' => 2,
+          'hbp' => 1,
+          'ktotal' => -0.5
+      }
+      super
+
+    end
+
+  end
+
+
 end

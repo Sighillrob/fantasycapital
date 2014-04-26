@@ -4,94 +4,132 @@ include ProjectionByStatsHelper
 require 'action_view'
 include ActionView::Helpers::NumberHelper
 
+SPORTS = {NBA: {api_client: SportsdataClient::Sports::NBA},
+          MLB: {api_client: SportsdataClient::Sports::MLB}
+}
+
 namespace :projection do
   desc "Fetch data from external source (SportsData)" 
   task fetch_stats: :environment do
-    Rails.logger.info "Feteching and populating Teams from SportsData"
-    teams = Projection::Team.refresh_all SportsdataClient::Sports::NBA.teams.result
+    SPORTS.each do |sport_name, sport|
 
-    Rails.logger.info "Feteching and populating Players from SportsData"
-    teams.each do |team|
-      Projection::Player.refresh SportsdataClient::Sports::NBA.players(team.ext_team_id).result, team
+      Rails.logger.info "Fetching and populating Teams from SportsData"
+      teams = Projection::Team.refresh_all sport[:api_client].teams
+
+      Rails.logger.info "Fetching and populating Players from SportsData"
+
+      teams.each do |team|
+        team.players.update_all(is_current: false)
+      end
+
+      teams_array = sport[:api_client].players(teams)
+      Projection::Player.refresh teams_array
+
+      Rails.logger.info "Fetching and populating Games from SportsData"
+      cutoff = ENV['cutoff'] || "10"
+      gamelist = sport[:api_client].all_season_games
+      recent_games = Projection::Game.refresh_all(sport_name.to_s, gamelist, Time.now - cutoff.to_i.days)
+      Rails.logger.info "Populated #{recent_games.count} games"
+
+      Rails.logger.info "Fetching and populating Player stats from SportsData for #{recent_games.count} games"
+      recent_games.each do |recent_game|
+        game_stats = sport[:api_client].game_stats(recent_game.ext_game_id)
+        recent_game.refresh_stats(game_stats, sport_name)
+      end
+
+      Rails.logger.info "Fetching and populating scheduled games from SportsData"
+      Projection::ScheduledGame.refresh_all(sport_name, sport[:api_client].games_scheduled)
     end
-
-    Rails.logger.info "Feteching and populating Games from SportsData"
-    cutoff = ENV['cutoff'] || "10"
-    games = Projection::Game.refresh_all(
-        ( SportsdataClient::Sports::NBA.regular_season_games.result + SportsdataClient::Sports::NBA.post_season_games.result ),
-      Time.now - cutoff.to_i.days
-    )
-
-    Rails.logger.info "Feteching and populating Player stats from SportsData"
-    games.each do |game|
-      game.refresh_stats SportsdataClient::Sports::NBA.game_stats(game.ext_game_id).result
-    end
-        
-    Rails.logger.info "Feteching and populating scheduled games from SportsData"
-    Projection::ScheduledGame.refresh_all SportsdataClient::Sports::NBA.games_scheduled.result
+    Rails.logger.info "Done with projection:fetch_stats task"
   end
 
-  desc "Projet Fantasy Points"
+  desc "Project Fantasy Points"
   task fp: [:environment] do
     Rails.logger.info "Calculating FP..."
     Projection::ScheduledGame.games_on.each do |scheduled_game|
-      Resque.enqueue(FPCalculationWorker, scheduled_game.id)
+      # enqueue tasks for Resque if we're in production, otherwise run them manually.
+      if Rails.env.production? || Rails.env.staging?
+        Rails.logger.info "Enqueuing FP Calculation for game #{scheduled_game.id}"
+        Resque.enqueue(FPCalculationWorker, scheduled_game.id)
+      else
+        Rails.logger.info "Running FP Calculation for game #{scheduled_game.id} directly (non-production)"
+        FPCalculationWorker.raw_perform scheduled_game.id
+      end
+
     end
   end
 
   desc "Send notification email"
   task notif: [:environment] do
     today = Time.now.in_time_zone("EST").strftime("%Y-%m-%d")
-    yesterday = (Time.now.in_time_zone("EST") - 1.day).strftime("%Y-%m-%d")
-    Pony.mail(
-      :to => Rails.configuration.projection_notif_email,
-      :cc => "kenneth.jiang@gmail.com",
-      :from => Rails.configuration.projection_notif_email, 
-      :subject => "Projection #{today}",
-      :html_body => "<h3><a href='http://fantasycapital-stg.herokuapp.com/projections/with_stats?date=#{today}'>Projection #{today}</h3>")
-  end
-
-  desc "Generates report that compares projection and actual"
-  task review: [:environment] do
-    stat_names = Projection::Stat::STATS_ALLOWED.keys - ["minutes", "personal_fouls", "fp"]
-
-    today = Time.now.in_time_zone("EST").beginning_of_day
-    time_range = (today-3.day)..today
-    projections = Projection::Projection.includes(:player, :projection_by_stats, :scheduled_game).where('projection_scheduled_games.start_date' => time_range)
-
-    filename = "#{Rails.root}/tmp/review-#{today.strftime('%Y-%m-%d')}.csv"
-    CSV.open(filename, "w") do |csv|
-      csv << ["Player", "Game", "fp(projection)", "fp(actual)"].concat( stat_names.inject([]) {|a, s| a << "#{s}(projection)"; a << "#{s}(actual)"})
-      projections.each do |proj|
-        player = proj.player
-        game = Projection::Game.where(ext_game_id: proj.scheduled_game.ext_game_id, team: player.team).first
-        next if game.nil?
-
-        actual_fp = Projection::Stat.where(game: game, player: player, stat_name: "fp").first.try(:stat_value) || 0.0
-        line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('EST'), "%.2f" % (proj.fp || 0.0), "%0.2f" % actual_fp]
-        stat_names.each do |s|
-          line << "%.3f" % (stat_of(proj, s).try(:fp) || 0.0)
-          actual = Projection::Stat.where(game: game, player: player, stat_name: s).first
-          line << "%.2f" % (actual ? actual.stat_value : 0.0)
-        end
-        csv << line
-      end
+    body = SPORTS.map do |sport_name, sport|
+      "<h3><a href='https://stage.fantasycapital.com/projections/with_stats/#{sport_name}" +
+      "?date=#{today}'>#{sport_name} Projection #{today}</h3><p>"
     end
 
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
-      :cc => "kenneth.jiang@gmail.com",
+      :cc => "techalerts@fantasycapital.com",
       :from => Rails.configuration.projection_notif_email, 
-      :subject => "Review #{today}",
-      :html_body => "<h3>#{today}</h3>",
-      :attachments => {"review-#{today.strftime('%Y-%m-%d')}.csv" => File.read(filename)}
-    )
+      :subject => "Projection #{today}",
+      :html_body => body)
+  end
+
+  desc "Generates report that compares projection and actual"
+  task review: [:environment] do
+    SPORTS.each do |sport_name, sport|
+
+      stat_names = Projection::Stat.class_for_sport(sport_name).stats_allowed.keys
+      stat_names -= ["minutes", "personal_fouls", "fp"]
+
+      today = Time.now.in_time_zone("EST").beginning_of_day
+      time_range = (today-3.day)..today
+      projections = Projection::Projection
+                      .includes(:player, :projection_by_stats, :scheduled_game)
+                      .where('projection_scheduled_games.start_date' => time_range,
+                             'projection_scheduled_games.sport' => sport_name.to_s)
+
+      filename = "#{Rails.root}/tmp/review-#{sport_name}-#{today.strftime('%Y-%m-%d')}.csv"
+      CSV.open(filename, "w") do |csv|
+        csv << ["Player", "Game", "fp(projection)", "fp(actual)"]
+                  .concat( stat_names.inject([]) {|a, s|
+                      a << "#{s}(projection)"; a << "#{s}(actual)"
+                  })
+
+        projections.each do |proj|
+          player = proj.player
+          game = Projection::Game.where(ext_game_id: proj.scheduled_game.ext_game_id,
+                                        team: player.team).first
+          next if game.nil?
+
+          actual_fp = Projection::Stat.where(game: game, player: player, stat_name: "fp")
+                        .first.try(:stat_value) || 0.0
+          line = [proj.player.name, proj.scheduled_game.start_date.in_time_zone('EST'), "%.2f" % (proj.fp || 0.0), "%0.2f" % actual_fp]
+          stat_names.each do |s|
+            line << "%.3f" % (stat_of(proj, s).try(:fp) || 0.0)
+            actual = Projection::Stat.where(game: game, player: player, stat_name: s).first
+            line << "%.2f" % (actual ? actual.stat_value : 0.0)
+          end
+          csv << line
+        end
+      end
+
+      Pony.mail(
+        :to => Rails.configuration.projection_notif_email,
+        :cc => "techalerts@fantasycapital.com",
+        :from => Rails.configuration.projection_notif_email,
+        :subject => "Review #{sport_name} #{today}",
+        :html_body => "<h3>#{today}</h3>",
+        :attachments => {"review-#{today.strftime('%Y-%m-%d')}.csv" => File.read(filename)}
+      )
+    end
+
   end
 
   desc "Purge projection database"
   task purge: :environment do
     input = ''
-    STDOUT.puts "This will delete all data in projectin tables! Are you sure (y/N)?"
+    STDOUT.puts "This will delete all data in projection tables! Are you sure (y/N)?"
     input = STDIN.gets.chomp
     if input.downcase == "y"
       Projection::ProjectionBreakdown.delete_all

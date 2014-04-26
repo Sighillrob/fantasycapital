@@ -22,7 +22,7 @@ class Main.Views.PlayerView extends Backbone.View
                 @sub.replaceWith(content)
             @anim_node = @el.find("tr[data-player-id=\"" + @model.get("id") + "\"]")
             if self.pending_animation
-                @anim_node.css({"background-color": "#0eea6c"}).stop(true, true).animate({ "background-color": "#eef0f1"}, 2000)
+                @anim_node.css({"background-color": "#0eea6c"}).stop(true).animate({ "background-color": "#eef0f1"}, 2000)
                 self.pending_animation = false
         , 2000)
 
