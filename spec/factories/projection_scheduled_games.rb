@@ -9,6 +9,7 @@
 #  created_at   :datetime
 #  updated_at   :datetime
 #  ext_game_id  :string(255)
+#  sport        :string(255)      default("NBA")
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
