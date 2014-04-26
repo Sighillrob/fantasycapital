@@ -1,5 +1,5 @@
 <div class='topbarWraper'>
-  <div class='navbar navbar-default navbar-static-top capital_top_nav' role="navigation">
+  <div class='navbar navbar-default navbar-static-top capital_top_nav topbar-nav' role="navigation">
     <div class='container'>
       <!--<div class='navbar-header'>
         <button class='navbar-toggle' data-target=".capitalcollapse" data-toggle="collapse" type="button">
@@ -15,9 +15,12 @@
       </div>
       <% end %>
       <div class=''>
-        <ul class='nav navbar-nav navbar-nav-centered'>
+        <ul class='nav navbar-nav navbar-nav-centered clearfix'>
           <li>
-            <%= link_to invite_waiting_lists_path, class: 'refer-link' do%>
+            <a href="#" class="pull-left">
+              <strong class="learn-more">Learn more about Fantasy Capital</strong>
+            </a>
+            <%= link_to invite_waiting_lists_path, class: 'refer-link pull-right' do%>
               <strong class='ajax-modal refer-friends'>Refer Friends for Cash &rarr;</strong>
             <%end%>
           </li>
