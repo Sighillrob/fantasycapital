@@ -16,7 +16,12 @@ module SportsdataClient
     end
 
     def logger
-     @@logger ||= ::Logger.new('log/sportsdata-client.log')
+      begin
+        Dir.mkdir("log/")
+      rescue Errno::EEXIST => exist
+        puts "Sportsdata-client: Log directory already exists"
+      end
+      @@logger ||= ::Logger.new('log/sportsdata-client.log')
     end
   end
 end
