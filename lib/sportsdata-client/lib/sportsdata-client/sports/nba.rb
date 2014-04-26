@@ -3,6 +3,7 @@ module SportsdataClient
       class NBA < SportsdataClient::SportsdataGateway
 
         class << self
+
           def current_season
             season = (Time.now.month < 10) ? Time.now.year - 1 : Time.now.year
           end
@@ -13,14 +14,21 @@ module SportsdataClient
             end
           end
 
-          def players(team_id)
-            client.request "teams/#{team_id}/profile.xml" do |response|
-                SportsdataClient::ResponseParser.new(response).parse 'player'
+          def players(teams, season=current_season)
+            teamhash = {}
+            teams.each do |team|
+              team_id = team[:ext_team_id]
+              client.request "teams/#{team_id}/profile.xml" do |response|
+                players = SportsdataClient::ResponseParser.new.parse('player', response)
+                teamhash[team_id] = players
+              end
+
             end
+            teamhash
           end
 
           def all_season_games(season=current_season)
-            (self.regular_season_games.result + self.post_season_games.result )
+            (self.regular_season_games + self.post_season_games )
           end
 
           def regular_season_games(season=current_season)

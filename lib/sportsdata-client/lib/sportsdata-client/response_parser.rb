@@ -2,13 +2,15 @@ module SportsdataClient
   class ResponseParser
       attr_reader :result
 
-      def initialize(payload)
+      def initialize(payload=nil)
         @payload = payload
         @result  = []
       end
 
-      def parse(parent_node)
-        find_resource_node @payload, parent_node
+      # find all instances of a node key in a tree and return it. This acts cumulatively over multiple calls.
+      def parse(node_to_find, payload=nil)
+        @payload = payload if !payload.nil?
+        find_resource_node @payload, node_to_find
         @result
       end
 

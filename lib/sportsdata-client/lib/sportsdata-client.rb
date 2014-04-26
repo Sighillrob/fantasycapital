@@ -2,10 +2,7 @@ require 'active_support/all'
 require 'httparty'
 
 module SportsdataClient
-  # stats account secret
-  mattr_accessor :api_secret
 
-  mattr_accessor :api_key
   @@base_url = 'http://api.sportsdatallc.org/'.freeze
 
   mattr_accessor :logger
