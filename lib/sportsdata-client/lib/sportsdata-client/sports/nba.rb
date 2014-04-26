@@ -17,10 +17,12 @@ module SportsdataClient
           def players(teams, season=current_season)
             teamhash = {}
             teams.each do |team|
-              team_id = team[:ext_team_id]
-              client.request "teams/#{team_id}/profile.xml" do |response|
+              ext_team_id = team['id']
+
+              # Team profile (roster) API call
+              client.request "teams/#{ext_team_id}/profile.xml" do |response|
                 players = SportsdataClient::ResponseParser.new.parse('player', response)
-                teamhash[team_id] = players
+                teamhash[ext_team_id] = players
               end
 
             end
