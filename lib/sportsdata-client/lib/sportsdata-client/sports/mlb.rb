@@ -1,6 +1,6 @@
 module SportsdataClient
   module Sports
-      class NBA < SportsdataClient::SportsdataGateway
+      class MLB < SportsdataClient::SportsdataGateway
 
         class << self
           def current_season
@@ -17,10 +17,6 @@ module SportsdataClient
             client.request "teams/#{team_id}/profile.xml" do |response|
                 SportsdataClient::ResponseParser.new(response).parse 'player'
             end
-          end
-
-          def all_season_games(season=current_season)
-            (self.regular_season_games.result + self.post_season_games.result )
           end
 
           def regular_season_games(season=current_season)
@@ -55,7 +51,7 @@ module SportsdataClient
           
           protected
           def action_prefix
-            'nba-t3'
+            'mlb-t4'
           end
         end
       end

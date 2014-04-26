@@ -20,8 +20,9 @@ module Projection
     belongs_to :home_team, class_name: Team
     belongs_to :away_team, class_name: Team
     has_many :stats, inverse_of: :game
+    validates :sport, presence: true
   
-    def self.refresh_all(games_src, cutoff=(Time.now-10.days))
+    def self.refresh_all(sport_name, games_src, cutoff=(Time.now-10.days))
       updated_games = []
       # "closed" status means the game has finished
       games_src.select {|g| g["status"] == "closed"}.each do |game_src|
@@ -39,7 +40,8 @@ module Projection
 
         teams = [home_team, away_team];
         [teams, teams.reverse].each do |(team1, team2)|
-          game = Game.where( team: team1, ext_game_id: game_src["id"] ).first_or_initialize
+          game = Game.where(ext_game_id: game_src["id"], team: team1 ).first_or_initialize
+          game.sport = sport_name
           game.start_date = game_start
           game.opponent_team = team2
           game.home_team = home_team

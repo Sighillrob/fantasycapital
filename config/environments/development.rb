@@ -27,6 +27,10 @@ Main::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # log messages go to STDOUT in development
+  Rails.logger = Logger.new(STDOUT)
+
+
   config.after_initialize do
    Bullet.enable        = true
    Bullet.alert         = false

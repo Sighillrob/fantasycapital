@@ -4,34 +4,40 @@ include ProjectionByStatsHelper
 require 'action_view'
 include ActionView::Helpers::NumberHelper
 
+SPORTS = {NBA: {api_client: SportsdataClient::Sports::NBA},
+          #MLB: {api_client: SportsdataClient::Sports::MLB}
+}
+
 namespace :projection do
   desc "Fetch data from external source (SportsData)" 
   task fetch_stats: :environment do
-    Rails.logger.info "Feteching and populating Teams from SportsData"
-    teams = Projection::Team.refresh_all SportsdataClient::Sports::NBA.teams.result
+    SPORTS.each do |sport_name, sport|
 
-    Rails.logger.info "Feteching and populating Players from SportsData"
-    teams.each do |team|
-      Projection::Player.refresh SportsdataClient::Sports::NBA.players(team.ext_team_id).result, team
+      Rails.logger.info "Feteching and populating Teams from SportsData"
+      teams = Projection::Team.refresh_all sport[:api_client].teams.result
+
+      Rails.logger.info "Fetching and populating Players from SportsData"
+      teams.each do |team|
+        Projection::Player.refresh sport[:api_client].players(team.ext_team_id).result, team
+      end
+
+      Rails.logger.info "Fetching and populating Games from SportsData"
+      cutoff = ENV['cutoff'] || "10"
+      gamelist = sport[:api_client].all_season_games
+      games = Projection::Game.refresh_all(sport_name.to_s, gamelist, Time.now - cutoff.to_i.days)
+
+      Rails.logger.info "Fetching and populating Player stats from SportsData"
+      games.each do |game|
+        game.refresh_stats sport[:api_client].game_stats(game.ext_game_id).result
+      end
+
+      Rails.logger.info "Fetching and populating scheduled games from SportsData"
+      Projection::ScheduledGame.refresh_all sport[:api_client].games_scheduled.result
     end
 
-    Rails.logger.info "Feteching and populating Games from SportsData"
-    cutoff = ENV['cutoff'] || "10"
-    games = Projection::Game.refresh_all(
-        ( SportsdataClient::Sports::NBA.regular_season_games.result + SportsdataClient::Sports::NBA.post_season_games.result ),
-      Time.now - cutoff.to_i.days
-    )
-
-    Rails.logger.info "Feteching and populating Player stats from SportsData"
-    games.each do |game|
-      game.refresh_stats SportsdataClient::Sports::NBA.game_stats(game.ext_game_id).result
-    end
-        
-    Rails.logger.info "Feteching and populating scheduled games from SportsData"
-    Projection::ScheduledGame.refresh_all SportsdataClient::Sports::NBA.games_scheduled.result
   end
 
-  desc "Projet Fantasy Points"
+  desc "Project Fantasy Points"
   task fp: [:environment] do
     Rails.logger.info "Calculating FP..."
     Projection::ScheduledGame.games_on.each do |scheduled_game|
@@ -80,7 +86,7 @@ namespace :projection do
 
     Pony.mail(
       :to => Rails.configuration.projection_notif_email,
-      :cc => "kenneth.jiang@gmail.com",
+      :cc => "techalerts@fantasycapital.com",
       :from => Rails.configuration.projection_notif_email, 
       :subject => "Review #{today}",
       :html_body => "<h3>#{today}</h3>",
@@ -91,7 +97,7 @@ namespace :projection do
   desc "Purge projection database"
   task purge: :environment do
     input = ''
-    STDOUT.puts "This will delete all data in projectin tables! Are you sure (y/N)?"
+    STDOUT.puts "This will delete all data in projection tables! Are you sure (y/N)?"
     input = STDIN.gets.chomp
     if input.downcase == "y"
       Projection::ProjectionBreakdown.delete_all
