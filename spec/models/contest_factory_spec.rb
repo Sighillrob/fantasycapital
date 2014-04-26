@@ -25,7 +25,7 @@ describe Contest do
 
 
   before do
-    ContestFactory.create_nba_contests
+    ContestFactory.create_contests "NBA"
   end
 
   describe "when 7 games are scheduled over 3 days" do
@@ -41,7 +41,7 @@ describe Contest do
 
     it "should be idemopotent (identical results when called more than once)" do
       count = subject.count
-      ContestFactory.create_nba_contests
+      ContestFactory.create_contests "NBA"
       subject.count.should == count
     end
   end
