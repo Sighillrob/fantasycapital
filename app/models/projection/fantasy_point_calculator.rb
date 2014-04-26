@@ -14,8 +14,6 @@ module Projection
         "player.last_10_games" => lambda {|x| x * 0.25 },
         "player.all_games" => lambda {|x| x * 0.50 }
       }
-      # load weights and other parameters from rule file
-      self.instance_eval(File.read("#{Rails.root}/config/projection_model"), File.read("#{Rails.root}/config/projection_model"))
     end
   
     def update(scheduled_game)
