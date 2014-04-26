@@ -10,9 +10,11 @@ module SportsdataClient
           end
 
           def teams(season=current_season)
-            client.request "teams/#{season}.xml" do |response|
+            teams=client.request "teams/#{season}.xml" do |response|
               SportsdataClient::ResponseParser.new(response).parse 'team'
             end
+            process_mlb_teams teams
+
           end
 
           def players(teams, season=current_season)
@@ -94,6 +96,14 @@ module SportsdataClient
             'mlb-t4'
           end
 
+          def process_mlb_teams(teams)
+            # take teams coming from the sports-data API for MLB,
+            # and adjust their fields so the rest of the app understands them
+            teams.each do |team|
+              team['alias'] = team['abbr']
+            end
+            return teams
+          end
           def process_mlb_events(events)
             # take events (aka games)coming from the sports-data games API for MLB,
             # and adjust their fields so the rest of the app understands them

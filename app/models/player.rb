@@ -90,27 +90,39 @@ class Player < ActiveRecord::Base
   end
 
   class << self
-    def refresh_all(players_src, team_src)
+    def refresh_all(players_src, team_id, sport)
+      # called by rake stats.fetch_players task
       players_src.each do |player_src|
         player = Player.where(ext_player_id: player_src['id']).first_or_initialize
         player.last_name = player_src['last_name']
         player.first_name = player_src['first_name']
 
-        # for some reason the team 'name' is different here than in the other API. Add 'market' to it
-        player.team = Team.where(ext_team_id: team_src['id']).first_or_create do |team|
-          team.name = "#{team_src['market']} #{team_src['name']}"
-          team.teamalias = team_src['alias']
-        end
+        player.team = Team.find_by!(ext_team_id: team_id)
 
-        player.dob = Time.parse(player_src['birthdate'])
+        player.dob = Time.parse(player_src['birthdate']) unless player_src['birthdate'].empty?
 
         #salary is fp * 250 rounded to nearest 100
         salary = (player.fantasy_points * FP_TO_SALARY_MULTIPLIER / 100.0).round * 100
         #min 3000
         player.salary = [salary, PLAYER_MIN_SALARY].max
 
-        player.sport_position = SportPosition.where(name: player_src['primary_position'], sport: 'NBA').first
-        player.save!
+        # Look for player's position from specific (primary_position) to generic (position). For
+        # example, in MLB a player could be LF (left field) in primary_position, but we want
+        # the generic OF (outfield) value which is in position field.
+        player.sport_position = SportPosition.where(
+           name: [player_src['primary_position'], player_src['position']],
+           sport: sport.to_s).first
+        if player.sport_position.nil?
+          Rails.logger.error "Player has unknown position: #{player_src}"
+          player.sport_position = SportPosition.find_by!(name:"INVALID")
+        end
+
+        begin
+          player.save!
+        rescue ActiveRecord::RecordInvalid => invalid
+          puts invalid.record.errors
+          raise
+        end
       end
     end
 

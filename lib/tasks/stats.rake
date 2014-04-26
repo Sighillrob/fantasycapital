@@ -1,3 +1,4 @@
+
 namespace :stats do
    def log(message, error = false)
      if error
@@ -28,12 +29,18 @@ namespace :stats do
     safe_rake_tasks "stats:player_stats"
   end
 
-  desc "Populate players for NBA from SportsData api"
+  desc "Populate players for all active sports from SportsData API"
   task fetch_players: [:environment] do
-    teams = SportsdataClient::Sports::NBA.teams.result
-    teams.each do |team|
-      Player.refresh_all SportsdataClient::Sports::NBA.players(team['id']).result, team
+    SPORTS.each do |sport_name, sport|
+      Rails.logger.info "Rake stats fetch players for #{sport_name}"
+      teams = sport[:api_client].teams
+      Team.refresh_all(teams)
+      players_in_teams = sport[:api_client].players(teams)
+      players_in_teams.each do |team_id, players|
+        Player.refresh_all players, team_id, sport_name
+      end
     end
+    Rails.logger.info "Rake stats fetch players finished"
   end
 
    desc "Create games and contests from stats api"
