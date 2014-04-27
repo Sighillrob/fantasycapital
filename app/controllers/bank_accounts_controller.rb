@@ -18,15 +18,17 @@ class BankAccountsController < ApplicationController
     begin
       stripe_token = params[:stripe_token]
       bank_service = BankService.new(current_user, stripe_token)
-      StripeCustomerService.new(current_user, stripe_token).ensure!
 
       unless bank_service.add(bank_account_params)
         render_json_errors(bank_service.bank_account)
         return
       end
+
       render json: {status: 201}
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
+    rescue 
+      render json: {error: "Unable to add bank account"}, status: :unprocessable_entity
     end
   end
 
