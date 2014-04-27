@@ -17,6 +17,7 @@ class BankService
       :bank_account => @stripe_token
     )
 
+    @bank_account.is_default = @user.bank_accounts.where(is_default: true).none?
     @bank_account.recipient_id = recipient.id
     @bank_account.save
   end

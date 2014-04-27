@@ -1,5 +1,5 @@
 class ContestFactory
-  NBA_CONTESTS = [
+  CONTESTS = [
       ## For beta launch, only supporting 50/50 and tournament games, and only at $1,$5,$10 levels
       ["50/50", 1.00, 9.00, 10],
       #["50/50", 2.00, 18.00, 10],
@@ -32,11 +32,13 @@ class ContestFactory
 
   class << self
 
-    def create_nba_contests
-      # create games and contests for all days where there are 3 or more games being played.
+    def create_contests sport
+      # create games and contests for a sport for all days where there are 3 or more games
+      # being played.
 
       # generate hash of how many games are played on each date.
-      games_per_day = GameScore.recent_and_upcoming.group(:playdate).uniq.count
+      games_per_day = GameScore.recent_and_upcoming
+                               .where(sport: sport).group(:playdate).uniq.count
       games_per_day.each do |gamedate, gamecount |
         # skip days with fewer than 3 games.
         next if gamecount < 3
@@ -69,9 +71,10 @@ class ContestFactory
         }
         
         # Create contests for this day, and mark eligible players, if they don't already exist.
-        NBA_CONTESTS.each do |row|
+        CONTESTS.each do |row|
           c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2],
-                          max_entries: row[3], sport: "NBA", contestdate:gamedate).first_or_initialize
+                          max_entries: row[3], sport: sport.to_s,
+                          contestdate:gamedate).first_or_initialize
           c.contest_start = contest_time
           c.save! if c.changed?
           # Create a playercontest entry per player and contest. So it's ~6K entries per day.
@@ -92,7 +95,7 @@ class ContestFactory
               PlayerContest.where(contest: c, player: p).first_or_create
             end
           end
-          puts "Created PlayerContests for #{players.count} players for contest #{c.id}"
+          puts "Created PlayerContests for #{players.count} players for contest #{c.id}, sport #{sport.to_s}"
         end
       end
     end

@@ -51,6 +51,13 @@ class StripeForm
       unless Stripe.card.validateCVC(payload.cvc)
         errors['cvc'] = 'Is not a valid cvc number'
         valid = false
+    else if @stripeAction == 'bankAccount'
+      unless Stripe.bankAccount.validateAccountNumber(payload.accountNumber, payload.country)
+        errors['accountNumber'] = 'Is not a valid account number'
+        valid = false
+      unless Stripe.bankAccount.validateRoutingNumber(payload.routingNumber, payload.country)
+        errors['routingNumber'] = 'Is not a valid routing number'
+        valid = false
 
     @showFormErrors(errors) unless valid
     valid
@@ -97,6 +104,7 @@ initCallback = (action, response) ->
     url = 'bank_accounts'
     data =
       stripe_token: response.id
+      amount: parseInt($('#depositAmount').val())
       bank_account:
         name: response.bank_account.bank_name
         stripe_id: response.bank_account.id

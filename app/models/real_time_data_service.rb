@@ -8,9 +8,9 @@ class RealTimeDataService
       "turnovers"
   ]
 
-  def refresh_schedule(schedule_summary)
+  def refresh_schedule(schedule_summary, sport)
     # update the GameScore models with game schedules and state. This happens for several days ahead
-    # during overnight tasks, and regularly (every 15 seconds) during gametimes.
+    # during overnight tasks.
 
     # return the list of ext_games that are currently live.
 
@@ -34,6 +34,7 @@ class RealTimeDataService
       game.scheduledstart = game_summary['scheduled']
       game.home_team = home_team
       game.away_team = away_team
+      game.sport = sport.to_s
       game.save!
 
       # skip the game if the game hasn't started or is over. we're in a select, so a TRUE means return this
