@@ -19,7 +19,8 @@ class CreditCardsController < ApplicationController
 
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
-    rescue 
+    rescue Exception => e
+      Rails.logger.error "Unable to add credit card: #{e.message}"
       render json: {error: "Unable to add credit card"}, status: :unprocessable_entity
     end
   end

@@ -11,6 +11,9 @@ class BankAccountsController < ApplicationController
         amount = params[:amount].gsub(/\D/, '').to_i
         BankWithdrawalService.new(current_user, bank_account).withdraw(amount)
       end   
+    rescue ServiceError => e
+      render json: {error: e.message}, status: :unprocessable_entity
+      return
     rescue Exception => e
       render json: {error: "Could not withdraw funds from default bank account"}, status: :unprocessable_entity
       return
@@ -36,18 +39,6 @@ class BankAccountsController < ApplicationController
       return
     rescue
       render json: {error: "Unable to add bank account"}, status: :unprocessable_entity
-      return
-    end
-    
-    # Need to make a deposit?
-    begin
-      if params[:amount].present?
-        bank_account = current_user.bank_accounts.where(is_default: true).first
-        amount = params[:amount].gsub(/\D/, '').to_i
-        BankWithdrawalService.new(current_user, bank_account).withdraw(amount)
-      end   
-    rescue Exception => e
-      render json: {error: "Could not withdraw funds from default bank account"}, status: :unprocessable_entity
       return
     end
 

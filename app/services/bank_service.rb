@@ -19,10 +19,8 @@ class BankService
 
     begin
       ActiveRecord::Base.transaction do
-        @user.bank_accounts.where(is_default: true).each do |acct|
-          acct.is_default = false
-          acct.save!
-        end
+        
+        @user.bank_accounts.where(is_default: true).update_all(is_default: false)
         @bank_account.is_default = true
         @bank_account.recipient_id = recipient.id
         @bank_account.save!
