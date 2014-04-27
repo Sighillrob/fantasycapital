@@ -5,9 +5,17 @@ class BankAccountsController < ApplicationController
   end
 
   def withdrawal_post
-    bank_account = current_user.bank_accounts.find(params[:bank_id])
-    amount = (params[:amount]||'').gsub(/\D/, '').to_i
-    BankWithdrawalService.new(current_user, bank_account).withdraw(amount)
+    begin
+      if params[:amount].present?
+        bank_account = current_user.bank_accounts.where(is_default: true).first
+        amount = params[:amount].gsub(/\D/, '').to_i
+        BankWithdrawalService.new(current_user, bank_account).withdraw(amount)
+      end   
+    rescue Exception => e
+      render json: {error: "Could not withdraw funds from default bank account"}, status: :unprocessable_entity
+      return
+    end
+
     render json: nil, status: :ok
   end
 
@@ -19,17 +27,32 @@ class BankAccountsController < ApplicationController
       stripe_token = params[:stripe_token]
       bank_service = BankService.new(current_user, stripe_token)
 
-      unless bank_service.add(bank_account_params)
+      unless bank_service.add(bank_account_params, params[:tax_id])
         render_json_errors(bank_service.bank_account)
         return
       end
-
-      render json: {status: 201}
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
-    rescue 
+      return
+    rescue
       render json: {error: "Unable to add bank account"}, status: :unprocessable_entity
+      return
     end
+    
+    # Need to make a deposit?
+    begin
+      if params[:amount].present?
+        bank_account = current_user.bank_accounts.where(is_default: true).first
+        amount = params[:amount].gsub(/\D/, '').to_i
+        BankWithdrawalService.new(current_user, bank_account).withdraw(amount)
+      end   
+    rescue Exception => e
+      render json: {error: "Could not withdraw funds from default bank account"}, status: :unprocessable_entity
+      return
+    end
+
+    render json: {status: 201}
+
   end
 
   private
