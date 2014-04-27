@@ -248,7 +248,7 @@ header {
     float: left;
     margin: 0;
     padding: 0;
-    margin-top: 30px;
+    margin-top: 24px;
     margin-bottom: 30px;
   }
 }
@@ -542,10 +542,12 @@ ul.contest {
   float: right;
 }
 
-.refer-friends {
+.refer-friends,
+.learn-more {
   color: #0FEA6C;
   font-weight: bold;
   font-size: 14px;
+  line-height: 41px;
 }
 
 .filter-row {
@@ -643,4 +645,30 @@ h3.panel-group-title{
 #contests_browse .contestHead {
   font-family: "oswald-regular";
   font-size: 1.2em;
+}
+
+.capitalbanner .never-played-guide {
+  height: 80px;
+  background-color: #13F089;
+  color: #0B9052;
+  line-height: 25px;
+}
+
+.capitalbanner .never-played-guide h2 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 20px 0 0 0;
+  margin: 0;
+}
+
+.learn-more-img {
+  display: inline-block;
+  border: 3px solid #FFFFFF;
+  border-radius: 4px;
+  margin-left: 5px;  
+}
+
+.learn-more-img .no-margin {
+  margin: 0px;
 }

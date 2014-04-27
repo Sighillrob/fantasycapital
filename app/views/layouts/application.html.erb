@@ -20,15 +20,18 @@
 
   <body class='<%=page_class%>' id='<%= page_id %>'>
     <%= render 'shared/header' %>
-    <div class='container capitalcontent'>
-      <% if flash[:notice] %>
-          <div class="alert alert-success"><%= flash[:notice] %></div>
-      <% end %>
-      <% if flash[:alert] %>
-          <div class="alert alert-danger"><%= flash[:alert] %></div>
-      <% end %>
+    <div class='container'>
+      <%= yield :banner %>
+      <div class="capitalcontent">
+        <% if flash[:notice] %>
+            <div class="alert alert-success"><%= flash[:notice] %></div>
+        <% end %>
+        <% if flash[:alert] %>
+            <div class="alert alert-danger"><%= flash[:alert] %></div>
+        <% end %>
 
-      <%= yield %>
+        <%= yield %>
+      </div>
     </div>
     <%= render 'shared/footer' %>
     <div class="ajax-loader" style="display:none;">

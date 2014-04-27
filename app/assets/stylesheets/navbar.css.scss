@@ -35,7 +35,18 @@
   background-color: #2E363E;
   height: 50px;
   font-family: $main-font; //'droid_sansregular';
+  /*
   background: image-url('nav-bg.png') no-repeat center center;
+  */
+  background: #505e6c; /* Old browsers */
+  background: -moz-linear-gradient(top, #505e6c 0%, #2d353c 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#505e6c), color-stop(100%,#2d353c)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #505e6c 0%,#2d353c 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #505e6c 0%,#2d353c 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #505e6c 0%,#2d353c 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #505e6c 0%,#2d353c 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#505e6c', endColorstr='#2d353c',GradientType=0 ); /* IE6-9 */
+
 
   .line {
     height: 2px;
@@ -51,13 +62,20 @@
 
   li.welcome-box {
     text-align: center;
-    min-width: 220px;
+    min-width: 260px;
     background-color: #2e363e;
     float: right;
-
+    line-height: 60px;
+    background: #39434d; /* Old browsers */
+    background: -moz-linear-gradient(top, #39434d 0%, #21272c 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#39434d), color-stop(100%,#21272c)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #39434d 0%,#21272c 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #39434d 0%,#21272c 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #39434d 0%,#21272c 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #39434d 0%,#21272c 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#39434d', endColorstr='#21272c',GradientType=0 );
     .welcome-text{
-      padding-top: 13px;
-      padding-bottom: 13px;
+      line-height: 60px;
 
       a:hover{
         text-decoration: none;
@@ -70,19 +88,21 @@
       right: 0;
       list-style: none;
       padding-left: 0;
-      margin-top: 5px;
       display:none;
+      line-height: 35px;
 
       a:hover{
         text-decoration: none;
       }
     }
+
     a {
       display: inline-block;
       padding-right: 5px;
       color: white !important;
 
       &.sign-out{
+        width: 100%;
         padding: 0;
         img{
           width: 30px;
@@ -96,9 +116,10 @@
         color: #0FEA6C !important;
       }
     }
-    
+
+
     .first-name {
-      color: #0FEA6C;
+      color: #15E884;
     }
     .arrow {
       color: #0FEA6C;
@@ -114,15 +135,41 @@
     }
 
     li {
+      .padding {
+        line-height: 60px;
+        height: 60px;
+        padding: 0 25px;
+      }
+      .arrow-down {
+        display: none;
+      }
       &.active {
-        background: #fff;
-        padding: 6px 10px;
+        .padding {
+          background-color: #fff;
+          box-shadow: 0 0 3px #000;
+          border-bottom: 2px solid #fff;
+        }
+        top: -2px;
+
+        .arrow-down {
+          display: block;
+          position: absolute;
+          width: 0; 
+          height: 0; 
+          border-left: 46px solid transparent;
+          border-right: 46px solid transparent;
+          border-top: 15px solid #fff;
+        }
+
         .line {
           display:block;
-          background-color: #0fea6c;
+          background-color: #69F1A3;
+          margin-top: -15px;
         }
+
         a {
           background: none;
+          color: #3F4A55;
           &:hover{
             background: white;
           }
@@ -139,8 +186,6 @@
   ul{
     width: 100%;
     li {
-      padding: 6px 10px;
-
       &:last-child {
         border-right: none;
       }
@@ -166,4 +211,24 @@
     }
   }
 
+}
+
+.topbarWraper .navbar-nav > li > a {
+  padding: 0;
+
+}
+
+.topbarWraper .topbar-nav {
+  height: 41px;
+  min-height: 0;
+}
+
+div.header-close-button {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 13px;
+    height: 13px;
+    background-image: url("/assets/header-close-button.png");
+    cursor: pointer;
 }
