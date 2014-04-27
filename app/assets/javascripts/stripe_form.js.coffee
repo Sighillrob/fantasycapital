@@ -24,6 +24,19 @@ window.initializeStripeForm = ->
         .show()
         .append('<span class="error">' + res.responseJSON.error + '</span>')
 
+  $('#existingTransfer').click (e) ->
+    $('.error-container .error').remove()
+    e.preventDefault()
+    amount = parseInt($('#transferAmount').val())
+    promise = $.post '/accounts/bank_accounts/withdrawal', amount: amount
+
+    promise.success -> window.location.reload()
+
+    promise.error (res) ->
+      $('.error-container')
+        .show()
+        .append('<span class="error">' + res.responseJSON.error + '</span>')
+
 # Generic form for handling credit cards, bank accounts, etc
 class StripeForm
 
@@ -70,7 +83,7 @@ class StripeForm
       return unless @isValid(payload)
       Stripe[@stripeAction].createToken payload, (status, response) =>
         return @displayError(status, response) if status isnt 200
-        onSuccess(@stripeAction, response)
+        onSuccess(@stripeAction, response, payload)
 
   clearErrors: ->
     $('.error-container').hide().find('.error').remove()
@@ -89,7 +102,7 @@ class StripeForm
       payload[self.data('payload')] = self.val()
     payload
 
-initCallback = (action, response) ->
+initCallback = (action, response, payload) ->
   url = ''
   if action is 'card'
     url = 'credit_cards'
@@ -104,7 +117,8 @@ initCallback = (action, response) ->
     url = 'bank_accounts'
     data =
       stripe_token: response.id
-      amount: parseInt($('#depositAmount').val())
+      amount: parseInt($('#transferAmount').val())
+      tax_id: payload["tax_id"]
       bank_account:
         name: response.bank_account.bank_name
         stripe_id: response.bank_account.id

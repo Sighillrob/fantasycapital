@@ -17,9 +17,10 @@ describe BankWithdrawalService do
     end
 
     it 'throws error if user does not have enough' do
-      user.account.balance_in_cents = 5000
+      bal = user.account_balance
+
       expect {
-        BankWithdrawalService.new(user, nil).withdraw(60)
+        BankWithdrawalService.new(user, nil).withdraw(bal + 100)
       }.to raise_error(ServiceError, 'Insufficient Funds')
     end
 
