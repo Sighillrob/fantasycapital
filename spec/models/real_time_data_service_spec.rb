@@ -82,7 +82,7 @@ describe RealTimeDataService do
   context "the first time it's called" do
     # we'll be getting 4 player stats per player, so 8 stats total
     it "delivers 8 scores" do
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
       expect(pusher_mock).to receive(:trigger).with("stats", player_expect)
       expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
@@ -94,7 +94,7 @@ describe RealTimeDataService do
       expect(PlayerRealTimeScore.all.count).to be(10)
     end
     it "receives correct game update, player update, and entry update" do
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
 
 
       expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
@@ -108,7 +108,7 @@ describe RealTimeDataService do
 
   context "called two times with no change" do
     it "contains stats for 2 players" do
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       @gameid = GameScore.find_by_ext_game_id("aaa-id-of-game-1").id
 
       expect(pusher_mock).to receive(:trigger).with("stats", game_expect)
@@ -116,7 +116,7 @@ describe RealTimeDataService do
       expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
 
       RealTimeDataService.new.refresh_game(game_details)
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_details)
       RealTimeDataService.new.refresh_entries todaydate
 
@@ -132,7 +132,7 @@ describe RealTimeDataService do
       expect(pusher_mock).to receive(:trigger).once.with("stats", player_expect)
       expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect)
 
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_details)
       RealTimeDataService.new.refresh_entries todaydate
       # change a player's steals
@@ -152,7 +152,7 @@ describe RealTimeDataService do
       entries_expect2[:entries][1]["fps"] = 275.75
       expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect2)
 
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_src1)
       RealTimeDataService.new.refresh_entries todaydate
     end
@@ -193,7 +193,7 @@ describe RealTimeDataService do
       entries_expect[:entries][1]["fps"] = 1076
       expect(pusher_mock).to receive(:trigger).once.with("stats", entries_expect)
 
-      RealTimeDataService.new.refresh_schedule(game_schedule)
+      RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_src1)
       RealTimeDataService.new.refresh_entries todaydate
 

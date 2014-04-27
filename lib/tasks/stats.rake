@@ -49,19 +49,25 @@ namespace :stats do
      # create games and contests for multiple days in future so that we can always have contests to
      # enter.
      ActiveRecord::Base.logger.level = 2   # disable logging all SQL calls to console.
-     (today.. today+4).each do |date|
-       games_scheduled = SportsdataClient::Sports::NBA.games_scheduled(date).result
-       RealTimeDataService.new.refresh_schedule games_scheduled
+     SPORTS.each do |sport_name, sport|
+       (today.. today+4).each do |date|
+         games_scheduled = sport[:api_client].games_scheduled(date)
+         RealTimeDataService.new.refresh_schedule games_scheduled, sport_name
+       end
+       # populate upcoming contests in main webapp
+       ContestFactory.create_contests sport_name
      end
-     # populate upcoming contests in main webapp
-     ContestFactory.create_nba_contests
+
+     Rails.logger.info "Rake create_contests finished"
 
    end
 
 
    desc "Populate player's historical stats"
   task player_stats: [:environment] do
-    Projection::ScheduledGame.games_on.each do |scheduled_game|
+    # BUGBUG: Temporarily generate stats only for NBA. This way we can get the rest of the
+    #  MLB stuff put on staging server so Mike and Steve can check the data being generated.
+    Projection::ScheduledGame.games_on.where(sport: "NBA").each do |scheduled_game|
       Resque.enqueue(PlayerStatsWorker, scheduled_game.id)
     end
   end
