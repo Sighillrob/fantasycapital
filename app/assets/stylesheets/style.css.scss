@@ -661,3 +661,14 @@ h3.panel-group-title{
   padding: 20px 0 0 0;
   margin: 0;
 }
+
+.learn-more-img {
+  display: inline-block;
+  border: 3px solid #FFFFFF;
+  border-radius: 4px;
+  margin-left: 5px;  
+}
+
+.learn-more-img .no-margin {
+  margin: 0px;
+}
