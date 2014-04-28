@@ -62,12 +62,12 @@ body {
 
 body {
   /*font-family: $main-font;*/
-  background: image-url('main-bg.jpeg') no-repeat fixed 100% 30px #000 !important;
+  background: image-url('main-bg.jpeg') no-repeat fixed 100% 120px #000 !important;
   background-attachment: fixed !important;
   background-size: 100% !important;
-  background: image-url('main-bg.jpeg') no-repeat fixed 30px center #000 !important      \9;
+  background: image-url('main-bg.jpeg') no-repeat fixed 120px center #000 !important      \9;
   /*IE 9*/
-  background: image-url('main-bg.jpeg') no-repeat fixed 30px 100% #000 /IE9 !important;
+  background: image-url('main-bg.jpeg') no-repeat fixed 120px 100% #000 /IE9 !important;
   background-attachment: fixed /IE9 !important;
   background-size: 100% /IE9 !important;
 }
