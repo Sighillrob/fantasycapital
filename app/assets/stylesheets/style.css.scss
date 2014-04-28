@@ -672,3 +672,20 @@ h3.panel-group-title{
 .learn-more-img .no-margin {
   margin: 0px;
 }
+
+.rules-terms-headings h3 {
+    margin: 5px 0 15px 0;
+    font-weight: bold;
+}
+.rules-terms-headings h4 {
+    margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.rules-terms-headings p,
+.rules-terms-headings li {
+    font-size: 15px;
+    line-height: 30px;
+}
+.rules-terms-headings ul {
+  margin-bottom: 20px;
+}
