@@ -56,7 +56,7 @@ class BankWithdrawalService
 
       # OK user has enough money, check if escrow has enough to give to user
       escrow_balance = Stripe::Balance.retrieve()
-      puts escrow_balance
+
       if escrow_balance.available[0].amount < cents
         # Settle opp fees - this should get balance positive
         OppSettlementService.new().run()
@@ -78,7 +78,7 @@ class BankWithdrawalService
         amount: cents,
         currency: 'usd',
         recipient: @bank.recipient_id,
-        statement_descriptor: 'Fantasy Capital Bank Tranfer'
+        statement_description: 'Fantasy Capital Bank Transfer'
       )
 
       if tr.status == "failed"

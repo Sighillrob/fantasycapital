@@ -9,6 +9,12 @@
 
     <div class="addfunds-content">
       <div class="deposit-amount">
+        <% cc = current_user.credit_cards.where(is_default: true).first
+           if cc == nil %>
+        <div class="pull-left">
+          Need to add a credit card first
+        </div><br/><br/><br/>
+        <% end %>
         <div class="deposit-item pull-left">
           <div class="pull-left">
             In whole dollar amounts &nbsp;$&nbsp;
@@ -42,7 +48,11 @@
         <div class="form-group for-credit">
           <label for="full_name" class="col-sm-4 control-label">* Credit Card Number</label>
           <div class="col-sm-6">
-            <input type="text" class="form-control" data-payload="number">
+            <input type="text" class="form-control" data-payload="number"
+                   <% if cc != nil %>
+                   value="xxxxxxxxxxxx<%= cc.last_4 %>"
+                   <% end %>
+                   >
           </div>
         </div>
 
@@ -134,7 +144,10 @@
         
         <div class="form-group">
           <div class="col-sm-offset-4 col-sm-2">
+
+            <% if cc != nil %>
             <button id="existingDeposit" type="submit" class="btn btn-default btn-deposit">Deposit</button>
+            <% end %>
           </div>
           <div class="col-sm-4">
             <button id="stripeSubmit" type="submit" class="btn btn-default btn-deposit">Add CC + Deposit</button>
