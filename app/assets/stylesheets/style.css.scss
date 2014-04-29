@@ -245,6 +245,7 @@ li.dropdown {
 header {
 
   h1.logo {
+    position: relative;
     float: left;
     margin: 0;
     padding: 0;
@@ -258,6 +259,14 @@ header {
     float: none;
 
   }
+}
+header .logo em {
+    font-size: 12px;
+    position: absolute;
+    font-weight: bold;
+    top: 68px;
+    left: 87px;
+    color: #8b949d;
 }
 
 /*Radio Button and Check Boxes*/
@@ -672,6 +681,7 @@ h3.panel-group-title{
     text-transform: uppercase;
     font-size: 28px;
     line-height: 80px;
+    letter-spacing: 1px;
 }
 .capitalbanner .banner-elements .banner-text .big {
   font-size: 44px;
@@ -711,6 +721,28 @@ h3.panel-group-title{
   margin: 0;
 }
 
+.capitalbanner .banner-button {
+  margin-top: 20px;
+}
+
+.capitalbanner .sign-up-free {
+    color: #13F089;
+    text-decoration: none;
+    padding: 8px 25px;
+    font-size: 18px;
+    text-transform: uppercase;
+    background: rgb(62,74,85); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(62,74,85,1) 0%, rgba(37,44,50,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(62,74,85,1)), color-stop(100%,rgba(37,44,50,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(62,74,85,1) 0%,rgba(37,44,50,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(62,74,85,1) 0%,rgba(37,44,50,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(62,74,85,1) 0%,rgba(37,44,50,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(62,74,85,1) 0%,rgba(37,44,50,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e4a55', endColorstr='#252c32',GradientType=0 ); /* IE6-9 */
+    
+
+}
+
 .learn-more-img {
   display: inline-block;
   border: 3px solid #FFFFFF;
@@ -739,4 +771,53 @@ h3.panel-group-title{
     position: relative;
     width: 80px;
     height: 80px;
+}
+
+#home-filter-games {
+  background-color: #505E6C;
+  color: #fff;
+  width: 100%;
+  margin: 20px auto 0 auto;
+  padding: 10px 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#home-game-types {
+  color: #555555;
+  line-height: 80px;
+  text-transform: uppercase;
+  font-family: "oswald-regular";
+  font-size: 24px;
+  width: 100%;
+  margin: 20px auto 0 auto;
+}
+#home-game-types .game-filters > div {
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+  border: 1px solid #DCDEE1;
+  color: #B6B6B6;
+}
+#home-game-types .game-filters > div:hover {
+  text-decoration: underline;
+}
+#home-game-types .game-filters .active {
+  color: inherit;
+  border-bottom: none;
+  border-top: 5px solid #0FEA6C;
+  top: -4px;
+}
+#home-game-types div.border-right-none {
+  border-right: none;
+}
+
+#home-game-types .heading {
+  font-size: 32px;
+}
+#home-game-types .border-bottom {
+  border-bottom: 1px solid #dcdee1;
+}
+#home-page-types .padding-none {
+  padding: 0;
 }
