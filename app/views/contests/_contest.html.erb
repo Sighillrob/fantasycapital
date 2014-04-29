@@ -10,8 +10,8 @@
   <td class='entry-fee' data-value=<%= contest.entry_fee %>>
     <%= contest_entry_fee contest %>
    </td>
-  <td data-value=<%= contest.prize %>>
-    <%= number_to_currency(contest.prize, precision: 0) %>
+  <td data-value=<%# contest.prizepool %> >
+    <%= number_to_currency(contest.prizepool, precision: 0) %>
   </td>
   <td class="entries-per-contest"><%= "#{contest.entries_count}/#{contest.max_entries}" %></td>
   <td class="actions-column">

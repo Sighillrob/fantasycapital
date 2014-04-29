@@ -6,7 +6,6 @@
 #  title         :string(255)
 #  sport         :string(255)
 #  contest_type  :string(255)
-#  prize         :decimal(, )
 #  entry_fee     :decimal(, )
 #  contest_start :datetime
 #  created_at    :datetime
@@ -14,6 +13,7 @@
 #  max_entries   :integer
 #  entries_count :integer          default(0)
 #  contestdate   :date
+#  rake          :float            default(0.1)
 #
 
 require 'spec_helper'
@@ -80,7 +80,7 @@ describe Contest do
         recorded_entries = contest.record_final_outcome!
 
         winnings = contest.winnings
-        expect(winnings).to include([entries[1], 1.0])
+        expect(winnings).to include({entry:entries[1], prize_fraction:1.0})
         expect(winnings.length).to be(1)
       end
 
@@ -92,7 +92,7 @@ describe Contest do
         winnings = contest.winnings
         expect(winnings.length).to be(3)
         [1,7,8].map do |i|
-          expect(winnings).to include([entries[i], 1.0/3.0])
+          expect(winnings).to include({entry:entries[i], prize_fraction:1.0/3.0})
         end
       end
 
@@ -104,7 +104,7 @@ describe Contest do
         winnings = contest.winnings
         expect(winnings.length).to be(5)
         [0,1,2,7,8].map do |i|
-          expect(winnings).to include([entries[i], 0.2])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.2})
         end
 
       end
@@ -118,10 +118,10 @@ describe Contest do
         winnings = contest.winnings
         expect(winnings.length).to be(6)
         [0,1].map do |i|
-          expect(winnings).to include([entries[i], 0.2])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.2})
         end
         [2,6,7,8].map do |i|
-          expect(winnings).to include([entries[i], 0.15])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.15})
         end
       end
 
@@ -134,10 +134,10 @@ describe Contest do
         winnings = contest.winnings
         expect(winnings.length).to be(7)
         [0,1,2,7].map do |i|
-          expect(winnings).to include([entries[i], 0.2])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.2})
         end
         [6,8,9].map do |i|
-          expect(winnings).to include([entries[i], (0.2/3.0).round(4)])
+          expect(winnings).to include({entry:entries[i], prize_fraction:(0.2/3.0).round(4)})
         end
 
       end
@@ -150,10 +150,10 @@ describe Contest do
         winnings = contest.winnings
         expect(winnings.length).to be(7)
         [0,1,2].map do |i|
-          expect(winnings).to include([entries[i], 0.2])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.2})
         end
         [6,7,8,9].map do |i|
-          expect(winnings).to include([entries[i], 0.1])
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.1})
         end
 
       end

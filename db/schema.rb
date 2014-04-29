@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140427002226) do
+ActiveRecord::Schema.define(version: 20140429202122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,7 +42,6 @@ ActiveRecord::Schema.define(version: 20140427002226) do
     t.string   "title"
     t.string   "sport"
     t.string   "contest_type"
-    t.decimal  "prize"
     t.decimal  "entry_fee"
     t.datetime "contest_start"
     t.datetime "created_at"
@@ -50,6 +49,7 @@ ActiveRecord::Schema.define(version: 20140427002226) do
     t.integer  "max_entries"
     t.integer  "entries_count", default: 0
     t.date     "contestdate"
+    t.float    "rake",          default: 0.1
   end
 
   add_index "contests", ["contest_start"], name: "index_contests_on_contest_start", using: :btree

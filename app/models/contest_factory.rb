@@ -1,34 +1,37 @@
 class ContestFactory
   CONTESTS = [
       ## For beta launch, only supporting 50/50 and tournament games, and only at $1,$5,$10 levels
-      ["50/50", 1.00, 9.00, 10],
-      #["50/50", 2.00, 18.00, 10],
-      ["50/50", 5.00, 45.00, 10],
-      ["50/50", 10.00, 90.00, 10],
-      #["50/50", 25.00, 225.00, 10],
-      #["50/50", 50.00, 450.00, 10],
-      #["50/50", 100.00, 900.00, 10],
-      #["50/50", 250.00, 2250.00, 10],
-      #["50/50", 500.00, 4500.00, 10],
-      #["H2H", 1.00, 9.00, 10],
-      #["H2H", 2.00, 18.00, 10],
-      #["H2H", 5.00, 45.00, 10],
-      #["H2H", 10.00, 90.00, 10],
-      #["H2H", 25.00, 225.00, 10],
-      #["H2H", 50.00, 450.00, 10],
-      #["H2H", 100.00, 900.00, 10],
-      #["H2H", 250.00, 2250.00, 10],
-      #["H2H", 500.00, 4500.00, 10],
-      ["Tournament", 1.00, 90.00, 100],
-      #["Tournament", 2.00, 180.00, 100],
-      ["Tournament", 5.00, 450.00, 100],
-      ["Tournament", 10.00, 900.00, 100],
-      #["Tournament", 25.00, 2250.00, 100],
-      #["Tournament", 50.00, 4500.00, 100],
-      #["Tournament", 100.00, 9000.00, 100],
-      #["Tournament", 250.00, 22500.00, 100],
-      #["Tournament", 500.00, 45000.00, 100]
-  ] 
+      ["50/50", 1.00, 10],
+      #["50/50", 2.00, 10],
+      ["50/50", 5.00, 10],
+      ["50/50", 10.00, 10],
+      #["50/50", 25.00, 10],
+      #["50/50", 50.00, 10],
+      #["50/50", 100.00, 10],
+      #["50/50", 250.00, 10],
+      #["50/50", 500.00, 10],
+      #["H2H", 1.00, 10],
+      #["H2H", 2.00, 10],
+      #["H2H", 5.00, 10],
+      #["H2H", 10.00, 10],
+      #["H2H", 25.00, 10],
+      #["H2H", 50.00, 10],
+      #["H2H", 100.00, 10],
+      #["H2H", 250.00, 10],
+      #["H2H", 500.00, 10],
+      ["Tournament", 1.00, 100],
+      #["Tournament", 2.00, 100],
+      ["Tournament", 5.00, 100],
+      ["Tournament", 10.00, 100],
+      #["Tournament", 25.00, 100],
+      #["Tournament", 50.00, 100],
+      #["Tournament", 100.00, 100],
+      #["Tournament", 250.00, 100],
+      #["Tournament", 500.00, 100]
+  ]
+
+  # single constant for now, but could be varied per contest in the model
+  RAKE_FEE = 0.1
 
   class << self
 
@@ -72,9 +75,13 @@ class ContestFactory
         
         # Create contests for this day, and mark eligible players, if they don't already exist.
         CONTESTS.each do |row|
-          c = Contest.where(contest_type: row[0], entry_fee: row[1], prize: row[2],
-                          max_entries: row[3], sport: sport.to_s,
-                          contestdate:gamedate).first_or_initialize
+          c = Contest.where(contest_type: row[0], entry_fee: row[1],
+                          max_entries: row[2], sport: sport.to_s,
+                          contestdate:gamedate).first_or_initialize do |new_c|
+            # add rake only on a new contest being created, don't change for already-created
+            new_c.rake = RAKE_FEE
+          end
+
           c.contest_start = contest_time
           c.save! if c.changed?
           # Create a playercontest entry per player and contest. So it's ~6K entries per day.
