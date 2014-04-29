@@ -647,6 +647,54 @@ h3.panel-group-title{
   font-size: 1.2em;
 }
 
+.capitalbanner {
+  position: relative;
+}
+
+.capitalbanner .banner-elements {
+  position: absolute;
+  width: 1000px;
+  height: 300px;
+  top: 0;
+  text-align: center;
+  color: #fff;
+  font-family: "oswald-regular";
+}
+
+.capitalbanner .banner-elements .banner-circles {
+  width: 650px;
+  margin: 50px auto 0 auto;
+}
+
+.capitalbanner .banner-elements .banner-text {
+    width: 810px;
+    margin: 0 auto;
+    text-transform: uppercase;
+    font-size: 28px;
+    line-height: 80px;
+}
+.capitalbanner .banner-elements .banner-text .big {
+  font-size: 44px;
+}
+.capitalbanner .banner-elements .banner-text .green {
+  color: #13F089;
+}
+.capitalbanner .banner-elements .banner-circles > div {
+  height: 60px;
+  padding: 0;
+}
+
+.capitalbanner .circle-small {
+}
+
+.capitalbanner .banner-elements .line {
+  padding-top: 29px;
+  width: 100%;
+  height: 2px;
+  border-bottom: 2px solid #fff;
+  margin: 0 auto;
+}
+
 .capitalbanner .never-played-guide {
   height: 80px;
   background-color: #13F089;
