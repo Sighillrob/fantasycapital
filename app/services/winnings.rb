@@ -35,7 +35,7 @@ class Winnings
     winningentries = @contest.entries.where(final_pos: 1)
     prize = 1.0 / winningentries.count
     winningentries.map do | entry |
-      [entry, prize]
+      {entry:entry, prize_fraction:prize}
     end
   end
 
@@ -65,11 +65,11 @@ class Winnings
     slots_for_last_entries = highestwinnerpos - not_last_entries.length
     prize_for_last_entrant = (slots_for_last_entries * slot_winnings / last_entries.length).round(4)
     not_last_entries.each do |entry|
-      retval << [entry, slot_winnings]
+      retval << {entry:entry, prize_fraction:slot_winnings}
     end
 
     last_entries.each do |entry|
-      retval << [entry, prize_for_last_entrant]
+      retval << {entry:entry, prize_fraction:prize_for_last_entrant}
     end
     retval
   end

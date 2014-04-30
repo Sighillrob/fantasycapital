@@ -6,7 +6,6 @@
 #  title         :string(255)
 #  sport         :string(255)
 #  contest_type  :string(255)
-#  prize         :decimal(, )
 #  entry_fee     :decimal(, )
 #  contest_start :datetime
 #  created_at    :datetime
@@ -14,6 +13,7 @@
 #  max_entries   :integer
 #  entries_count :integer          default(0)
 #  contestdate   :date
+#  rake          :float            default(0.1)
 #
 
 class Contest < ActiveRecord::Base
@@ -44,6 +44,10 @@ class Contest < ActiveRecord::Base
     self.start_at < Time.now
   end
 
+  def prizepool
+    # total prize pool available in contest, with rake removed
+    (self.max_entries*self.entry_fee) * (1.0-self.rake)
+  end
 
   def has_final_score_and_pos?
     self.entries.count > 0 and self.entries.missing_final_score_or_pos.count == 0
