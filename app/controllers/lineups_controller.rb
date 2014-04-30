@@ -46,7 +46,7 @@ class LineupsController < ApplicationController
 
     # success path
     respond_to do |format|
-      format.html { redirect_to entries_path, notice: "OK, you've entered the contest" }
+      format.html { redirect_to entries_path, notice: "Congratulations. You have entered the contest." }
       format.json { render action: 'show', status: :created, location: @lineup }
     end
   end
