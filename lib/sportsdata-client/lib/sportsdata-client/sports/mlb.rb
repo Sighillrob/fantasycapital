@@ -17,8 +17,9 @@ module SportsdataClient
 
           end
 
-          def players(teams, season=current_season)
-            # NOTE: in MLB, 'teams' variable is unused. but in NBA we need it.
+          def players(ext_team_ids, season=current_season)
+            # NOTE: in MLB, 'ext_team_ids' variable is unused b/c the API returns all teams
+            # regardless, while in NBA we have to make an API call per team.
             # return a hash of external team ids, with each entry an array of parsed players
             players={}
             client.request "rosters/#{season}.xml" do |response|

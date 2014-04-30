@@ -6,6 +6,33 @@ describe 'Sportsdata Client' do
 
   NBA_TEAMS_RESPONSE = File.read("spec/fixtures/sportsdata_client/nba_teams.json")
   MLB_TEAMS_RESPONSE =File.read("spec/fixtures/sportsdata_client/mlb_teams.json")
+
+  describe "response parser" do
+    # MLB responses are really weird. A single event is returned as a single JSON item; multiple
+    # events are returned as an array. So create a test case for single and multiple responses from
+    # the MLB API.
+    it "parses multiple events properly" do
+      from_api_json=
+        '{"calendars":{"event":[{"scheduled_start":"2014-04-25T23:05:00Z","tbd":"false"},
+                               {"scheduled_start":"2014-04-26T00:10:00Z",
+                                "home":"dcfd5266-00ce-442c-bc09-264cd20cf455","tbd":"false"}],
+                      "season_id":"8f4e3a30-8444-11e3-808c-22000a904a71","season_year":"2014"}}'
+      from_api = JSON.parse(from_api_json)
+      events=SportsdataClient::ResponseParser.new(from_api).parse 'event'
+      expect(events.length).to be(2)
+      expect(events[0]['scheduled_start']).to eq('2014-04-25T23:05:00Z')
+    end
+    it "parses a single event properly" do
+      from_api_json=
+          '{"calendars":{"event":{"scheduled_start":"2014-03-24T17:05:00Z","tbd":"false"},
+                         "season_id":"8f4e3a30-8444-11e3-808c-22000a904a71","season_year":"2014"}}'
+      from_api = JSON.parse(from_api_json)
+
+      events=SportsdataClient::ResponseParser.new(from_api).parse 'event'
+      expect(events.length).to be(1)
+      expect(events[0]['scheduled_start']).to eq('2014-03-24T17:05:00Z')
+    end
+  end
   describe "teams" do
     it "parses NBA teams properly" do
       # stub out the actual call to the sportsdata API
@@ -54,8 +81,9 @@ describe 'Sportsdata Client' do
       end
 
       # get a hash of 3 teams by picking a conference and division
-      teamshash = JSON.parse(NBA_TEAMS_RESPONSE)['league']['conference'][0]['division'][0]['team']
-      player_teams = SportsdataClient::Sports::NBA.players(teamshash)
+      teamsarray = JSON.parse(NBA_TEAMS_RESPONSE)['league']['conference'][0]['division'][0]['team']
+      ext_team_ids = teamsarray.map {|team|team['id'] }
+      player_teams = SportsdataClient::Sports::NBA.players(ext_team_ids)
       expect(player_teams.length).to be(3)  # 3 teams
       expect(player_teams['583ec8d4-fb46-11e1-82cb-f4ce4684ea4c'].length).to be(8)   # players in team 0
       expect(player_teams['583ec97e-fb46-11e1-82cb-f4ce4684ea4c'].length).to be(9)   # players in team 1

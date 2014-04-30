@@ -1,5 +1,7 @@
 
 namespace :stats do
+   SPORTS ||= Rails.configuration.sports
+
    def log(message, error = false)
      if error
        Rails.logger.error message
@@ -35,7 +37,10 @@ namespace :stats do
       Rails.logger.info "Rake stats fetch players for #{sport_name}"
       teams = sport[:api_client].teams
       Team.refresh_all(teams)
-      players_in_teams = sport[:api_client].players(teams)
+      # BUGBUG: fix this line
+      ext_team_ids = teams.map {|team| team['id'] }
+
+      players_in_teams = sport[:api_client].players(ext_team_ids)
       players_in_teams.each do |team_id, players|
         Player.refresh_all players, team_id, sport_name
       end
@@ -68,6 +73,7 @@ namespace :stats do
     # BUGBUG: Temporarily generate stats only for NBA. This way we can get the rest of the
     #  MLB stuff put on staging server so Mike and Steve can check the data being generated.
     Projection::ScheduledGame.games_on.where(sport: "NBA").each do |scheduled_game|
+      Rails.logger.info("Calculate player stats enqueued for #{scheduled_game[:ext_game_id]}")
       Resque.enqueue(PlayerStatsWorker, scheduled_game.id)
     end
   end
