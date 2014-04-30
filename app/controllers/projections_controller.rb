@@ -4,8 +4,8 @@ class ProjectionsController < ApplicationController
   # GET /projections/(NBA|MLB)
   def index
     sport_name = params[:sport_name]
-    statscls = Projection::Stat.class_for_sport(sport_name)
-    raise ActionController::RoutingError.new('Not Found') if statscls.nil?
+    @statscls = Projection::Stat.class_for_sport(sport_name)
+    raise ActionController::RoutingError.new('Not Found') if @statscls.nil?
 
     @projections = Projection::Projection
                     .includes(:player,:projection_by_stats,
@@ -18,7 +18,8 @@ class ProjectionsController < ApplicationController
   # GET /projections/with_stats/(NBA|MLB)
   def with_stats
     index
-    @stats = statscls.stats_allowed.keys - ["minutes"]
+
+    @stats = @statscls.stats_allowed.keys - ["minutes"]
 
   end
  
