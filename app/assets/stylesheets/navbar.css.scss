@@ -156,9 +156,11 @@
           position: absolute;
           width: 0; 
           height: 0; 
-          border-left: 46px solid transparent;
-          border-right: 46px solid transparent;
-          border-top: 15px solid #fff;
+          left: -3px;
+          width: 97px;
+          height: 26px;
+          background-image: image-url("navadd-dropshadow.png");
+          z-index: 10;
         }
 
         .line {
@@ -229,6 +231,6 @@ div.header-close-button {
     right: 14px;
     width: 13px;
     height: 13px;
-    background-image: url("/assets/header-close-button.png");
+    background-image: image-url("header-close-button.png");
     cursor: pointer;
 }
