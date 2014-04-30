@@ -4,25 +4,26 @@ include ProjectionByStatsHelper
 require 'action_view'
 include ActionView::Helpers::NumberHelper
 
-SPORTS = {NBA: {api_client: SportsdataClient::Sports::NBA},
-          MLB: {api_client: SportsdataClient::Sports::MLB}
-}
+PROJECTION_SPORTS = Rails.configuration.sports.dup
+
 
 namespace :projection do
+
   desc "Fetch data from external source (SportsData)" 
   task fetch_stats: :environment do
-    SPORTS.each do |sport_name, sport|
+    PROJECTION_SPORTS.each do |sport_name, sport|
 
       Rails.logger.info "Fetching and populating Teams from SportsData"
-      teams = Projection::Team.refresh_all sport[:api_client].teams
+      teams_from_sportsdata = sport[:api_client].teams
+      teams = Projection::Team.refresh_all teams_from_sportsdata
 
       Rails.logger.info "Fetching and populating Players from SportsData"
 
       teams.each do |team|
         team.players.update_all(is_current: false)
       end
-
-      teams_array = sport[:api_client].players(teams)
+      ext_team_ids = teams.map do |team| team[:ext_team_id] end
+      teams_array = sport[:api_client].players(ext_team_ids)
       Projection::Player.refresh teams_array
 
       Rails.logger.info "Fetching and populating Games from SportsData"
@@ -62,7 +63,7 @@ namespace :projection do
   desc "Send notification email"
   task notif: [:environment] do
     today = Time.now.in_time_zone("EST").strftime("%Y-%m-%d")
-    body = SPORTS.map do |sport_name, sport|
+    body = PROJECTION_SPORTS.map do |sport_name, sport|
       "<h3><a href='https://stage.fantasycapital.com/projections/with_stats/#{sport_name}" +
       "?date=#{today}'>#{sport_name} Projection #{today}</h3><p>"
     end
@@ -77,7 +78,7 @@ namespace :projection do
 
   desc "Generates report that compares projection and actual"
   task review: [:environment] do
-    SPORTS.each do |sport_name, sport|
+    PROJECTION_SPORTS.each do |sport_name, sport|
 
       stat_names = Projection::Stat.class_for_sport(sport_name).stats_allowed.keys
       stat_names -= ["minutes", "personal_fouls", "fp"]

@@ -23,7 +23,15 @@ module SportsdataClient
           when Hash
             entry.keys.each do |key|
               if key == node_key
-                @result.push(*entry[key])
+                case entry[key]
+                  when Array
+                    # flatten arrays found into results.
+                    @result.push(*entry[key])
+                  else
+                    # a single-entry result (a hash or a string) should be returned as an individual item
+                    @result.push(entry[key])
+                end
+
                 return
               else
                 find_resource_node entry[key], node_key

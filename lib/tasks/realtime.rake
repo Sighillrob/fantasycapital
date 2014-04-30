@@ -39,7 +39,7 @@ namespace :realtime do
 
     # update all games that are in progress every 20 seconds, while any games are in progress.
     loop do
-      games = GameScore.in_range(today, today).not_closed
+      games = GameScore.in_range(today, today).not_closed.where(sport: "NBA")
       break if games.length == 0
       puts "Running realtime game status for #{games.length} games for #{today}"
 
@@ -60,7 +60,8 @@ namespace :realtime do
         games.each do |game|
           next if game.scheduledstart - 15.minutes > now
           puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
-          game, a_player_changed = RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result['game']
+          gamestate = SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id)['game']
+          game, a_player_changed = RealTimeDataService.new.refresh_game gamestate
           game_closed_with_score = true if game.closed? and !game.exception_ending?
           players_somewhere_changed = true if a_player_changed
         end
