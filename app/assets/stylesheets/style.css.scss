@@ -615,11 +615,11 @@ h3.panel-group-title{
       .panel-title{
         font-size: 22px;
         a{
-          background: url(/assets/down-arrow.png) no-repeat right center;
+          background: image-url("down-arrow.png") no-repeat right center;
           padding-right: 25px;
 
           &.collapsed{
-            background: url(/assets/right-arrow.png) no-repeat right center;
+            background: image-url("right-arrow.png") no-repeat right center;
             padding-right: 20px;
           }
           
@@ -755,7 +755,7 @@ h3.panel-group-title{
 }
 
 .fc-logo {
-    background: url("/assets/fc-small-logo.png") center center no-repeat;
+    background: image-url("fc-small-logo.png") center center no-repeat;
     width: 80px;
     height: 80px;
     margin-left: 30px;

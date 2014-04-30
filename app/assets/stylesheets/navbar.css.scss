@@ -159,7 +159,7 @@
           left: -3px;
           width: 97px;
           height: 26px;
-          background-image: url("navadd-dropshadow.png");
+          background-image: image-url("navadd-dropshadow.png");
           z-index: 10;
         }
 
@@ -231,6 +231,6 @@ div.header-close-button {
     right: 14px;
     width: 13px;
     height: 13px;
-    background-image: url("header-close-button.png");
+    background-image: image-url("header-close-button.png");
     cursor: pointer;
 }
