@@ -29,9 +29,15 @@ module Projection
           end
           players_src.each do |player_src|
             player = Player.where(ext_player_id: player_src['id']).first_or_initialize
-            # NOTE: first_name and last_name are present in both MLB and NBA data.
-            # We were previously using 'full_name' but it doesn't exist in MLB data.
-            player.name = player_src['first_name'] + ' ' + player_src['last_name']
+            # NOTE: NBA data uses 'full_name' variable. MLB uses preferred_name + last_name.
+            #   Ideally we should go back to the sportsdata-client and make these two consistent
+            #   there.
+            if player_src['full_name']
+              player.name = player_src['full_name']
+            else
+              player.name = player_src['preferred_name'] + ' ' + player_src['last_name']
+            end
+
             player.is_current = true
             player.team = Team.find_by!(ext_team_id: ext_team_id)
             player.position = player_src['primary_position']
