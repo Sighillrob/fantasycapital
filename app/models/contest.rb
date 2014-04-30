@@ -16,6 +16,7 @@
 #  rake          :float            default(0.1)
 #
 
+
 class Contest < ActiveRecord::Base
   validates :contestdate, presence: true
 
@@ -80,6 +81,9 @@ class Contest < ActiveRecord::Base
       lastscore = entry.final_score
       entry.update(final_pos: currpos+1)
     }
+    # resolve financial transactions as a result of this contest ending.
+    TransactionService::contest_end(self)
+
     return entries_ordered
   end
 
@@ -125,10 +129,17 @@ class Contest < ActiveRecord::Base
   end
 
   def enter(lineup)
+    # enter a contest with the given lineup, and return the new Entry
     raise "#{lineup.user} maximized the number of entries" unless eligible_for? lineup.user
     raise "Maximum entries reached" if filled?
     dup.save! if entries.count == max_entries - 1
-    entries.create!(lineup: lineup)
+    entry = nil 
+    # create the entry, and make the financial transaction as appropriate.
+    ActiveRecord::Base.transaction do
+      entry = entries.create!(lineup: lineup)
+      TransactionService.contest_entry(lineup.user, entry)
+    end
+    entry
   end
 
   def winnings

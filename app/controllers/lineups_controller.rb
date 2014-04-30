@@ -38,7 +38,7 @@ class LineupsController < ApplicationController
     if @entry.nil? or !@lineup.valid?
       # error path
       @contest = Contest.includes(:eligible_players).find(contest_id)
-      self.populate_lineup_variables sport
+      populate_lineup_variables sport
       flash.now[:alert] = @lineup.errors.full_messages.join ", "
       render action: 'new'
       return
