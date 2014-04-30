@@ -24,7 +24,7 @@
   </li>
   -->
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
-  <li><h2><span style="font-size:0.8em;"><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %> <%= @contest.contestdate %></span></h2></li>
+  <li><h2><span style="font-size:0.8em;"><%= number_to_currency(@contest.prizepool, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %> <%= @contest.contestdate %></span></h2></li>
   <% if @contest.accurate_state == :live %>
       <li><a id="is_contest_live_text" href="#">LIVE IN PLAY</a></li>
       <!-- BUGBUG: should change this to be client-rendered time so we have timezone right -->
@@ -51,7 +51,7 @@
       <h4>&nbsp;&nbsp;<strong>Entry:</strong> <%= number_to_currency(@contest.entry_fee, unit: '$') %></h4>
     </li>
     <li>&nbsp;&nbsp;<a href="#"><span class="green">
-         <%= number_to_currency(@contest.prize, unit: '$') %> Prize Pool</span></a>
+         <%= number_to_currency(@contest.prizepool, unit: '$') %> Prize Pool</span></a>
     </li>
   </ul>
 </div>
@@ -92,7 +92,7 @@
     <!--</td>-->
     <!--<td class="fantasypoints">entry.current_fantasypoints </td>-->
     <!--&lt;!&ndash;<td>$300K NFL Bomb Entry</td>&ndash;&gt;-->
-    <!--<td><%= number_to_currency(@contest.prize, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %></td>-->
+    <!--<td><%# number_to_currency(@contest.prizepool, unit: '$') %> <%# @contest.sport %> <%# @contest.contest_type %></td>-->
   <!--</tr>-->
   <!-- end -->
 
