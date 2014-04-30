@@ -12,6 +12,9 @@ Main::Application.routes.draw do
   get "splash/index", as: :splash
   root to: "contests#browse"
 
+  get "terms/", :controller => "terms", :action => "index"
+  get "privacy-policy/", :controller => "privacy_policy", :action => "index"
+
   devise_for :users, :controllers => {:sessions => 'sessions', :registrations => 'registrations' }
 
   get '/users/subregion_options' => 'users#subregion_options'

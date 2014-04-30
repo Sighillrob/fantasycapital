@@ -28,6 +28,9 @@ module Main
     #   and especially comment below first answer.
     #config.assets.precompile += %w( .svg .eot .woff .ttf )
 
+    config.sports = {NBA: {api_client: SportsdataClient::Sports::NBA},
+                     MLB: {api_client: SportsdataClient::Sports::MLB}
+    }
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

@@ -14,10 +14,9 @@ module SportsdataClient
             end
           end
 
-          def players(teams, season=current_season)
+          def players(ext_team_ids, season=current_season)
             teamhash = {}
-            teams.each do |team|
-              ext_team_id = team['id']
+            ext_team_ids.each do |ext_team_id|
 
               # Team profile (roster) API call
               client.request "teams/#{ext_team_id}/profile.xml" do |response|
