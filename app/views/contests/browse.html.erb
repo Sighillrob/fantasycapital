@@ -1,10 +1,8 @@
 <% content_for :banner do %>
   <div class="capitalbanner">
-    <div class="banner">
-      <img src="<%= image_path("home-banner.png") %>" width="1000" height="300">
-    </div>
+    <div class="banner"></div>
     <div class="banner-elements">
-      <div class="row banner-circles">
+      <div class="row banner-circles hide visible-md visible-lg">
         <div class="col-md-2 circle-small">
           <img src="<%= image_path("marquee-1.png") %>">
         </div>
@@ -22,9 +20,17 @@
         </div>
       </div>
       <div class="row banner-text">
-        <div class="col-md-4">Enter a contest</div>
-        <div class="col-md-4">Draft a team</div>
-        <div class="col-md-4 green big">Win cash</div>
+        <div class="col-md-4">
+          <span class="hidden-md hidden-lg">1. Enter a contest</span>
+          <span class="hidden-xs hidden-sm">Enter a contest</span></div>
+        <div class="col-md-4">
+          <span class="hidden-md hidden-lg">2. Draft a team</span>
+          <span class="hidden-xs hidden-sm">Draft a team</span>
+        </div>
+        <div class="col-md-4 green big">
+          <span class="hidden-md hidden-lg">3. Win cash</span>
+          <span class="hidden-xs hidden-sm">Win cash</span>
+        </div>
       </diV>
       <div class="row banner-button hide">
         <div class="col-md-12">
@@ -83,13 +89,13 @@
   </p>
 </div>
 -->
-<div id="home-game-types" class="row">
+<div id="home-game-types" class="row fantasy-tabs">
   <div class="col-md-7 heading border-bottom">Upcoming Games</div>
   <div class="col-md-5 clearfix">
     <div class="row game-filters">
-      <div class="col-md-4 border-right-none active">Public</div>
-      <div class="col-md-4 border-right-none">Private</div>
-      <div class="col-md-4">
+      <div class="col-md-4 border-right-none active public">Public</div>
+      <div class="col-md-4 border-right-none private">Private</div>
+      <div class="col-md-4 cornell">
         <img src="<%= image_path("cornell-university-logo.jpg") %>">
       </div>
     </div>

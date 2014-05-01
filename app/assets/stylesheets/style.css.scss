@@ -660,9 +660,15 @@ h3.panel-group-title{
   position: relative;
 }
 
+.capitalbanner .banner {
+    background-image: image-url("home-banner.png");
+    width: 100%;
+    height: 300px;
+}
+
 .capitalbanner .banner-elements {
   position: absolute;
-  width: 1000px;
+  width: 100%;
   height: 300px;
   top: 0;
   text-align: center;
@@ -675,13 +681,20 @@ h3.panel-group-title{
   margin: 50px auto 0 auto;
 }
 
+
+
 .capitalbanner .banner-elements .banner-text {
-    width: 810px;
+    width: 100%;
     margin: 0 auto;
     text-transform: uppercase;
     font-size: 28px;
     line-height: 80px;
     letter-spacing: 1px;
+}
+@media (min-width: 768px) {
+  .capitalbanner .banner-elements .banner-text {
+    width: 810px;
+  }
 }
 .capitalbanner .banner-elements .banner-text .big {
   font-size: 44px;
@@ -783,7 +796,7 @@ h3.panel-group-title{
   cursor: pointer;
 }
 
-#home-game-types {
+.fantasy-tabs {
   color: #555555;
   line-height: 80px;
   text-transform: uppercase;
@@ -792,32 +805,115 @@ h3.panel-group-title{
   width: 100%;
   margin: 20px auto 0 auto;
 }
-#home-game-types .game-filters > div {
+.fantasy-tabs .game-filters > div {
   cursor: pointer;
   text-align: center;
   padding: 0;
   border: 1px solid #DCDEE1;
   color: #B6B6B6;
 }
-#home-game-types .game-filters > div:hover {
+.fantasy-tabs .game-filters .placeholder {
+  border: 0;
+  border-bottom: 1px solid #dcdee1;
+}
+.fantasy-tabs .game-filters .placeholder:hover {
+  text-decoration: none;
+  cursor: default;
+}
+.fantasy-tabs .game-filters > div:hover {
   text-decoration: underline;
 }
-#home-game-types .game-filters .active {
+.fantasy-tabs .game-filters .active {
   color: inherit;
   border-bottom: none;
   border-top: 5px solid #0FEA6C;
   top: -4px;
 }
-#home-game-types div.border-right-none {
+.fantasy-tabs div.border-right-none {
   border-right: none;
 }
-
-#home-game-types .heading {
+@media (max-width: 991px) {
+  .fantasy-tabs .game-filters .active {
+    top: 0px;
+  }
+  .fantasy-tabs div.public,
+  .fantasy-tabs div.private,
+  .fantasy-tabs div.live,
+  .fantasy-tabs div.upcoming {
+    border-bottom: none;
+  }
+  .fantasy-tabs div.border-right-none {
+    border-right: 1px solid #dcdee1;
+  }
+}
+.fantasy-tabs .row span {
+    line-height: 60px;
+    margin-right: 10px;
+    margin-left: -5px;
+}
+.fantasy-tabs .heading {
   font-size: 32px;
 }
-#home-game-types .border-bottom {
+.fantasy-tabs .border-bottom {
   border-bottom: 1px solid #dcdee1;
 }
+.fantasy-tabs .numbers {
+    color: #B6B6B6;
+    margin-left: 3px;
+    font-size: 14px;
+    font-family: Arial;
+    position: absolute;
+    top: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.fantasy-tabs .tabs-layout {
+  margin-right: 0;
+  padding-right: 0;
+  float: left;
+  width: 545px;
+}
+.fantasy-tabs .mp-right-reset {
+  padding-right: 0;
+  margin-right: 0;
+}
+@media (max-width: 1200px) {
+  .fantasy-tabs .tabs-layout {
+    width: 525px;
+  }
+}
+@media (max-width: 991px) {
+  .fantasy-tabs .tabs-layout {
+    margin: 20px auto 0 auto;
+    width: 100%;
+  }
+  .fantasy-tabs .mp-right-reset {
+    padding-right: 15px;
+    margin-right: 0px;
+  }
+}
+.fantasy-tabs .border-added {
+  width: 15px;
+  float: left;
+  border-bottom: 1px solid #dcdee1;
+  height: 82px;
+}
+
+.fantasy-subheader {
+  border-bottom: 1px solid #dcdee1;
+  line-height: 80px;
+  height: 80px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.fantasy-subheader h5 {
+  font-family:"oswald-regular";
+  line-height: 80px;
+  text-transform: uppercase;
+}
+
 #home-page-types .padding-none {
   padding: 0;
 }
@@ -837,4 +933,25 @@ h3.panel-group-title{
 }
 .rules-terms-headings ul {
   margin-bottom: 20px;
+}
+
+.fc-btn-green {
+  cursor: pointer;
+  font-family:"oswald-regular";
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 18px;
+  text-transform: uppercase;
+  background: rgb(19,240,137); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(19,240,137,1) 0%, rgba(11,229,80,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(19,240,137,1)), color-stop(100%,rgba(11,229,80,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(19,240,137,1) 0%,rgba(11,229,80,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(19,240,137,1) 0%,rgba(11,229,80,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(19,240,137,1) 0%,rgba(11,229,80,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(19,240,137,1) 0%,rgba(11,229,80,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#13f089', endColorstr='#0be550',GradientType=0 ); /* IE6-9 */
+}
+
+.fc-btn-green:hover {
+  color: #fff;
 }
