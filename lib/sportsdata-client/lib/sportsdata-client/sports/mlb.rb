@@ -48,7 +48,7 @@ module SportsdataClient
 
           def game_stats(game_id)
             # Get "Game Summary" from API
-            # For Projection, this needs to return array of “team” hashes:
+            # For Projection, this needs to return array of length 2, each entry is a “team” hash:
             #id — team ID
             #[players][player]
             #    [played]
@@ -58,28 +58,34 @@ module SportsdataClient
             #        [stat2]
             result = client.request "statistics/#{game_id}.xml"
             hometeamstats = result['statistics']['home']
+            awayteamstats = result['statistics']['visitor']
 
             # adjust parameters to match receiver's expectations
-            hometeamstats['hitting']['players']['player'].each do |player|
-              player['played'] = player['games']['play'].to_i > 0 ? 'true' : 'false'
-              player['statistics'] = {}
+            [hometeamstats,awayteamstats].each do |teamstats|
 
-              # Add "onbase" statistics -- single, double, triple, homerun, base-on-balls,
-              #   hit-by-pitch
-              ['s', 'd', 't', 'hr', 'bb', 'hbp'].each do |statname|
-                player['statistics'][statname] = player['onbase'][statname]
+              teamstats['hitting']['players']['player'].each do |player|
+                # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
+
+                player['played'] = player['games']['play'].to_i > 0 ? 'true' : 'false'
+                player['statistics'] = {}
+
+                # Add "onbase" statistics -- single, double, triple, homerun, base-on-balls,
+                #   hit-by-pitch
+                ['s', 'd', 't', 'hr', 'bb', 'hbp'].each do |statname|
+                  player['statistics'][statname] = player['onbase'][statname]
+                end
+                # Append other stats
+                player['statistics']['runs'] = player['runs']['total']  # total runs
+                player['statistics']['rbi'] = player['rbi']             # RBI
+                player['statistics']['ktotal'] = player['outs']['ktotal'] # strikeouts
+                player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
+
               end
-              # Append other stats
-              player['statistics']['runs'] = player['runs']['total']  # total runs
-              player['statistics']['rbi'] = player['rbi']             # RBI
-              player['statistics']['ktotal'] = player['outs']['ktotal'] # strikeouts
-              player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
-
             end
-            # there is only ONE team that matters here, the home team (b/c each team and game is uniquely entered in the ScheduledGame table)
-            teamresp = [{'id' => hometeamstats['id'], 'players' => hometeamstats['hitting']['players']}]
+            # return home and away team, similar format as NBA API does natively.
+            teamresp = [{'id' => hometeamstats['id'], 'players' => hometeamstats['hitting']['players']},
+                        {'id' => awayteamstats['id'], 'players' => awayteamstats['hitting']['players']}]
 
-            # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
             return teamresp
 
           end

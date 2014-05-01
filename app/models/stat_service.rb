@@ -13,7 +13,7 @@ class StatService
       }
       @dimension_map = {
         "p_player." => "summary",
-        "p_opponent_team.defense_allowed_in_" => "matchup" }
+      }
       @span_map = {
         "the_0th_game_to_last" => lambda {|games| games[0].start_date.strftime("%m/%d") },
         "the_1rd_game_to_last" => lambda {|games| games[0].start_date.strftime("%m/%d") },
@@ -31,14 +31,13 @@ class StatService
           player = Player.where(ext_player_id: p_player.ext_player_id).first
           next if player.nil?
           player.player_stats.delete_all
-          p_opponent_team = team2
           # BUGBUG: Need to pass SPORT here so we can get it right in update_stats
-          update_stats(player, p_player, p_opponent_team)
+          update_stats(player, p_player)
         end # of player
       end # of team
     end
 
-    def update_stats(player, p_player, p_opponent_team)
+    def update_stats(player, p_player)
       cal = Projection::FantasyPointCalculator.create_for_sport('NBA')
       @dimension_map.each do |subject, dim_display|
         priority=0
@@ -47,11 +46,7 @@ class StatService
           @stat_map.each do |stat_name, stat_display|
             games = eval(subject + span)
             next if games.nil? || games.size == 0
-            if ( subject.start_with? "p_opponent_team" )
-              stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player.position == p_player.position}
-            else
-              stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
-            end
+            stat_value = cal.avg_stats_per_game(games) {|stat| stat.stat_name == stat_name && stat.player == p_player}
             PlayerStat.create(dimension: dim_display, time_span: span_display.call(games), stat_name: stat_display, stat_value: stat_value.to_s, player: player, display_priority: priority)
           end # of stat
         end # of span
