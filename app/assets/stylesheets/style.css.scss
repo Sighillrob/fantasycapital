@@ -837,7 +837,9 @@ h3.panel-group-title{
     top: 0px;
   }
   .fantasy-tabs div.public,
-  .fantasy-tabs div.private {
+  .fantasy-tabs div.private,
+  .fantasy-tabs div.live,
+  .fantasy-tabs div.upcoming {
     border-bottom: none;
   }
   .fantasy-tabs div.border-right-none {
@@ -872,16 +874,32 @@ h3.panel-group-title{
   float: left;
   width: 545px;
 }
+.fantasy-tabs .mp-right-reset {
+  padding-right: 0;
+  margin-right: 0;
+}
+@media (max-width: 1200px) {
+  .fantasy-tabs .tabs-layout {
+    width: 525px;
+  }
+}
+@media (max-width: 991px) {
+  .fantasy-tabs .tabs-layout {
+    margin: 20px auto 0 auto;
+    width: 100%;
+  }
+  .fantasy-tabs .mp-right-reset {
+    padding-right: 15px;
+    margin-right: 0px;
+  }
+}
 .fantasy-tabs .border-added {
   width: 15px;
   float: left;
   border-bottom: 1px solid #dcdee1;
   height: 82px;
 }
-.fantasy-tabs .mp-right-reset {
-  padding-right: 0;
-  margin-right: 0;
-}
+
 .fantasy-subheader {
   border-bottom: 1px solid #dcdee1;
   line-height: 80px;
