@@ -1,4 +1,5 @@
 class StatService
+  # Stats service generates the data for the statistics user interface.
     def initialize
       @stat_map = { 
         "fp" => "FPPG",
