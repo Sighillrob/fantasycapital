@@ -1,4 +1,37 @@
+<div id="entries-contest-types" class="row fantasy-tabs">
+  <div class="col-md-5 heading border-bottom">My Entries</div>
+  <div class="col-md-7 clearfix mp-right-reset">
+    <div class="row game-filters tabs-layout">
+      <div class="col-md-1 placeholder">&nbsp;</div>
+      <div class="col-md-3 border-right-none active">
+        <span>Live</span>
+        <span class="numbers">10</span>
+      </div>
+      <div class="col-md-4 border-right-none">
+        <span>Upcoming</span>
+        <span class="numbers">15</span>
+      </div>
+      <div class="col-md-4">
+        <span>Completed</span>
+        <span class="numbers">1205</span>
+      </div>
+    </div>
+    <div class="border-added">&nbsp;</div>
+  </div>
+  <!-- <div class="col-md-1 border-bottom padding-none">&nbsp;</div> -->
+</div>
+<div class="row fantasy-subheader">
+  <div class="col-md-6 text-left">
+    <h5>Live contests</h5>
+  </div>
+  <div class="col-md-6 text-right">
+    <a class="fc-btn-green">Enter more games</a>
+  </div>
+</div>
+<!--
 <div>
+
+  
 
   <h2>MY ENTRIES</h2>
   <div class="clear">&nbsp;</div>
@@ -63,7 +96,8 @@
   <div class="completed-contests-dest"></div>
 
 </div>
-
+-->
+<!--
 <script>
 
   jQuery(document).on("ready page:load", function ($) {
@@ -130,7 +164,7 @@
   });
 
 </script>
-
+-->
 <%= Rails.application.assets.find_asset('backbone/templates/live-contests-template.html').to_s.html_safe %>
 <%= Rails.application.assets.find_asset('backbone/templates/upcoming-contests-template.html').to_s.html_safe %>
 <%= Rails.application.assets.find_asset('backbone/templates/completed-contests-template.html').to_s.html_safe %>
