@@ -32,7 +32,7 @@ class BankWithdrawalService
         new_transaction.amount_in_cents = cents * -1
         new_transaction.save!
 
-        # Create an opp transaction for the assumed stripe fee
+        # Create an op transaction for the assumed stripe fee
         op_transaction.transaction_type = Transaction.TYPE_ENUM[:op_fee]
         op_transaction.amount_in_cents = stripe_transfer_fee * -1
         op_transaction.save! 
@@ -58,8 +58,8 @@ class BankWithdrawalService
       escrow_balance = Stripe::Balance.retrieve()
 
       if escrow_balance.available[0].amount < cents
-        # Settle opp fees - this should get balance positive
-        OppSettlementService.new().run()
+        # Settle op fees - this should get balance positive
+        OpSettlementService.new().run()
 
         # Retry
         escrow_balance = Stripe::Balance.retrieve()
