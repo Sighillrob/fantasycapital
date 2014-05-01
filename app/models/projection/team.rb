@@ -31,35 +31,5 @@ module Projection
       end
     end
 
-    def method_missing(method_name, *args, &block)
-      if m = /^defense_allowed_in_last_(\d+)_game[s]*$/.match(method_name)
-        self.defense_allowed_in_last_games(m[1].to_i)
-      elsif m = /^defense_allowed_in_the_(\d+)\w\w_game_to_last$/.match(method_name)
-        self.defense_allowed_in_the_game_to_last(m[1].to_i)
-      else
-        super
-      end
-    end
-    
-    def defense_allowed_in_last_games(x)
-      Game.includes(:opponent_team, stats: :player).where(opponent_team: self).order(start_date: :asc).last(x)
-    end
-
-    def defense_allowed_in_the_game_to_last(x)
-      self.defense_allowed_in_last_games(x+1).reverse[x,1]
-    end
-
-    def defense_allowed_in_home_games
-      Game.includes(:opponent_team, stats: :player).where(opponent_team: self, home_team: self)
-    end
-
-    def defense_allowed_in_away_games
-      Game.includes(:opponent_team, stats: :player).where(opponent_team: self, away_team: self)
-    end
-
-    def defense_allowed_in_all_games
-      Game.includes(:opponent_team, stats: :player).where(opponent_team: self)
-    end
-
   end
 end

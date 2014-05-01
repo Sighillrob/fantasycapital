@@ -5,8 +5,7 @@ describe 'Sportsdata Client' do
   # right now, in realtime and overnight.
 
   NBA_TEAMS_RESPONSE = File.read("spec/fixtures/sportsdata_client/nba_teams.json")
-  MLB_TEAMS_RESPONSE =File.read("spec/fixtures/sportsdata_client/mlb_teams.json")
-
+  MLB_TEAMS_RESPONSE = File.read("spec/fixtures/sportsdata_client/mlb_teams.json")
   describe "response parser" do
     # MLB responses are really weird. A single event is returned as a single JSON item; multiple
     # events are returned as an array. So create a test case for single and multiple responses from
@@ -131,13 +130,33 @@ describe 'Sportsdata Client' do
   end
 
   describe "game_stats" do
+    let (:mlb_game_stats_resp) { File.read("spec/fixtures/sportsdata_client/mlb_game_stats.json") }
+    let (:nba_game_stats_resp) { File.read("spec/fixtures/sportsdata_client/nba_game_stats.json") }
+
     # test SportsdataClient::Sports::NBA.game_stats
+
     it "parses NBA properly" do
-      pending
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        block.call(JSON.parse(nba_game_stats_resp))
+      end
+      game_stats=SportsdataClient::Sports::NBA.game_stats('whatever-nba-ext-id')
+      expect(game_stats.length).to be(2)  # expect 2 teams
+      expect(game_stats[0]['players']['player'].length).to be(15)  # first team player count
+      expect(game_stats[1]['players']['player'].length).to be(15)  # 2nd team player count
+
+      puts "HI"
     end
 
     it "parses MLB properly" do
-      pending
+      SportsdataClient::Client.any_instance.stub(:request) do |url, &block|
+        JSON.parse(mlb_game_stats_resp) # BUGBUG: non-block usage of this in mlb.rb... we should change it to a block
+      end
+
+      game_stats=SportsdataClient::Sports::MLB.game_stats('whatever-mlext-id')
+      expect(game_stats.length).to be(2)  # expect 2 teams
+      expect(game_stats[0]['players']['player'].length).to be(17)  # first team has 17 players
+      expect(game_stats[1]['players']['player'].length).to be(13)  # 2nd team has 13 players
+
     end
   end
 

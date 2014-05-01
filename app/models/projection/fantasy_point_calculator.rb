@@ -33,7 +33,7 @@ module Projection
 
           projection.fp = weighted_fp do |stat_name, weight|
             p_by_stat = ProjectionByStat.where(projection: projection, stat_name: stat_name).first_or_create
-            p_by_stat.fp = fp_of_stat(stat_name, team1_player, team2, p_by_stat)
+            p_by_stat.fp = fp_of_stat(stat_name, team1_player, p_by_stat)
             p_by_stat.weighted_fp = p_by_stat.fp * weight
             p_by_stat.save!
             p_by_stat.fp
@@ -50,31 +50,15 @@ module Projection
       end
     end
 
-    def fp_of_stat(stat_name, player, opponent_team, p_by_stat)
+    def fp_of_stat(stat_name, player, p_by_stat)
 
       p_by_stat.fp = @games_weights.reduce(0.0) do |fp, (criteria, calculation)|
         p_by_s_c = ProjByStatCrit.where(projection_by_stat: p_by_stat, criteria: criteria).first_or_create
 
-        if ( criteria.start_with? "opponent_team" )
-          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat|
-            stat.stat_name == stat_name && stat.player.position == player.position
-          }
-          # opponent's stat should be factored by minutes played
-          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
-          if self.class.sport == "NBA"
-            # NOTE: Mike and Steve said this calculation isn't essential. It's used in daily
-            #   stats emails though. Since it only works for NBA, qualify it w/ NBA for now.
-
-            avg_mins = avg_mins_played_in_last_3(player, p_by_stat.projection)
-            p_by_s_c.weighted_fp *= avg_mins / 48.0
-          end
-
-        else
-          p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat|
-            stat.stat_name == stat_name && stat.player == player
-          }
-          p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
-        end
+        p_by_s_c.fp = avg_stats_per_game(eval(criteria), p_by_s_c) {|stat|
+          stat.stat_name == stat_name && stat.player == player
+        }
+        p_by_s_c.weighted_fp = calculation.call(p_by_s_c.fp)
         p_by_s_c.save!
 
         fp + p_by_s_c.weighted_fp

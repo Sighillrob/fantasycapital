@@ -31,7 +31,9 @@ describe 'projection:fetch_stats' do  # describe name here is the rake task we e
     apiclient.should_receive(:teams).once { nba_resp[:team]}
     apiclient.should_receive(:players).once { nba_resp[:player_teams] }
     apiclient.should_receive(:all_season_games).once { nba_resp[:all_season_games] }
-    apiclient.should_receive(:game_stats).exactly(4).times { nba_resp[:game_stats] }
+
+    # 2 games in the all_season_games message, so should see game_stats request two times
+    apiclient.should_receive(:game_stats).exactly(2).times { nba_resp[:game_stats] }
     apiclient.should_receive(:games_scheduled).once { nba_resp[:games_scheduled] }
 
     subject.invoke    # call fetch_stats
@@ -50,7 +52,9 @@ describe 'projection:fetch_stats' do  # describe name here is the rake task we e
     }
     apiclient.should_receive(:players).once { mlb_resp[:player_teams] }
     apiclient.should_receive(:all_season_games).once { mlb_resp[:all_season_games] }
-    apiclient.should_receive(:game_stats).exactly(4).times { mlb_resp[:game_stats] }
+    apiclient.should_receive(:game_stats).exactly(2).times {
+      mlb_resp[:game_stats]
+    }
     apiclient.should_receive(:games_scheduled).once { mlb_resp[:games_scheduled] }
 
     subject.invoke    # call fetch_stats
