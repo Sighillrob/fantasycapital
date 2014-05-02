@@ -310,7 +310,7 @@ a#clear-lineups{
 
 .entries_index table, 
 .entries_index table th {
-    text-align: right;
+    text-align: left;
 }
 
 .container .opponent-team {
@@ -325,6 +325,8 @@ a#clear-lineups{
 
 #entries-section {
   min-height: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 #entries-empty {
     background: url("/assets/white-star.jpg") no-repeat center center;
@@ -350,3 +352,58 @@ a#clear-lineups{
     text-transform: uppercase;
     color: #c6c6c6;
 }
+
+.fantasy-subheader-black {
+  margin-left: -20px;
+  margin-right: -20px;
+  background-color: #22272D;
+  color: #0FEA6C;
+  font-family: "oswald-regular";
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+}
+.fantasy-subheader-black > div {
+  height: 140px;
+}
+@media (max-width: 991px) {
+  .fantasy-subheader-black > div {
+    height: auto;
+  }
+}
+.fantasy-subheader-black .subheader .padding {
+  margin: 40px 0 0 20px;
+}
+.fantasy-subheader-black h3 {
+  color: #fff;
+  font-size: 36px;
+  margin-top: 40px;
+}
+.fantasy-subheader-black .subheader h3 {
+  text-align: left;
+  color: #0FEA6C;
+  font-size: 36px;
+}
+.fantasy-subheader-black .subheader p {
+  text-align: left;
+  color: #A9ABAC;
+}
+@media (max-width: 991px) {
+  .fantasy-subheader-black .subheader h3,
+  .fantasy-subheader-black .subheader p {
+    text-align: center;
+  }
+}
+.fantasy-subheader-black p {
+  margin-top: 3px;
+  color: #A9ABAC;
+  text-align: center;
+  margin-bottom:40px;
+}
+.fantasy-subheader-black h3.green, 
+.fantasy-subheader-black p.green {
+  color: #0FEA6C;
+  text-align: center;
+}
+
