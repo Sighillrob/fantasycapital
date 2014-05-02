@@ -955,3 +955,54 @@ h3.panel-group-title{
 .fc-btn-green:hover {
   color: #fff;
 }
+
+#home-filter-games.active {
+  color: #505E6C;
+  background-color: #fff;
+}
+
+#home-filter-options {
+    font-size: 14px;
+    color: #505E6C;
+    padding: 10px 20px;
+}
+#home-filter-options .short {
+    width: 65px;
+    outline: 0;
+}
+#home-filter-options p {
+  margin: 0;
+  padding: 0;
+}
+#home-filter-options .light-grey {
+  color: #97A2AD;
+  margin-left: 18px;
+}
+#home-filter-options .light-grey.no-margin {
+  margin-left: 0px;
+}
+#home-filter-options .checkbox-toggle {
+  width: 13px;
+  height: 13px;
+  overflow: hidden;
+  margin-right: 5px;
+  background: image-url("checkbox-imitation.jpg");
+  cursor: pointer;
+  position: absolute;
+  top: 4px;
+}
+#home-filter-options .checkbox-toggle.active {
+  background-position: 0 -13px;
+}
+.relative {
+  position: relative;
+}
+#home-filter-games .reset-filters {
+  display: none;
+}
+
+#home-filter-games.active .reset-filters {
+  display: block;
+  font-weight: normal;
+  text-decoration: underline;
+}
