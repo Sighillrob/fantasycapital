@@ -1,4 +1,22 @@
 GIT
+  remote: git://github.com/gregbell/active_admin.git
+  revision: a25c9231715a4124bd7a303f29feeb381ec88956
+  specs:
+    activeadmin (1.0.0.pre)
+      arbre (~> 1.0)
+      bourbon
+      coffee-rails
+      devise (~> 3.2)
+      formtastic (~> 2.3.0.rc3)
+      inherited_resources (~> 1.3)
+      jquery-rails
+      jquery-ui-rails
+      kaminari (~> 0.15)
+      rails (>= 3.2, <= 4.1)
+      ransack (~> 1.0)
+      sass-rails
+
+GIT
   remote: git://github.com/jim/carmen-rails.git
   revision: 076dd251e075d07408e0b5268f886956ef2a347c
   specs:
@@ -55,6 +73,8 @@ GEM
     annotate (2.6.1)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
+    arbre (1.0.1)
+      activesupport (>= 3.0.0)
     arel (4.0.2)
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
@@ -64,6 +84,9 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blankslate (3.1.2)
+    bourbon (3.2.1)
+      sass (~> 3.2)
+      thor
     builder (3.1.4)
     bullet (4.7.1)
       activesupport
@@ -129,12 +152,17 @@ GEM
       factory_girl (~> 4.3.0)
       railties (>= 3.0.0)
     ffi (1.9.3)
+    formtastic (2.3.0.rc3)
+      actionpack (>= 3.0)
     fssm (0.2.10)
     gibbon (1.1.1)
       httparty
       multi_json (>= 1.3.4)
     haml (4.0.5)
       tilt
+    has_scope (0.6.0.rc)
+      actionpack (>= 3.2, < 5)
+      activesupport (>= 3.2, < 5)
     heroku (3.3.0)
       heroku-api (~> 0.3.17)
       launchy (>= 0.3.2)
@@ -152,6 +180,9 @@ GEM
       multi_xml (>= 0.5.2)
     httpclient (2.3.4.1)
     i18n (0.6.9)
+    inherited_resources (1.4.1)
+      has_scope (~> 0.6.0.rc)
+      responders (~> 1.0.0.rc)
     jasmine (2.0.0)
       jasmine-core (~> 2.0.0)
       phantomjs
@@ -166,7 +197,12 @@ GEM
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (4.2.1)
+      railties (>= 3.2.16)
     json (1.8.1)
+    kaminari (0.15.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     kgio (2.9.2)
     launchy (2.4.2)
       addressable (~> 2.3)
@@ -203,6 +239,8 @@ GEM
     orm_adapter (0.5.0)
     pg (0.17.1)
     phantomjs (1.9.7.0)
+    polyamorous (1.0.0)
+      activerecord (>= 3.0)
     polyglot (0.3.3)
     pony (1.6.2)
       mail (>= 2.0)
@@ -257,11 +295,19 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.1.1)
+    ransack (1.2.3)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.0.0)
     rdoc (4.1.1)
       json (~> 1.4)
     redis (3.0.7)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
+    responders (1.0.0)
+      railties (>= 3.2, < 5)
     resque (1.25.1)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -387,6 +433,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activeadmin!
   activerecord-session_store (= 0.1.0)
   airbrake
   angularjs-rails (~> 1.2)

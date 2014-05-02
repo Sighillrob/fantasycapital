@@ -87,6 +87,9 @@ gem 'rack-zippy'
 # unicorn web server for production
 gem 'unicorn'
 
+# active admin
+gem 'activeadmin', github: 'gregbell/active_admin'
+
 group :development do
   gem 'mailcatcher'
 end
