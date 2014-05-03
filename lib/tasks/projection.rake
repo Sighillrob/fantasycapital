@@ -27,7 +27,11 @@ namespace :projection do
       Projection::Player.refresh teams_array
 
       Rails.logger.info "Fetching and populating Games from SportsData"
-      cutoff = ENV['cutoff'] || "10"
+
+      # projection cutoff can be set by env variable to help with db 'seeding'. That is, when a new DB is
+      # set up for the first time, we might need to record stats farther back than the default
+      # of 10 days. Otherwise we may not have enough data to properly compute fantasy points.
+      cutoff = ENV['PROJECTION_DAYS'] || "10"
       gamelist = sport[:api_client].all_season_games
       recent_games = Projection::Game.refresh_all(sport_name.to_s, gamelist, Time.now - cutoff.to_i.days)
       Rails.logger.info "Populated #{recent_games.count} games"

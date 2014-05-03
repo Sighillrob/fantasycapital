@@ -47,14 +47,15 @@ class ContestFactory
         next if gamecount < 3
 
         # generate contests for this gamedate if they don't exist yet.
-        games_of_day = GameScore.where(playdate:gamedate)
+        games_of_day = GameScore.where(playdate:gamedate).where(sport: sport)
 
         # contests start at the earliest gametime of that day.
         contest_time = games_of_day.pluck(:scheduledstart).sort()[0].to_time
 
-        # create array of all teams playing today.
+        # create array of all teams playing this sport today.
         p_teams = games_of_day.map {|g| [g.home_team, g.away_team]}.flatten
 
+        # get array of all players playing this sport today
         players = p_teams.reduce([]) {|p, t| p + Player.where(
                                     ext_player_id: t.players.map {|pp| pp.ext_player_id})}
 

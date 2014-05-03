@@ -46,7 +46,7 @@ module SportsdataClient
             client.request "statistics/#{game_id}.xml"
           end
 
-          def game_stats(game_id)
+          def game_stats(ext_game_id)
             # Get "Game Summary" from API
             # For Projection, this needs to return array of length 2, each entry is a “team” hash:
             #id — team ID
@@ -56,7 +56,7 @@ module SportsdataClient
             #    [statistics]
             #        [stat1]
             #        [stat2]
-            result = client.request "statistics/#{game_id}.xml"
+            result = client.request "statistics/#{ext_game_id}.xml"
             hometeamstats = result['statistics']['home']
             awayteamstats = result['statistics']['visitor']
 
