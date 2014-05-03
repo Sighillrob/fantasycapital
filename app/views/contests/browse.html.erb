@@ -95,21 +95,65 @@
     <div class="row game-filters">
       <div class="col-md-4 border-right-none active public">Public</div>
       <div class="col-md-4 border-right-none private">Private</div>
-      <div class="col-md-4 cornell">
+      <div class="col-md-4 cornell">&nbsp;
+        <!--
         <img src="<%= image_path("cornell-university-logo.jpg") %>">
+        -->
       </div>
     </div>
   </div>
   <!-- <div class="col-md-1 border-bottom padding-none">&nbsp;</div> -->
 </div>
-
-<div id="home-filter-games">
-  <div class="expand">+ Filter Games</div>
-  <div class="row hide">
-    <!-- -->
+<div id="home-game-filters">
+  <div id="home-filter-games">
+    <div class="row expand">
+      <div class="col-md-6 text-left"><span class="sign">-<span> Filter Games</div>
+      <div class="col-md-6 text-right reset-filters">Reset Filters</div>
+    </div>
+  </div>
+  <div id="home-filter-options" class="hide">
+    <div class="row">
+      <div class="col-md-2">
+        <p>Contest type</p>
+        <div class="relative">
+          <span class="checkbox-toggle" data-value="false"></span><span class="light-grey">50/50</span>
+        </div>
+        <div class="relative">
+          <span class="checkbox-toggle" data-value="false"></span><span class="light-grey">Head to Head</span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <p>Sport</p>
+        <div class="relative">
+          <span class="checkbox-toggle" data-value="false"></span><span class="light-grey">NBA</span>
+        </div>
+        <div class="relative">
+          <span class="checkbox-toggle" data-value="false"></span><span class="light-grey">MLB</span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <p>Live in</p>
+        <div class="relative">
+          <span class="checkbox-toggle" data-value="false"></span><span class="light-grey">Next hour only</span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <p>Entry</p>
+        <div class="row">
+          <div class="col-md-6">
+            <p><span class="light-grey no-margin">Min</span></p>
+            <input type="text" class="short" placeholder="eg. $1">
+          </div>
+          <div class="col-md-6">
+            <p><span class="light-grey no-margin">Min</span></p>
+            <input type="text" class="short">
+          </div>
+        </div>
+        
+      </div>
+    </div>
   </div>
 </div>
-
 <table id="home-contests" class='contestHead main-grid table filter-result'>
   <thead>
   <tr>
@@ -140,4 +184,9 @@
     }
   });
   */
+
+  $(document).on("page:load ready", function () {
+    var homeFiltersView = new Main.Views.HomeFiltersView();
+  });
+
 </script>
