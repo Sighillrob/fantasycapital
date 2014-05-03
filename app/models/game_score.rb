@@ -15,6 +15,7 @@
 #  period          :integer
 #  created_at      :datetime
 #  updated_at      :datetime
+#  sport           :string(255)      default("NBA")
 #
 
 class GameScore < ActiveRecord::Base
@@ -123,7 +124,11 @@ class GameScore < ActiveRecord::Base
         if self.pending_final?
           "PENDING..."
         else
-          "#{minutes_remaining} MIN LEFT"
+          if self.sport=="NBA"
+            "#{minutes_remaining} MIN LEFT"
+          elsif self.sport=="MLB"
+            "#{self.period} INNING"
+          end
         end
       when :closed
         if self.exception_ending?

@@ -128,7 +128,7 @@
 
       var games_coll = new Main.Collections.GamesCollection([],
               {teams_coll: teams_coll});
-      games_coll.reset(<%= @games.to_json.html_safe %>);
+      games_coll.reset(<%= @todaysgames.to_json.html_safe %>);
 
       var players_coll = new Main.Collections.PlayersCollection([],
               {teams_coll: teams_coll, games_coll: games_coll,

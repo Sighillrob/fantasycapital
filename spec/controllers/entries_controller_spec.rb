@@ -51,7 +51,7 @@ describe EntriesController do
       # make games closed by adjusting their status
       game.update(status:'closed')
       game2.update(status:'closed')
-      RealTimeDataService.new.try_closing_contests todaydate
+      RealTimeDataService.new.try_closing_contests todaydate, "NBA"
 
       get 'index'
       data = assigns(:data)

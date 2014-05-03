@@ -18,7 +18,9 @@ class Player < ActiveRecord::Base
   PRIORITIZE_SEQUENCE_NUMBER = 1
   FP_TO_SALARY_MULTIPLIER    = 250
   PLAYER_MIN_SALARY = 3000
-  NBA_STATS_ORDER = ['points', 'rebounds', 'assists', 'steals', 'blocks', 'turnovers']
+  STATS_ORDER =
+      {"NBA" => ['points', 'rebounds', 'assists', 'steals', 'blocks', 'turnovers'],
+       "MLB" => ['runs'] }
 
   belongs_to :team
   belongs_to :sport_position
@@ -32,14 +34,14 @@ class Player < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
-  def realtime_fantasy_points(gameid=nil)
+  def realtime_fantasy_points(gamescore=nil)
     # return current real-time-fantasy score for a particular game ID, or array of gameid's.
     # to use an eager-loaded association that's been pre-filtered to only include the relevant game(s),
     # make sure gameid is nil.
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
-    if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
+    if gamescore.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       fpsarray = self.player_real_time_scores.to_a.select { |x| x['name'] == 'fp' }
       if fpsarray.length > 1
         ext_game_ids = fpsarray.map {|x| GameScore.find(x['game_score_id']).ext_game_id}
@@ -48,7 +50,7 @@ class Player < ActiveRecord::Base
 
       fps = fpsarray[0]
     else
-      fpsarray = player_real_time_scores.where(game_score_id: gameid, name: 'fp')
+      fpsarray = player_real_time_scores.where(game_score: gamescore, name: 'fp')
       raise "More than one fantasy score for #{self.name}" if fpsarray.count > 1
       fps = fpsarray.first
     end
@@ -62,7 +64,7 @@ class Player < ActiveRecord::Base
 
 
 
-  def rtstats(gameid=nil)
+  def rtstats(sport, game_score=nil)
 
     # return the score-string (ie "0 P 0 R 0 S ...") for this player in a particular game.
     # can pass an array of gameids. Make sure we assemble in right order.
@@ -71,15 +73,15 @@ class Player < ActiveRecord::Base
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
-    if gameid.nil? && (self.association_cache.keys.include? :player_real_time_scores)
+    if game_score.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       stats = self.player_real_time_scores.to_a
     else
-      stats = player_real_time_scores.where(game_score_id: gameid)
+      stats = player_real_time_scores.where(game_score: game_score)
     end
 
     rtstats = []
     stats.to_a.each do |rtstat|
-      idx = NBA_STATS_ORDER.index(rtstat['name'])
+      idx = STATS_ORDER[sport].index(rtstat['name'])
       unless idx.nil?
         rtstats[idx] = rtstat['value'].to_i.to_s + rtstat['name'][0]
       end

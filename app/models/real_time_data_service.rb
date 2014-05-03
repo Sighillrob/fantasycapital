@@ -1,14 +1,20 @@
 class RealTimeDataService
-  REALTIME_STATS = [ 
-      "points",
-      "assists",
-      "steals",
-      "rebounds",
-      "blocks",
-      "turnovers"
-  ]
+  REALTIME_STATS = {
+      "NBA" => [
+        "points",
+        "assists",
+        "steals",
+        "rebounds",
+        "blocks",
+        "turnovers"
+      ],
+      "MLB" => [
+        "runs"
+      ]
 
-  def refresh_schedule(schedule_summary, sport)
+  }
+
+  def refresh_schedule(schedule_summary, sportname)
     # update the GameScore models with game schedules and state. This happens for several days ahead
     # during overnight tasks.
 
@@ -34,7 +40,7 @@ class RealTimeDataService
       game.scheduledstart = game_summary['scheduled']
       game.home_team = home_team
       game.away_team = away_team
-      game.sport = sport.to_s
+      game.sport = sportname.to_s
       game.save!
 
       # skip the game if the game hasn't started or is over. we're in a select, so a TRUE means return this
@@ -51,20 +57,21 @@ class RealTimeDataService
       Rails.logger.warn("GameScore not found for #{game_src['id']}")
       return nil
     end
+    pusherchan = "#{game_score.sport}-gamecenter"
     if game_score.record_sportsdata(game_src)
-      game = game_score
       # NOTE: I'm sure this can now be simplified -- all the keys and values match
-      game_score_to_push = {:games =>  [{"id" => game.id,
-                                          "pretty_play_state" => game.pretty_play_state,
-                                          "minutes_remaining" => game.minutes_remaining,
-                                          "home_team_score" => game.home_team_score,
-                                          "away_team_score" => game.away_team_score,
+      game_score_to_push = {:games =>  [{"id" => game_score.id,
+                                          "pretty_play_state" => game_score.pretty_play_state,
+                                          # BUGBUG: this needs to be fixed for multiple sports
+                                          "minutes_remaining" => game_score.minutes_remaining,
+                                          "home_team_score" => game_score.home_team_score,
+                                          "away_team_score" => game_score.away_team_score,
                                          } ]
       }
-      Pusher['gamecenter'].trigger('stats', game_score_to_push)
+      Pusher[pusherchan].trigger('stats', game_score_to_push)
     end
 
-    cal = Projection::FantasyPointCalculator.create_for_sport('NBA')
+    cal = Projection::FantasyPointCalculator.create_for_sport(game_score.sport)
 
     teams_src = game_src['team'] || []
 
@@ -82,7 +89,7 @@ class RealTimeDataService
 
       stats = player_src["statistics"] || []
       stats.each do |name, value|
-        next unless REALTIME_STATS.include? name
+        next unless REALTIME_STATS[game_score.sport].include? name
         score = PlayerRealTimeScore.where(player: player, name: name,
                                           game_score:game_score).first_or_initialize
         if score.value != value.to_f
@@ -107,33 +114,36 @@ class RealTimeDataService
     # send updated player stats to browser.
     playerstats = changed_players.map {|player|
       pl_json = {id: player.id}
-      pl_json[:rtstats] = player.rtstats(game_score.id)
-      pl_json[:currfps] = player.realtime_fantasy_points(game_score.id).to_f
+      pl_json[:rtstats] = player.rtstats(game_score.sport, game_score)
+      pl_json[:currfps] = player.realtime_fantasy_points(game_score).to_f
       pl_json
     }
 
     ##Limit the size of each message (pusher's limit is 10240)
     playerstats.each_slice(50).each do |msg_chunk|
-      Pusher['gamecenter'].trigger('stats', { :players => msg_chunk })
+      Pusher[pusherchan].trigger('stats', { :players => msg_chunk })
     end
 
     return game_score, !changed_players.empty?
   end
 
-  def refresh_entries playdate
-    # Recalculate all live entries' fantasy points and send as a message. BUGBUG: should
-    #   do this separately per sport.
-    todaysentries = Entry.in_range(playdate, playdate)
+  def refresh_entries playdate, sport_name
+    # Recalculate all live entries' fantasy points for a given sport, and send as a Pusher message.
+    todaysentries = Entry.joins(:contest).in_range(playdate, playdate)
+                         .where(contests: {sport:sport_name})
     @entries = todaysentries.map {|entry| {"id" => entry.id, "fps" => entry.current_fantasypoints}}
+    pusherchan = "#{sport_name}-gamecenter"
+
     if !@entries.empty?
-      Pusher['gamecenter'].trigger('stats', { :entries => @entries })
+      Pusher[pusherchan].trigger('stats', { :entries => @entries })
     end
 
   end
 
-  def try_closing_contests playdate
+  def try_closing_contests playdate, sport_name
 #     # close out entries that have all games finished.
-    todaysentries = Entry.in_range(playdate, playdate).missing_final_score.readonly(false)
+    todaysentries = Entry.joins(:contest).in_range(playdate, playdate)
+                         .where(contests: {sport:sport_name}).missing_final_score.readonly(false)
 
     todaysentries.each_with_index do |entry, idx|
       gamesnotdone = entry.games.reject do | game | game.scores_valid? end
@@ -143,8 +153,8 @@ class RealTimeDataService
       entry
     end
 
-    # close out contests that havce all games finished
-    Contest.in_range(playdate, playdate).each do |contest|
+    # close out contests for this sport that have all games finished
+    Contest.in_range(playdate, playdate).where(sport:sport_name).each do |contest|
       contest.record_final_outcome!
     end
 

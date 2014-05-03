@@ -27,12 +27,12 @@ class EntriesController < ApplicationController
     @contest = @entry.contest
     @entries = @entry.contest.entries
 
-    @games = GameScore.recent_and_upcoming  # BUGBUG: do we need this? or just today's games?
+    #@games = GameScore.recent_and_upcoming  # BUGBUG: do we need this? or just today's games?
 
     # get all the player scores for today's games
-    @todaysgames = GameScore.where({playdate: @contest.contestdate})
+    @todaysgames = GameScore.where(playdate: @contest.contestdate, sport: @contest.sport)
 
-    @teams = Team.all
+    @teams = Team.all  # BUGBUG: this is not subsetted to sport... do we need to do that?
 
     # add today's scores to the players in a consumable format.
     todaygameids = @todaysgames.pluck('id')
@@ -40,11 +40,11 @@ class EntriesController < ApplicationController
                                     player_real_time_scores: {game_score_id: todaygameids})
     @players = rawplayers.map { |player|
       pl_json = player.as_json()
-      pl_json['rtstats'] = player.rtstats
+      pl_json['rtstats'] = player.rtstats(@contest.sport)
       pl_json['currfps'] = player.realtime_fantasy_points
       pl_json
     }
-    @sportpositions = SportPosition.all
+    @sportpositions = SportPosition.where(sport: @contest.sport)
   end
 
   def index

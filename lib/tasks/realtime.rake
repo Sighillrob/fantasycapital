@@ -1,4 +1,7 @@
 
+
+REALTIME_SPORTS = Rails.configuration.sports.dup
+
 namespace :realtime do
 
   desc "Check if realtime-data task should be started. This task should be run from heroku scheduler ~once per hour. "
@@ -28,7 +31,7 @@ namespace :realtime do
   task games: :environment do
     # Monitor all live games from one process and thread to economize on DB connections.
     today = Time.now.in_time_zone("US/Pacific").to_date
-    puts "Starting realtime game status for #{today}"
+    puts "Starting realtime game task for #{today}"
     Signal.trap("TERM") do
       puts "Realtime function received Sigterm... Exiting."
       exit
@@ -39,7 +42,7 @@ namespace :realtime do
 
     # update all games that are in progress every 20 seconds, while any games are in progress.
     loop do
-      games = GameScore.in_range(today, today).not_closed.where(sport: "NBA")
+      games = GameScore.in_range(today, today).not_closed
       break if games.length == 0
       puts "Running realtime game status for #{games.length} games for #{today}"
 
@@ -53,32 +56,35 @@ namespace :realtime do
 
         now = Time.now
 
-        # iterate through games. Delete games from the list if they've closed. Update them with new
-        # API data if they are in progress.
-        game_closed_with_score = false
-        players_somewhere_changed = false
-        games.each do |game|
-          next if game.scheduledstart - 15.minutes > now
-          puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
-          gamestate = SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id)['game']
-          game, a_player_changed = RealTimeDataService.new.refresh_game gamestate
-          game_closed_with_score = true if game.closed? and !game.exception_ending?
-          players_somewhere_changed = true if a_player_changed
-        end
+        PROJECTION_SPORTS.each { |sport_name, sport|
+          # iterate through games. Delete games from the list if they've closed. Update them with new
+          # API data if they are in progress.
+          games_for_sport = games.where(sport:sport_name)
+          game_closed_with_score = false
+          players_somewhere_changed = false
+          games_for_sport.each do |game|
+            next if game.scheduledstart - 15.minutes > now
+            puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
+            gamestate = sport[:api_client].full_game_stats(game.ext_game_id)['game']
+            game, a_player_changed = RealTimeDataService.new.refresh_game gamestate
+            game_closed_with_score = true if game.closed? and !game.exception_ending?
+            players_somewhere_changed = true if a_player_changed
+          end
 
-        # send entries to browser
-        if players_somewhere_changed
-          RealTimeDataService.new.refresh_entries today
-        end
+          # send entries to browser
+          if players_somewhere_changed
+            RealTimeDataService.new.refresh_entries today, sport_name
+          end
 
-        # if one of the games just closed, see if we can close out any contests
+          # if one of the games just closed, see if we can close out any contests
 
-        if game_closed_with_score
-          puts "A game just closed... trying to close contests"
-          RealTimeDataService.new.try_closing_contests today
-          puts "Done closing contests"
-        end
+          if game_closed_with_score
+            puts "A game just closed... trying to close contests"
+            RealTimeDataService.new.try_closing_contests today, sport_name
+            puts "Done closing contests"
+          end
 
+        }
         timerthread.join
 
       end
@@ -90,25 +96,6 @@ namespace :realtime do
     heroku.post_ps_scale(Rails.configuration.app_name, 'rtdata', 0)
 
   end
-
-  # NILS: Deprecated -- this built the schedule AND monitored games.
-  #task games_old: :environment do
-  #
-  #  while true do
-  #    begin
-  #      puts "Realtime task: fetching games"
-  #      ongoing_ext_games = RealTimeDataService.new.refresh_schedule SportsdataClient::Sports::NBA.games_scheduled.result
-  #      ongoing_ext_games.each do |ext_game|
-  #        RealTimeDataService.new.refresh_game SportsdataClient::Sports::NBA.full_game_stats(ext_game['id']).result['game']
-  #      end
-  #      sleep 15
-  #    rescue => e
-  #      Rails.logger = Logger.new(STDOUT)
-  #      Rails.logger.error e.message
-  #      Rails.logger.error e.backtrace.join("\n")
-  #    end
-  #  end
-  #end
 
   desc "capture realtime game stats and save them to files"
   task games_to_file: :environment do
