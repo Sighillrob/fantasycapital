@@ -15,6 +15,7 @@
 #  period          :integer
 #  created_at      :datetime
 #  updated_at      :datetime
+#  sport           :string(255)      default("NBA")
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
