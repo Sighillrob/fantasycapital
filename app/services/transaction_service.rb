@@ -71,7 +71,6 @@ module TransactionService
         # Create a rake transaction
         rake_in_cents = (contest.entry_fee * contest.max_entries * 100).round - total_prize_given_in_cents
         new_tr = Transaction.new
-        new_tr.user = user
 
         # Just need an entry so we can trace back to a specific contest
         new_tr.entry = entry

@@ -46,6 +46,13 @@ FactoryGirl.define do
     country "US"
     state "AL"
 
+    after(:create) do |user|
+      create(:transaction, user: user, 
+             transaction_type: Transaction.TYPE_ENUM[:charge], 
+             amount_in_cents: 100000, 
+             payment_engine_type: Transaction.PAYMENT_ENGINE_TYPE_ENUM[:stripe])
+    end
+
     factory :user_with_account  do
       account
     end
