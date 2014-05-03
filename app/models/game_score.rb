@@ -27,6 +27,8 @@ class GameScore < ActiveRecord::Base
   validates :status, presence: true
   validates :ext_game_id, uniqueness: true
   validates :sport, presence: true
+  validates :home_team, presence: true
+  validates :away_team, presence: true
 
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
