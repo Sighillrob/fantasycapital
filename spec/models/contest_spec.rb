@@ -108,6 +108,16 @@ describe Contest do
         end
 
       end
+      it "calculates 50/50 winnings correctly when everyone ties" do
+        # if all 10 entries tie, winnings are 10% to each.
+        entries.each { |e| e.update!(final_score:30) }
+        recorded_entries = contest.record_final_outcome!
+        winnings = contest.winnings
+        expect(winnings.length).to be(10)
+        (0..9).map do |i|
+          expect(winnings).to include({entry:entries[i], prize_fraction:0.1})
+        end
+      end
       it "calculates 50/50 winnings correctly with a 4-way tie starting from 3rd place" do
         # if there's a 4-way tie in 3rd,4th,5th,6th,7th place, then the distribution is
         # 1st,2nd: 20% each.  3rd/4th/5th/6th: 60%/5 = 12% each.

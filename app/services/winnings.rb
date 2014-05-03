@@ -58,9 +58,7 @@ class Winnings
 
     finalpos = entries[-1].final_pos
     # divide the list into entries with the same position as the last element, and those that don't.
-    sep = entries.chunk { |entry| entry.final_pos == finalpos}
-    not_last_entries = sep.find { |e| !e[0] }[1]
-    last_entries = sep.find { |e| e[0] }[1]
+    (last_entries,not_last_entries) = entries.partition { |entry| entry.final_pos == finalpos}
 
     slots_for_last_entries = highestwinnerpos - not_last_entries.length
     prize_for_last_entrant = (slots_for_last_entries * slot_winnings / last_entries.length).round(4)
