@@ -1,12 +1,12 @@
 class Main.Views.UpcomingContestsView extends Backbone.View
     initialize: (contests) ->
-        @$el = $(".upcoming-contests-dest")
+        @$el = $("#entries-list .fantasy-table-wrapper")
         @template = $("#upcoming-contests-template").html()
         @upcomingContests = contests
         @listenTo(@upcomingContests, "change", @render)
         @render()
     render: () ->
-        if @el && @template
+        if @$el && @template
             @$el.html(_.template(@template, { upcomingContests: @upcomingContests.toJSON() }))
             @countdown()
     countdown: () ->
