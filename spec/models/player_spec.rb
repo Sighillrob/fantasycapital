@@ -31,8 +31,8 @@ describe Player do
   it "returns correct FP scores without eager-loading" do
 
     should belong_to(:sport_position)
-    expect(player.realtime_fantasy_points(game.id)).to eq(20)
-    expect(player.realtime_fantasy_points(game2.id)).to eq(30)
+    expect(player.realtime_fantasy_points(game)).to eq(20)
+    expect(player.realtime_fantasy_points(game2)).to eq(30)
   end
 
   it "returns correct FP scores WITH eager-loading" do

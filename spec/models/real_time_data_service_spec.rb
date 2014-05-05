@@ -54,7 +54,7 @@ describe RealTimeDataService do
   }
 
   before do
-    Pusher.stub(:[]).with('gamecenter').and_return(pusher_mock)
+    Pusher.stub(:[]).with('NBA-gamecenter').and_return(pusher_mock)
   end
 
   context "closing contests" do
@@ -62,7 +62,7 @@ describe RealTimeDataService do
     it "closes entry whose games are done" do
       game.update(status: 'closed')
       game2.update(status:'closed')
-      RealTimeDataService.new.try_closing_contests todaydate
+      RealTimeDataService.new.try_closing_contests todaydate, "NBA"
       entry0 = Entry.find(entries[0].id)
       entry1 = Entry.find(entries[1].id)
       expect([entry0[:final_score], entry0[:final_pos]]).to eq([88, 1])
@@ -71,7 +71,7 @@ describe RealTimeDataService do
 
     it "won't close an entry when a game is still in progress" do
       game.update(status:'closed')  # only one of the two games is closed...
-      RealTimeDataService.new.try_closing_contests todaydate
+      RealTimeDataService.new.try_closing_contests todaydate, "NBA"
       entry0 = Entry.find(entries[0].id)
       entry1 = Entry.find(entries[1].id)
       expect([entry0[:final_score], entry0[:final_pos]]).to eq([nil, nil])
@@ -87,7 +87,7 @@ describe RealTimeDataService do
       expect(pusher_mock).to receive(:trigger).with("stats", player_expect)
       expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
       RealTimeDataService.new.refresh_game(game_details)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
 
       # 10 entries in playerrealtimescore -- 2 players * 4 stats, + 2 fantasypoint values seeded
       #  from the baseentries file.
@@ -102,7 +102,7 @@ describe RealTimeDataService do
       expect(pusher_mock).to receive(:trigger).with("stats", entries_expect)
 
       RealTimeDataService.new.refresh_game(game_details)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
     end
   end
 
@@ -118,7 +118,7 @@ describe RealTimeDataService do
       RealTimeDataService.new.refresh_game(game_details)
       RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_details)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
 
     end
   end
@@ -134,7 +134,7 @@ describe RealTimeDataService do
 
       RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_details)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
       # change a player's steals
       game_src1 = game_details.clone
       game_src1['team'][0]['players']['player'][0]['statistics']['steals'] = 82
@@ -154,7 +154,7 @@ describe RealTimeDataService do
 
       RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_src1)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
     end
   end
 
@@ -195,7 +195,7 @@ describe RealTimeDataService do
 
       RealTimeDataService.new.refresh_schedule(game_schedule, "NBA")
       RealTimeDataService.new.refresh_game(game_src1)
-      RealTimeDataService.new.refresh_entries todaydate
+      RealTimeDataService.new.refresh_entries todaydate, "NBA"
 
     end
   end
