@@ -10,6 +10,7 @@
 #  created_at   :datetime
 #  updated_at   :datetime
 #  recipient_id :string(255)
+#  is_default   :boolean
 #
 
 FactoryGirl.define do

@@ -15,6 +15,7 @@
 #  period          :integer
 #  created_at      :datetime
 #  updated_at      :datetime
+#  sport           :string(255)      default("NBA")
 #
 
 require 'spec_helper'
