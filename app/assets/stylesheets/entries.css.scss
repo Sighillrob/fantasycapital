@@ -417,3 +417,79 @@ a#clear-lineups{
   font-size: 18px;
   font-weight: normal;
 }
+.drafting-header-row{
+ 
+  border-bottom: 1px solid #DDDFE2;
+  margin-bottom: 40px;
+}
+.drafting-header-row h1 {
+  color: #14F089;
+  font-family: "oswald-regular";
+  font-size: 44px;
+  margin-bottom: 15px;
+  margin-top: 40px;
+}
+.drafting-header-row p {
+  color: #555;
+  margin-bottom: 0px;
+}
+.drafting-header-row p a  {
+  color: #14F089;
+}
+.drafting-header-row p:last-child {
+  margin-bottom: 40px;
+}
+.drafting-info-row {
+  background-color: #F1F4F5;
+  margin-top: 16px;
+  color: #2E363E;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+@media (max-width: 991px) {
+  .drafting-info-row {
+    padding: 25px 0px;
+  }
+}
+.drafting-info-row h3 {
+  font-family: "oswald-regular";
+  font-size: 44px;
+  color: #2E363E;
+}
+.drafting-info-row h6 {
+  font-family: "oswald-regular";
+  font-size: 17px;
+  font-weight: bold; 
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+.drafting-info-row .small-margin-top {
+  margin-top: 6px;
+}
+.drafting-info-row .live-border {
+  color: #8F9599;
+  border: 2px solid #8F9599;
+  font-family: "oswald-regular";
+  font-size: 24px;
+  padding: 0px 6px;
+  float: right;
+  margin-top: 4px
+}
+.drafting-info-row .contest-time {
+  text-align: center;
+  color: #A2A6A9;
+}
+@media (max-width: 991px) {
+  .drafting-info-row .contest-time {
+    text-align: left;
+    color: #2E363E;
+  }
+}
+
+.drafting-info-row .contest-prefix {
+  text-align: center;
+  color: #A2A6A9;
+  line-height: 44px;
+}
