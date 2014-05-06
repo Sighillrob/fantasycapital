@@ -41,9 +41,36 @@ module SportsdataClient
             process_mlb_events events
           end
 
-          def full_game_stats(game_id)
+          def daily_scores(date)
+            url =  "daily/boxscore/%04d/%02d/%02d.xml" % [date.year, date.month, date.day]
+            client.request url
+          end
+
+          def full_game_stats(game_id, daily_scores)
             #client.request "games/#{game_id}/summary.xml"
-            client.request "statistics/#{game_id}.xml"
+            client.request "statistics/#{game_id}.xml" do |response|
+              # build up response as expected by API:
+              #   - id
+              #   - team (array of hometeam, away team)
+              #       - points
+              #       - ['players']['player'] -- array of players
+              retval = response['statistics']
+              retval['team'] = [fix_team_stats(retval['home']), fix_team_stats(retval['visitor']) ]
+              currscores = daily_scores['boxscores']['boxscore'].find{|e| e['id'] == game_id}
+              begin
+                if currscores['status'] == 'closed'
+                  retval['inning'] = currscores['final']['inning']
+                  retval['inning_half'] = currscores['final']['inning_half']
+                else
+                  retval['inning'] = currscores['outcome']['current_inning']
+                  retval['inning_half'] = currscores['outcome']['current_inning_half']
+                end
+              rescue
+                Rails.logger.error "Can't find final or outcome fields in currscores: #{currscores}"
+              end
+
+              retval
+            end
           end
 
           def game_stats(ext_game_id)
@@ -61,30 +88,11 @@ module SportsdataClient
             awayteamstats = result['statistics']['visitor']
 
             # adjust parameters to match receiver's expectations
-            [hometeamstats,awayteamstats].each do |teamstats|
-
-              teamstats['hitting']['players']['player'].each do |player|
-                # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
-
-                player['played'] = player['games']['play'].to_i > 0 ? 'true' : 'false'
-                player['statistics'] = {}
-
-                # Add "onbase" statistics -- single, double, triple, homerun, base-on-balls,
-                #   hit-by-pitch
-                ['s', 'd', 't', 'hr', 'bb', 'hbp'].each do |statname|
-                  player['statistics'][statname] = player['onbase'][statname]
-                end
-                # Append other stats
-                player['statistics']['runs'] = player['runs']['total']  # total runs
-                player['statistics']['rbi'] = player['rbi']             # RBI
-                player['statistics']['ktotal'] = player['outs']['ktotal'] # strikeouts
-                player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
-
-              end
+            [hometeamstats,awayteamstats].each do |team_src|
+              fix_team_stats(team_src)
             end
             # return home and away team, similar format as NBA API does natively.
-            teamresp = [{'id' => hometeamstats['id'], 'players' => hometeamstats['hitting']['players']},
-                        {'id' => awayteamstats['id'], 'players' => awayteamstats['hitting']['players']}]
+            teamresp = [hometeamstats, awayteamstats]
 
             return teamresp
 
@@ -121,6 +129,40 @@ module SportsdataClient
             end
             return events
           end
+
+          private
+          def fix_team_stats(team_src)
+            team_src['hitting']['players']['player'].each do |player|
+              # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
+              # BUGBUG: player['games'] doesn't exist in realtime? It exists in projection:fetch_stats???
+              player['played'] = 'false'
+              begin
+                player['played'] = 'true' if player['games']['play'].to_i > 0
+              rescue
+                Rails.logger.error "Can't find played field in player..."
+              end
+
+              player['statistics'] = {}
+
+              # Add "onbase" statistics -- single, double, triple, homerun, base-on-balls,
+              #   hit-by-pitch
+              ['s', 'd', 't', 'hr', 'bb', 'hbp'].each do |statname|
+                player['statistics'][statname] = player['onbase'][statname]
+              end
+              # Append other stats
+              player['statistics']['runs'] = player['runs']['total']  # total runs
+              player['statistics']['rbi'] = player['rbi']             # RBI
+              player['statistics']['ktotal'] = player['outs']['ktotal'] # strikeouts
+              player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
+
+            end
+            # BUGBUG: need to add pitcher here...
+            team_src['players'] = team_src['hitting']['players']
+
+            team_src
+
+          end
+
         end
       end
 

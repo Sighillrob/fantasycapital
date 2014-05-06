@@ -61,7 +61,7 @@ GameCenterTests.on("games", function () {
       games.push({
         "id": i,
         "pretty_play_state": timeleft + " MIN LEFT",
-        "minutes_remaining": timeleft,
+        "game_remaining": timeleft,
         "home_team_score": Math.floor((Math.random() * 100)),
         "away_team_score": Math.floor((Math.random() * 100))
       });

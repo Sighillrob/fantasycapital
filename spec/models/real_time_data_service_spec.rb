@@ -32,8 +32,8 @@ describe RealTimeDataService do
                   }}],
     }
   end
-  let(:game_expect) { {:games=>[{"id"=>game.id, "pretty_play_state"=>"48 MIN LEFT",
-                              "minutes_remaining"=>48,
+  let(:game_expect) { {:games=>[{"id"=>game.id, "pretty_play_state"=>"28 MIN LEFT",
+                              "game_remaining"=>28,
                               "home_team_score"=>54, "away_team_score"=>22}]}
   }
   # NBA fantasy point calculation:
