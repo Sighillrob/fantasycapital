@@ -37,16 +37,16 @@ class GameScore < ActiveRecord::Base
   belongs_to :away_team, :class_name => 'Team'
 
   has_many :player_real_time_scores, dependent: :destroy
+  before_validation :default_values
 
-  before_create :default_values
-
+  # set default values to remediate older database objects.
   def default_values
     if self.sport=="NBA"
       self.gamelength ||=48   # 48 minutes.
-      self.progress = 0
+      self.progress ||= 0
     elsif self.sport=="MLB"
       self.gamelength ||=18   # 18 inning-halves.
-      self.progress = 0
+      self.progress ||= 0
     else
       Rails.logger.error "Unknown sport #{self.sport}!"
     end

@@ -28,10 +28,17 @@ module Main
     #   and especially comment below first answer.
     #config.assets.precompile += %w( .svg .eot .woff .ttf )
 
-    config.sports = {NBA: {api_client: SportsdataClient::Sports::NBA},
+    potential_sports = {NBA: {api_client: SportsdataClient::Sports::NBA},
                      MLB: {api_client: SportsdataClient::Sports::MLB}
     }
 
+    # choose sports which are enabled for projections based on an environment variable. Default
+    #  value should be all sports.
+    enabled_sports = (ENV['SPORTS'] || "MLB,NBA").split","
+    config.sports = {}
+    enabled_sports.each { |sportname|
+      config.sports[sportname.to_sym] = potential_sports[sportname.to_sym]
+    }
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, dir: "spec/factories"
