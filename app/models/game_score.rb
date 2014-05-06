@@ -30,12 +30,28 @@ class GameScore < ActiveRecord::Base
   validates :sport, presence: true
   validates :home_team, presence: true
   validates :away_team, presence: true
+  validates :progress, presence: true
+  validates :gamelength, presence: true
 
   belongs_to :home_team, :class_name => 'Team'
   belongs_to :away_team, :class_name => 'Team'
 
   has_many :player_real_time_scores, dependent: :destroy
 
+  before_create :default_values
+
+  def default_values
+    if self.sport=="NBA"
+      self.gamelength ||=48   # 48 minutes.
+      self.progress = 0
+    elsif self.sport=="MLB"
+      self.gamelength ||=18   # 18 inning-halves.
+      self.progress = 0
+    else
+      Rails.logger.error "Unknown sport #{self.sport}!"
+    end
+
+  end
   # games can have one of these status's (from the external API):
   #scheduled - The game is scheduled to occur.
   #created – The game has been created and we have begun logging information.
@@ -95,21 +111,18 @@ class GameScore < ActiveRecord::Base
     (self.status=='complete')
   end
 
-  # Minutes left in play. Hardcoded to NBA for now, this is different for college basketball
-  # and other sports!
-  def minutes_remaining
-    # NBA has 4 12-minute periods
-    if self.closed?
-        0
-    elsif self.in_future?
-      48
-    elsif self.period && self.period > 4
-      0
-    elsif self.period && self.period > 0
-      # self.clock represents minutes until game is over...
-      48 - (12 * self.period) + self.clock
-    else
-      48
+  # Amount of game left to play.
+  def game_remaining
+    begin
+      if self.sport == "MLB"
+        (self.gamelength - self.progress) / 2.0
+      else
+        (self.gamelength - self.progress)
+      end
+
+    rescue
+      0    # some old NBA games don't have these fields filled out... stub it instead. this
+            # can ultimately go away, b/c going forward new games validate presence of this field.
     end
 
   end
@@ -125,9 +138,9 @@ class GameScore < ActiveRecord::Base
           "PENDING..."
         else
           if self.sport=="NBA"
-            "#{minutes_remaining} MIN LEFT"
+            "#{game_remaining} MIN LEFT"
           elsif self.sport=="MLB"
-            "#{self.period} INNING"
+            "#{self.progress/2} INNING"
           end
         end
       when :closed
@@ -139,6 +152,16 @@ class GameScore < ActiveRecord::Base
     end
   end
 
+  def game_progress(game_src)
+    # For NBA games, "progress" is # of minutes played (against a fixed amount of 48)
+    if self.sport == "MLB"
+      game_src['inning']*2 + (game_src['inning_half']=='B' ? 1 : 0)
+    elsif self.sport == "NBA"
+      (12 * game_src['period'].to_i) - game_src['clock'].to_i
+    else
+      raise "Unknown sport #{self.sport} in GameScore.game_progress"
+    end
+  end
 
   # record game status for this game from sportsdata API (sportsdata 'game-summary' data). returns true if game changed
   def record_sportsdata (game_src)
@@ -149,9 +172,8 @@ class GameScore < ActiveRecord::Base
     return false if closed?  # we're done with this game, no changes made.
     if !exception_ending?
       # good status
-      self.period=game_src['quarter'].to_i  # NBA, a period is a quarter
-      self.clock=game_src['clock'].to_i
-      self.home_team_score=game_src['team'][0]['points'].to_i  # BUGBUG: Not sure if [0] is always home
+      self.progress = game_progress(game_src)
+      self.home_team_score=game_src['team'][0]['points'].to_i
       self.away_team_score=game_src['team'][1]['points'].to_i
     end
     # record status at end of update so we still capture one 'closed' state.
@@ -165,7 +187,7 @@ class GameScore < ActiveRecord::Base
     # add computed parameters for json serialization (for sending to browser)
     h = super(options)
     h[:pretty_play_state] = self.pretty_play_state
-    h[:minutes_remaining] = self.minutes_remaining
+    h[:game_remaining] = self.game_remaining
     h
   end
 

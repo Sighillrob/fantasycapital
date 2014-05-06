@@ -63,7 +63,7 @@ class RealTimeDataService
       game_score_to_push = {:games =>  [{"id" => game_score.id,
                                           "pretty_play_state" => game_score.pretty_play_state,
                                           # BUGBUG: this needs to be fixed for multiple sports
-                                          "minutes_remaining" => game_score.minutes_remaining,
+                                          "game_remaining" => game_score.game_remaining,
                                           "home_team_score" => game_score.home_team_score,
                                           "away_team_score" => game_score.away_team_score,
                                          } ]

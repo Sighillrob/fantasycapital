@@ -51,6 +51,7 @@ module Projection
   class NBA_Stat < Stat
     register_sport "NBA"
 
+    # these are the parameters that come from the sportsdata API.
     @stats_allowed = {  # class instance variable
         "fp" => nil,
         "points" => nil,
@@ -72,6 +73,7 @@ module Projection
     # fantasy points are stored). But I *think* this list is used to capture stats we want to show
     # a user. Maybe? I'm sure we'll be coming back to this...
 
+    # these are the parameters that come from the sportsdata API.
     @stats_allowed = { # class instance variable
         "fp" => nil,
         's' => nil,
@@ -79,7 +81,7 @@ module Projection
         't' => nil,
         'hr' => nil,
         'rbi' => nil,
-        'run' => nil,
+        'runs' => nil,
         'bb' => nil,
         'stolen' => nil,
         'hbp' => nil,

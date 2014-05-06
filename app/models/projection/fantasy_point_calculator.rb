@@ -152,7 +152,7 @@ module Projection
           't' => 3,
           'hr' => 4,
           'rbi' => 1,
-          'run' => 1,
+          'runs' => 1,
           'bb' => 1,
           'stolen' => 2,
           'hbp' => 1,

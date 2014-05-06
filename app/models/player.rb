@@ -73,6 +73,8 @@ class Player < ActiveRecord::Base
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
+    # in MLB the printed fields are:
+    #   S, D, T, HR, RBI, R, W, SB, HBP, SO
     if game_score.nil? && (self.association_cache.keys.include? :player_real_time_scores)
       stats = self.player_real_time_scores.to_a
     else
@@ -83,11 +85,16 @@ class Player < ActiveRecord::Base
     stats.to_a.each do |rtstat|
       idx = STATS_ORDER[sport].index(rtstat['name'])
       unless idx.nil?
-        rtstats[idx] = rtstat['value'].to_i.to_s + rtstat['name'][0]
+        statval = rtstat['value'].to_i
+        if statval > 0
+          rtstats[idx] = statval.to_s + rtstat['name'][0]
+        else
+          rtstats[idx] = nil
+        end
       end
 
     end
-    # use 'compact' to remove nil entries (in case we only have partial data)
+    # use 'compact' to remove nil entries (for stats w/ 0 values or if we only have partial data)
     rtstats.compact.join(" ").upcase
   end
 

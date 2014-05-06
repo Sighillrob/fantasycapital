@@ -71,7 +71,7 @@ class Main.Models.Player extends Backbone.Model
   getMinutesRemaining: () ->
     mygame = @currgame()
     return "None" if !mygame
-    minutes = mygame.get("minutes_remaining")
+    minutes = mygame.get("game_remaining")
     return minutes + " MIN LEFT"
   getGameID: () ->
     mygame = @currgame()
