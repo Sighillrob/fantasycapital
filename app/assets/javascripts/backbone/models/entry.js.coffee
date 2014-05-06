@@ -40,7 +40,7 @@ class Main.Models.Entry extends Backbone.Model
       $.each(players, (index, player) ->
         game = player.currgame()
         if game
-          entry_min_left += game.get('minutes_remaining')
+          entry_min_left += game.get('game_remaining')
       )
     return entry_min_left
 

@@ -46,8 +46,11 @@ module SportsdataClient
             end
           end
 
-          def full_game_stats(game_id)
-            client.request "games/#{game_id}/summary.xml"
+          def full_game_stats(game_id, daily_scores)
+            # NOTE: daily_scores arg not used for NBA games
+            client.request "games/#{game_id}/summary.xml" do |response|
+              response['game']
+            end
           end
 
           def game_stats(game_id)

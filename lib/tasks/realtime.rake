@@ -62,10 +62,14 @@ namespace :realtime do
           games_for_sport = games.where(sport:sport_name)
           game_closed_with_score = false
           players_somewhere_changed = false
+          # kind of a hack -- MLB scores aren't part of the game-stats, while in NBA they are. So
+          # for MLB grab daily_scores for all games once per loop, then inject them into the
+          # API client. Ultimately want to encapsulate this logic into the API client.
+          daily_scores = sport_name==:MLB ? sport[:api_client].daily_scores(today) : nil
           games_for_sport.each do |game|
             next if game.scheduledstart - 15.minutes > now
             puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
-            gamestate = sport[:api_client].full_game_stats(game.ext_game_id)['game']
+            gamestate = sport[:api_client].full_game_stats(game.ext_game_id, daily_scores)
             game, a_player_changed = RealTimeDataService.new.refresh_game gamestate
             game_closed_with_score = true if game.closed? and !game.exception_ending?
             players_somewhere_changed = true if a_player_changed
@@ -104,7 +108,7 @@ namespace :realtime do
         ts = Time.now.strftime("%d-%H-%M-%S")
           Projection::ScheduledGame.games_on.each do |game|
           File.open("tmp/#{ts}__#{game.ext_game_id}.json","w") do |f|
-            f.write(SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id).result.to_json)
+            f.write(SportsdataClient::Sports::NBA.full_game_stats(game.ext_game_id, nil).result.to_json)
           end
         end
         sleep 150
@@ -132,13 +136,15 @@ namespace :realtime do
     Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..10]}.uniq.sort.each do |ts|
       Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
         puts "Sending file #{feed}"
+        # NOTE: The ['game'] index below is an older format for game storage. If we re-record
+        #  games, we should remove that and just pass the result of the parse.
         game_json = JSON.parse(File.open(feed).read)['game']
         # IDs of the "fake" games in DB is "FAKE-" + real_game_id
         game_json['id'] = "FAKE-" + game_json['id']
         RealTimeDataService.new.refresh_game game_json
         break if killme
       end
-      RealTimeDataService.new.refresh_entries "2050-12-31"
+      RealTimeDataService.new.refresh_entries "2050-12-31", "NBA"
       sleep 1
       break if killme
     end
