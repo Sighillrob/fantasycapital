@@ -1,6 +1,6 @@
 class Main.Views.LiveContestsView extends Backbone.View
     initialize: (contests) ->
-        @$el = $(".live-contests-dest")
+        @$el = $("#entries-list .fantasy-table-wrapper")
         @template = $("#live-contests-template").html()
         @liveContests = contests
         @listenTo(@liveContests, "change", @render)

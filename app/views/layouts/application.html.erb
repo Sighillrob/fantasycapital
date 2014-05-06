@@ -42,6 +42,7 @@
         <img src="<%= image_path("js-disabled-banner.gif") %>">
       </div>
     </noscript>
+    <%= yield :templates %>
   </body>
 
   <%= yield :after_js %>

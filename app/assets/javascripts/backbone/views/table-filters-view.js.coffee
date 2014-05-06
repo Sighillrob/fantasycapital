@@ -1,7 +1,9 @@
-class Main.Views.HomeFiltersView extends Backbone.View
+class Main.Views.TableFiltersView extends Backbone.View
     initialize: () ->
-        @$el = $("#home-game-filters")
+        @$el = $(".table-filters-view")
+        console.log(@$el)
         if @$el.length > 0
+            console.log("ATTACHED")
             @attachToggleHandler()
             @attachCheckboxHandler()
     attachToggleHandler: () ->

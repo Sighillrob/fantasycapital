@@ -1,6 +1,6 @@
 class Main.Views.CompletedContestsView extends Backbone.View
     initialize: (contests) ->
-        @$el = $(".completed-contests-dest")
+        @$el = $("#entries-list .fantasy-table-wrapper")
         @template = $("#completed-contests-template").html()
         @completedContests = contests
         @listenTo(@completedContests, "change", @render)
