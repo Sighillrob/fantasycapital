@@ -129,14 +129,27 @@ table.status {
   font-size: 11px;
 }
 
+table.status.thick {
+  font-size: 12px;
+}
+
 table.status tr td {
   color: #999999;
   padding: 4px 5px 2px;
   text-align: center;
 }
+table.status.thick tr td {
+  color: #999999;
+  padding: 14px 14px 0px;
+  text-align: left;
+}
 
 table.status tr:nth-child(2) td {
   padding: 0
+}
+table.status.thick tr:nth-child(2) td {
+  padding: 0px 14px 4px;
+  color: #606D75;
 }
 
 table.status tr.white td {
@@ -145,7 +158,13 @@ table.status tr.white td {
 
 table.status tr:last-child td span {
   border-top: 1px solid #999999;
-  padding: 0 8px;
+  padding: 6px 36px 0px 0px;
+  font-style: italic;
+  color: #909396;
+}
+
+table.status.schedule {
+  padding: 0px;
 }
 
 /*Score Card*/
@@ -328,4 +347,7 @@ progress::-moz-progress-bar {
 }
 .scorecard2 .gray {
     color: gray;
+}
+.gamecenter-list-padding {
+  padding-left: 6px;
 }

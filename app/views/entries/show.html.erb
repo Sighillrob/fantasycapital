@@ -5,6 +5,83 @@
 <%= Rails.application.assets.find_asset('backbone/templates/scorecard-template.html').to_s.html_safe %>
 <%= Rails.application.assets.find_asset('backbone/templates/entry-summary-template.html').to_s.html_safe %>
 
+<div class="row fantasy-subheader-black">
+  <div class="col-md-3 subheader">
+    <div class="padding">
+      <h3>Scoreboard</h3>
+      <p>Your games: <span class="date">April 30, 2014</span></p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <h3>...</h3> 
+    <p>entries</p>
+  </div>
+  <div class="col-md-3">
+    <h3>...</h3>
+    <p>in play</p>
+  </div>
+  <div class="col-md-3">
+    <h3 class="green">...</h3>
+    <p class="green">currently winning</p>
+  </div>
+</div>
+
+<div class="row drafting-info-row">
+  <div class="col-md-3">
+    <div class="row">
+      <div class="col-xs-6">
+        <h3 class="text-right">NBA</h3>
+      </div>
+      <div class="col-xs-6">
+        <h6>50/50</h6>
+        <p class="small-margin-top"><strong>12-31-2014</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="row hidden-xs hidden-sm">
+      <div class="col-xs-2">
+        <h3>$9</h3>
+      </div>
+      <div class="col-xs-10">
+        <h6>PRIZE POOL</h6>
+        <p class="small-margin-top">Entry fee: <strong>$1</strong> Entries: <strong>15/100</strong></p>
+      </div>
+    </div>
+    <div class="row hidden-md hidden-lg">
+      <div class="col-xs-6">
+        <h3 class="text-right">$9</h3>
+      </div>
+      <div class="col-xs-6">
+        <h6>PRIZE POOL</h6>
+        <p class="small-margin-top">Entry fee: <strong>$1</strong> Entries: <strong>15/100</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="row hidden-xs hidden-sm">
+      <div class="col-xs-4">
+        <p class="live-border">LIVE</p>
+      </div>
+      <div class="col-xs-2">
+        <p class="contest-prefix">in</p>
+      </div>
+      <div class="col-xs-6">
+        <h3>4:12:24</h3>
+        <p class="contest-time">8:40pm EST</p>
+      </div>
+    </div>
+    <div class="row hidden-md hidden-lg">
+      <div class="col-xs-6">
+        <h3 class="text-right">LIVE in</h3>
+      </div>
+      <div class="col-xs-6">
+        <h3 class="text-left">4:12:24</h3>
+        <p class="contest-time">8:40pm EST</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div data-entry_id="<%= @entry_id %>" data-contest_id="<%= @entry.contest.id %>"
             class="capitalcontent gamecenter" data-sport="<%= @contest.sport %>" >
@@ -17,28 +94,28 @@
 < end >
 %>
 
-<ul class="list-inline title">
+<!-- <ul class="list-inline title"> -->
 <!--  <li>
     <h2>DAILY NBA FREEROLL </h2>
     <h2><%= @contest.title || "No contest title" %></h2>
   </li>
   -->
   <!--<li><span>10x $300k nfl bomb entries</span></li>-->
-  <li><h2><span style="font-size:0.8em;"><%= number_to_currency(@contest.prizepool, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %> <%= @contest.contestdate %></span></h2></li>
+ <!--  <li><h2><span style="font-size:0.8em;"><%= number_to_currency(@contest.prizepool, unit: '$') %> <%= @contest.sport %> <%= @contest.contest_type %> <%= @contest.contestdate %></span></h2></li>
   <% if @contest.accurate_state == :live %>
-      <li><a id="is_contest_live_text" href="#">LIVE IN PLAY</a></li>
+      <li><a id="is_contest_live_text" href="#">LIVE IN PLAY</a></li> -->
       <!-- BUGBUG: should change this to be client-rendered time so we have timezone right -->
-      <li><span>Started <%= @contest.start_at.in_time_zone("America/New_York").strftime("%l:%M %p") %></span></li>
+   <!--    <li><span>Started <%= @contest.start_at.in_time_zone("America/New_York").strftime("%l:%M %p") %></span></li>
   <% else %>
       <li><a id="is_contest_live_text" href="#">not live</a></li>
       <li></li>
-  <% end %>
+  <% end %> -->
 
   <!--<li><span>Started 7:00pm ET 12/18</span></li>-->
-</ul>
-<div class="clearfix"></div>
+<!-- </ul>
+<div class="clearfix"></div> -->
 <!--Tab Section-->
-<div class="light_grey freerollbox">
+<!-- <div class="light_grey freerollbox">
   <ul class="list-inline">
     <li>
       <h4><strong>Multiplayer League</strong></h4>
@@ -54,15 +131,15 @@
          <%= number_to_currency(@contest.prizepool, unit: '$') %> Prize Pool</span></a>
     </li>
   </ul>
-</div>
+</div> -->
 <!--/Tab Section-->
 
 
-<div class="clearfix">&nbsp;</div>
+<!-- <div class="clearfix">&nbsp;</div> -->
 <!--Status Table-->
 
 <!-- this element owned by backbone GamesView -->
-<ul class="list-inline freeroll_status" id="gamesview_el">
+<ul class="list-inline freeroll_status gamecenter-list-padding" id="gamesview_el">
   <!-- row of relevant games with realtime state, filled in via backbone -->
 </ul>
 
