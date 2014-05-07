@@ -7,7 +7,7 @@
 
 
 <div data-entry_id="<%= @entry_id %>" data-contest_id="<%= @entry.contest.id %>"
-            class="capitalcontent gamecenter">
+            class="capitalcontent gamecenter" data-sport="<%= @contest.sport %>" >
 <!--Login Section-->
 <%#
 <%= form_tag({controller:"entries", action:"admin"}, remote: true, id: "admin_buttons_form") do >
