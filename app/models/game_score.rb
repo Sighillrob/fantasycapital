@@ -114,10 +114,14 @@ class GameScore < ActiveRecord::Base
   # Amount of game left to play.
   def game_remaining
     begin
+      # bit of a hack -- pre-game progress can sometimes be negative in the DB. I need to go
+      #   back and address that, but later...
+      gameprog = [0, self.progress].max
+
       if self.sport == "MLB"
-        (self.gamelength - self.progress) / 2.0
+        (self.gamelength - gameprog) / 2.0
       else
-        (self.gamelength - self.progress)
+        (self.gamelength - gameprog)
       end
 
     rescue
@@ -155,9 +159,17 @@ class GameScore < ActiveRecord::Base
   def game_progress(game_src)
     # For NBA games, "progress" is # of minutes played (against a fixed amount of 48)
     if self.sport == "MLB"
-      game_src['inning'].to_i*2 + (game_src['inning_half']=='B' ? 1 : 0)
+      Integer(game_src['inning'])*2 + (game_src['inning_half']=='B' ? 1 : 0)
     elsif self.sport == "NBA"
-      (12 * game_src['period'].to_i) - game_src['clock'].to_i
+
+      begin
+        # 'clock' is a string containing "mm:ss" -- parse out the minutes
+        (12 * Integer(game_src['quarter'])) - Integer(game_src['clock'].split(':')[0])
+      rescue Exception => e
+        Rails.logger.error "Bad value in game_src"
+        raise
+      end
+
     else
       raise "Unknown sport #{self.sport} in GameScore.game_progress"
     end
@@ -173,8 +185,8 @@ class GameScore < ActiveRecord::Base
     if !exception_ending?
       # good status
       self.progress = game_progress(game_src)
-      self.home_team_score=game_src['team'][0]['points'].to_i
-      self.away_team_score=game_src['team'][1]['points'].to_i
+      self.home_team_score=Integer(game_src['team'][0]['points'])
+      self.away_team_score=Integer(game_src['team'][1]['points'])
     end
     # record status at end of update so we still capture one 'closed' state.
     self.status = game_src['status']

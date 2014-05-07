@@ -82,18 +82,18 @@ class Player < ActiveRecord::Base
     #    Players: 1B, 2B, 3B, HR, RBI, R, BB, SB, HBP, K
     #    Pitchers: IP, K, ER, W/L, CG, NH
     if game_score.nil? && (self.association_cache.keys.include? :player_real_time_scores)
-      stats = self.player_real_time_scores
+      stats = self.player_real_time_scores.to_a
     else
       stats = player_real_time_scores.where(game_score: game_score)
     end
     display_order = STATS_ORDERED[sport].keys
     rtstats = []
-    stats.pluck(:name, :value).each do |stat_name, stat_value|
-      idx = display_order.index(stat_name)
+    stats.each do |stat|
+      idx = display_order.index(stat.name)
       unless idx.nil?
-        statval = stat_value.to_i
+        statval = stat.value.to_i
         if statval > 0
-          rtstats[idx] = statval.to_s + STATS_ORDERED[sport][stat_name]
+          rtstats[idx] = statval.to_s + STATS_ORDERED[sport][stat.name]
         else
           rtstats[idx] = nil
         end
