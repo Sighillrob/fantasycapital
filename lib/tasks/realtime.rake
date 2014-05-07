@@ -142,9 +142,9 @@ namespace :realtime do
     Dir.entries( "#{Rails.root}/db/gamefeeds").select {|f| !File.directory? f}.map{|x| x[0..10]}.uniq.sort.each do |ts|
       Dir["#{Rails.root}/db/gamefeeds/#{ts}*"].each do |feed|
         puts "Sending file #{feed}"
-        # NOTE: The ['game'] index below is an older format for game storage. If we re-record
-        #  games, we should remove that and just pass the result of the parse.
-        game_json = JSON.parse(File.open(feed).read)['game']
+        game_json = JSON.parse(File.open(feed).read)
+        game_json = SportsdataClient::Sports::NBA.fix_full_game_stats(game_json)
+
         # IDs of the "fake" games in DB is "FAKE-" + real_game_id
         game_json['id'] = "FAKE-" + game_json['id']
         RealTimeDataService.new.refresh_game game_json
