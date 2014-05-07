@@ -18,9 +18,14 @@ class Player < ActiveRecord::Base
   PRIORITIZE_SEQUENCE_NUMBER = 1
   FP_TO_SALARY_MULTIPLIER    = 250
   PLAYER_MIN_SALARY = 3000
-  STATS_ORDER =
-      {"NBA" => ['points', 'rebounds', 'assists', 'steals', 'blocks', 'turnovers'],
-       "MLB" => ['runs'] }
+
+  # record display-order of stats, and translation between API names and display names of stats
+  STATS_ORDERED =
+      {"NBA" => {'points' => 'P', 'rebounds' => 'R', 'assists' => 'A', 'steals' => 'S',
+                  'blocks' => 'B', 'turnovers' => 'T'},
+       "MLB" => {'s' => 'S', 'd' => 'D', 't' => 'T', 'hr' => 'HR', 'rbi' => 'RBI',
+                 'runs' => 'R', 'bb' => 'BB', 'stolen' => 'SB', 'hbp' => 'HBP', 'ktotal' => 'K' }
+      }
 
   belongs_to :team
   belongs_to :sport_position
@@ -73,21 +78,22 @@ class Player < ActiveRecord::Base
 
     # if this player has an eager-loaded set of realtime scores, use those to save queries.
     # those should already be pre-scoped to the game-ids we care about.
-    # in MLB the printed fields are:
-    #   S, D, T, HR, RBI, R, W, SB, HBP, SO
+    # In MLB the printed fields are:
+    #    Players: 1B, 2B, 3B, HR, RBI, R, BB, SB, HBP, K
+    #    Pitchers: IP, K, ER, W/L, CG, NH
     if game_score.nil? && (self.association_cache.keys.include? :player_real_time_scores)
-      stats = self.player_real_time_scores.to_a
+      stats = self.player_real_time_scores
     else
       stats = player_real_time_scores.where(game_score: game_score)
     end
-
+    display_order = STATS_ORDERED[sport].keys
     rtstats = []
-    stats.to_a.each do |rtstat|
-      idx = STATS_ORDER[sport].index(rtstat['name'])
+    stats.pluck(:name, :value).each do |stat_name, stat_value|
+      idx = display_order.index(stat_name)
       unless idx.nil?
-        statval = rtstat['value'].to_i
+        statval = stat_value.to_i
         if statval > 0
-          rtstats[idx] = statval.to_s + rtstat['name'][0]
+          rtstats[idx] = statval.to_s + STATS_ORDERED[sport][stat_name]
         else
           rtstats[idx] = nil
         end

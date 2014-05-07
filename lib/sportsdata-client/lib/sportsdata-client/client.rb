@@ -6,7 +6,7 @@ module SportsdataClient
     RETRIES = 5
 
     include HTTParty
-    debug_output $stderr if (defined? Rails && Rails.env.development?)
+    #debug_output $stderr if ((defined? Rails) && Rails.env.development?)
     logger SportsdataClient.logger, :info, :apache
     base_uri SportsdataClient.base_url
 

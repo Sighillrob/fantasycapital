@@ -49,9 +49,9 @@ namespace :realtime do
       # repeat polling games multiple times before checking if any games have 'closed' again.
       6.times do
         timerthread = Thread.new do
-          puts "Sleeping 20 sec"
+          Rails.logger.debug "Starting 20 second timer..."
           sleep 20
-          puts "Done sleeping 20 sec"
+          Rails.logger.debug "20-second timer done."
         end
 
         now = Time.now
@@ -67,8 +67,12 @@ namespace :realtime do
           # API client. Ultimately want to encapsulate this logic into the API client.
           daily_scores = sport_name==:MLB ? sport[:api_client].daily_scores(today) : nil
           games_for_sport.each do |game|
-            next if game.scheduledstart - 15.minutes > now
-            puts "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
+            if game.scheduledstart - 15.minutes > now
+              Rails.logger.debug "Skipping #{game.sport} game #{game.id} (in future), "
+                                 "starttime= #{game.scheduledstart}"
+              next
+            end
+            Rails.logger.debug "Updating game #{game.away_team.teamalias}@#{game.home_team.teamalias}"
             gamestate = sport[:api_client].full_game_stats(game.ext_game_id, daily_scores)
             game, a_player_changed = RealTimeDataService.new.refresh_game gamestate
             game_closed_with_score = true if game.closed? and !game.exception_ending?
@@ -78,14 +82,16 @@ namespace :realtime do
           # send entries to browser
           if players_somewhere_changed
             RealTimeDataService.new.refresh_entries today, sport_name
+          else
+            Rails.logger.debug "No players changed in any #{sport_name} games"
           end
 
           # if one of the games just closed, see if we can close out any contests
 
           if game_closed_with_score
-            puts "A game just closed... trying to close contests"
+            Rails.logger.debug "A game just closed... trying to close contests"
             RealTimeDataService.new.try_closing_contests today, sport_name
-            puts "Done closing contests"
+            Rails.logger.debug "Done closing contests"
           end
 
         }

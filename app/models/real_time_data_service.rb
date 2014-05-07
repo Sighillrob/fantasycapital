@@ -9,7 +9,16 @@ class RealTimeDataService
         "turnovers"
       ],
       "MLB" => [
-        "runs"
+        's',
+        'd',
+        't',
+        'hr',
+        'bb',
+        'hbp',
+        "runs",
+        'rbi',
+        'ktotal',
+        'stolen'
       ]
 
   }
