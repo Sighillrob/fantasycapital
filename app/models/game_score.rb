@@ -185,8 +185,14 @@ class GameScore < ActiveRecord::Base
     if !exception_ending?
       # good status
       self.progress = game_progress(game_src)
-      self.home_team_score=Integer(game_src['team'][0]['points'])
-      self.away_team_score=Integer(game_src['team'][1]['points'])
+      begin
+        self.home_team_score=Integer(game_src['team'][0]['points'])
+        self.away_team_score=Integer(game_src['team'][1]['points'])
+      rescue
+        Rails.logger.error "Error recording team points"
+        raise
+      end
+
     end
     # record status at end of update so we still capture one 'closed' state.
     self.status = game_src['status']
