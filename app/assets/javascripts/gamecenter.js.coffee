@@ -63,7 +63,7 @@ class window.GameCenterCls
         @entrysummarys_view = new Main.Views.EntrySummarysView(
           {el: $('#entry-summarys-view-el'), entries_coll: entries_coll, players_coll: players_coll})
 
-        channel = this.pusher.subscribe('gamecenter')
+        channel = this.pusher.subscribe('MLB-gamecenter')
         @myentry = entries_coll.get(@my_entry_id)
         # trigger initial sort to make sure display is updated properly.
         entries_coll.sort()

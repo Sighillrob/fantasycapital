@@ -155,7 +155,7 @@ class GameScore < ActiveRecord::Base
   def game_progress(game_src)
     # For NBA games, "progress" is # of minutes played (against a fixed amount of 48)
     if self.sport == "MLB"
-      game_src['inning']*2 + (game_src['inning_half']=='B' ? 1 : 0)
+      game_src['inning'].to_i*2 + (game_src['inning_half']=='B' ? 1 : 0)
     elsif self.sport == "NBA"
       (12 * game_src['period'].to_i) - game_src['clock'].to_i
     else

@@ -61,12 +61,17 @@ module SportsdataClient
                 if currscores['status'] == 'closed'
                   retval['inning'] = currscores['final']['inning']
                   retval['inning_half'] = currscores['final']['inning_half']
+                elsif currscores['status'] == 'scheduled'
+                  retval['inning'] = 0
+                  retval['inning_half'] = 'T'
                 else
                   retval['inning'] = currscores['outcome']['current_inning']
                   retval['inning_half'] = currscores['outcome']['current_inning_half']
                 end
               rescue
                 Rails.logger.error "Can't find final or outcome fields in currscores: #{currscores}"
+                # when we've hit this in the past, it means there's another if (status) that
+                # we need to implement above.
               end
 
               retval
@@ -132,14 +137,25 @@ module SportsdataClient
 
           private
           def fix_team_stats(team_src)
-            team_src['hitting']['players']['player'].each do |player|
+
+            # playerlist can be empty if this is a scheduled game... if so, stub out the datastruct
+            team_src['hitting']['players'] = {'player' => {}} if team_src['hitting']['players'].nil?
+
+            playerlist = team_src['hitting']['players']['player']
+            playerlist.each do |player|
               # BUGBUG: PITCHER IS MISSING HERE, NEED TO ADD hometeamstats['pitching]['players']
               # BUGBUG: player['games'] doesn't exist in realtime? It exists in projection:fetch_stats???
-              player['played'] = 'false'
               begin
+                player['played'] = 'false'
                 player['played'] = 'true' if player['games']['play'].to_i > 0
-              rescue
-                Rails.logger.error "Can't find played field in player..."
+              rescue Exception => e
+                # this exception occurs when we didn't find player['games'].
+                #  It looks like this is normal for in-progress MLB games. In that case I think
+                #  the player list is only folks who are actually playing, so we can mark the
+                #  player's 'played' attribute true.
+                #Rails.logger.warn "Player missing 'played' field: #{player['id']}, " +
+                #                   "team #{team_src['id']}"
+                player['played'] = 'true' # make assumption to recover...
               end
 
               player['statistics'] = {}
@@ -156,6 +172,7 @@ module SportsdataClient
               player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
 
             end
+
             # BUGBUG: need to add pitcher here...
             team_src['players'] = team_src['hitting']['players']
 
