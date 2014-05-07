@@ -114,10 +114,14 @@ class GameScore < ActiveRecord::Base
   # Amount of game left to play.
   def game_remaining
     begin
+      # bit of a hack -- pre-game progress can sometimes be negative in the DB. I need to go
+      #   back and address that, but later...
+      gameprog = [0, self.progress].max
+
       if self.sport == "MLB"
-        (self.gamelength - self.progress) / 2.0
+        (self.gamelength - gameprog) / 2.0
       else
-        (self.gamelength - self.progress)
+        (self.gamelength - gameprog)
       end
 
     rescue
