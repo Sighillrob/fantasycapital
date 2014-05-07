@@ -56,14 +56,19 @@ class window.GameCenterCls
         console.log "GameCenter Constructor"
 
         @pusher = new Pusher(pusherkey)
-        @my_entry_id = ($('.gamecenter').data('entry_id'))
-        @my_contest_id = ($('.gamecenter').data('contest_id'))
+        @$gamecenter = $('.gamecenter')
+        @my_entry_id = @$gamecenter.data('entry_id')
+        @my_contest_id = @$gamecenter.data('contest_id')
+        @sport = @$gamecenter.data('sport')
         @gamesview = new Main.Views.GamesView({el: $('#gamesview_el'), games_coll: games_coll})
 
         @entrysummarys_view = new Main.Views.EntrySummarysView(
           {el: $('#entry-summarys-view-el'), entries_coll: entries_coll, players_coll: players_coll})
 
-        channel = this.pusher.subscribe('MLB-gamecenter')
+        @allowedSports = ["NBA", "MLB"]
+        if @allowedSports.indexOf(@sport) == -1
+            @sport = "NBA"
+        channel = this.pusher.subscribe(@sport + '-gamecenter')
         @myentry = entries_coll.get(@my_entry_id)
         # trigger initial sort to make sure display is updated properly.
         entries_coll.sort()
