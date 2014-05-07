@@ -18,7 +18,7 @@ describe RealTimeDataService do
   let (:game_details) do
     { 'id' => game.ext_game_id,
       'status' => 'inprogress',
-      'period' => "2",
+      'quarter' => "2",
       'clock' => "4:25",
       'team' => [{'points' => "54", 'players' => { 'player'=> [
                       { "id" => players[2].ext_player_id,

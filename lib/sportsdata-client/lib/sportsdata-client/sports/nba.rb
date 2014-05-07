@@ -49,7 +49,7 @@ module SportsdataClient
           def full_game_stats(game_id, daily_scores)
             # NOTE: daily_scores arg not used for NBA games
             client.request "games/#{game_id}/summary.xml" do |response|
-              response['game']
+              fix_full_game_stats response
             end
           end
 
@@ -63,6 +63,17 @@ module SportsdataClient
             client.request "games/#{date.strftime("%Y/%m/%d")}/schedule.xml" do |response|
               SportsdataClient::ResponseParser.new(response).parse 'game'
             end
+          end
+
+          def fix_full_game_stats(response)
+            case response['game']['status']
+              # create default values of 'clock' and 'quarter' for games that haven't started
+              when 'scheduled', 'created'
+                response['game']['clock'] = "48"
+                response['game']['quarter'] = "0"
+            end
+            response['game']
+
           end
           
           protected
