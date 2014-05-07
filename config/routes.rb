@@ -3,7 +3,10 @@ require "resque_web"
 Main::Application.routes.draw do
 
   
+  
   ActiveAdmin.routes(self)
+  
+  
   ResqueWeb::Engine.eager_load!
 
   mount ResqueWeb::Engine => "/resque_web"
@@ -93,6 +96,8 @@ Main::Application.routes.draw do
        end
      end
    end
+
+  resources :password_resets
 
   #scope :api do
     #get "/searchEntries" => "api#searchEntries"

@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
     def restrict_to_splash_page
       #redirect_to splash_path unless user_signed_in?
     end
+   
 
   private
     def require_login!
@@ -42,6 +43,14 @@ class ApplicationController < ActionController::Base
         when ['sessions', 'create', 'POST'] # user logging in
           return
         when ['registrations', 'create', 'POST'] # user logging in
+          return
+        when ['password_resets', 'new', 'GET'] # user logging in
+          return
+        when ['password_resets', 'create', 'POST'] # user logging in
+          return
+        when ['password_resets', 'edit', 'GET'] # user logging in
+          return
+        when ['password_resets', 'update', 'POST'] # user logging in
           return
       end
 

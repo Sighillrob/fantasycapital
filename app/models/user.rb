@@ -47,6 +47,7 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_uniqueness_of :email
 
+  before_create {generate_token(:auth_token)}
   after_create :attach_waiting_list
 
   def full_name
@@ -94,6 +95,22 @@ class User < ActiveRecord::Base
     waiting_list.invitation_token
   end
 
+  # generate token method to be used in unique token based on user model
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64      
+    end while User.exists?(column => self[column])
+  end
+
+  #send password reset method to be used in password reset controller
+  def send_password_reset
+    generate_token(:reset_password_token)
+    self.reset_password_sent_at =Time.zone.now 
+    save!
+    UserMailer.password_reset(self).deliver
+  end
+  
+  
   protected
   def attach_waiting_list
     unless waiting_list
