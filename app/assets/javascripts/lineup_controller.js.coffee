@@ -1,9 +1,6 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
+# Note this file will be included in *all* pages.
 $(document).on "ready page:load": ->
-	$('.createnewlineups').click -> 
+	$('.createnewlineups').click ->
     $('.new-lineup-popup').toggle()
     $('.new-lineup-popup .choices li a').removeClass('selected')
 
