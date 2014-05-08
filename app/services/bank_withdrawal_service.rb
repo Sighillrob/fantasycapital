@@ -120,7 +120,7 @@ class BankWithdrawalService
         raise ServiceError, "Deposit failed!"
       end
 
-    rescue Exception => ex
+    rescue => ex
       # JACKPIEN - Bugbug - There is a small likelihood that something fails
       # and triggers an exception after we ran a "daily sweep" /
       # opp_settlement_service - of which FC Opps would have paid the 

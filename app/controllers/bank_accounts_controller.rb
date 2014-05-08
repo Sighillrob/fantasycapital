@@ -14,7 +14,7 @@ class BankAccountsController < ApplicationController
     rescue ServiceError => e
       render json: {error: e.message}, status: :unprocessable_entity
       return
-    rescue Exception => e
+    rescue => e
       render json: {error: "Could not withdraw funds from default bank account"}, status: :unprocessable_entity
       return
     end

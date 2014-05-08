@@ -165,7 +165,7 @@ class GameScore < ActiveRecord::Base
       begin
         # 'clock' is a string containing "mm:ss" -- parse out the minutes
         (12 * Integer(game_src['quarter'])) - Integer(game_src['clock'].split(':')[0])
-      rescue Exception => e
+      rescue => e
         Rails.logger.error "Bad value in game_src"
         raise
       end

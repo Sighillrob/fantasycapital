@@ -148,7 +148,7 @@ module SportsdataClient
               begin
                 player['played'] = 'false'
                 player['played'] = 'true' if player['games']['play'].to_i > 0
-              rescue Exception => e
+              rescue NoMethodError => e
                 # this exception occurs when we didn't find player['games'].
                 #  It looks like this is normal for in-progress MLB games. In that case I think
                 #  the player list is only folks who are actually playing, so we can mark the
