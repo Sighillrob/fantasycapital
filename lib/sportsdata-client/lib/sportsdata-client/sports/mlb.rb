@@ -139,7 +139,13 @@ module SportsdataClient
           def fix_team_stats(team_src)
 
             # playerlist can be empty if this is a scheduled game... if so, stub out the datastruct
-            team_src['hitting']['players'] = {'player' => {}} if team_src['hitting']['players'].nil?
+            team_src['hitting']['players'] = {'player' => []} if team_src['hitting']['players'].nil?
+
+            # playerlist can be a hash if there's a single player, while it's an
+            #   an array if there are multiple players. (Bad API!) Clean that up.
+            if team_src['hitting']['players']['player'].kind_of?(Hash)
+              team_src['hitting']['players']['player'] = [team_src['hitting']['players']['player']]
+            end
 
             playerlist = team_src['hitting']['players']['player']
             playerlist.each do |player|
