@@ -172,7 +172,7 @@ module SportsdataClient
               player['statistics']['stolen'] = player['steal']['stolen'] # stolen bases
 
             end
-
+            team_src['points'] = team_src['runs']
             # BUGBUG: need to add pitcher here...
             team_src['players'] = team_src['hitting']['players']
 
