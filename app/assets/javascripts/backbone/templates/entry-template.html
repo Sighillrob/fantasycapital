@@ -8,8 +8,13 @@
             <span class="green username"><%= entry.get('username') %></span></p>
 
         <div class="clearfix"></div>
-        <p><span class="entry-min-remaining"><%= entry.min_left() %></span> Minutes Remaining
-        <p><progress class="entry-progress-bar" value="<%= entry.min_left() %>" max="480"></progress>
+        <p><span class="entry-min-remaining"><%= entry.min_left() %></span> 
+        <% if (locals.sport === 'NBA') { %>
+        Minutes Remaining 
+        <% } else if (locals.sport === 'MLB') { %>
+        Innings Remaining
+        <% } %> 
+        <p><progress class="entry-progress-bar" value="<%= entry.min_left() %>" max="<%= entry.total_gamelength() %>" ></progress>
         </p>
     </div>
     <div class="col-md-2 panelThree"><strong class="panelStrong">SCORE</strong>

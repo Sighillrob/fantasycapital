@@ -33,17 +33,20 @@ class Main.Models.Entry extends Backbone.Model
           ids.push(game.get("id"))
       )
     return _(ids).uniq()
-  min_left: () ->
-    entry_min_left = 0
+  sum_game_property: (property) ->
+    left = 0
     players = @players()
     if players
       $.each(players, (index, player) ->
         game = player.currgame()
         if game
-          entry_min_left += game.get('game_remaining')
+          left += game.get(property)
       )
-    return entry_min_left
-
+    return left
+  min_left: () ->
+    @sum_game_property('game_remaining')
+  total_gamelength: () ->
+    @sum_game_property('gamelength')
 class Main.Collections.EntriesCollection extends Backbone.Collection
   model: Main.Models.Entry
   url: '/entries'

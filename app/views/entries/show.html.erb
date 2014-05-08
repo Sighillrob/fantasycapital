@@ -152,7 +152,11 @@
         <th>POS</th>
         <th>&nbsp;</th>
         <th>USER</th>
-        <th>MINUTES REMAINING</th>
+        <% if @contest.sport == 'NBA' %> 
+          <th>MINUTES REMAINING</th> 
+        <% elsif @contest.sport == 'MLB' %>
+          <th>INNINGS REMAINING</th> 
+        <% end %>
         <th>SCORE</th>
         <th>PRIZES</th>
       </tr>
@@ -191,6 +195,10 @@
 </div>
 
   <script type="text/javascript">
+
+      var globals = {
+        sport: "<%= @contest.sport %>"
+      };
       // populate games list from servers.
       // temporary hack until we handle user images.
       var user_img_placeholder = "<%= image_path("user.png") %>";
