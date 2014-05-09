@@ -115,7 +115,7 @@ class OpSettlementService
           new_op.child_transactions << tr
         end        
       end
-    rescue Exception => ex
+    rescue => ex
       Rails.logger.error ex.message
       Rails.logger.error ex.backtrace.join("\n")
       Rails.logger.error "Something failed during a Op Settlement run"

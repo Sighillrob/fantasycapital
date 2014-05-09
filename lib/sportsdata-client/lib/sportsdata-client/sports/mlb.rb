@@ -139,7 +139,13 @@ module SportsdataClient
           def fix_team_stats(team_src)
 
             # playerlist can be empty if this is a scheduled game... if so, stub out the datastruct
-            team_src['hitting']['players'] = {'player' => {}} if team_src['hitting']['players'].nil?
+            team_src['hitting']['players'] = {'player' => []} if team_src['hitting']['players'].nil?
+
+            # playerlist can be a hash if there's a single player, while it's an
+            #   an array if there are multiple players. (Bad API!) Clean that up.
+            if team_src['hitting']['players']['player'].kind_of?(Hash)
+              team_src['hitting']['players']['player'] = [team_src['hitting']['players']['player']]
+            end
 
             playerlist = team_src['hitting']['players']['player']
             playerlist.each do |player|
@@ -148,7 +154,7 @@ module SportsdataClient
               begin
                 player['played'] = 'false'
                 player['played'] = 'true' if player['games']['play'].to_i > 0
-              rescue Exception => e
+              rescue NoMethodError => e
                 # this exception occurs when we didn't find player['games'].
                 #  It looks like this is normal for in-progress MLB games. In that case I think
                 #  the player list is only folks who are actually playing, so we can mark the

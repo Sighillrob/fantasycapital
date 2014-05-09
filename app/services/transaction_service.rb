@@ -79,7 +79,7 @@ module TransactionService
         new_tr.save! 
       end
       
-    rescue Exception => ex      
+    rescue => ex      
       Rails.logger.error ex.message
       Rails.logger.error ex.backtrace.join("\n")
       Rails.logger.error "Something failed during contest end transaction service"
