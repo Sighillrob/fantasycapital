@@ -444,9 +444,13 @@ a#clear-lineups{
   margin-top: 16px;
   color: #2E363E;
   padding-top: 50px;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   margin-left: -20px;
   margin-right: -20px;
+  margin-bottom: 20px;
+  background-image: image-url('drafting-header-bg-ball.png');
+  background-repeat: no-repeat;
+  background-position: -56px -14px;
 }
 @media (max-width: 991px) {
   .drafting-info-row {
@@ -492,4 +496,34 @@ a#clear-lineups{
   text-align: center;
   color: #A2A6A9;
   line-height: 44px;
+}
+
+.drafting-change-padding .first {
+  padding-left: 25px;
+  padding-right: 5px;
+}
+
+.drafting-change-padding .second {
+  padding-left: 5px;
+  padding-right: 25px;
+}
+
+.drafting-time-section .second {
+  width: auto;
+  padding: 0px;
+}
+
+.drafting-time-section .third {
+  padding-left: 5px;
+  padding-right: 25px;
+  text-align: left; 
+}
+
+.drafting-entries-border {
+  border-bottom: 1px solid #999;
+}
+
+.drafting-subheader-bold {
+  font-weight: bold;
+  letter-spacing: -1px;
 }

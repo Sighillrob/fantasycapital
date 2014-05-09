@@ -33,45 +33,45 @@
 <div class='welcomeNote'>SELECT THE BEST TEAM WITHOUT EXCEEDING THE SALARY CAP.</div> -->
 <div class='row drafting-info-row'>
   <div class='col-md-3'>
-    <div class='row'>
-      <div class='col-xs-6'>
+    <div class='row drafting-change-padding'>
+      <div class='col-xs-6 first'>
         <h3 class='text-right'>NBA</h3>
       </div>
-      <div class='col-xs-6'>
+      <div class='col-xs-6 second'>
         <h6>50/50</h6>
         <p class="small-margin-top"><strong>12-31-2014</strong></p>
       </div>
     </div>
   </div>
   <div class='col-md-5'>
-    <div class='row hidden-xs hidden-sm'>
-      <div class='col-xs-2'>
-        <h3>$9</h3>
-      </div>
-      <div class='col-xs-10'>
-        <h6>PRIZE POOL</h6>
-        <p class="small-margin-top">Entry fee: <strong>$1</strong> Entries: <strong>15/100</strong></p>
-      </div>
-    </div>
-    <div class='row hidden-md hidden-lg'>
-      <div class='col-xs-6'>
+    <div class='row hidden-xs hidden-sm drafting-change-padding'>
+      <div class='col-xs-3 first'>
         <h3 class='text-right'>$9</h3>
       </div>
-      <div class='col-xs-6'>
+      <div class='col-xs-9 second'>
+        <h6>PRIZE POOL</h6>
+        <p class="small-margin-top">Entry fee: <strong>$1</strong> Entries: <strong class='drafting-entries-border'>15/100</strong></p>
+      </div>
+    </div>
+    <div class='row hidden-md hidden-lg drafting-change-padding'>
+      <div class='col-xs-6 first'>
+        <h3 class='text-right'>$9</h3>
+      </div>
+      <div class='col-xs-6 second'>
         <h6>PRIZE POOL</h6>
         <p class="small-margin-top">Entry fee: <strong>$1</strong> Entries: <strong>15/100</strong></p>
       </div>
     </div>
   </div>
   <div class='col-md-4'>
-    <div class='row hidden-xs hidden-sm'>
-      <div class='col-xs-4'>
+    <div class='row hidden-xs hidden-sm drafting-time-section'>
+      <div class='col-xs-4 first'>
         <p class='live-border'>LIVE</p>
       </div>
-      <div class='col-xs-2'>
+      <div class='col-xs-2 second'>
         <p class='contest-prefix'>in</p>
       </div>
-      <div class='col-xs-6'>
+      <div class='col-xs-6 third'>
         <h3>4:12:24</h3>
         <p class='contest-time'>8:40pm EST</p>
       </div>
@@ -99,8 +99,8 @@
 
 
 
-<div class='col-md2'>
-  <h2>AVAILABLE PLAYERS</h2>
+<div class='col-md2 '>
+  <h2 class='drafting-subheader-bold'>AVAILABLE PLAYERS</h2>
   <ul class='dropdownsport'>
     <li>
       <div class='styled-select'>
@@ -170,7 +170,7 @@
 <!-- right half of screen - chosen lineup -->
 <%= form_for @lineup do |f| %>
     <div class='col-md2'>
-      <h2>LINEUP</h2>
+      <h2 class='drafting-subheader-bold'>LINEUP</h2>
 
       <div class='col-lg-6'>
         <h4>
