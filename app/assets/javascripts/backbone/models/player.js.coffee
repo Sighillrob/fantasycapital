@@ -72,7 +72,11 @@ class Main.Models.Player extends Backbone.Model
     mygame = @currgame()
     return "None" if !mygame
     minutes = mygame.get("game_remaining")
-    return minutes + " MIN LEFT"
+    if globals.sport == 'NBA'
+      type = "MIN"
+    else if globals.sport == 'MLB'
+      type = "INN"
+    return minutes + " " + type + " LEFT"
   getGameID: () ->
     mygame = @currgame()
     return 0 if !mygame

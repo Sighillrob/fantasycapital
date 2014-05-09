@@ -60,10 +60,16 @@ class window.GameCenterCls
         @my_entry_id = @$gamecenter.data('entry_id')
         @my_contest_id = @$gamecenter.data('contest_id')
         @sport = @$gamecenter.data('sport')
-        @gamesview = new Main.Views.GamesView({el: $('#gamesview_el'), games_coll: games_coll})
+        @gamesview = new Main.Views.GamesView({
+            el: $('#gamesview_el'), 
+            games_coll: games_coll
+        })
 
-        @entrysummarys_view = new Main.Views.EntrySummarysView(
-          {el: $('#entry-summarys-view-el'), entries_coll: entries_coll, players_coll: players_coll})
+        @entrysummarys_view = new Main.Views.EntrySummarysView({
+            el: $('#entry-summarys-view-el'), 
+            entries_coll: entries_coll, 
+            players_coll: players_coll
+        })
 
         @allowedSports = ["NBA", "MLB"]
         if @allowedSports.indexOf(@sport) == -1

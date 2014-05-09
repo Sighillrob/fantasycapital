@@ -36,6 +36,7 @@ class Main.Views.EntryView extends Backbone.View
       #    console.log pl_pos[0].get('rtstats')
       #)
       $(@el).empty().html(_.template(this.template, {
+        locals: globals,
         entry: @entry, 
         player_and_pos: player_and_pos, 
         user_img: window.user_img_placeholder,
